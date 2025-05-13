@@ -10,7 +10,7 @@ This project is a **Social Media Management** tool. It consists of two main appl
 This project uses a monorepo structure, where all applications and shared code are organized in the following way:
 
 ```
-novinhub-clone/
+raya-novin/
 ├── apps/
 │   ├── landing/        # Public site
 │   └── dashboard/      # Admin dashboard
