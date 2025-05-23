@@ -2,8 +2,9 @@ import AppSidebar from "@/components/app-sidebar";
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 import SubSidebar from "./SubSidebar";
+import ProgressBar from "./ProgressBar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout() {
   return (
     <div className="flex">
       {/* Sidebar */}
@@ -11,15 +12,13 @@ export default function Layout({ children }: { children: React.ReactNode }) {
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col mr-16">
-        {/* Navbar */}
-
         <Navbar />
 
-        {/* Page Content */}
-        <main className="flex bg-gray-100 min-h-dvh">
+        <main className="flex bg-gray-100 dark:bg-gray-800 min-h-[calc(100dvh-64px)]">
           <SubSidebar />
           <div className="flex-1">
             <Outlet />
+            <ProgressBar />
           </div>
         </main>
       </div>

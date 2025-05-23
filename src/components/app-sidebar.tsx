@@ -31,7 +31,7 @@ const Sidebar = () => {
                     className={`text-white hover:bg-gray-800 p-2 rounded-lg cursor-pointer
                     ${
                       "/" + currentPath === item.href
-                        ? "bg-gray-800 text-white"
+                        ? "bg-[#9eaecd70] text-white"
                         : "text-gray-400 hover:bg-gray-800 hover:text-white"
                     }
                     `}

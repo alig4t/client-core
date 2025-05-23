@@ -89,7 +89,7 @@ button:hover {
 button:focus,
 button:focus-visible {
   /* outline: 4px auto -webkit-focus-ring-color; */
-  outline: 4px auto #f6f3f4;
+  /* outline: 4px auto #f6f3f4; */
   transition: all ease 0.2s;
 }
 
@@ -208,4 +208,18 @@ button:focus-visible {
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
   background-color: rgba(75, 85, 99, 0.8);
+}
+
+/* nprogress custom style */
+#nprogress {
+  pointer-events: none;
+}
+#nprogress .bar {
+  background: #3b82f6; /* آبی یا رنگ دلخواه */
+  position: fixed;
+  z-index: 1031;
+  top: 0;
+  right: 0;
+  width: 0%;
+  height: 3px;
 }

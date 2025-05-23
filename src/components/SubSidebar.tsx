@@ -24,7 +24,7 @@ const SubSidebar = () => {
   if (!matchedKey) return null;
 
   return (
-    <aside className="w-60 bg-white dark:bg-gray-900 border-l border-gray-200 dark:border-gray-800 py-4 px-2">
+    <aside className="w-60 bg-white dark:bg-gray-900 border-l border-r border-gray-200 dark:border-gray-600  py-4 px-2">
       <ul className="space-y-1">
         {loading
           ? Array.from({ length: menuItems.length }).map((_, idx) => (
