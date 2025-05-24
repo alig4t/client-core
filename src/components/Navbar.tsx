@@ -9,19 +9,11 @@ import {
 import { Button } from "@/components/ui/button";
 import {
   Bell,
-  Moon,
   MoonIcon,
-  Plus,
-  Sun,
-  SunDim,
   SunIcon,
-  SunMedium,
-  SunMediumIcon,
-  SunMoonIcon,
-  SunriseIcon,
-  Zap,
 } from "lucide-react";
 import { useState } from "react";
+import { Separator } from "./ui/separator";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
@@ -51,10 +43,10 @@ const Navbar = () => {
 
       {/* Dark Mode Toggle */}
 
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 space-x-4">
         <DropdownMenu dir="rtl">
           <DropdownMenuTrigger asChild>
-            <button className="relative text-gray-700 dark:text-white !bg-gray-100 rounded-md p-2">
+            <button className="relative text-gray-700 dark:text-white !bg-gray-50 dark:!bg-gray-900 rounded-md p-2 border-gray-200 dark:hover:!border-gray-800">
               <Bell className="h-5 w-5" />
               <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
                 3
@@ -94,6 +86,8 @@ const Navbar = () => {
             <MoonIcon className="h-6 w-6 transition-transform duration-300" />
           )}
         </div>
+
+        <Separator orientation="vertical"  />
 
         {/* User Dropdown */}
         <DropdownMenu>
