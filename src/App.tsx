@@ -3,6 +3,7 @@ import "./App.css";
 import Layout from "./components/Layout";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
+import LoginPage from "./pages/Login";
 
 function App() {
   return (
@@ -10,7 +11,7 @@ function App() {
       
       <Routes>
         {/* صفحه ورود بدون Layout */}
-        {/* <Route path="/login" element={<Login />} /> */}
+        <Route path="/login" element={<LoginPage />} />
 
         {/* سایر صفحات با Layout */}
         <Route path="/" element={<Layout />}>
