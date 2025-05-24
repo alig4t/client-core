@@ -29,8 +29,8 @@ const SubSidebar = () => {
         {loading
           ? Array.from({ length: menuItems.length }).map((_, idx) => (
               <li key={idx} className="flex mb-4 gap-4 pr-2 pl-4 items-center">
-                <div className="w-7 h-6 bg-gray-100 dark:bg-gray-700 rounded-md animate-pulse"></div>
-                <div className="h-6 flex-auto bg-gray-100 dark:bg-gray-700 rounded-md animate-pulse"></div>
+                <div className="w-7 h-6 bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse"></div>
+                <div className="h-6 flex-auto bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
               </li>
             ))
           : menuItems.map((item, idx) => {
