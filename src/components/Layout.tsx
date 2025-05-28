@@ -16,7 +16,7 @@ export default function Layout() {
 
         <main className="flex bg-gray-100 dark:bg-gray-800 min-h-[calc(100dvh-64px)]">
           <SubSidebar />
-          <div className="flex-1">
+          <div className="flex-1 p-3">
             <Outlet />
             <ProgressBar />
           </div>
