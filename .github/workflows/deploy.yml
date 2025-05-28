@@ -1,0 +1,62 @@
+name: 🚀 Deploy RNT Social Front (React)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📦 Checkout code
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 Install dependencies
+        run: |
+          cd rnt_social_front
+          npm install
+
+      - name: ⚒️ Build React App
+        run: |
+          cd rnt_social_front
+          npm run build
+
+      - name: 🛠 Install rsync and sshpass
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y rsync sshpass
+
+      - name: 🛡 Trust SSH host
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
+
+      - name: 🚀 Deploy React Build to Server
+        run: |
+          echo "🔥 Uploading frontend..."
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" \
+            rsync -avz --delete \
+            -e "ssh -p ${{ secrets.SSH_PORT }}" \
+            rnt_social_front/build/ \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/rnt_social_front/
+
+      - name: 🔄 Reload Nginx
+        uses: appleboy/ssh-action@v1.2.2
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SSH_PASSWORD }}
+          port: ${{ secrets.SSH_PORT }}
+          script: |
+            echo "🔁 Reloading Nginx to serve updated frontend"
+            sudo systemctl reload nginx
+
+      - name: 🥳 Done
+        run: echo "🎉 Frontend deployed successfully!"
