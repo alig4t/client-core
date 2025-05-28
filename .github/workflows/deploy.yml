@@ -20,12 +20,12 @@ jobs:
 
       - name: 📦 Install dependencies
         run: |
-          cd rnt_social_front
+          cd rnt_social_client
           npm install
 
       - name: ⚒️ Build React App
         run: |
-          cd rnt_social_front
+          cd rnt_social_client
           npm run build
 
       - name: 🛠 Install rsync and sshpass
