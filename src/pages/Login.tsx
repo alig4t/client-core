@@ -27,6 +27,7 @@ export default function LoginPage() {
           </div>
 
           {/* Submit */}
+          {/* Submit */}
           <Button className="w-full text-gray-800 bg-sky-500 hover:bg-sky-600">ورود</Button>
 
           {/* Forgot */}
