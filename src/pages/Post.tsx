@@ -1,4 +1,4 @@
-import NoContent from "@/components/noContent";
+import NoContent from "./../components/NoContent";
 import { Plug } from "lucide-react";
 
 const Post = () => {

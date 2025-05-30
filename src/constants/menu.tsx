@@ -14,6 +14,7 @@ import {
   CreditCard,
   NotebookPen,
 } from "lucide-react";
+import type { JSX } from "react";
 
 export const mainMenu = [
   { icon: <Home size={24} />, label: "خانه", href: "/" },

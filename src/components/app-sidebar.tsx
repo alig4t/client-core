@@ -4,7 +4,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { Home, User, Settings, LayoutDashboard } from "lucide-react";
+import { LayoutDashboard } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
 import { mainMenu } from "@/constants/menu";

@@ -1,27 +1,24 @@
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
-  TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "./ui/table";
 import Card from "./Card";
 
-const sessions = [
-  {
-    id: 1,
-    browser: "Chrome",
-    os: "Windows 10",
-    ip: "۵.۱۱۶.۱۸۷.۷۳",
-    date: "۴ اردیبهشت ۱۴۰۴",
-    time: "۲۲:۴۴",
-    current: true,
-  },
-];
+// const sessions = [
+//   {
+//     id: 1,
+//     browser: "Chrome",
+//     os: "Windows 10",
+//     ip: "۵.۱۱۶.۱۸۷.۷۳",
+//     date: "۴ اردیبهشت ۱۴۰۴",
+//     time: "۲۲:۴۴",
+//     current: true,
+//   },
+// ];
 const invoices = [
   {
     invoice: "INV001",
@@ -46,10 +43,11 @@ const invoices = [
 export default function SessionTable() {
   return (
     <Card>
-      <h2 className="text-right text-lg font-bold p-4 border-b">
-        نشست‌های فعال
-      </h2>
-      {/* <div className="overflow-x-auto pb-3">
+      <>
+        <h2 className="text-right text-lg font-bold p-4 border-b">
+          نشست‌های فعال
+        </h2>
+        {/* <div className="overflow-x-auto pb-3">
         <table className="w-full text-sm text-right border-collapse">
           <thead className=" text-gray-700">
             <tr>
@@ -83,43 +81,44 @@ export default function SessionTable() {
           </tbody>
         </table>
       </div> */}
-      <Table className="w-[95%] m-auto">
-        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-        <TableHeader>
-          <TableRow>
-            <TableHead className="text-right text-gray-700 py-5 font-bold">
-              Invoice
-            </TableHead>
-            <TableHead className="text-right text-gray-700  font-bold">
-              Status
-            </TableHead>
-            <TableHead className="text-right text-gray-700   font-bold">
-              Method
-            </TableHead>
-            <TableHead className="text-right text-gray-700  font-bold">
-              Amount
-            </TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {invoices.map((invoice) => (
-            <TableRow key={invoice.invoice}>
-              <TableCell className="text-right py-4">
-                {invoice.invoice}
-              </TableCell>
-              <TableCell className="text-right">
-                {invoice.paymentStatus}
-              </TableCell>
-              <TableCell className="text-right">
-                {invoice.paymentMethod}
-              </TableCell>
-              <TableCell className="text-right">
-                {invoice.totalAmount}
-              </TableCell>
+        <Table className="w-[95%] m-auto">
+          {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+          <TableHeader>
+            <TableRow>
+              <TableHead className="text-right text-gray-700 py-5 font-bold">
+                Invoice
+              </TableHead>
+              <TableHead className="text-right text-gray-700  font-bold">
+                Status
+              </TableHead>
+              <TableHead className="text-right text-gray-700   font-bold">
+                Method
+              </TableHead>
+              <TableHead className="text-right text-gray-700  font-bold">
+                Amount
+              </TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+          </TableHeader>
+          <TableBody>
+            {invoices.map((invoice) => (
+              <TableRow key={invoice.invoice}>
+                <TableCell className="text-right py-4">
+                  {invoice.invoice}
+                </TableCell>
+                <TableCell className="text-right">
+                  {invoice.paymentStatus}
+                </TableCell>
+                <TableCell className="text-right">
+                  {invoice.paymentMethod}
+                </TableCell>
+                <TableCell className="text-right">
+                  {invoice.totalAmount}
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </>
     </Card>
   );
 }
