@@ -24,13 +24,20 @@ const SubSidebar = () => {
   if (!matchedKey) return null;
 
   return (
-    <aside className="w-60 bg-white dark:bg-gray-900 border-l border-r border-gray-200 dark:border-gray-600  py-4 px-2">
-      <ul className="space-y-1">
+    <aside className="w-full  md:w-60 bg-white dark:bg-gray-900 border-l border-r border-gray-200 dark:border-gray-600 py-8 md:py-4 px-6 md:px-2">
+      <ul
+        className="
+      grid grid-cols-4 sm:grid-cols-4 gap-3 
+      md:block md:space-y-1 w-full transition-all"
+      >
         {loading
           ? Array.from({ length: menuItems.length }).map((_, idx) => (
-              <li key={idx} className="flex mb-4 gap-4 pr-2 pl-4 items-center">
+              <li
+                key={idx}
+                className="flex flex-col items-center justify-center gap-2"
+              >
                 <div className="w-7 h-6 bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse"></div>
-                <div className="h-6 flex-auto bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
+                <div className="w-12 h-3 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
               </li>
             ))
           : menuItems.map((item, idx) => {
@@ -39,19 +46,20 @@ const SubSidebar = () => {
                 <li key={idx}>
                   <Link
                     to={item.href}
-                    className={`group flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium
-                      ${
-                        isActive
-                          ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:!text-white"
-                          : "text-gray-600 hover:bg-gray-50 dark:!text-gray-300 dark:hover:bg-gray-800"
-                      }`}
+                    className={`
+                  group flex flex-col md:flex-row items-center justify-center md:justify-start gap-2 md:gap-3 p-4 md:p-2 rounded-lg text-[12px] md:text-sm font-medium shadow-sm md:shadow-none
+                  ${
+                    isActive
+                      ? "bg-gray-100 text-gray-900 dark:bg-gray-800 dark:text-white"
+                      : "text-gray-600 hover:bg-gray-50 dark:text-gray-300 dark:hover:bg-gray-800"
+                  }`}
                   >
-                    <span
-                      className={`text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white`}
-                    >
+                    <span className="text-lg text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white">
                       {item.icon}
                     </span>
-                    <span className="flex-1 text-right">{item.label}</span>
+                    <span className="text-center md:text-right min-h-[36px] md:min-h-0 flex items-center">
+                      {item.label}
+                    </span>
                   </Link>
                 </li>
               );

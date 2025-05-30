@@ -17,6 +17,7 @@ const Sidebar = () => {
     <TooltipProvider>
       <div className="fixed right-0 top-0 h-screen w-16 bg-gray-900 flex flex-col items-center py-4">
         {/* 🔹 لوگو بالا */}
+        {/* #2cbabb */}
         <div className="mb-6">
           <LayoutDashboard size={28} className="text-white" />
         </div>
