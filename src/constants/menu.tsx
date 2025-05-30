@@ -12,6 +12,7 @@ import {
   Bell,
   Zap,
   CreditCard,
+  NotebookPen,
 } from "lucide-react";
 
 export const mainMenu = [
@@ -22,7 +23,7 @@ export const mainMenu = [
   { icon: <User size={24} />, label: "کاربران", href: "/users" },
   { icon: <Settings size={24} />, label: "پیکربندی", href: "/config" },
   { icon: <Home size={24} />, label: "آمار", href: "/stats" },
-  { icon: <User size={24} />, label: "حساب من", href: "/account" },
+  { icon: <NotebookPen size={24} />, label: "پست ها", href: "/posts" },
   { icon: <Settings size={24} />, label: "امنیت", href: "/security" },
 ];
 
@@ -79,6 +80,13 @@ export const subMenus: Record<
     {
       label: "محتواها",
       href: "/profile/billing",
+      icon: <CreditCard size={18} />,
+    },
+  ],
+  "/posts": [
+    {
+      label: "محتواها",
+      href: "/posts/billing",
       icon: <CreditCard size={18} />,
     },
   ],
