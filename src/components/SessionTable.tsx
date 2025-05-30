@@ -9,6 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "./ui/table";
+import Card from "./Card";
 
 const sessions = [
   {
@@ -44,12 +45,7 @@ const invoices = [
 
 export default function SessionTable() {
   return (
-    <div
-      className="  bg-white
-    relative rounded-md border shadow-md border-gray-200 dark:border-gray-800 text-gray-700 dark:text-zinc-100  dark:bg-dark-background flex-1
-    pb-4
-    "
-    >
+    <Card>
       <h2 className="text-right text-lg font-bold p-4 border-b">
         نشست‌های فعال
       </h2>
@@ -124,6 +120,6 @@ export default function SessionTable() {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Card>
   );
 }
