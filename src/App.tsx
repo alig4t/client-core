@@ -4,11 +4,11 @@ import Layout from "./components/Layout";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import LoginPage from "./pages/Login";
+import Post from "./pages/Post";
 
 function App() {
   return (
     <>
-      
       <Routes>
         {/* صفحه ورود بدون Layout */}
         <Route path="/login" element={<LoginPage />} />
@@ -17,6 +17,7 @@ function App() {
         <Route path="/" element={<Layout />}>
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="posts" element={<Post />} />
           {/* صفحه خانه */}
           <Route index element={<div className="p-4">خانه</div>} />
         </Route>

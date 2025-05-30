@@ -14,7 +14,7 @@ export default function Layout() {
       <div className="flex-1 flex flex-col mr-16">
         <Navbar />
 
-        <main className="flex bg-gray-100 dark:bg-gray-800 min-h-[calc(100dvh-64px)]">
+        <main className="flex bg-gray-50 dark:bg-gray-800 min-h-[calc(100dvh-64px)]">
           <SubSidebar />
           <div className="flex-1 p-3">
             <Outlet />

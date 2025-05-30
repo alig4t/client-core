@@ -7,11 +7,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import {
-  Bell,
-  MoonIcon,
-  SunIcon,
-} from "lucide-react";
+import { Bell, MoonIcon, SunIcon } from "lucide-react";
 import { useState } from "react";
 import { Separator } from "./ui/separator";
 
@@ -32,18 +28,21 @@ const Navbar = () => {
 
       {/* Upgrade Button */}
       <div className="flex gap-2">
-        {/* <Button variant="secondary" className="text-sm dark:text-gray-800">
+        <Button
+          className=" !bg-white !border-0 !shadow-none
+         !text-sm hover:!text-gray-900 transition !text-zinc-500 dark:text-gray-700"
+        >
           ارتقای حساب
         </Button>
 
-        <Button variant="outline" className="text-sm dark:text-gray-800">
+        <Button className="!bg-[#699bf8] hover:!bg-[#699bf8f2] hover:!text-white !text-sm text-zinc-50">
           پشتیبانی
-        </Button> */}
+        </Button>
       </div>
 
       {/* Dark Mode Toggle */}
 
-      <div className="flex items-center gap-4 space-x-4">
+      <div className="flex items-center gap-2 space-x-1">
         <DropdownMenu dir="rtl">
           <DropdownMenuTrigger asChild>
             <button className="relative text-gray-700 dark:text-white !bg-gray-50 dark:!bg-gray-900 rounded-md p-2 border-gray-200 dark:hover:!border-gray-800">
@@ -77,7 +76,9 @@ const Navbar = () => {
         </DropdownMenu>
 
         <div
-          className="flex items-center w-10 h-12 text-gray-700 dark:text-gray-100 justify-center cursor-pointer ml-3 transition-all duration-300 hover:rotate-12 hover:scale-110"
+          className="flex items-center w-10 h-12 text-gray-700
+           dark:text-gray-100 justify-center cursor-pointer
+            transition-all duration-300 hover:rotate-12 hover:scale-110"
           onClick={toggleDarkMode}
         >
           {darkMode ? (
@@ -87,7 +88,10 @@ const Navbar = () => {
           )}
         </div>
 
-        <Separator orientation="vertical"  />
+        <Separator
+          orientation="vertical"
+          className="!h-6 !text-gray-300 !mr-1 !ml-4"
+        />
 
         {/* User Dropdown */}
         <DropdownMenu>
