@@ -43,7 +43,7 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" \
             rsync -avz --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            /root/dist/ \
+            rnt_social_client/dist/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/rnt_social_front/build/
 
       - name: 🔄 Reload Nginx
