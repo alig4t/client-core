@@ -5,6 +5,7 @@ import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import LoginPage from "./pages/Login";
 import Post from "./pages/Post";
+import NotFoundPage from "./components/NotFoundPage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
           <Route path="posts" element={<Post />} />
           {/* صفحه خانه */}
           <Route index element={<div className="p-4">خانه</div>} />
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
     </>

@@ -32,11 +32,11 @@ const Navbar = () => {
           className=" !bg-white !border-0 !shadow-none
          !text-sm hover:!text-gray-900 transition !text-zinc-500 dark:text-gray-700"
         >
-          ارتقای حساب
+          پشتیبانی
         </Button>
 
-        <Button className="!bg-[#699bf8] hover:!bg-[#699bf8f2] hover:!text-white !text-sm text-zinc-50">
-          پشتیبانی
+        <Button className="!bg-[#c5226c] hover:!bg-[#c11764] !font-bold hover:!text-white !text-xs text-zinc-50">
+          ارتقای حساب
         </Button>
       </div>
 

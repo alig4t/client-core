@@ -34,10 +34,10 @@ const SubSidebar = () => {
           ? Array.from({ length: menuItems.length }).map((_, idx) => (
               <li
                 key={idx}
-                className="flex flex-col items-center justify-center gap-2"
+                className="flex flex-col md:flex-row items-center justify-center gap-2 md:mb-3 md:px-2"
               >
                 <div className="w-7 h-6 bg-gray-300 dark:bg-gray-700 rounded-md animate-pulse"></div>
-                <div className="w-12 h-3 bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
+                <div className="w-12 h-3 md:h-5 md:flex-auto bg-gray-200 dark:bg-gray-700 rounded-md animate-pulse"></div>
               </li>
             ))
           : menuItems.map((item, idx) => {
@@ -57,7 +57,7 @@ const SubSidebar = () => {
                     <span className="text-lg text-gray-500 dark:text-gray-400 group-hover:text-gray-700 dark:group-hover:text-white">
                       {item.icon}
                     </span>
-                    <span className="text-center md:text-right min-h-[36px] md:min-h-0 flex items-center">
+                    <span className="text-center md:text-right min-h-[36px] md:min-h-0 flex items-center dark:text-zinc-200">
                       {item.label}
                     </span>
                   </Link>
