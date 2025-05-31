@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: 📦 Install dependencies
-        working-directory: RNT.Social.Client
+        working-directory: rnt.social.client
         run: npm install
 
       - name: ⚒️ Build React App
@@ -42,8 +42,8 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" \
             rsync -avz --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            RNT.Social.Client/dist/ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:RNT.Social.Client/dist/
+            rnt.social.client/dist/ \
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:rnt.social.client/dist/
 
       - name: 🔄 Reload Nginx
         uses: appleboy/ssh-action@v1.2.2
