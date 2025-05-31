@@ -19,10 +19,12 @@ jobs:
           node-version: '20'
 
       - name: 📦 Install dependencies
+        working-directory: RNT.Social.Client
         run: |
           npm install
 
       - name: ⚒️ Build React App
+        working-directory: RNT.Social.Client
         run: |
           npm run build
 
@@ -43,7 +45,7 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" \
             rsync -avz --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            rnt_social_client/dist/ \
+            RNT.Social.Client/dist/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/rnt_social_front/build/
 
       - name: 🔄 Reload Nginx
