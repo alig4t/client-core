@@ -43,7 +43,7 @@ jobs:
             rsync -avz --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
             RNT.Social.Client/dist/ \
-            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/rnt_social_front/build/
+            ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:RNT.Social.Client/dist/
 
       - name: 🔄 Reload Nginx
         uses: appleboy/ssh-action@v1.2.2
