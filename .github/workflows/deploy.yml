@@ -20,13 +20,11 @@ jobs:
 
       - name: 📦 Install dependencies
         working-directory: RNT.Social.Client
-        run: |
-          npm install
+        run: npm install
 
       - name: ⚒️ Build React App
         working-directory: RNT.Social.Client
-        run: |
-          npm run build
+        run: npm run build
 
       - name: 🛠 Install rsync and sshpass
         run: |
@@ -37,7 +35,6 @@ jobs:
         run: |
           mkdir -p ~/.ssh
           ssh-keyscan -p ${{ secrets.SSH_PORT }} ${{ secrets.SERVER_IP }} >> ~/.ssh/known_hosts
-          echo "🔑 Trust established with ${{ secrets.SERVER_IP }}"
 
       - name: 🚀 Deploy React Build to Server
         run: |
@@ -45,7 +42,7 @@ jobs:
           sshpass -p "${{ secrets.SSH_PASSWORD }}" \
             rsync -avz --delete \
             -e "ssh -p ${{ secrets.SSH_PORT }}" \
-            rnt.social.client/ \
+            RNT.Social.Client/dist/ \
             ${{ secrets.SERVER_USER }}@${{ secrets.SERVER_IP }}:/var/www/rnt_social_front/build/
 
       - name: 🔄 Reload Nginx
