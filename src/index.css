@@ -71,6 +71,10 @@ body {
   font-family: IRANSansXFaNum;
 }
 
+div {
+  font-family: IRANSansXFaNum !important;
+}
+
 h1 {
   font-size: 3.2em;
   line-height: 1.1;
@@ -227,4 +231,30 @@ button:focus-visible {
   right: 0;
   width: 0%;
   height: 3px;
+}
+
+@layer utilities {
+  .bg-layout {
+    @apply bg-[#F9FAFB];
+  }
+
+  .dark .bg-layout {
+    @apply bg-[#1F2937];
+  }
+
+  .bg-layout-content {
+    @apply bg-[#fff];
+  }
+
+  .dark .bg-layout-content {
+    @apply bg-[#111827];
+    color: #e4e4e7 !important;
+  }
+}
+
+.dark .bg-layout-content p,
+.dark .bg-layout-content a,
+.dark .bg-layout-content span,
+.dark .bg-layout-content div {
+  color: #e4e4e7;
 }

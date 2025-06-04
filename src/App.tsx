@@ -6,10 +6,13 @@ import Settings from "./pages/Settings";
 import LoginPage from "./pages/Login";
 import Post from "./pages/Post";
 import NotFoundPage from "./components/NotFoundPage";
+import { Toaster } from "./components/ui/sonner";
 
 function App() {
   return (
     <>
+      {/* <Toaster richColors position="top-center" /> */}
+      <Toaster />
       <Routes>
         {/* صفحه ورود بدون Layout */}
         <Route path="/login" element={<LoginPage />} />

@@ -1,67 +1,134 @@
-// src/pages/LoginPage.tsx
-
+import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
+import { login } from "@/services/authService";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
+import { useNavigate } from "react-router-dom";
+// مسیر درست به Wrapper
+import { useFormContext } from "react-hook-form";
+import { FormWrapper } from "@/components/shared/FormWrapper";
+import { toast } from "sonner";
+import AuthLayout from "@/components/AuthLayout";
+import SubmitButton from "@/components/SubmitButton";
+
+const loginSchema = z.object({
+  email: z.string().email("ایمیل معتبر وارد کنید"),
+  password: z.string().min(6, "رمز عبور حداقل باید ۶ کاراکتر باشد"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
+function LoginFormFields() {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<LoginFormData>();
+
+  return (
+    <>
+      <div className="space-y-1">
+        <Label htmlFor="email">ایمیل</Label>
+        <Input
+          id="email"
+          type="email"
+          placeholder="ایمیل خود را وارد کنید"
+          {...register("email")}
+        />
+        {errors.email && (
+          <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+        )}
+      </div>
+
+      <div className="space-y-1">
+        <Label htmlFor="password">رمز عبور</Label>
+        <Input
+          id="password"
+          type="password"
+          placeholder="رمز عبور را وارد کنید"
+          {...register("password")}
+        />
+        {errors.password && (
+          <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+        )}
+      </div>
+    </>
+  );
+}
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+
+  const mutation = useMutation({
+    mutationFn: (data: LoginFormData) => login(data),
+    onSuccess: (data) => {
+      localStorage.setItem("token", data.data.token);
+      toast("ورود موفقیت آمیز بود", {
+        description: "در حال ورود به حساب کاربری..",
+        position: "bottom-left",
+        type: "success",
+      });
+      setTimeout(() => {
+        navigate("/dashboard");
+      }, 1000);
+    },
+    onError: (error: any) => {
+      toast(error?.response?.data?.message || "ورود ناموفق بود", {
+        description: "مشکلی در فرایند ورود به حساب کاربری رخ داده است",
+        // action: {
+        //   label: "Undo",
+        //   onClick: () => console.log("Undo"),
+        // },
+        position: "bottom-left",
+        type: "error",
+      });
+    },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    mutation.mutate(data);
+  };
+
   return (
-    <div
-      className="min-h-screen flex items-center justify-center bg-gray-100 text-right px-4"
-      dir="rtl"
-    >
-      <Card className="w-full max-w-sm bg-white rounded-xl shadow-lg">
-        <CardContent className="py-8 px-6 space-y-5">
-          <h2 className="text-xl font-bold text-center">خوش آمدید</h2>
-          <p className="text-sm text-gray-600 text-center mb-2">
-            به پنل کاربری وارد شوید
-          </p>
+    <AuthLayout>
+      <CardContent className="py-8 px-6 space-y-5">
+        <h2 className="text-xl font-bold text-center">خوش آمدید</h2>
+        <p className="text-sm text-gray-600 text-center mb-2 dark:!text-zinc-400">
+          به پنل کاربری وارد شوید
+        </p>
 
-          {/* Email */}
-          <div className="space-y-1">
-            <Label htmlFor="email">ایمیل</Label>
-            <Input
-              id="email"
-              type="email"
-              placeholder="ایمیل خود را وارد کنید"
-            />
-          </div>
+        <FormWrapper schema={loginSchema} onSubmit={onSubmit}>
+          <div className="space-y-4">
+            <LoginFormFields />
 
-          {/* Password */}
-          <div className="space-y-1">
-            <Label htmlFor="password">رمز عبور</Label>
-            <Input
-              id="password"
-              type="password"
-              placeholder="رمز عبور را وارد کنید"
-            />
-          </div>
-
-          {/* Submit */}
-          {/* Submit */}
-          <Button className="w-full text-gray-800 !bg-[#f9f9f9] ">ورود</Button>
-
-          {/* Forgot */}
-          <div className="text-sm text-center text-gray-500 mt-1">
-            <a href="#" className="hover:underline">
-              رمز عبور خود را فراموش کرده‌اید؟
-            </a>
-          </div>
-
-          {/* Divider */}
-          <div className="flex items-center gap-2 mt-4 mb-2">
-            <div className="flex-grow border-t border-gray-300" />
-            <span className="text-sm text-gray-400">یا</span>
-            <div className="flex-grow border-t border-gray-300" />
-          </div>
-
-          {/* OAuth Buttons */}
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full flex justify-center items-center gap-2 !bg-[#f9f9f9]"
+            <SubmitButton
+              disabled={mutation.isPending}
+              type="submit"
+              className="mt-8"
             >
+              <>{mutation.isPending ? "در حال ورود..." : "ورود"}</>
+            </SubmitButton>
+          </div>
+        </FormWrapper>
+
+        <div className="text-sm text-center dark:!text-zinc-400 mt-1">
+          <a href="#" className="hover:underline dark:!text-zinc-400">
+            رمز عبور خود را فراموش کرده‌اید؟
+          </a>
+        </div>
+
+        {/* Divider */}
+        <div className="flex items-center gap-2 mt-4 mb-2">
+          <div className="flex-grow border-t border-gray-300" />
+          <span className="text-sm text-gray-400">یا</span>
+          <div className="flex-grow border-t border-gray-300" />
+        </div>
+
+        {/* OAuth Buttons */}
+        <div className="space-y-2">
+          <SubmitButton>
+            <>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 x="0px"
@@ -88,11 +155,11 @@ export default function LoginPage() {
                 ></path>
               </svg>
               ورود با گوگل
-            </Button>
-            <Button
-              variant="outline"
-              className="w-full flex justify-center items-center gap-2 !bg-[#f9f9f9]"
-            >
+            </>
+          </SubmitButton>
+
+          <SubmitButton>
+            <>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 shape-rendering="geometricPrecision"
@@ -114,18 +181,21 @@ export default function LoginPage() {
                 </g>
               </svg>
               ورود با فیسبوک
-            </Button>
-          </div>
+            </>
+          </SubmitButton>
+        </div>
 
-          {/* Register */}
-          <p className="text-sm text-center text-gray-500 mt-4">
-            هنوز عضو نشده‌اید؟{" "}
-            <a href="#" className="text-sky-600 hover:underline">
-              ثبت نام کنید
-            </a>
-          </p>
-        </CardContent>
-      </Card>
-    </div>
+        {/* Register */}
+        <p className="text-sm text-center text-gray-500 mt-4 ">
+          هنوز عضو نشده‌اید؟{" "}
+          <a
+            href="#"
+            className="text-sky-600 hover:underline dark:!text-red-700"
+          >
+            ثبت نام کنید
+          </a>
+        </p>
+      </CardContent>
+    </AuthLayout>
   );
 }

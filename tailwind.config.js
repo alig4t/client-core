@@ -8,6 +8,8 @@ module.exports = {
           dark: "red",
           light: "#fff",
         },
+        "layout-dark": "#171e28",
+        "layout-light": "#f9f",
       },
     },
   },
