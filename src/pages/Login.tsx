@@ -66,7 +66,7 @@ export default function LoginPage() {
       toast("ورود موفقیت آمیز بود", {
         description: "در حال ورود به حساب کاربری..",
         position: "bottom-left",
-        type: "success",
+        // type: "success",
       });
       setTimeout(() => {
         navigate("/dashboard");
@@ -80,7 +80,7 @@ export default function LoginPage() {
         //   onClick: () => console.log("Undo"),
         // },
         position: "bottom-left",
-        type: "error",
+        // type: "error",
       });
     },
   });
