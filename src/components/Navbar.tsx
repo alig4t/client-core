@@ -20,14 +20,14 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full h-16 bg-white dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 flex items-center justify-between px-4">
+    <div className="w-full h-16 bg-white dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
       {/* Title (Right) */}
-      <h3 className="text-sm font-bold text-gray-800 dark:text-white">
+      <h3 className="text-sm font-bold text-gray-800 dark:text-white hidden md:visible">
         پنل مدیریت
       </h3>
 
       {/* Upgrade Button */}
-      <div className="flex gap-2">
+      <div className="hidden md:visible md:flex gap-2">
         <Button
           className=" !bg-white !border-0 !shadow-none
          !text-sm hover:!text-gray-900 transition !text-zinc-500 dark:text-gray-700"
