@@ -20,3 +20,10 @@ export interface UserResponse {
     token: string;
     user: UserModel;
 }
+
+// type PersonResponse = BaseResponse<Person>;
+// type TagResponse = BaseResponse<Tag>;
+// type PostResponse = BaseResponse<Post>;
+// type RoleResponse = BaseResponse<Role>;
+// type PermissionResponse = BaseResponse<Permission>;
+// type UserWithTokenResponse = BaseResponse<UserResponse>;
