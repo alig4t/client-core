@@ -1,12 +1,40 @@
 // pages/tags/TagSearchPage.tsx
-import { useEffect, useState } from 'react';
-import TagService from '@/Models/Tag/TagService';
-import { Link } from 'react-router-dom';
-import type { TagModel } from './TagModel';
+import { useEffect, useState } from "react";
+import TagService from "@/Models/Tag/TagFakeService";
+import { Link } from "react-router-dom";
+import type { TagModel } from "./TagModel";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableCaption,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { Input } from "@/components/ui/input";
+import { DatePicker } from "zaman";
+
+import "@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css";
+import "@majidh1/jalalidatepicker";
+
+declare global {
+  interface Window {
+    jalaliDatepicker: any;
+  }
+}
 
 export default function TagSearchPage() {
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [tags, setTags] = useState<TagModel[]>([]);
+
+  useEffect(() => {
+    window.jalaliDatepicker.startWatch({
+      minDate: "attr",
+      maxDate: "attr",
+      time: true,
+    });
+  }, []);
 
   const fetchTags = async () => {
     const res = await TagService.getAll();
@@ -22,35 +50,79 @@ export default function TagSearchPage() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4">
-        <input
+      <div className="flex justify-between items-center mb-4 bg-[#7fb788] rounded-lg p-3">
+        <h4 className="text-lg font-bold">مدیریت تگ ها</h4>
+        {/* <input
           className="input input-bordered"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           placeholder="جستجوی نام برچسب"
-        />
-        <Link to="/tags/create" className="btn btn-primary">افزودن جدید</Link>
+        /> */}
+        <Link
+          to="/tags/create"
+          className="btn btn-primary text-xs font-bold bg-gray-200 text-gray-600 px-3 py-1.5 rounded-full"
+        >
+          افزودن جدید
+        </Link>
       </div>
-      <table className="table w-full">
-        <thead>
-          <tr>
-            <th>شناسه</th>
-            <th>نام</th>
-            <th>جزئیات</th>
-          </tr>
-        </thead>
-        <tbody>
+
+      <div className=" border-dashed border-2 p-4 border-gray-300 rounded-md my-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-1">
+          <Input
+            // className="col-span-2"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="جستجوی نام برچسب"
+          />
+          {/* <div className="date-picker-box"> */}
+          <Input
+            type="text"
+            data-jdp
+            placeholder="لطفا یک تاریخ وارد نمایید"
+            data-jdp-only-date
+          />
+        </div>
+
+        {/* </div> */}
+
+        <div className="flex w-full pt-3 text-left justify-end">
+          <button
+            type="button"
+            className="btn btn-primary text-xs font-bold !bg-gray-200 text-gray-600 px-3 py-1.5 rounded-full"
+          >
+            اعمال فیلتر
+          </button>
+        </div>
+      </div>
+
+      <Table className="rounded-corners">
+        {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">شناسه</TableHead>
+            <TableHead>نام</TableHead>
+            <TableHead>جزئیات</TableHead>
+            {/* <TableHead className="text-right">Amount</TableHead> */}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
           {tags.map((tag) => (
-            <tr key={tag.id}>
-              <td>{tag.id}</td>
-              <td>{tag.name}</td>
-              <td>
-                <Link to={`/tags/${tag.id}`} className="link">مشاهده</Link>
-              </td>
-            </tr>
+            <TableRow key={tag.id}>
+              <TableCell className="font-medium">{tag.id}</TableCell>
+              <TableCell>{tag.name}</TableCell>
+              <TableCell className="flex gap-2">
+                <Link to={`/tags/${tag.id}/edit`} className="link">
+                  ویرایش
+                </Link>
+                <span className="text-gray-400">|</span>
+                <Link to={`/tags/${tag.id}`} className="link">
+                  مشاهده
+                </Link>
+              </TableCell>
+            </TableRow>
           ))}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
     </div>
   );
 }
