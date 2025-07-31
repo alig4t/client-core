@@ -7,6 +7,9 @@ import LoginPage from "./pages/Login";
 import Post from "./pages/Post";
 import NotFoundPage from "./components/NotFoundPage";
 import { Toaster } from "./components/ui/sonner";
+import TagSearchPage from "./Models/Tag/TagSearchPage";
+import TagCreatePage from "./Models/Tag/TagCreatePage";
+import TagDisplayPage from "./Models/Tag/TagDisplayPage";
 
 function App() {
   return (
@@ -22,6 +25,9 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="posts" element={<Post />} />
+          <Route path="tags" element={<TagSearchPage />} />
+          <Route path="tags/create" element={<TagCreatePage />} />
+          <Route path="tags/:id" element={<TagDisplayPage />} />
           {/* صفحه خانه */}
           <Route index element={<div className="p-4">خانه</div>} />
           <Route path="*" element={<NotFoundPage />} />

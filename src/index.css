@@ -13,6 +13,7 @@
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
   background-color: #242424;
+  --table-border-color: rgb(212, 212, 212);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -58,6 +59,7 @@ a {
   color: #111827;
   text-decoration: inherit;
 }
+
 a:hover {
   color: #0f1623;
 }
@@ -70,6 +72,7 @@ body {
   min-height: 100vh;
   font-family: IRANSansXFaNum;
 }
+
 html,
 body {
   margin: 0;
@@ -97,9 +100,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
 }
+
 button:hover {
   border-color: #c8c9ca;
 }
+
 button:focus,
 button:focus-visible {
   /* outline: 4px auto -webkit-focus-ring-color; */
@@ -113,9 +118,11 @@ button:focus-visible {
     color: #213547;
     background-color: #ffffff;
   }
+
   a:hover {
     color: #0f1623;
   }
+
   /* button {
     background-color: #f9f9f9;
   } */
@@ -197,6 +204,7 @@ button:focus-visible {
   * {
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
@@ -204,8 +212,10 @@ button:focus-visible {
 
 .custom-scrollbar {
   overflow-y: auto;
-  scrollbar-width: none; /* Firefox */
-  scrollbar-color: #4b5563 transparent; /* thumb and track */
+  scrollbar-width: none;
+  /* Firefox */
+  scrollbar-color: #4b5563 transparent;
+  /* thumb and track */
 }
 
 .custom-scrollbar::-webkit-scrollbar {
@@ -217,7 +227,8 @@ button:focus-visible {
 }
 
 .custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(75, 85, 99, 0.6); /* gray-600 با شفافیت */
+  background-color: rgba(75, 85, 99, 0.6);
+  /* gray-600 با شفافیت */
   border-radius: 8px;
 }
 
@@ -229,8 +240,10 @@ button:focus-visible {
 #nprogress {
   pointer-events: none;
 }
+
 #nprogress .bar {
-  background: #3b82f6; /* آبی یا رنگ دلخواه */
+  background: #3b82f6;
+  /* آبی یا رنگ دلخواه */
   position: fixed;
   z-index: 1031;
   top: 0;
@@ -263,4 +276,139 @@ button:focus-visible {
 .dark .bg-layout-content span,
 .dark .bg-layout-content div {
   color: #e4e4e7;
+}
+
+
+
+table.rounded-corners {
+  /* padding: 10px; */
+  border-spacing: 0;
+  border-collapse: separate;
+  border-radius: 10px;
+  border: 1px solid var(--table-border-color);
+}
+
+table.rounded-corners th {
+  padding: 10px 10px;
+  color: #111827;
+  font-weight: bold;
+  font-size: 13px;
+}
+
+table.rounded-corners td {
+  padding: 15px 10px;
+  color: #3a3a3a;
+}
+
+table.rounded-corners td a {
+  color: #346d9e;
+  font-weight: bold;
+  font-size: 12px;
+  transition: all ease 0.2s;
+}
+
+table.rounded-corners td a:hover,
+table.rounded-corners td a:focus,
+table.rounded-corners td a:active {
+  color: #215583;
+}
+
+table.rounded-corners th:first-child,
+table.rounded-corners td:first-child {
+  padding-right: 20px;
+}
+
+table.rounded-corners th:last-child,
+table.rounded-corners td:last-child {
+  padding-left: 20px;
+}
+
+/* Apply a border to the right of all but the last column */
+table.rounded-corners th:not(:first-child),
+table.rounded-corners td:not(:first-child) {
+  /* border-right: 1px solid rgb(168, 164, 164); */
+}
+
+/* Apply a border to the bottom of all but the last row */
+table.rounded-corners>thead>tr:not(:last-child)>th,
+table.rounded-corners>thead>tr:not(:last-child)>td,
+table.rounded-corners>tbody>tr:not(:last-child)>th,
+table.rounded-corners>tbody>tr:not(:last-child)>td,
+table.rounded-corners>tfoot>tr:not(:last-child)>th,
+table.rounded-corners>tfoot>tr:not(:last-child)>td,
+table.rounded-corners>tr:not(:last-child)>td,
+table.rounded-corners>tr:not(:last-child)>th,
+table.rounded-corners>thead:not(:last-child),
+table.rounded-corners>tbody:not(:last-child),
+table.rounded-corners>tfoot:not(:last-child) {
+  border-bottom: 1px solid var(--table-border-color);
+}
+
+table.rounded-corners>thead>tr>th {
+  border-bottom: 1px solid var(--table-border-color);
+  text-align: right;
+}
+
+
+.date-picker-box {
+  font-family: IRANSansXFaNum !important;
+  text-align: center;
+}
+
+.date-picker-box input {
+  font-family: IRANSansXFaNum !important;
+  text-align: center;
+  width: 100%;
+  outline: 0;
+  border-radius: 8px;
+  height: 37px;
+  border: 1px solid #dedede;
+}
+
+.date-picker-box .wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+}
+
+.date-picker-box .tab {
+  flex-direction: column;
+  display: flex;
+  justify-content: center;
+  border-radius: 8px;
+  background-color: #f5f5f5;
+  gap: 16px;
+  padding: 8px;
+}
+
+.date-picker-box .tabItem {
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.date-picker-box .tabItem:hover {
+  color: #3f5152;
+}
+
+.date-picker-box .tabItem--selected {
+  background-color: #ffffff;
+}
+
+.date-picker-box .libWrapper {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 14px;
+}
+
+@media only screen and (min-width: 600px) {
+
+  .date-picker-box .tab,
+  .date-picker-box .libWrapper {
+    flex-direction: row;
+  }
 }
