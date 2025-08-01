@@ -61,7 +61,7 @@ export default function TagSearchPage() {
           placeholder="جستجوی نام برچسب"
         /> */}
         <Link
-          to="/tags/create"
+          to="/portal/tags/create"
           className="btn btn-primary text-xs font-bold bg-[#c5226c] !text-white px-3 py-1.5 rounded-full"
         >
           افزودن جدید
