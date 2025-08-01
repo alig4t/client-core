@@ -27,9 +27,13 @@ function App() {
           <Route path="profile" element={<Profile />} />
           <Route path="settings" element={<Settings />} />
           <Route path="posts" element={<Post />} />
-          <Route path="tags" element={<TagSearchPage />} />
-          <Route path="tags/create" element={<TagCreatePage />} />
-          <Route path="tags/:id" element={<TagDisplayPage />} />
+
+          <Route path="portal">
+            <Route path="tags" element={<TagSearchPage />} />
+            <Route path="tags/create" element={<TagCreatePage />} />
+            <Route path="tags/:id" element={<TagDisplayPage />} />
+          </Route>
+
           {/* صفحه خانه */}
           <Route index element={<div className="p-4">خانه</div>} />
           <Route path="*" element={<NotFoundPage />} />

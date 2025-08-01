@@ -13,16 +13,17 @@ import {
   Zap,
   CreditCard,
   NotebookPen,
+  Bolt,
 } from "lucide-react";
 import type { JSX } from "react";
 
 export const mainMenu = [
   { icon: <Home size={24} />, label: "خانه", href: "/" },
   { icon: <User size={24} />, label: "پروفایل", href: "/profile" },
+  { icon: <Bolt size={24} />, label: "پورتال", href: "/portal" },
+
   { icon: <Settings size={24} />, label: "تنظیمات", href: "/settings" },
-  { icon: <LayoutDashboard size={24} />, label: "داشبورد", href: "/dashboard" },
-  { icon: <User size={24} />, label: "کاربران", href: "/users" },
-  { icon: <Settings size={24} />, label: "پیکربندی", href: "/config" },
+
   { icon: <Home size={24} />, label: "آمار", href: "/stats" },
   { icon: <NotebookPen size={24} />, label: "پست ها", href: "/posts" },
   { icon: <Settings size={24} />, label: "امنیت", href: "/security" },
@@ -88,6 +89,18 @@ export const subMenus: Record<
     {
       label: "محتواها",
       href: "/posts/billing",
+      icon: <CreditCard size={18} />,
+    },
+  ],
+  "/portal": [
+    {
+      label: "تگ ها",
+      href: "/portal/tags",
+      icon: <CreditCard size={18} />,
+    },
+    {
+      label: "پست ها",
+      href: "/portal/posts",
       icon: <CreditCard size={18} />,
     },
   ],

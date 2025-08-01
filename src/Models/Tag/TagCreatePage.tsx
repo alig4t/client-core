@@ -32,7 +32,11 @@ function TagFormFields() {
       <Label htmlFor="name" className="text-xs m-1">
         نام برچسب
       </Label>
-      <Input id="name" {...register("name")} />
+      <Input
+        id="name"
+        {...register("name")}
+        placeholder="نام برچسب را وارد نمایید"
+      />
       {errors.name && (
         <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
       )}
