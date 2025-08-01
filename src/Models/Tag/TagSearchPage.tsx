@@ -17,6 +17,8 @@ import { DatePicker } from "zaman";
 
 import "@majidh1/jalalidatepicker/dist/jalalidatepicker.min.css";
 import "@majidh1/jalalidatepicker";
+import RowContainer from "@/components/RowContainer";
+import ButtonPanel from "@/components/ButtonPanel";
 
 declare global {
   interface Window {
@@ -50,7 +52,7 @@ export default function TagSearchPage() {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between items-center mb-4 bg-[#7fb788] rounded-lg p-3">
+      <div className="flex justify-between items-center mb-4 rounded-lg p-3">
         <h4 className="text-lg font-bold">مدیریت تگ ها</h4>
         {/* <input
           className="input input-bordered"
@@ -60,14 +62,14 @@ export default function TagSearchPage() {
         /> */}
         <Link
           to="/tags/create"
-          className="btn btn-primary text-xs font-bold bg-gray-200 text-gray-600 px-3 py-1.5 rounded-full"
+          className="btn btn-primary text-xs font-bold bg-[#c5226c] !text-white px-3 py-1.5 rounded-full"
         >
           افزودن جدید
         </Link>
       </div>
 
       <div className=" border-dashed border-2 p-4 border-gray-300 rounded-md my-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-1">
+        <RowContainer>
           <Input
             // className="col-span-2"
             value={search}
@@ -81,21 +83,21 @@ export default function TagSearchPage() {
             placeholder="لطفا یک تاریخ وارد نمایید"
             data-jdp-only-date
           />
-        </div>
+        </RowContainer>
 
         {/* </div> */}
 
-        <div className="flex w-full pt-3 text-left justify-end">
+        <ButtonPanel className="mt-4">
           <button
             type="button"
             className="btn btn-primary text-xs font-bold !bg-gray-200 text-gray-600 px-3 py-1.5 rounded-full"
           >
             اعمال فیلتر
           </button>
-        </div>
+        </ButtonPanel>
       </div>
 
-      <Table className="rounded-corners">
+      <Table className="rounded-corners bg-white">
         {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
         <TableHeader>
           <TableRow>
