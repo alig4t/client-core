@@ -10,10 +10,12 @@ import { Toaster } from "./components/ui/sonner";
 import TagSearchPage from "./Models/Tag/TagSearchPage";
 import TagCreatePage from "./Models/Tag/TagCreatePage";
 import TagDisplayPage from "./Models/Tag/TagDisplayPage";
+import GlobalLoaderProvider from "./components/GlobalLoaderProvider";
 
 function App() {
   return (
     <>
+      <GlobalLoaderProvider />
       {/* <Toaster richColors position="top-center" /> */}
       <Toaster />
       <Routes>
