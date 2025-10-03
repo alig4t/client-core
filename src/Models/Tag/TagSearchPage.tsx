@@ -113,11 +113,11 @@ export default function TagSearchPage() {
               <TableCell className="font-medium">{tag.id}</TableCell>
               <TableCell>{tag.name}</TableCell>
               <TableCell className="flex gap-2">
-                <Link to={`/tags/${tag.id}/edit`} className="link">
+                <Link to={`/portal/tags/${tag.id}/edit`} className="link">
                   ویرایش
                 </Link>
                 <span className="text-gray-400">|</span>
-                <Link to={`/tags/${tag.id}`} className="link">
+                <Link to={`/portal/tags/${tag.id}`} className="link">
                   مشاهده
                 </Link>
               </TableCell>
