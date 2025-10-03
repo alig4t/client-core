@@ -1,14 +1,13 @@
 import { useQuery } from "@tanstack/react-query";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import TagService from "@/Models/Tag/TagService";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 import { loadingStore } from "@/stores/loadingStore";
 import RowContainer from "@/components/RowContainer";
 import Column from "@/components/Column";
-import TitleHeader from "@/components/TitleHeader";
 import ServiceErrorDisplay from "@/components/ServiceErrorDisplay";
+import TitleHeader from "@/components/TitleHeader";
 
 export default function TagDisplayPage() {
   const { id } = useParams();

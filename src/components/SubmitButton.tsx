@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 import { Button } from "./ui/button";
 
 interface SubmitButtonProps {
-  children: ReactElement;
+  children: ReactElement | String;
   disabled?: boolean;
   type?: "button" | "reset" | "submit";
   className?: string;

@@ -10,10 +10,9 @@ import { z } from "zod";
 import { toast } from "sonner";
 import TagService from "@/Models/Tag/TagService";
 import { loadingStore } from "@/stores/loadingStore";
-import TitleHeader from "@/components/TitleHeader";
 import RowContainer from "@/components/RowContainer";
 import ButtonPanel from "@/components/ButtonPanel";
-import { useEffect } from "react";
+import StyledTableWrapper from "@/components/Layout/StyledTableWrapper";
 
 const createTagSchema = z.object({
   name: z.string().min(2, "نام الزامی است"),
@@ -76,10 +75,10 @@ export default function CreateTagPage() {
   // }, []);
 
   return (
-    <div className="p-6 w-full">
-      <TitleHeader title="ایجاد برچسب جدید" />
+    <StyledTableWrapper title="ایجاد برچسب جدید">
+      {/* <TitleHeader title="ایجاد برچسب جدید" /> */}
 
-      <div className="bg-layout-content w-full rounded-md border p-4 mt-4">
+      <div className="bg-layout-content w-full rounded-md p-4 mt-4">
         <FormWrapper schema={createTagSchema} onSubmit={handleSubmit}>
           <RowContainer>
             <TagFormFields />
@@ -95,6 +94,6 @@ export default function CreateTagPage() {
           </ButtonPanel>
         </FormWrapper>
       </div>
-    </div>
+    </StyledTableWrapper>
   );
 }

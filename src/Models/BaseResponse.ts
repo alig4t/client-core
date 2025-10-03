@@ -1,3 +1,8 @@
+import type { PermissionModel } from "./Permission/PermissionModel";
+import type { PersonModel } from "./Person/PersonModel";
+import type { PostModel } from "./Post/PostModel";
+import type { RoleModel } from "./Role/RoleModel";
+import type { TagModel } from "./Tag/TagModel";
 import type { UserModel } from "./User/UserModel";
 
 export interface BaseResponse<T> {
@@ -21,9 +26,9 @@ export interface UserResponse {
     user: UserModel;
 }
 
-// type PersonResponse = BaseResponse<Person>;
-// type TagResponse = BaseResponse<Tag>;
-// type PostResponse = BaseResponse<Post>;
-// type RoleResponse = BaseResponse<Role>;
-// type PermissionResponse = BaseResponse<Permission>;
-// type UserWithTokenResponse = BaseResponse<UserResponse>;
+type PersonResponse = BaseResponse<PersonModel>;
+type TagResponse = BaseResponse<TagModel>;
+type PostResponse = BaseResponse<PostModel>;
+type RoleResponse = BaseResponse<RoleModel>;
+type PermissionResponse = BaseResponse<PermissionModel>;
+type UserWithTokenResponse = BaseResponse<UserResponse>;

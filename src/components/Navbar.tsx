@@ -20,7 +20,7 @@ const Navbar = () => {
   };
 
   return (
-    <div className="w-full h-16 bg-[var(--background)] dark:bg-gray-900 border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
+    <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
       {/* Title (Right) */}
       <h3 className="text-sm font-bold text-gray-800 dark:text-white hidden md:visible">
         پنل مدیریت

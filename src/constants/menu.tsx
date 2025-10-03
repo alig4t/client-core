@@ -2,7 +2,6 @@ import {
   Home,
   User,
   Settings,
-  LayoutDashboard,
   Plug,
   Users,
   PlusSquare,
