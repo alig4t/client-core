@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import type { SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import type { ZodType } from "zod";
 import { z } from "zod";
 
 type FormWrapperProps<T extends z.ZodTypeAny> = {
@@ -12,7 +11,7 @@ type FormWrapperProps<T extends z.ZodTypeAny> = {
   children: ReactNode;
 };
 
-export function FormWrapper<T extends ZodType<any>>({
+export function FormWrapper<T extends z.ZodTypeAny>({
   schema,
   defaultValues = {},
   onSubmit,

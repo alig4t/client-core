@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 import { useParams } from "react-router-dom";
 import TagService from "@/Models/Tag/TagService";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +13,7 @@ import TitleHeader from "@/components/TitleHeader";
 export default function TagDisplayPage() {
   const { id } = useParams();
 
-  const { data, isError, error, refetch, isFetched } = useQuery({
+  const { data, isError, error, refetch } = useQuery({
     queryKey: ["tag", id],
     queryFn: () => {
       loadingStore.show();
@@ -26,20 +27,22 @@ export default function TagDisplayPage() {
     refetchOnMount: false,
     refetchOnReconnect: false,
     retryOnMount: false, // فقط برای mount اولیه
-
-    // مهم: برای جلوگیری از toast تکراری
-    onError: (error) => {
-      if (!isFetched) {
-        toast.error(error?.response?.data?.message || "خطا در دریافت برچسب", {
-          description: "مشکلی در فرایند دریافت برچسب رخ داده است",
-          position: "bottom-left",
-        });
-      }
-    },
   });
 
+  // نمایش خطا با useEffect (نسخه v5: onError در useQuery وجود ندارد)
+  const hasToastedRef = useRef(false);
+  useEffect(() => {
+    if (isError && !hasToastedRef.current) {
+      const err: any = error;
+      toast.error(err?.response?.data?.message || "خطا در دریافت برچسب", {
+        description: "مشکلی در فرایند دریافت برچسب رخ داده است",
+        position: "bottom-left",
+      });
+      hasToastedRef.current = true;
+    }
+  }, [isError, error]);
+
   if (isError) {
-    toast.error("خطا در دریافت برچسب");
     return <ServiceErrorDisplay refetch={() => refetch()} />;
   }
 
