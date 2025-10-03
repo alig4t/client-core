@@ -17,6 +17,7 @@ function Stars(props: any) {
 
   // انیمیشن در هر فریم
   useFrame((state, delta) => {
+    console.log(state);
     if (ref.current) {
       ref.current.rotation.x -= delta / 10;
       ref.current.rotation.y -= delta / 15;
