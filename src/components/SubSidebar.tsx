@@ -24,7 +24,7 @@ const SubSidebar = () => {
   if (!matchedKey) return null;
 
   return (
-    <aside className="w-full  md:w-60 bg-white dark:bg-gray-900 border-l border-r border-gray-200 dark:border-gray-600 py-8 md:py-4 px-6 md:px-2">
+    <aside className="w-full  md:w-60 bg-[var(--background)] dark:bg-gray-900 border-l border-r border-gray-200 dark:border-gray-600 py-8 md:py-4 px-6 md:px-2">
       <ul
         className="
       grid grid-cols-3 sm:grid-cols-4 gap-3 

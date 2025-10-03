@@ -1,0 +1,127 @@
+@layer base {
+
+    /* ==========================================================================
+       تم روشن (Light Mode)
+       ========================================================================== */
+    :root {
+        --background: #fafafa;
+        --foreground: #020817;
+
+        --card: #ffffff;
+        --card-foreground: #020817;
+
+        --popover: #ffffff;
+        --popover-foreground: #020817;
+
+        /* رنگ اصلی سفارشی شما */
+        --primary: #101828;
+        --primary-foreground: #f8fafc;
+
+        --secondary: #f1f5f9;
+        --secondary-foreground: #101828;
+
+        --muted: #f1f5f9;
+        --muted-foreground: #a0a0a0;
+
+        --accent: #f1f5f9;
+        --accent-foreground: #101828;
+
+        --destructive: #ef4444;
+        --destructive-foreground: #f8fafc;
+
+        /* --- تغییر رنگ حاشیه به خاکستری ملایم‌تر --- */
+        --border: #e5e7eb;
+        /* gray-200 */
+        --input: #e5e7eb;
+        --input-border: #e5e7eb;
+        /* gray-200 */
+        --ring: #aaa9a9;
+
+        --radius: 0.5rem;
+
+        /* ... (متغیرهای چارت و سایدبار بدون تغییر) ... */
+        --chart-1: #f59e0b;
+        --chart-2: #06b6d4;
+        --chart-3: #6366f1;
+        --chart-4: #84cc16;
+        --chart-5: #eab308;
+        --sidebar: #f8fafc;
+        --sidebar-foreground: #020817;
+        --sidebar-primary: #101828;
+        --sidebar-primary-foreground: #f8fafc;
+        --sidebar-accent: #f1f5f9;
+        --sidebar-accent-foreground: #101828;
+        --sidebar-border: #e2e8f0;
+        --sidebar-ring: #94a3b8;
+    }
+
+    /* ==========================================================================
+       تم تاریک (Dark Mode)
+       ========================================================================== */
+    .dark {
+        --background: #020817;
+        --foreground: #f8fafc;
+
+        --card: #020817;
+        --card-foreground: #f8fafc;
+
+        --popover: #020817;
+        --popover-foreground: #f8fafc;
+
+        --primary: #f8fafc;
+        --primary-foreground: #101828;
+
+        --secondary: #1e293b;
+        --secondary-foreground: #f8fafc;
+
+        --muted: #1e293b;
+        --muted-foreground: #94a3b8;
+
+        --accent: #1e293b;
+        --accent-foreground: #f8fafc;
+
+        --destructive: #7f1d1d;
+        --destructive-foreground: #f8fafc;
+
+        /* --- تغییر رنگ حاشیه به خاکستری تیره‌تر و نامحسوس‌تر --- */
+        --border: #1f2937;
+        /* gray-800 */
+        --input: #1f2937;
+        /* gray-800 */
+        --ring: #4b5563;
+        /* gray-600 */
+
+        /* ... (متغیرهای چارت و سایدبار بدون تغییر) ... */
+        --chart-1: #4f46e5;
+        --chart-2: #22d3ee;
+        --chart-3: #eab308;
+        --chart-4: #d946ef;
+        --chart-5: #f97316;
+        --sidebar: #101828;
+        --sidebar-foreground: #f8fafc;
+        --sidebar-primary: #4f46e5;
+        --sidebar-primary-foreground: #f8fafc;
+        --sidebar-accent: #1e293b;
+        --sidebar-accent-foreground: #f8fafc;
+        --sidebar-border: #1e293b;
+        --sidebar-ring: #64748b;
+    }
+}
+
+
+@theme {
+
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --animate-infinite-slider: infiniteSlider 20s linear infinite;
+
+    @keyframes infiniteSlider {
+        0% {
+            transform: translateX(0);
+        }
+
+        100% {
+            transform: translateX(50%);
+        }
+    }
+}
