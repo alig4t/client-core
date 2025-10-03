@@ -41,3 +41,33 @@ export default function AuthLayout({ children }: AuthLayoutProps) {
     </div>
   );
 }
+
+// // src/components/AuthLayout.tsx
+
+// import { type ReactElement } from "react";
+// import AnimatedBackground from "./Layout/AnimatedBackground";
+
+// interface AuthLayoutProps {
+//   children: ReactElement;
+// }
+
+// export default function AuthLayout({ children }: AuthLayoutProps) {
+//   return (
+//     // کانتینر اصلی که تمام صفحه را می‌پوشاند
+//     <div className="min-h-screen w-full bg-[#111827] relative">
+//       {/* پس‌زمینه انیمیشنی در لایه زیرین */}
+//       <AnimatedBackground />
+
+//       {/* محتوای اصلی در لایه رویی با چیدمان وسط‌چین */}
+//       <div className="relative z-10 flex min-h-screen w-full items-center justify-center p-4">
+//         <div
+//           dir="rtl"
+//           // استایل Glassmorphism (شیشه‌ای) با استفاده از کلاس‌های Tailwind
+//           className="w-full max-w-md rounded-2xl border border-white/10 bg-white/5 p-8 shadow-2xl backdrop-blur-lg"
+//         >
+//           {children}
+//         </div>
+//       </div>
+//     </div>
+//   );
+// }

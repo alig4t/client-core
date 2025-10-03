@@ -1,24 +1,24 @@
+// src/components/Layout.tsx
+
 import AppSidebar from "@/components/app-sidebar";
 import Navbar from "./Navbar";
 import { Outlet } from "react-router-dom";
 import SubSidebar from "./SubSidebar";
-import ProgressBar from "./ProgressBar";
 
 export default function Layout() {
   return (
-    <div className="flex justify-between">
-      {/* Sidebar */}
+    <div className="flex bg-muted/40 dark:bg-background">
+      {" "}
+      {/* تغییر اینجا */}
       <AppSidebar />
-
-      {/* Main Content */}
       <div className="flex-1 flex flex-col">
         <Navbar />
-
-        <main className="flex flex-col md:flex-row flex-wrap bg-gray-50 dark:bg-gray-800 min-h-[calc(100dvh-64px)]">
+        {/* حذف پس‌زمینه از main تا از پس‌زمینه والد ارث‌بری کند */}
+        <main className="flex flex-col md:flex-row flex-wrap min-h-[calc(100dvh-64px)] bg-[var(--background)]">
           <SubSidebar />
-          <div className="flex-1 p-3">
+          {/* افزایش padding برای فضای بیشتر */}
+          <div className="flex-1 p-4 sm:p-6">
             <Outlet />
-            <ProgressBar />
           </div>
         </main>
       </div>

@@ -11,6 +11,8 @@ import { FormWrapper } from "@/components/shared/FormWrapper";
 import { toast } from "sonner";
 import AuthLayout from "@/components/AuthLayout";
 import SubmitButton from "@/components/SubmitButton";
+import { Link } from "react-router-dom";
+import { useAuth } from "@/stores/AuthContext";
 
 const loginSchema = z.object({
   email: z.string().email("ایمیل معتبر وارد کنید"),
@@ -58,11 +60,13 @@ function LoginFormFields() {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
 
   const mutation = useMutation({
     mutationFn: (data: LoginFormData) => login(data),
     onSuccess: (data) => {
-      localStorage.setItem("token", data.data.token);
+      authLogin(data.data.token);
+      // localStorage.setItem("token", data.data.token);
       toast("ورود موفقیت آمیز بود", {
         description: "در حال ورود به حساب کاربری..",
         position: "bottom-left",
@@ -73,14 +77,10 @@ export default function LoginPage() {
       }, 1000);
     },
     onError: (error: any) => {
-      toast(error?.response?.data?.message || "ورود ناموفق بود", {
-        description: "مشکلی در فرایند ورود به حساب کاربری رخ داده است",
-        // action: {
-        //   label: "Undo",
-        //   onClick: () => console.log("Undo"),
-        // },
+      toast.error("ورود ناموفق بود", {
+        // اینجا هم پیام خطا آماده است
+        description: error.message || "ایمیل یا رمز عبور شما صحیح نمی‌باشد.",
         position: "bottom-left",
-        // type: "error",
       });
     },
   });
@@ -187,12 +187,12 @@ export default function LoginPage() {
         {/* Register */}
         <p className="text-sm text-center text-gray-500 mt-4 ">
           هنوز عضو نشده‌اید؟{" "}
-          <a
-            href="#"
+          <Link
+            to="/register" // مسیر صفحه ثبت‌نام
             className="text-sky-600 hover:underline dark:!text-red-700"
           >
             ثبت نام کنید
-          </a>
+          </Link>
         </p>
       </CardContent>
     </AuthLayout>
