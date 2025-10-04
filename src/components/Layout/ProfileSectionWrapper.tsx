@@ -14,7 +14,7 @@ const ProfileSectionWrapper: React.FC<ProfileSectionWrapperProps> = ({
   className = "",
 }) => {
   return (
-    <div className="bg-[var(--card)] rounded-[15px] p-6 my-4">
+    <div className={`bg-[var(--card)] rounded-[15px] p-6 my-4 ${className}`}>
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-bold text-[var(--foreground)]  text-center md:text-right">
           {title}
