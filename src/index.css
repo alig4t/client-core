@@ -21,6 +21,12 @@ a:hover {
   color: #0f1623;
 }
 
+/* .bg-pattern {
+  background-color: #e45151;
+  background-image: url("@/assets/bg.png");
+  background-repeat: repeat;
+} */
+
 body {
   margin: 0;
   /* display: flex; */
@@ -48,7 +54,7 @@ h1 {
 
 button {
   border-radius: 8px;
-  border: 1px solid transparent;
+  /* border: 1px solid transparent; */
   padding: 0.6em 1.2em;
   font-size: 1em;
   font-weight: 500;

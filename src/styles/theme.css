@@ -4,8 +4,9 @@
        تم روشن (Light Mode)
        ========================================================================== */
     :root {
-        --background: #fafafa;
-        --foreground: #020817;
+        --background: #F7F7F7;
+        --foreground: #666666;
+        --foreground-2: #424242;
 
         --card: #ffffff;
         --card-foreground: #020817;
@@ -61,8 +62,8 @@
     .dark {
         --background: #101828;
         --foreground: #f8fafc;
-
-        --card: #020817;
+        --foreground-2: #ebebeb;
+        --card: #1e2939;
         --card-foreground: #f8fafc;
 
         --popover: #020817;

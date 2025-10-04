@@ -52,7 +52,7 @@ const Navbar = () => {
               </span>
             </button>
           </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-64 text-right">
+          <DropdownMenuContent className="w-64 text-right !bg-[var(--background)]">
             <DropdownMenuLabel className="text-center">
               اطلاع رسانی‌ها
             </DropdownMenuLabel>
@@ -107,7 +107,10 @@ const Navbar = () => {
               />
             </div>
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-56 text-right">
+          <DropdownMenuContent
+            align="end"
+            className="w-56 text-right  !bg-[var(--background)]"
+          >
             <div className="flex items-center gap-3 p-3 border-b border-gray-200 dark:border-gray-700">
               <img
                 src="https://i.pravatar.cc/40"

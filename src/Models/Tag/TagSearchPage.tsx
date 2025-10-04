@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import TagService from "@/Models/Tag/TagFakeService";
 import { Link } from "react-router-dom";
 import type { TagModel } from "./TagModel";
-import { PlusCircle, Search } from "lucide-react";
+import { PlusCircle, Search, Filter, Delete } from "lucide-react";
 
 // Import shadcn UI components
 import {
@@ -18,11 +18,9 @@ import { Button } from "@/components/ui/button";
 import {
   Accordion,
   AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
+  AccordionItem
 } from "@/components/ui/accordion";
 import ProfileSectionWrapper from "@/components/Layout/ProfileSectionWrapper";
-import StyledTableWrapper from "@/components/Layout/StyledTableWrapper";
 
 // Import the new styled table wrapper
 
@@ -36,6 +34,8 @@ declare global {
 export default function TagSearchPage() {
   const [search, setSearch] = useState("");
   const [tags, setTags] = useState<TagModel[]>([]);
+
+  const [openFilter, setOpenFilter] = useState<string>(""); // "" یعنی بسته، "filter-panel" یعنی باز
 
   // Initialize datepicker
   useEffect(() => {
@@ -61,54 +61,90 @@ export default function TagSearchPage() {
     fetchTags();
   }, [search]);
 
+  // 2. تابع برای باز و بسته کردن پنل فیلتر
+  const toggleFilterPanel = () => {
+    setOpenFilter(openFilter === "" ? "filter-panel" : "");
+  };
+
+  // useEffect(() => {
+  //   // فقط زمانی اسکریپت را اجرا کن که پنل فیلتر باز باشد
+  //   if (openFilter === "filter-panel" && window.jalaliDatepicker) {
+  //     window.jalaliDatepicker.startWatch({
+  //       minDate: "attr",
+  //       maxDate: "attr",
+  //       time: true,
+  //     });
+  //   }
+  // }, [openFilter]);
+
   return (
     <>
       <ProfileSectionWrapper
-        title="مدیریت تگ ها"
+        title="لیست تگ‌ها"
+        className="!rounded-[25px] "
         newLink={
-          <Link to="/portal/tags/create">
-            <Button>
-              <PlusCircle className="ml-2 h-4 w-4" />
-              افزودن تگ جدید
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              className="border-purple-700 hover:!border-purple-800 text-purple-700 hover:text-purple-800"
+              onClick={toggleFilterPanel}
+            >
+              <Filter className="ml-2 h-4 w-4" />
+              فیلتر
             </Button>
-          </Link>
+            <Link to="/portal/tags/create">
+              <Button className="!text-[13px]">
+                <PlusCircle className="ml-2 h-4 w-4" />
+                افزودن تگ جدید
+              </Button>
+            </Link>
+          </div>
         }
       >
-        <div className="space-y-6 text-[var(--foreground)]">
-          {/* Accordion Filter */}
-          <Accordion type="single" collapsible className="w-full">
-            <AccordionItem value="item-1">
-              <AccordionTrigger className="focus-visible:ring-gray-800 bg-gray-100 dark:bg-gray-800 px-4 rounded-md">
-                <span className="text-base font-medium">فیلترها</span>
-              </AccordionTrigger>
-              <AccordionContent className="bg-gray-50 dark:bg-gray-900 mt-1 rounded-md p-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <Accordion
+          type="single"
+          collapsible
+          className="w-full"
+          value={openFilter}
+          onValueChange={setOpenFilter}
+        >
+          <AccordionItem value="filter-panel" className="border-none">
+            <AccordionContent className="bg-gray-100 border-1 border-gray-50  mt-1 rounded-md p-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                <div className="flex flex-col gap-2">
+                  <p className="text-[var(--foreground)]">عنوان برچسب</p>
                   <Input
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="جستجوی نام برچسب..."
                   />
-                  <Input
-                    type="text"
-                    data-jdp // For Jalali DatePicker
-                    placeholder="انتخاب تاریخ"
-                  />
                 </div>
-                <div className="flex justify-end mt-4">
-                  <Button variant="secondary">
-                    <Search className="ml-2 h-4 w-4" />
-                    اعمال فیلتر
-                  </Button>
+                <div className="flex flex-col gap-2">
+                  <p className="text-[var(--foreground)]">تاریخ</p>
+                  <Input type="text" data-jdp placeholder="انتخاب تاریخ" />
                 </div>
-              </AccordionContent>
-            </AccordionItem>
-          </Accordion>
-
-          {/* Use the new StyledTableWrapper */}
-        </div>
-      </ProfileSectionWrapper>
-      <StyledTableWrapper title="لیست تگ‌ها">
-        <Table>
+              </div>
+              <div className="flex justify-end gap-2 mt-4">
+                <Button
+                  size={"sm"}
+                  variant={"outline"}
+                  className="border !text-[12px] border-red-500 hover:!border-red-600 text-red-500 hover:!text-red-600"
+                >
+                  <Delete className="ml-2 h-4 w-4" />
+                  حذف فیلتر
+                </Button>
+                <Button
+                  size={"sm"}
+                  className="bg-green-600  !text-[12px] hover:bg-green-700"
+                >
+                  <Search className="ml-2 h-4 w-4" />
+                  اعمال فیلتر
+                </Button>
+              </div>
+            </AccordionContent>
+          </AccordionItem>
+        </Accordion>
+        <Table className=" shadow-md text-[var(--foreground-2)] mt-7">
           <TableHeader>
             <TableRow className="border-b-4 border-[var(--border)] hover:bg-transparent">
               <TableHead className="w-[100px] border-b-2 font-bold border-[var(--border)] text-center">
@@ -156,7 +192,7 @@ export default function TagSearchPage() {
             )}
           </TableBody>
         </Table>
-      </StyledTableWrapper>
+      </ProfileSectionWrapper>
     </>
   );
 }
