@@ -122,7 +122,7 @@ export default function RegisterPage() {
     },
     onError: (error: any) => {
       toast.error("ثبت‌نام ناموفق بود", {
-        description: error.response?.data?.message || "لطفاً اطلاعات وارد شده را بررسی کنید.",
+        description: error?.message || "لطفاً اطلاعات وارد شده را بررسی کنید.",
         position: "bottom-left",
       });
     },
