@@ -9,6 +9,7 @@ type FormWrapperProps<T extends z.ZodTypeAny> = {
   defaultValues?: Partial<z.infer<T>>;
   onSubmit: SubmitHandler<z.infer<T>>;
   children: ReactNode;
+  className?: string;
 };
 
 export function FormWrapper<T extends z.ZodTypeAny>({
@@ -16,6 +17,7 @@ export function FormWrapper<T extends z.ZodTypeAny>({
   defaultValues = {},
   onSubmit,
   children,
+  className="",
 }: FormWrapperProps<T>) {
   const methods = useForm<z.infer<T>>({
     resolver: zodResolver(schema),
@@ -24,7 +26,7 @@ export function FormWrapper<T extends z.ZodTypeAny>({
 
   return (
     <FormProvider {...methods}>
-      <form onSubmit={methods.handleSubmit(onSubmit)}>{children}</form>
+      <form onSubmit={methods.handleSubmit(onSubmit)} className={className}>{children}</form>
     </FormProvider>
   );
 }

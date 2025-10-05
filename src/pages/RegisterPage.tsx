@@ -1,19 +1,15 @@
-// src/pages/RegisterPage.tsx
-
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { register as registerService } from "@/services/authService"; // تغییر نام برای جلوگیری از تداخل
-import { Input } from "@/components/ui/input";
-import { CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
+import { register as registerService } from "@/services/authService";
 import { Link, useNavigate } from "react-router-dom";
-import { useFormContext } from "react-hook-form";
-import { FormWrapper } from "@/components/shared/FormWrapper";
+import { useFormContext, FormProvider } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import AuthLayout from "@/components/AuthLayout";
-import SubmitButton from "@/components/SubmitButton";
+import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو از اینجا وارد می‌شود
+import { FormWrapper } from "@/components/shared/FormWrapper";
+import { ErrorFormText } from "@/components/general/ErrorText/ErrorFormText";
 
-// Schema برای اعتبارسنجی فرم ثبت‌نام
+// --- Schema برای اعتبارسنجی فرم ثبت‌نام ---
 const registerSchema = z
   .object({
     name: z.string().min(3, "نام حداقل باید ۳ کاراکتر باشد"),
@@ -25,12 +21,12 @@ const registerSchema = z
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "رمزهای عبور با یکدیگر مطابقت ندارند",
-    path: ["confirmPassword"], // نمایش خطا زیر فیلد تکرار رمز عبور
+    path: ["confirmPassword"],
   });
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-// کامپوننت فیلدهای فرم
+// --- کامپوننت فیلدهای فرم با استایل جدید ---
 function RegisterFormFields() {
   const {
     register,
@@ -39,66 +35,75 @@ function RegisterFormFields() {
 
   return (
     <>
-      <div className="space-y-1">
-        <Label htmlFor="name">نام</Label>
-        <Input
+      <div className="w-full">
+        <label htmlFor="name" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          نام
+        </label>
+        <input
           id="name"
           type="text"
           placeholder="نام خود را وارد کنید"
           {...register("name")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.name && (
-          <p className="text-xs text-red-500 mt-1">{errors.name.message}</p>
-        )}
+        {errors.name && (<ErrorFormText msg={errors.name.message} />)}
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="email">ایمیل</Label>
-        <Input
+      <div className="w-full">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          ایمیل
+        </label>
+        <input
           id="email"
           type="email"
-          placeholder="ایمیل خود را وارد کنید"
+          placeholder="مثلا user@example.com"
           {...register("email")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         {errors.email && (
-          <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+          <ErrorFormText msg={errors.email.message} />
         )}
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="password">رمز عبور</Label>
-        <Input
+      <div className="w-full">
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          رمز عبور
+        </label>
+        <input
           id="password"
           type="password"
-          placeholder="رمز عبور را وارد کنید"
+          placeholder="یک رمز عبور قوی انتخاب کنید"
           {...register("password")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         {errors.password && (
-          <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+          <ErrorFormText msg={errors.password.message} />
         )}
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="confirmPassword">تکرار رمز عبور</Label>
-        <Input
+      <div className="w-full">
+        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          تکرار رمز عبور
+        </label>
+        <input
           id="confirmPassword"
           type="password"
-          placeholder="رمز عبور را تکرار کنید"
+          placeholder="رمز عبور را دوباره وارد کنید"
           {...register("confirmPassword")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         {errors.confirmPassword && (
-          <p className="text-xs text-red-500 mt-1">
-            {errors.confirmPassword.message}
-          </p>
+          <ErrorFormText msg={errors.confirmPassword.message} />
         )}
       </div>
     </>
   );
 }
 
-// کامپوننت اصلی صفحه ثبت‌نام
+// --- کامپوننت اصلی صفحه ثبت‌نام با استایل جدید ---
 export default function RegisterPage() {
   const navigate = useNavigate();
+
 
   const mutation = useMutation({
     mutationFn: (data: RegisterFormData) =>
@@ -108,19 +113,17 @@ export default function RegisterPage() {
         password: data.password,
       }),
     onSuccess: () => {
-      toast("ثبت‌نام موفقیت آمیز بود", {
-        description:
-          "حساب کاربری شما با موفقیت ایجاد شد. به صفحه ورود منتقل می‌شوید.",
+      toast.success("ثبت‌نام موفقیت آمیز بود", {
+        description: "حساب کاربری شما ایجاد شد. به صفحه ورود منتقل می‌شوید.",
         position: "bottom-left",
       });
       setTimeout(() => {
-        navigate("/login"); // هدایت به صفحه لاگین پس از ثبت‌نام موفق
+        navigate("/login");
       }, 2000);
     },
     onError: (error: any) => {
       toast.error("ثبت‌نام ناموفق بود", {
-        // به سادگی از error.message استفاده می‌کنیم که در interceptor آماده شده
-        description: error.message || "لطفاً اطلاعات وارد شده را بررسی کنید.",
+        description: error.response?.data?.message || "لطفاً اطلاعات وارد شده را بررسی کنید.",
         position: "bottom-left",
       });
     },
@@ -131,37 +134,41 @@ export default function RegisterPage() {
   };
 
   return (
-    <AuthLayout>
-      <CardContent className="py-8 px-6 space-y-5">
-        <h2 className="text-xl font-bold text-center">ایجاد حساب کاربری</h2>
-        <p className="text-sm text-gray-600 text-center mb-2 dark:!text-zinc-400">
-          برای استفاده از امکانات، ثبت نام کنید
-        </p>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50 py-12">
+      <div className="w-full max-w-sm sm:max-w-[480px] p-8 space-y-6 bg-white shadow-xl rounded-2xl">
+        <div className="flex justify-center">
+          <img src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`} alt="Logo" className="" />
+        </div>
 
-        <FormWrapper schema={registerSchema} onSubmit={onSubmit}>
-          <div className="space-y-4">
-            <RegisterFormFields />
+        <div className="text-center">
+          <h1 className="!text-3xl font-bold text-gray-800 mb-2">ایجاد حساب کاربری</h1>
+        </div>
 
-            <SubmitButton
-              disabled={mutation.isPending}
-              type="submit"
-              className="mt-8"
-            >
-              <>{mutation.isPending ? "در حال ایجاد حساب..." : "ثبت نام"}</>
-            </SubmitButton>
-          </div>
+        {/* <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
+        <FormWrapper schema={registerSchema} onSubmit={onSubmit} className="space-y-5">
+          <RegisterFormFields />
+          <button
+            disabled={mutation.isPending}
+            type="submit"
+            className="w-full px-4 py-3 mt-4 font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-purple-300 transition-colors duration-300"
+          >
+            {mutation.isPending ? "در حال ایجاد حساب..." : "ثبت نام"}
+          </button>
         </FormWrapper>
+        {/* </form> */}
+        {/* </FormProvider> */}
 
-        <p className="text-sm text-center text-gray-500 mt-4">
+        <p className="text-[11px] text-center text-gray-500">
           حساب کاربری دارید؟{" "}
           <Link
             to="/login"
-            className="text-sky-600 hover:underline dark:!text-red-700"
+            className="font-semibold text-purple-600 hover:underline"
           >
             وارد شوید
           </Link>
         </p>
-      </CardContent>
-    </AuthLayout>
+      </div>
+    </div>
   );
 }

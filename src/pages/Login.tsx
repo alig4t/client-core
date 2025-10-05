@@ -1,26 +1,25 @@
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { login } from "@/services/authService";
-import { Input } from "@/components/ui/input";
-import { CardContent } from "@/components/ui/card";
-import { Label } from "@/components/ui/label";
 import { useNavigate } from "react-router-dom";
-// مسیر درست به Wrapper
+import { useForm, FormProvider } from "react-hook-form";
 import { useFormContext } from "react-hook-form";
-import { FormWrapper } from "@/components/shared/FormWrapper";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
-import AuthLayout from "@/components/AuthLayout";
-import SubmitButton from "@/components/SubmitButton";
-import { Link } from "react-router-dom";
 import { useAuth } from "@/stores/AuthContext";
+import { SOCIAL_MEDIA_LOGO } from "@/assets/icons";
+import { Link } from "react-router-dom";
+import { FormWrapper } from "@/components/shared/FormWrapper";
+import { ErrorFormText } from "@/components/general/ErrorText/ErrorFormText";
 
+// --- Schema و Type بدون تغییر ---
 const loginSchema = z.object({
   email: z.string().email("ایمیل معتبر وارد کنید"),
   password: z.string().min(6, "رمز عبور حداقل باید ۶ کاراکتر باشد"),
 });
-
 type LoginFormData = z.infer<typeof loginSchema>;
 
+// --- کامپوننت فیلدهای فرم با استایل جدید ---
 function LoginFormFields() {
   const {
     register,
@@ -29,48 +28,58 @@ function LoginFormFields() {
 
   return (
     <>
-      <div className="space-y-1">
-        <Label htmlFor="email">ایمیل</Label>
-        <Input
+      <div className="w-full">
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          ایمیل
+        </label>
+        <input
           id="email"
           type="email"
-          placeholder="ایمیل خود را وارد کنید"
+          placeholder="مثلا user@example.com"
           {...register("email")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         {errors.email && (
-          <p className="text-xs text-red-500 mt-1">{errors.email.message}</p>
+          <ErrorFormText msg={errors.email.message} />
         )}
       </div>
 
-      <div className="space-y-1">
-        <Label htmlFor="password">رمز عبور</Label>
-        <Input
+      <div className="w-full">
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          رمز عبور
+        </label>
+        <input
           id="password"
           type="password"
-          placeholder="رمز عبور را وارد کنید"
+          placeholder="رمز عبور خود را وارد کنید"
           {...register("password")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         {errors.password && (
-          <p className="text-xs text-red-500 mt-1">{errors.password.message}</p>
+          <ErrorFormText msg={errors.password.message} />
         )}
       </div>
     </>
   );
 }
 
+// --- کامپوننت اصلی صفحه لاگین با استایل جدید ---
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
+  // const methods = useForm<LoginFormData>({
+  //   resolver: zodResolver(loginSchema),
+  // });
+
   const mutation = useMutation({
     mutationFn: (data: LoginFormData) => login(data),
     onSuccess: (data) => {
+      // پاسخ سرور شما باید شامل accessToken و refreshToken باشد
       authLogin(data.data.token);
-      // localStorage.setItem("token", data.data.token);
-      toast("ورود موفقیت آمیز بود", {
-        description: "در حال ورود به حساب کاربری..",
+      toast.success("ورود موفقیت آمیز بود", {
+        description: "خوش آمدید! در حال انتقال به داشبورد...",
         position: "bottom-left",
-        // type: "success",
       });
       setTimeout(() => {
         navigate("/dashboard");
@@ -78,8 +87,7 @@ export default function LoginPage() {
     },
     onError: (error: any) => {
       toast.error("ورود ناموفق بود", {
-        // اینجا هم پیام خطا آماده است
-        description: error.message || "ایمیل یا رمز عبور شما صحیح نمی‌باشد.",
+        description: error.response?.data?.message || "ایمیل یا رمز عبور شما صحیح نمی‌باشد.",
         position: "bottom-left",
       });
     },
@@ -90,111 +98,51 @@ export default function LoginPage() {
   };
 
   return (
-    <AuthLayout>
-      <CardContent className="py-8 px-6 space-y-5">
-        <h2 className="text-xl font-bold text-center">خوش آمدید</h2>
-        <p className="text-sm text-gray-600 text-center mb-2 dark:!text-zinc-400">
-          به پنل کاربری وارد شوید
-        </p>
+    <div className="flex items-center justify-center min-h-screen bg-gray-50">
+      <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6 bg-white shadow-xl rounded-2xl">
+        <div className="flex justify-center">
+          <img src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`} alt="Logo" className="" />
+          {/* <svg className="w-40 h-auto" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <text x="50" y="30" fontFamily="Arial, sans-serif" fontSize="24" fill="#5A2E8E" fontWeight="bold">رایا نوین</text>
+            </svg> */}
+        </div>
 
-        <FormWrapper schema={loginSchema} onSubmit={onSubmit}>
-          <div className="space-y-4">
-            <LoginFormFields />
+        {/* بخش عنوان */}
+        <div className="text-center">
+          <h1 className="!text-3xl font-bold text-gray-800 mb-2">ورود به پنل مدیریت</h1>
+          {/* <p className="mt-2 text-sm text-gray-500">ایمیل و رمز عبور خود را وارد کنید</p> */}
+        </div>
 
-            <SubmitButton
-              disabled={mutation.isPending}
-              type="submit"
-              className="mt-8"
-            >
-              <>{mutation.isPending ? "در حال ورود..." : "ورود"}</>
-            </SubmitButton>
-          </div>
+        {/* بخش فرم */}
+        <FormWrapper schema={loginSchema} onSubmit={onSubmit} className="space-y-5">
+          {/* <FormProvider {...methods}>
+          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
+          <LoginFormFields />
+          <button
+            disabled={mutation.isPending}
+            type="submit"
+            className="w-full px-4 py-3 font-semibold text-white mt-4 bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-purple-300 transition-colors duration-300"
+          >
+            {mutation.isPending ? "در حال بررسی..." : "تایید و ادامه"}
+          </button>
+          {/* </form> */}
         </FormWrapper>
 
-        <div className="text-sm text-center dark:!text-zinc-400 mt-1">
-          <a href="#" className="hover:underline dark:!text-zinc-400">
-            رمز عبور خود را فراموش کرده‌اید؟
-          </a>
-        </div>
-
-        {/* Divider */}
-        <div className="flex items-center gap-2 mt-4 mb-2">
-          <div className="flex-grow border-t border-gray-300" />
-          <span className="text-sm text-gray-400">یا</span>
-          <div className="flex-grow border-t border-gray-300" />
-        </div>
-
-        {/* OAuth Buttons */}
-        <div className="space-y-2">
-          <SubmitButton>
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                x="0px"
-                y="0px"
-                width="100"
-                height="100"
-                viewBox="0 0 48 48"
-              >
-                <path
-                  fill="#FFC107"
-                  d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"
-                ></path>
-                <path
-                  fill="#FF3D00"
-                  d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"
-                ></path>
-                <path
-                  fill="#4CAF50"
-                  d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"
-                ></path>
-                <path
-                  fill="#1976D2"
-                  d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"
-                ></path>
-              </svg>
-              ورود با گوگل
-            </>
-          </SubmitButton>
-
-          <SubmitButton>
-            <>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                shape-rendering="geometricPrecision"
-                text-rendering="geometricPrecision"
-                image-rendering="optimizeQuality"
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                viewBox="0 0 509 509"
-              >
-                <g fill-rule="nonzero">
-                  <path
-                    fill="#0866FF"
-                    d="M509 254.5C509 113.94 395.06 0 254.5 0S0 113.94 0 254.5C0 373.86 82.17 474 193.02 501.51V332.27h-52.48V254.5h52.48v-33.51c0-86.63 39.2-126.78 124.24-126.78 16.13 0 43.95 3.17 55.33 6.33v70.5c-6.01-.63-16.44-.95-29.4-.95-41.73 0-57.86 15.81-57.86 56.91v27.5h83.13l-14.28 77.77h-68.85v174.87C411.35 491.92 509 384.62 509 254.5z"
-                  />
-                  <path
-                    fill="#fff"
-                    d="M354.18 332.27l14.28-77.77h-83.13V227c0-41.1 16.13-56.91 57.86-56.91 12.96 0 23.39.32 29.4.95v-70.5c-11.38-3.16-39.2-6.33-55.33-6.33-85.04 0-124.24 40.16-124.24 126.78v33.51h-52.48v77.77h52.48v169.24c19.69 4.88 40.28 7.49 61.48 7.49 10.44 0 20.72-.64 30.83-1.86V332.27h68.85z"
-                  />
-                </g>
-              </svg>
-              ورود با فیسبوک
-            </>
-          </SubmitButton>
-        </div>
-
-        {/* Register */}
-        <p className="text-sm text-center text-gray-500 mt-4 ">
-          هنوز عضو نشده‌اید؟{" "}
-          <Link
-            to="/register" // مسیر صفحه ثبت‌نام
-            className="text-sky-600 hover:underline dark:!text-red-700"
-          >
-            ثبت نام کنید
-          </Link>
+        {/* بخش قوانین */}
+        <p className="text-xs text-center text-gray-400">
+          ورود شما به منزله قبول <a href="#" className="font-semibold text-purple-600 hover:underline">قوانین و مقررات</a> رایانوین است.
         </p>
-      </CardContent>
-    </AuthLayout>
+
+        <div className="pt-4 text-center">
+          <p className=" text-gray-500  text-[11px]">
+            هنوز حساب کاربری نساخته‌اید؟{' '}
+            <Link to="/register" className="font-semibold text-purple-600 hover:text-purple-700 hover:underline">
+              ایجاد حساب کاربری
+            </Link>
+          </p>
+        </div>
+
+      </div>
+    </div>
   );
 }
