@@ -12,11 +12,11 @@ import { ErrorFormText } from "@/components/general/ErrorText/ErrorFormText";
 const registerSchema = z
   .object({
     name: z.string().min(3, "نام حداقل باید ۳ کاراکتر باشد"),
-    email: z.string().email("ایمیل معتبر وارد کنید"),
-    password: z.string().min(6, "رمز عبور حداقل باید ۶ کاراکتر باشد"),
+    username: z.string().nonempty("نام کاربری را وارد نمایید"),
+    password: z.string().min(3, "رمز عبور حداقل باید 3 کاراکتر باشد"),
     confirmPassword: z
       .string()
-      .min(6, "تکرار رمز عبور حداقل باید ۶ کاراکتر باشد"),
+      .min(3, "تکرار رمز عبور حداقل باید 3 کاراکتر باشد"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     message: "رمزهای عبور با یکدیگر مطابقت ندارند",
@@ -49,18 +49,18 @@ function RegisterFormFields() {
       </div>
 
       <div className="w-full">
-        <label htmlFor="email" className="block text-sm font-medium text-gray-700 text-right mb-1">
-          ایمیل
+        <label htmlFor="username" className="block text-sm font-medium text-gray-700 text-right mb-1">
+          نام کاربری
         </label>
         <input
-          id="email"
-          type="email"
-          placeholder="مثلا user@example.com"
-          {...register("email")}
+          id="username"
+          type="text"
+          placeholder="مثلا aligh75"
+          {...register("username")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.email && (
-          <ErrorFormText msg={errors.email.message} />
+        {errors.username && (
+          <ErrorFormText msg={errors.username.message} />
         )}
       </div>
 
@@ -108,7 +108,7 @@ export default function RegisterPage() {
     mutationFn: (data: RegisterFormData) =>
       registerService({
         name: data.name,
-        email: data.email,
+        username: data.username,
         password: data.password,
       }),
     onSuccess: () => {

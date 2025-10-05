@@ -1,9 +1,9 @@
 import { api } from "@/lib/axios";
 
-export const login = (data: { email: string; password: string }) => {
+export const login = (data: { username: string; password: string }) => {
   return api.post("/auth/login", data);
 };
 
-export const register = (data: { name: string; email: string; password: string }) => {
+export const register = (data: { name: string; username: string; password: string }) => {
   return api.post("/auth/register", data);
 };
