@@ -2,8 +2,7 @@ import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
 import { register as registerService } from "@/services/authService";
 import { Link, useNavigate } from "react-router-dom";
-import { useFormContext, FormProvider } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو از اینجا وارد می‌شود
 import { FormWrapper } from "@/components/shared/FormWrapper";
