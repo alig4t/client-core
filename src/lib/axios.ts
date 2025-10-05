@@ -1,13 +1,11 @@
-// src/lib/axios.ts
-
-import axios, { AxiosError } from "axios";
+import axios,{AxiosError} from "axios";
 import type { AxiosResponse } from "axios";
 import { API_BASE_URL } from "@/config/api";
 import NProgress from "nprogress";
 import { toast } from "sonner";
 
+// ساخت یک نمونه از axios با تنظیمات پایه
 export const api = axios.create({
-  // ... (تنظیمات اولیه بدون تغییر)
   baseURL: API_BASE_URL,
   headers: {
     "Content-Type": "application/json",
@@ -15,11 +13,21 @@ export const api = axios.create({
   },
 });
 
-// ... (کد مربوط به NProgress و Request Interceptor بدون تغییر)
+// --- مدیریت نوار پیشرفت (Progress Bar) ---
 let requestCount = 0;
-const startProgress = () => { if (requestCount === 0) NProgress.start(); requestCount++; };
-const stopProgress = () => { requestCount--; if (requestCount <= 0) { NProgress.done(); requestCount = 0; } };
+const startProgress = () => {
+  if (requestCount === 0) NProgress.start();
+  requestCount++;
+};
+const stopProgress = () => {
+  requestCount--;
+  if (requestCount <= 0) {
+    NProgress.done();
+    requestCount = 0;
+  }
+};
 
+// --- رهگیر درخواست‌ها (Request Interceptor) ---
 api.interceptors.request.use(
   (config) => {
     startProgress();
@@ -35,40 +43,41 @@ api.interceptors.request.use(
   }
 );
 
-
-// --- مهم‌ترین تغییر اینجاست ---
+// --- رهگیر پاسخ‌ها (Response Interceptor) ---
 api.interceptors.response.use(
-  // ۱. این تابع برای پاسخ‌های با کد 2xx اجرا می‌شود
+  // ۱. این تابع برای پاسخ‌های موفق (کد 2xx) اجرا می‌شود
   (response: AxiosResponse) => {
     stopProgress();
     const responseData = response.data;
 
-    // چک می‌کنیم آیا بدنه پاسخ، ساختار یک خطا را دارد یا نه
+    // اگر سرور با کد 200 یک خطا برگردانده بود، آن را به عنوان خطا 처리 می‌کنیم
     if (responseData && responseData.type === 'error' && responseData.status >= 400) {
-      // اگر خطا بود، یک Promise رد شده (rejected) برمی‌گردانیم
-      // این کار باعث می‌شود که .catch() یا onError در useMutation اجرا شود
       const error = new AxiosError(
-        responseData.data || 'خطایی رخ داده است', // پیام خطا
-        String(responseData.status), // کد خطا
+        responseData.data || 'خطایی رخ داده است',
+        String(responseData.status),
         response.config,
         response.request,
         response
       );
-      
-      // پیام خطا را به آبجکت error اضافه می‌کنیم تا در کامپوننت قابل دسترس باشد
       error.message = responseData.data || 'خطایی رخ داده است';
-
       return Promise.reject(error);
     }
 
-    // اگر ساختار خطا را نداشت، پاسخ موفقیت‌آمیز است
-    return response;
+    // ✨ بهبود اصلی: باز کردن پوسته‌ی پاسخ‌های موفق ✨
+    // اگر پاسخ ساختار موفق مورد انتظار ما را داشت، فقط دیتای اصلی داخل آن را برمی‌گردانیم
+    if (responseData && responseData.type === 'data' && typeof responseData.data !== 'undefined') {
+      return responseData.data;
+    }
+
+    // به عنوان فال‌بک، اگر ساختار متفاوتی وجود داشت، کل بدنه دیتا را برمی‌گردانیم
+    return responseData;
   },
 
-  // ۲. این تابع برای پاسخ‌های غیر 2xx اجرا می‌شود (بدون تغییر)
+  // ۲. این تابع برای پاسخ‌های ناموفق (غیر 2xx) اجرا می‌شود
   (error: AxiosError) => {
     stopProgress();
 
+    // مدیریت خطای شبکه
     if (!error.response) {
       toast.error("خطای شبکه", {
         description: "اتصال به سرور برقرار نشد. لطفاً اینترنت خود را بررسی کنید.",
@@ -77,6 +86,7 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
+    // استخراج پیام خطا از پاسخ سرور
     const responseData = error.response.data as any;
     let errorMessage = "یک خطای پیش‌بینی نشده رخ داده است.";
 
@@ -85,15 +95,20 @@ api.interceptors.response.use(
       else if (typeof responseData.message === 'string') errorMessage = responseData.message;
     }
     
+    // قرار دادن پیام خطا در آبجکت error تا در useMutation قابل دسترس باشد
     error.message = errorMessage;
     
+    // مدیریت خطای 401 (عدم احراز هویت)
     if (error.response.status === 401) {
         localStorage.removeItem("token");
-        window.location.href = '/login';
-        toast.error("نشست شما منقضی شده", {
-            description: "لطفاً دوباره وارد شوید.",
-            position: "bottom-left",
-        });
+        // برای جلوگیری از loop، چک می‌کنیم که در صفحه لاگین نباشیم
+        if (window.location.pathname !== '/login') {
+            window.location.href = '/login';
+            toast.error("نشست شما منقضی شده", {
+                description: "لطفاً دوباره وارد شوید.",
+                position: "bottom-left",
+            });
+        }
     }
 
     return Promise.reject(error);

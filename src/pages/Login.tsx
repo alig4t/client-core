@@ -77,9 +77,14 @@ export default function LoginPage() {
       // پاسخ سرور شما باید شامل accessToken و refreshToken باشد
       // authLogin(data.data.token);
     
-      console.log("Data received on success:", data.data.data.token); 
+      console.log("Data received on success:", data); 
       // authLogin(data.token); 
-      authLogin(data.data.data.token)
+      const token = (data as any).token;
+      const user = (data as any).user;
+  
+      // هر دو را به تابع login پاس می‌دهیم
+      authLogin(token, user); 
+    
       
       toast.success("ورود موفقیت آمیز بود", {
         description: "خوش آمدید! در حال انتقال به داشبورد...",
@@ -91,7 +96,7 @@ export default function LoginPage() {
     },
     onError: (error: any) => {
       toast.error("ورود ناموفق بود", {
-        description: error.response?.data?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",
+        description: error?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",
         position: "bottom-left",
       });
     },

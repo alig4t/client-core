@@ -10,15 +10,20 @@ import { Button } from "@/components/ui/button";
 import { Bell, MoonIcon, SunIcon } from "lucide-react";
 import { useState } from "react";
 import { Separator } from "./ui/separator";
+import { useAuth } from "@/stores/AuthContext";
 
 const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
+  const { user, logout } = useAuth();
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     document.documentElement.classList.toggle("dark");
   };
 
+  if (!user) {
+    return null; 
+  }
   return (
     <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
       {/* Title (Right) */}
@@ -98,7 +103,7 @@ const Navbar = () => {
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-2 cursor-pointer">
               <span className="text-sm font-medium text-gray-800 dark:text-white">
-                علی رضایی
+              {user.name}
               </span>
               <img
                 src="https://i.pravatar.cc/40"
@@ -118,15 +123,18 @@ const Navbar = () => {
                 className="w-10 h-10 rounded-full"
               />
               <div className="flex flex-col items-end">
-                <p className="font-medium">علی رضایی</p>
-                <p className="text-xs text-gray-500">ali@email.com</p>
+                <p className="font-medium"> {user.name}</p>
+                <p className="text-xs text-gray-500">{user.username}</p>
               </div>
             </div>
             <div className="flex justify-between px-3 py-2 text-sm">
               <DropdownMenuItem className="text-blue-600 hover:text-blue-800 cursor-pointer">
                 تنظیمات
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-red-600 hover:text-red-800 cursor-pointer">
+              <DropdownMenuItem 
+                onClick={logout} 
+                className="text-red-600 hover:text-red-800 cursor-pointer"
+              >
                 خروج
               </DropdownMenuItem>
             </div>
