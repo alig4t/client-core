@@ -21,9 +21,9 @@ const Navbar = () => {
     document.documentElement.classList.toggle("dark");
   };
 
-  if (!user) {
-    return null; 
-  }
+  // if (!user) {
+  //   return null; 
+  // }
   return (
     <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
       {/* Title (Right) */}
@@ -103,7 +103,7 @@ const Navbar = () => {
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-2 cursor-pointer">
               <span className="text-sm font-medium text-gray-800 dark:text-white">
-              {user.name}
+              {user?.name}
               </span>
               <img
                 src="https://i.pravatar.cc/40"
@@ -123,8 +123,8 @@ const Navbar = () => {
                 className="w-10 h-10 rounded-full"
               />
               <div className="flex flex-col items-end">
-                <p className="font-medium"> {user.name}</p>
-                <p className="text-xs text-gray-500">{user.username}</p>
+                <p className="font-medium"> {user?.name}</p>
+                <p className="text-xs text-gray-500">{user?.username}</p>
               </div>
             </div>
             <div className="flex justify-between px-3 py-2 text-sm">
