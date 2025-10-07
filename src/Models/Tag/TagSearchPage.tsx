@@ -11,6 +11,7 @@ import persian from "react-date-object/calendars/persian"
 import persian_fa from "react-date-object/locales/persian_fa"
 import type { Value } from "react-multi-date-picker"; // 1. ایمپورت کردن تایپ Value
 import Accordion from '@/components/general/Accordion';
+import TagsTable from './TagsTable';
 
 // ایمپورت کامپوننت‌های پایه
 
@@ -122,6 +123,7 @@ const InstallmentsPage: React.FC = () => {
             <p className="mt-4 text-gray-500">اقساطی جهت نمایش وجود ندارد</p>
         </div>
       </div>
+      <TagsTable />
     </div>
   );
 };
