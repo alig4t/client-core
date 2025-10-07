@@ -8,7 +8,7 @@ import { useAuth } from "@/stores/AuthContext";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons";
 import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/shared/FormWrapper";
-import { ErrorFormText } from "@/components/general/ErrorText/ErrorFormText";
+import { ErrorFormText } from "@/components/form/ErrorFormText";
 
 // --- Schema و Type بدون تغییر ---
 const loginSchema = z.object({
