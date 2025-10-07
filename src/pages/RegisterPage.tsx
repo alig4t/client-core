@@ -35,7 +35,10 @@ function RegisterFormFields() {
   return (
     <>
       <div className="w-full">
-        <label htmlFor="name" className="block text-sm font-medium text-gray-700 text-right mb-1">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-gray-700 text-right mb-1"
+        >
           نام
         </label>
         <input
@@ -45,11 +48,14 @@ function RegisterFormFields() {
           {...register("name")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.name && (<ErrorFormText msg={errors.name.message} />)}
+        {errors.name && <ErrorFormText msg={errors.name.message} />}
       </div>
 
       <div className="w-full">
-        <label htmlFor="username" className="block text-sm font-medium text-gray-700 text-right mb-1">
+        <label
+          htmlFor="username"
+          className="block text-sm font-medium text-gray-700 text-right mb-1"
+        >
           نام کاربری
         </label>
         <input
@@ -59,13 +65,14 @@ function RegisterFormFields() {
           {...register("username")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.username && (
-          <ErrorFormText msg={errors.username.message} />
-        )}
+        {errors.username && <ErrorFormText msg={errors.username.message} />}
       </div>
 
       <div className="w-full">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-right mb-1">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700 text-right mb-1"
+        >
           رمز عبور
         </label>
         <input
@@ -75,13 +82,14 @@ function RegisterFormFields() {
           {...register("password")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.password && (
-          <ErrorFormText msg={errors.password.message} />
-        )}
+        {errors.password && <ErrorFormText msg={errors.password.message} />}
       </div>
 
       <div className="w-full">
-        <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 text-right mb-1">
+        <label
+          htmlFor="confirmPassword"
+          className="block text-sm font-medium text-gray-700 text-right mb-1"
+        >
           تکرار رمز عبور
         </label>
         <input
@@ -102,7 +110,6 @@ function RegisterFormFields() {
 // --- کامپوننت اصلی صفحه ثبت‌نام با استایل جدید ---
 export default function RegisterPage() {
   const navigate = useNavigate();
-
 
   const mutation = useMutation({
     mutationFn: (data: RegisterFormData) =>
@@ -133,19 +140,29 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50 py-12">
-      <div className="w-full max-w-sm sm:max-w-[480px] p-8 space-y-6 bg-white shadow-xl rounded-2xl">
+    <div className="flex items-center justify-center min-h-screen sm:bg-gray-50 sm:py-12">
+      <div className="w-full max-w-sm sm:max-w-[480px] p-8 space-y-6 bg-white sm:shadow-xl rounded-2xl">
         <div className="flex justify-center">
-          <img src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`} alt="Logo" className="" />
+          <img
+            src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`}
+            alt="Logo"
+            className=""
+          />
         </div>
 
         <div className="text-center">
-          <h1 className="!text-3xl font-bold text-gray-800 mb-2">ایجاد حساب کاربری</h1>
+          <h1 className="!text-3xl font-bold text-gray-800 mb-2">
+            ایجاد حساب کاربری
+          </h1>
         </div>
 
         {/* <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
-        <FormWrapper schema={registerSchema} onSubmit={onSubmit} className="space-y-5">
+        <FormWrapper
+          schema={registerSchema}
+          onSubmit={onSubmit}
+          className="space-y-5"
+        >
           <RegisterFormFields />
           <button
             disabled={mutation.isPending}

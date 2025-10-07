@@ -28,7 +28,10 @@ function LoginFormFields() {
   return (
     <>
       <div className="w-full">
-        <label htmlFor="username" className="block text-sm font-medium text-gray-700 text-right mb-1">
+        <label
+          htmlFor="username"
+          className="block text-sm font-medium text-gray-700 text-right mb-1"
+        >
           نام کاربری
         </label>
         <input
@@ -38,13 +41,14 @@ function LoginFormFields() {
           {...register("username")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.username && (
-          <ErrorFormText msg={errors.username.message} />
-        )}
+        {errors.username && <ErrorFormText msg={errors.username.message} />}
       </div>
 
       <div className="w-full">
-        <label htmlFor="password" className="block text-sm font-medium text-gray-700 text-right mb-1">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700 text-right mb-1"
+        >
           رمز عبور
         </label>
         <input
@@ -54,9 +58,7 @@ function LoginFormFields() {
           {...register("password")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.password && (
-          <ErrorFormText msg={errors.password.message} />
-        )}
+        {errors.password && <ErrorFormText msg={errors.password.message} />}
       </div>
     </>
   );
@@ -76,27 +78,26 @@ export default function LoginPage() {
     onSuccess: (data) => {
       // پاسخ سرور شما باید شامل accessToken و refreshToken باشد
       // authLogin(data.data.token);
-    
-      console.log("Data received on success:", data); 
-      // authLogin(data.token); 
+
+      console.log("Data received on success:", data);
+      // authLogin(data.token);
       const token = (data as any).token;
       const user = (data as any).user;
-  
+
       // هر دو را به تابع login پاس می‌دهیم
-      authLogin(token, user); 
-    
-      
+
       toast.success("ورود موفقیت آمیز بود", {
         description: "خوش آمدید! در حال انتقال به داشبورد...",
         position: "bottom-left",
       });
       setTimeout(() => {
-        navigate("/");
-      }, 5000);
+        authLogin(token, user);
+      }, 1000);
     },
     onError: (error: any) => {
       toast.error("ورود ناموفق بود", {
-        description: error?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",
+        description:
+          error?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",
         position: "bottom-left",
       });
     },
@@ -107,10 +108,14 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-50">
-      <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6 bg-white shadow-xl rounded-2xl">
+    <div className="flex items-center justify-center min-h-screen sm:bg-gray-50">
+      <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6 bg-white sm:shadow-xl rounded-2xl">
         <div className="flex justify-center">
-          <img src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`} alt="Logo" className="" />
+          <img
+            src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`}
+            alt="Logo"
+            className=""
+          />
           {/* <svg className="w-40 h-auto" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <text x="50" y="30" fontFamily="Arial, sans-serif" fontSize="24" fill="#5A2E8E" fontWeight="bold">رایا نوین</text>
             </svg> */}
@@ -118,12 +123,18 @@ export default function LoginPage() {
 
         {/* بخش عنوان */}
         <div className="text-center">
-          <h1 className="!text-3xl font-bold text-gray-800 mb-2">ورود به پنل مدیریت</h1>
+          <h1 className="!text-3xl font-bold text-gray-800 mb-2">
+            ورود به پنل مدیریت
+          </h1>
           {/* <p className="mt-2 text-sm text-gray-500">ایمیل و رمز عبور خود را وارد کنید</p> */}
         </div>
 
         {/* بخش فرم */}
-        <FormWrapper schema={loginSchema} onSubmit={onSubmit} className="space-y-5">
+        <FormWrapper
+          schema={loginSchema}
+          onSubmit={onSubmit}
+          className="space-y-5"
+        >
           {/* <FormProvider {...methods}>
           <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
           <LoginFormFields />
@@ -139,18 +150,24 @@ export default function LoginPage() {
 
         {/* بخش قوانین */}
         <p className="text-xs text-center text-gray-400">
-          ورود شما به منزله قبول <a href="#" className="font-semibold text-purple-600 hover:underline">قوانین و مقررات</a> رایانوین است.
+          ورود شما به منزله قبول{" "}
+          <a href="#" className="font-semibold text-purple-600 hover:underline">
+            قوانین و مقررات
+          </a>{" "}
+          رایانوین است.
         </p>
 
         <div className="pt-4 text-center">
           <p className=" text-gray-500  text-[11px]">
-            هنوز حساب کاربری نساخته‌اید؟{' '}
-            <Link to="/register" className="font-semibold text-purple-600 hover:text-purple-700 hover:underline">
+            هنوز حساب کاربری نساخته‌اید؟{" "}
+            <Link
+              to="/register"
+              className="font-semibold text-purple-600 hover:text-purple-700 hover:underline"
+            >
               ایجاد حساب کاربری
             </Link>
           </p>
         </div>
-
       </div>
     </div>
   );
