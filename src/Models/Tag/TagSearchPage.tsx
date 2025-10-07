@@ -1,67 +1,60 @@
-
-
 import React, { useState } from 'react';
 import { Filter, FileText } from 'lucide-react';
-import type { Day } from 'react-modern-calendar-datepicker'; // ایمپورت تایپ Day
-import Input from '@/components/form/Input';
-import CustomDatePicker from '@/components/form/CustomDatePicker';
-import Select from '@/components/form/Select';
-import DatePicker from "react-multi-date-picker"
-import persian from "react-date-object/calendars/persian"
-import persian_fa from "react-date-object/locales/persian_fa"
-import type { Value } from "react-multi-date-picker"; // 1. ایمپورت کردن تایپ Value
 import Accordion from '@/components/general/Accordion';
 import TagsTable from './TagsTable';
+import DynamicFilterForm, { type DynamicFilters } from '@/core/FilterForm/DynamicFilterForm';
+import { tagFiltersConfig } from './TagFiltersConfig';
 
 // ایمپورت کامپوننت‌های پایه
 
 // کامپوننت آکاردئون فیلتر
-const FilterAccordion: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
+// const FilterAccordion: React.FC<{ isOpen: boolean }> = ({ isOpen }) => {
 
-  const [fromDate, setFromDate] = useState<Value>(null);
-  const [toDate, setToDate] = useState<Value>(null);
+//   const [fromDate, setFromDate] = useState<Value>(null);
+//   const [toDate, setToDate] = useState<Value>(null);
 
-  const insuranceTypes = [{ value: 'all', label: 'همه' }];
+//   const insuranceTypes = [{ value: 'all', label: 'همه' }];
 
-  if (!isOpen) return null;
+//   if (!isOpen) return null;
 
-  return (
-    <div dir="rtl" className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">نام بیمه گزار</label>
-                <Input placeholder="جستجو بر اساس نام بیمه گزار" />
-            </div>
-            <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">از تاریخ</label>
-                {/* 3. پاس دادن استیت‌ها به کامپوننت جدید */}
-                <CustomDatePicker value={fromDate} onChange={setFromDate} placeholder="۱۴۰۴/۰۷/۱۵" />
-            </div>
-            <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">تا تاریخ</label>
-                <CustomDatePicker value={toDate} onChange={setToDate} placeholder="۱۴۰۴/۰۷/۱۵" />
-            </div>
-            <div>
-                <label className="block mb-2 text-sm font-medium text-gray-700">نوع بیمه</label>
-                <Select options={insuranceTypes} />
-            </div>
-        </div>
-        <div className="flex items-center gap-4 mt-6">
-            <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
-            اعمال فیلتر
-            </button>
-            <button className="bg-red-100 text-red-600 px-6 py-2 rounded-lg hover:bg-red-200 transition-colors">
-            حذف فیلتر
-            </button>
-        </div>
-    </div>
-  );
-};
+//   return (
+//     <div dir="rtl" className="bg-white p-6 rounded-lg border border-gray-200 mb-6">
+//       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+//         <div>
+//           <label className="block mb-2 text-sm font-medium text-gray-700">نام بیمه گزار</label>
+//           <Input placeholder="جستجو بر اساس نام بیمه گزار" />
+//         </div>
+//         <div>
+//           <label className="block mb-2 text-sm font-medium text-gray-700">از تاریخ</label>
+//           {/* 3. پاس دادن استیت‌ها به کامپوننت جدید */}
+//           <CustomDatePicker value={fromDate} onChange={setFromDate} placeholder="۱۴۰۴/۰۷/۱۵" />
+//         </div>
+//         <div>
+//           <label className="block mb-2 text-sm font-medium text-gray-700">تا تاریخ</label>
+//           <CustomDatePicker value={toDate} onChange={setToDate} placeholder="۱۴۰۴/۰۷/۱۵" />
+//         </div>
+//         <div>
+//           <label className="block mb-2 text-sm font-medium text-gray-700">نوع بیمه</label>
+//           <Select options={insuranceTypes} value={""} onChange={() => { }} />
+//         </div>
+//       </div>
+//       <div className="flex items-center gap-4 mt-6">
+//         <button className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+//           اعمال فیلتر
+//         </button>
+//         <button className="bg-red-100 text-red-600 px-6 py-2 rounded-lg hover:bg-red-200 transition-colors">
+//           حذف فیلتر
+//         </button>
+//       </div>
+//     </div>
+//   );
+// };
 
 // کامپوننت اصلی صفحه
 const InstallmentsPage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<string>('ready');
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(true);
+  const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
 
   type Tab = {
     id: string;
@@ -92,11 +85,10 @@ const InstallmentsPage: React.FC = () => {
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 font-semibold transition-colors ${
-              activeTab === tab.id
-                ? 'border-b-2 border-purple-600 text-purple-600'
-                : 'text-gray-500 hover:text-gray-800'
-            }`}
+            className={`px-4 py-3 font-semibold transition-colors ${activeTab === tab.id
+              ? 'border-b-2 border-purple-600 text-purple-600'
+              : 'text-gray-500 hover:text-gray-800'
+              }`}
           >
             {tab.label}
           </button>
@@ -105,25 +97,29 @@ const InstallmentsPage: React.FC = () => {
 
       {/* <FilterAccordion isOpen={isFilterOpen} /> */}
       <Accordion title="فیلتر‌ها" startOpen={false}>
-        <FilterAccordion isOpen={true}/>
+        {/* <FilterAccordion isOpen={true}/> */}
+        <DynamicFilterForm
+          fields={tagFiltersConfig}
+          onApplyFilters={setActiveFilters}
+        />
       </Accordion>
 
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <div className="flex justify-between items-center mb-8">
-            <h2 className="font-semibold text-gray-800">قسطهای آماده پرداخت تا به امروز</h2>
-            <div className="bg-purple-100 text-purple-800 font-bold px-4 py-2 rounded-lg text-sm">
-                مجموع مبالغ آماده پرداخت: ۰ تومان
-            </div>
+          <h2 className="font-semibold text-gray-800">قسطهای آماده پرداخت تا به امروز</h2>
+          <div className="bg-purple-100 text-purple-800 font-bold px-4 py-2 rounded-lg text-sm">
+            مجموع مبالغ آماده پرداخت: ۰ تومان
+          </div>
         </div>
 
         <div className="text-center py-16">
-            <div className="inline-block p-4 bg-gray-100 rounded-full">
-                <FileText size={40} className="text-gray-400" />
-            </div>
-            <p className="mt-4 text-gray-500">اقساطی جهت نمایش وجود ندارد</p>
+          <div className="inline-block p-4 bg-gray-100 rounded-full">
+            <FileText size={40} className="text-gray-400" />
+          </div>
+          <p className="mt-4 text-gray-500">اقساطی جهت نمایش وجود ندارد</p>
         </div>
       </div>
-      <TagsTable />
+      <TagsTable filters={activeFilters} />
     </div>
   );
 };

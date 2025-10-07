@@ -33,7 +33,7 @@ export const Routes: RouteObject[] = [
   {
     // روت‌های محافظت‌شده که نیاز به احراز هویت دارند
     path: "/",
-    element: <PublicRoute />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: "/",
