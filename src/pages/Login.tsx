@@ -81,8 +81,8 @@ export default function LoginPage() {
 
       console.log("Data received on success:", data);
       // authLogin(data.token);
-      const token = (data as any).token;
-      const user = (data as any).user;
+      const token = data.data.token;
+      const user = data.data.user;
 
       // هر دو را به تابع login پاس می‌دهیم
 

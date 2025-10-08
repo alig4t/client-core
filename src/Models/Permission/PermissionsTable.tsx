@@ -11,7 +11,7 @@ import ErrorMessage from '@/components/general/ErrorMessage';
 const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) => {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState('showName,asc');
-  const [pageSize, setPageSize] = useState(15);
+  const [pageSize, setPageSize] = useState(10);
 
   const { 
     data, 
@@ -37,7 +37,9 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) =>
   // const { totalItems,totalPages,pageSize,currentPage,isLastPage} = meta
 
   const currentPage = meta?.currentPage ?? 0;
+  const totalItems = meta?.totalItems ?? 0;
   const totalPages = meta?.totalPages ?? 0;
+  const isLastPage = meta && 'isLastPage' in meta ? meta.isLastPage : false;
 
   return (
     <div dir="rtl" className={`p-6 bg-white rounded-lg border border-gray-200 transition-opacity ${isFetching ? 'opacity-50' : 'opacity-100'}`}>
