@@ -4,10 +4,23 @@ import NProgress from "nprogress";
 import { toast } from "sonner";
 
 // --- Type Definitions ---
-interface ApiResponse<T = any> {
+// interface ApiResponse<T = any> {
+//   type: 'data' | 'error';
+//   status: number;
+//   data: T;
+// }
+export interface ApiResponse<T = any> {
   type: 'data' | 'error';
   status: number;
   data: T;
+  meta?: {
+    totalItems: number;
+    totalPages: number;
+    pageSize: number;
+    currentPage: number;
+    isLastPage?: boolean;
+  };
+  timestamp?: string;
 }
 
 interface ApiErrorData {
@@ -56,11 +69,10 @@ api.interceptors.request.use(
 
 // --- Response Interceptor ---
 api.interceptors.response.use(
-  (response: AxiosResponse<ApiResponse>) => {
+  // Cast to any to allow returning ApiResponse instead of AxiosResponse
+  ((response: AxiosResponse<ApiResponse>) => {
     stopProgress();
     const responseData = response.data;
-
-    console.log(responseData);
     if (responseData && responseData.type === 'error' && responseData.status >= 400) {
       const errorMessage = (responseData.data as string) || 'خطایی از سمت سرور رخ داده است.';
       const error = new AxiosError(errorMessage, String(responseData.status), response.config, response.request, response);
@@ -68,16 +80,10 @@ api.interceptors.response.use(
       return Promise.reject(error);
     }
 
-    // ✨ **Final and Key Change** ✨
-    // Always return the content inside the main `data` property.
-    // This content will be the paginated object ({ data: [], meta: {} }) for lists,
-    // or a single entity object for getById, create, etc.
-    if (responseData && typeof responseData.data !== 'undefined') {
-      return responseData.data;
-    }
-
+    console.log(responseData)
+    // Return the full ApiResponse (with data + meta preserved)
     return responseData;
-  },
+  }) as any,
   (error: AxiosError<ApiErrorData>) => {
     stopProgress();
 

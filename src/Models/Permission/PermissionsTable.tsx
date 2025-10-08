@@ -8,24 +8,36 @@ import PermissionService from './PermissionService';
 import Spinner from '@/components/general/Spinner';
 import ErrorMessage from '@/components/general/ErrorMessage';
 
-
 const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) => {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState('showName,asc');
-  const [pageSize, setPageSize] = useState(5);
+  const [pageSize, setPageSize] = useState(15);
 
-  const { data, isLoading, isError, error, refetch, isFetching } = useQuery<PagedResponse<PermissionModel>>({
+  const { 
+    data, 
+    isLoading, 
+    isError, 
+    error, 
+    refetch, 
+    isFetching 
+  } = useQuery({
     queryKey: ['permissions', page, pageSize, sort, filters],
     queryFn: () => PermissionService.getAll({ page, size: pageSize, sort, filters }),
     placeholderData: keepPreviousData,
   });
 
+  console.log(data);
+
   if (isLoading) return <Spinner />;
   if (isError) return <ErrorMessage message={(error as Error).message} onRetry={refetch} />;
 
-  const pageData = data?.content ?? [];
-  console.log(data);
-  const totalPages = data?.totalPages ?? 0;
+  const pageData = data?.data ?? [];
+  const meta = data?.meta
+  console.log(meta);
+  // const { totalItems,totalPages,pageSize,currentPage,isLastPage} = meta
+
+  const currentPage = meta?.currentPage ?? 0;
+  const totalPages = meta?.totalPages ?? 0;
 
   return (
     <div dir="rtl" className={`p-6 bg-white rounded-lg border border-gray-200 transition-opacity ${isFetching ? 'opacity-50' : 'opacity-100'}`}>
@@ -66,9 +78,21 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) =>
 
       {/* Pagination Controls */}
       <div className="flex items-center justify-between mt-4">
-        <button onClick={() => setPage(p => Math.max(p - 1, 0))} disabled={page === 0} className="px-4 py-2 text-sm border rounded-md disabled:opacity-50">قبلی</button>
-        <span>صفحه {page + 1} از {totalPages}</span>
-        <button onClick={() => setPage(p => Math.min(p + 1, totalPages - 1))} disabled={page >= totalPages - 1} className="px-4 py-2 text-sm border rounded-md disabled:opacity-50">بعدی</button>
+        <button 
+          onClick={() => setPage(p => Math.max(p - 1, 0))} 
+          disabled={currentPage === 0} 
+          className="px-4 py-2 text-sm border rounded-md disabled:opacity-50"
+        >
+          قبلی
+        </button>
+        <span>صفحه {currentPage + 1} از {totalPages}</span>
+        <button 
+          onClick={() => setPage(p => Math.min(p + 1, totalPages - 1))} 
+          disabled={currentPage >= totalPages - 1} 
+          className="px-4 py-2 text-sm border rounded-md disabled:opacity-50"
+        >
+          بعدی
+        </button>
       </div>
     </div>
   );

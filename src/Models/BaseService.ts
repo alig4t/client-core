@@ -1,4 +1,4 @@
-import { api } from "@/lib/axios";
+import { api, type ApiResponse } from "@/lib/axios";
 
 export interface PagedResponse<T> {
   content: T[];
@@ -17,13 +17,15 @@ export interface ServerSideParams {
 
 interface ApiResponsePayload<T> {
   data: T[];
-  meta: {
+  meta?: {
     totalItems: number;
     totalPages: number;
     pageSize: number;
     currentPage: number;
+    isLastPage?: boolean;
   };
 }
+
 
 export class BaseService<T> {
   protected url: string;
@@ -32,12 +34,12 @@ export class BaseService<T> {
     this.url = url;
   }
 
-  async getAll(params: ServerSideParams = {}): Promise<PagedResponse<T>> {
+  async getAll(params: ServerSideParams = {}): Promise<ApiResponsePayload<T>> {
     const queryParams = new URLSearchParams();
     queryParams.append('page', String(params.page ?? 0));
     queryParams.append('size', String(params.size ?? 10));
     if (params.sort) queryParams.append('sort', params.sort);
-
+  
     if (params.filters) {
       Object.entries(params.filters).forEach(([key, value]) => {
         if (value !== null && value !== undefined && value !== '') {
@@ -46,20 +48,26 @@ export class BaseService<T> {
       });
     }
     
-    // The interceptor doesn't run on the type level, so we expect an AxiosResponse here
-    const response = await api.get<ApiResponsePayload<T>>(`${this.url}?${queryParams.toString()}`);
-
-    // ✨ **The Fix is Here** ✨
-    // We access the properties from `response.data` which contains our payload
+    // Cast the response to ApiResponse<T[]> to be explicit
+    const response = await api.get(`${this.url}?${queryParams.toString()}`) as ApiResponse<T[]>;
+    
+    console.log('Full response:', response);
+    
+    if (!response.meta) {
+      throw new Error('Pagination metadata missing in response');
+    }
+    
     return {
-      content:       response.data.data,
-      totalPages:    response.data.meta.totalPages,
-      totalElements: response.data.meta.totalItems,
-      number:        response.data.meta.currentPage,
-      size:          response.data.meta.pageSize,
+      data: response.data,
+      meta: {
+        totalPages: response.meta.totalPages,
+        totalItems: response.meta.totalItems,
+        currentPage: response.meta.currentPage,
+        pageSize: response.meta.pageSize,
+        isLastPage: response.meta.isLastPage,
+      }
     };
   }
-
   getById(id: number): Promise<T> {
     return api.get(`${this.url}/${id}`);
   }
