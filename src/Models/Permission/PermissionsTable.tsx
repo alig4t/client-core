@@ -7,6 +7,8 @@ import type { PagedResponse } from '../BaseService';
 import PermissionService from './PermissionService';
 import Spinner from '@/components/general/Spinner';
 import ErrorMessage from '@/components/general/ErrorMessage';
+import TablePlaceholder from '@/components/Layout/TablePlaceholder';
+import TableErrorState from '@/components/Layout/TableErrorState';
 
 const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) => {
   const [page, setPage] = useState(0);
@@ -28,8 +30,13 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) =>
 
   console.log(data);
 
-  if (isLoading) return <Spinner />;
-  if (isError) return <ErrorMessage message={(error as Error).message} onRetry={refetch} />;
+  if (isLoading) return <TablePlaceholder rowCount={pageSize} />;
+
+  // if (isError) return <ErrorMessage message={(error as Error).message} onRetry={refetch} />;
+
+  if (isError) {
+    return <TableErrorState message={(error as Error).message} onRetry={refetch} />;
+  }
 
   const pageData = data?.data ?? [];
   const meta = data?.meta

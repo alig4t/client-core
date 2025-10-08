@@ -8,7 +8,7 @@ interface ErrorMessageProps {
 
 const ErrorMessage: React.FC<ErrorMessageProps> = ({ message, onRetry }) => {
   return (
-    <div className="text-center py-16 bg-red-50 border border-red-200 rounded-lg">
+    <div className="text-center py-16 bg-red-50 border border-red-100 rounded-lg">
       <AlertTriangle className="mx-auto h-12 w-12 text-red-400" />
       <h3 className="mt-2 text-sm font-semibold text-red-800">خطا در دریافت اطلاعات</h3>
       <p className="mt-1 text-sm text-red-700">{message}</p>
