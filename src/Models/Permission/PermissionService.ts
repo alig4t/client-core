@@ -4,7 +4,7 @@ import type { PermissionModel } from '@/Models/Permission/PermissionModel';
 
 class PermissionService extends BaseService<PermissionModel> {
   constructor() {
-    super('/permissions');
+    super('/permission');
   }
 }
 

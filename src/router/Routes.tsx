@@ -13,6 +13,7 @@ import TagDisplayPage from "../Models/Tag/TagDisplayPage";
 import ProtectedRoute from "./ProtectedRoute"; // کامپوننت محافظت از روت‌ها
 import PublicRoute from "./PublicRoute"; // کامپوننت روت‌های عمومی
 import RegisterPage from "@/pages/RegisterPage";
+import PermissionsPage from "@/Models/Permission/PermissionsPage";
 
 export const Routes: RouteObject[] = [
   {
@@ -49,6 +50,7 @@ export const Routes: RouteObject[] = [
               { path: "tags", element: <TagSearchPage /> },
               { path: "tags/create", element: <TagCreatePage /> },
               { path: "tags/:id", element: <TagDisplayPage /> },
+              { path: "permissions", element: <PermissionsPage /> },
             ],
           },
         ],

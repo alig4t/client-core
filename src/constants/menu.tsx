@@ -102,5 +102,10 @@ export const subMenus: Record<
       href: "/portal/posts",
       icon: <CreditCard size={18} />,
     },
+    {
+      label: "مجوز ها",
+      href: "/portal/permissions",
+      icon: <CreditCard size={18} />,
+    },
   ],
 };
