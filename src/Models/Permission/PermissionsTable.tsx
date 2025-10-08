@@ -12,7 +12,7 @@ import ErrorMessage from '@/components/general/ErrorMessage';
 const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) => {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState('showName,asc');
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState(5);
 
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery<PagedResponse<PermissionModel>>({
     queryKey: ['permissions', page, pageSize, sort, filters],

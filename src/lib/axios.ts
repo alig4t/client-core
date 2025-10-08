@@ -60,6 +60,7 @@ api.interceptors.response.use(
     stopProgress();
     const responseData = response.data;
 
+    console.log(responseData);
     if (responseData && responseData.type === 'error' && responseData.status >= 400) {
       const errorMessage = (responseData.data as string) || 'خطایی از سمت سرور رخ داده است.';
       const error = new AxiosError(errorMessage, String(responseData.status), response.config, response.request, response);
