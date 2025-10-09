@@ -11,7 +11,7 @@ import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import Select, { type Option } from "@/components/form/Select";
 
-const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({
+const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
   filters,
 }) => {
   const [page, setPage] = useState(0);
@@ -19,7 +19,7 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({
   const [pageSize, setPageSize] = useState(10);
 
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ["permissions", page, pageSize, sort, filters],
+    queryKey: ["permission", page, pageSize, sort, filters],
     queryFn: () =>
       PermissionService.getAll({ page, size: pageSize, sort, filters }),
     placeholderData: keepPreviousData,
@@ -72,7 +72,6 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({
           onChange={(e) => setSort(e.target.value)}
           value={sort}
         />
-        
       </div>
 
       <div className="overflow-x-auto">
@@ -140,4 +139,4 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({
   );
 };
 
-export default PermissionsTable;
+export default PermissionTable;

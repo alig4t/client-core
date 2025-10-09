@@ -1,5 +1,3 @@
-// src/components/permissions/TableErrorState.tsx
-
 import React from "react";
 import { AlertTriangle, RotateCw } from "lucide-react";
 

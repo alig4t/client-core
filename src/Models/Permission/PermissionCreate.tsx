@@ -79,7 +79,7 @@ const PermissionCreate: React.FC = () => {
         description: "دسترسی جدید با موفقیت ایجاد شد.",
         position: "bottom-left",
       });
-      queryClient.invalidateQueries({ queryKey: ['permissions'] });
+      queryClient.invalidateQueries({ queryKey: ['permission'] });
       // می‌توانید در اینجا به صفحه لیست دسترسی‌ها هدایت کنید
       // navigate('/permissions');
     },
