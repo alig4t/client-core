@@ -1,4 +1,4 @@
-import type { FilterField } from "@/core/FilterForm/Filter";
+import type { FilterField } from "@/core/forms/Filter";
 
 
 export const permissionFiltersConfig: FilterField[] = [

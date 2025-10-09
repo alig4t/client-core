@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
 import type { PermissionModel } from "@/Models/Permission/PermissionModel";
-import type { DynamicFilters } from "@/core/FilterForm/DynamicFilterForm";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { PagedResponse } from "../BaseService";
 import PermissionService from "./PermissionService";
 import Spinner from "@/components/general/Spinner";

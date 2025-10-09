@@ -1,4 +1,4 @@
-import type { BaseModel } from "../BaseModel";
+import type { BaseModel } from "../../core/models/BaseModel";
 import type { RoleModel } from "../Role/RoleModel";
 
 export interface UserModel extends BaseModel {

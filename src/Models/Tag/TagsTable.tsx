@@ -5,7 +5,7 @@ import type { TagModel } from "@/Models/Tag/TagModel";
 import TagService from "./TagService";
 import Spinner from "@/components/general/Spinner";
 import ErrorMessage from "@/components/general/ErrorMessage";
-import type { DynamicFilters } from "@/core/FilterForm/DynamicFilterForm";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { PagedResponse } from "../BaseService";
 
 const TagsTable: React.FC<{ filters: DynamicFilters }> = ({ filters }) => {

@@ -1,16 +1,17 @@
 // src/pages/PermissionCreate.tsx
 
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { toast } from 'sonner';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "sonner";
 import { z } from "zod";
 import { useFormContext } from "react-hook-form";
-import permissionService from '@/Models/Permission/PermissionService';
-import type { PermissionModel } from '@/Models/Permission/PermissionModel';
-import Spinner from '@/components/general/Spinner';
+import permissionService from "@/Models/Permission/PermissionService";
+import type { PermissionModel } from "@/Models/Permission/PermissionModel";
+import Spinner from "@/components/general/Spinner";
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import { ErrorFormText } from "@/components/form/ErrorFormText";
+import { permissionModelMeta } from "./PermissionModel.meta";
 
 // --- Schema و Type برای ولیدیشن ---
 const permissionSchema = z.object({
@@ -33,7 +34,7 @@ function PermissionFormFields() {
           htmlFor="showName"
           className="block text-sm font-medium text-gray-700 text-right mb-1"
         >
-          نام نمایشی
+          {permissionModelMeta.fields.showName?.label}
         </label>
         <input
           id="showName"
@@ -50,7 +51,7 @@ function PermissionFormFields() {
           htmlFor="name"
           className="block text-sm font-medium text-gray-700 text-right mb-1"
         >
-          نام سیستمی
+          {permissionModelMeta.fields.name?.label}
         </label>
         <input
           id="name"
@@ -79,7 +80,7 @@ const PermissionCreate: React.FC = () => {
         description: "دسترسی جدید با موفقیت ایجاد شد.",
         position: "bottom-left",
       });
-      queryClient.invalidateQueries({ queryKey: ['permission'] });
+      queryClient.invalidateQueries({ queryKey: ["permission"] });
       // می‌توانید در اینجا به صفحه لیست دسترسی‌ها هدایت کنید
       // navigate('/permissions');
     },
@@ -132,7 +133,7 @@ const PermissionCreate: React.FC = () => {
                   در حال ذخیره...
                 </>
               ) : (
-                'ذخیره'
+                "ذخیره"
               )}
             </button>
           </div>

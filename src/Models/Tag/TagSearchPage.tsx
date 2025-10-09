@@ -1,9 +1,11 @@
-import React, { useState } from 'react';
-import { Filter, FileText } from 'lucide-react';
-import Accordion from '@/components/general/Accordion';
-import TagsTable from './TagsTable';
-import DynamicFilterForm, { type DynamicFilters } from '@/core/FilterForm/DynamicFilterForm';
-import { tagFiltersConfig } from './TagFiltersConfig';
+import React, { useState } from "react";
+import { Filter, FileText } from "lucide-react";
+import Accordion from "@/components/general/Accordion";
+import TagsTable from "./TagsTable";
+import DynamicFilterForm, {
+  type DynamicFilters,
+} from "@/core/forms/DynamicFilterForm";
+import { tagFiltersConfig } from "./TagFiltersConfig";
 
 // ایمپورت کامپوننت‌های پایه
 
@@ -52,7 +54,7 @@ import { tagFiltersConfig } from './TagFiltersConfig';
 
 // کامپوننت اصلی صفحه
 const InstallmentsPage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<string>('ready');
+  const [activeTab, setActiveTab] = useState<string>("ready");
   const [isFilterOpen, setIsFilterOpen] = useState<boolean>(true);
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
 
@@ -62,9 +64,9 @@ const InstallmentsPage: React.FC = () => {
   };
 
   const tabs: Tab[] = [
-    { id: 'ready', label: 'اقساط آماده پرداخت' },
-    { id: 'future', label: 'اقساط آتی' },
-    { id: 'paid', label: 'اقساط پرداخت شده' },
+    { id: "ready", label: "اقساط آماده پرداخت" },
+    { id: "future", label: "اقساط آتی" },
+    { id: "paid", label: "اقساط پرداخت شده" },
   ];
 
   return (
@@ -81,14 +83,15 @@ const InstallmentsPage: React.FC = () => {
       </div>
 
       <div className="flex items-center border-b border-gray-200 mb-6">
-        {tabs.map(tab => (
+        {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 font-semibold transition-colors ${activeTab === tab.id
-              ? 'border-b-2 border-purple-600 text-purple-600'
-              : 'text-gray-500 hover:text-gray-800'
-              }`}
+            className={`px-4 py-3 font-semibold transition-colors ${
+              activeTab === tab.id
+                ? "border-b-2 border-purple-600 text-purple-600"
+                : "text-gray-500 hover:text-gray-800"
+            }`}
           >
             {tab.label}
           </button>
@@ -106,7 +109,9 @@ const InstallmentsPage: React.FC = () => {
 
       <div className="bg-white p-6 rounded-lg border border-gray-200">
         <div className="flex justify-between items-center mb-8">
-          <h2 className="font-semibold text-gray-800">قسطهای آماده پرداخت تا به امروز</h2>
+          <h2 className="font-semibold text-gray-800">
+            قسطهای آماده پرداخت تا به امروز
+          </h2>
           <div className="bg-purple-100 text-purple-800 font-bold px-4 py-2 rounded-lg text-sm">
             مجموع مبالغ آماده پرداخت: ۰ تومان
           </div>
@@ -125,13 +130,6 @@ const InstallmentsPage: React.FC = () => {
 };
 
 export default InstallmentsPage;
-
-
-
-
-
-
-
 
 // import { useEffect, useState } from "react";
 // import TagService from "@/Models/Tag/TagFakeService";

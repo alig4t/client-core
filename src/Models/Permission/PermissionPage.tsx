@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Accordion from "@/components/general/Accordion";
 import DynamicFilterForm, {
   type DynamicFilters,
-} from "@/core/FilterForm/DynamicFilterForm";
+} from "@/core/forms/DynamicFilterForm";
 import { permissionFiltersConfig } from "./PermissionFiltersConfig";
 import PermissionTable from "./PermissionTable";
 import { useNavigate } from "react-router-dom";
