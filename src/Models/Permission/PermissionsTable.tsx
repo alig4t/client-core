@@ -72,16 +72,7 @@ const PermissionsTable: React.FC<{ filters: DynamicFilters }> = ({
           onChange={(e) => setSort(e.target.value)}
           value={sort}
         />
-        {/* <select
-          value={sort}
-          onChange={(e) => setSort(e.target.value)}
-          className="rounded-md border-gray-300"
-        >
-          <option value="showName,asc">نام نمایشی (صعودی)</option>
-          <option value="showName,desc">نام نمایشی (نزولی)</option>
-          <option value="name,asc">نام سیستمی (صعودی)</option>
-          <option value="name,desc">نام سیستمی (نزولی)</option>
-        </select> */}
+        
       </div>
 
       <div className="overflow-x-auto">
