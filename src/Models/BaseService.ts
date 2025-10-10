@@ -38,8 +38,7 @@ export class BaseService<T> {
     const queryParams = new URLSearchParams();
     queryParams.append('page', String(params.page ?? 0));
     queryParams.append('size', String(params.size ?? 10));
-    if (params.sort) queryParams.append('sort', params.sort);
-  
+ 
     if (params.filters) {
       Object.entries(params.filters).forEach(([key, value]) => {
         if (value !== null && value !== undefined && value !== '') {
@@ -47,6 +46,7 @@ export class BaseService<T> {
         }
       });
     }
+    if (params.sort) queryParams.append('sort', params.sort);
     
     // Cast the response to ApiResponse<T[]> to be explicit
     const response = await api.get(`${this.url}?${queryParams.toString()}`) as ApiResponse<T[]>;
