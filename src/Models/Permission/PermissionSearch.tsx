@@ -1,28 +1,21 @@
 // src/pages/permission/PermissionSearch.tsx
 
-import React, { useState } from "react";
-import { DateObject } from "react-multi-date-picker";
+import React from "react";
+import { useForm } from "react-hook-form";
+import type { SubmitHandler } from "react-hook-form";
+import DatePicker, { DateObject } from "react-multi-date-picker";
+import type { Value } from "react-multi-date-picker";
 import Input from "@/components/form/Input";
 import CustomDatePicker from "@/components/form/CustomDatePicker";
-import type { PermissionModel } from "@/Models/Permission/PermissionModel";
 import { permissionModelMeta } from "./PermissionModel.meta";
 
-// --- تابع کمکی برای ساخت کلید فیلتر ---
-const getFilterKey = (fieldName: string, fieldType: string): string => {
-  if (
-    fieldType === "text" ||
-    fieldType === "email" ||
-    fieldType === "textarea"
-  ) {
-    return `${fieldName}_like`;
-  }
-  if (fieldName === "createdAt" || fieldName === "updatedAt") {
-    // برای تاریخ‌ها، بعداً با پیشوند `ge` یا `le` استفاده می‌شود
-    return fieldName; // خود فیلد پایه
-  }
-  // برای سایر فیلدها (مثل boolean, number)
-  return fieldName;
-};
+// --- نوع داده‌های فرم ---
+interface PermissionSearchForm {
+  showName?: string;
+  name?: string;
+  fromDate?: Value; // ← از همان نوع CustomDatePicker
+  toDate?: Value; // ← از همان نوع CustomDatePicker
+}
 
 // --- نوع خروجی فیلترها ---
 export interface PermissionFilters {
@@ -36,57 +29,68 @@ interface PermissionSearchProps {
 const PermissionSearch: React.FC<PermissionSearchProps> = ({
   onApplyFilters,
 }) => {
-  // فقط فیلدهایی که می‌خوایم در سرچ باشن
-  const searchableFields = ["showName", "name"] as const;
-  const dateFields = ["createdAt"] as const; // می‌تونی updatedAt هم اضافه کنی
-
-  const [formState, setFormState] = useState<Record<string, any>>({});
-
-  const handleInputChange = (fieldName: string, value: any) => {
-    setFormState((prev) => ({
-      ...prev,
-      [fieldName]: value,
-    }));
-  };
-
-  const handleApply = () => {
-    const filters: PermissionFilters = {};
-
-    // فیلدهای متنی
-    searchableFields.forEach((field) => {
-      const value = formState[field];
-      if (value) {
-        filters[`${field}_like`] = value;
-      }
+  const { register, handleSubmit, reset, setValue, getValues } =
+    useForm<PermissionSearchForm>({
+      defaultValues: {
+        showName: "",
+        name: "",
+        fromDate: null,
+        toDate: null,
+      },
     });
 
-    // فیلدهای تاریخ (از تاریخ / تا تاریخ)
-    if (formState.fromDate) {
-      filters["createdAt_ge"] =
-        formState.fromDate instanceof DateObject
-          ? formState.fromDate.format("YYYY-MM-DD")
-          : formState.fromDate;
+  // تابع برای تبدیل Value به رشته ISO (YYYY-MM-DD)
+  // const formatDateValue = (value: Value): string | null => {
+  //   if (!value) return null;
+  //   // اگر DatePicker به‌صورت single است، value یک DateObject است
+  //   if (value instanceof DatePicker.DateObject) {
+  //     return value.format("YYYY-MM-DD");
+  //   }
+  //   // اگر آرایه باشه (چندتایی)، اولین مورد رو برمی‌گردونیم (در این مورد نیاز نیست)
+  //   if (Array.isArray(value) && value[0]) {
+  //     return value[0].format("YYYY-MM-DD");
+  //   }
+  //   return null;
+  // };
+
+  const onSubmit: SubmitHandler<PermissionSearchForm> = (data) => {
+    const filters: PermissionFilters = {};
+
+    if (data.showName?.trim()) filters["showName_like"] = data.showName.trim();
+    if (data.name?.trim()) filters["name_like"] = data.name.trim();
+
+    // const fromDateStr = formatDateValue(data.fromDate);
+    // const toDateStr = formatDateValue(data.toDate);
+
+    // if (data.fromDate) filters["createdAt_ge"] = data.fromDate.toDate();
+    // if (data.toDate) filters["createdAt_le"] = data.toDate;
+
+    if (data.fromDate instanceof DateObject) {
+      filters["createdAt_ge"] = data.fromDate.toDate();
     }
-    if (formState.toDate) {
-      filters["createdAt_le"] =
-        formState.toDate instanceof DateObject
-          ? formState.toDate.format("YYYY-MM-DD")
-          : formState.toDate;
+
+    if (data.toDate instanceof DateObject) {
+      filters["createdAt_le"] = data.toDate.toDate();
     }
 
     onApplyFilters(filters);
   };
 
   const handleClear = () => {
-    setFormState({});
+    reset();
     onApplyFilters({});
   };
 
+  // مدیریت تغییر تاریخ
+  const handleDateChange = (field: "fromDate" | "toDate", value: Value) => {
+    setValue(field, value, { shouldValidate: true, shouldDirty: true });
+  };
+
   return (
-    <div dir="rtl">
+    <form onSubmit={handleSubmit(onSubmit)} dir="rtl">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* فیلدهای متنی */}
-        {searchableFields.map((fieldKey) => {
+        {(["showName", "name"] as const).map((fieldKey) => {
           const meta = permissionModelMeta.fields[fieldKey];
           return (
             <div key={fieldKey}>
@@ -95,8 +99,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
               </label>
               <Input
                 placeholder={`جستجو بر اساس ${meta?.label}...`}
-                value={formState[fieldKey] || ""}
-                onChange={(e) => handleInputChange(fieldKey, e.target.value)}
+                {...register(fieldKey)}
               />
             </div>
           );
@@ -108,8 +111,8 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
             از تاریخ ایجاد
           </label>
           <CustomDatePicker
-            value={formState.fromDate || null}
-            onChange={(date) => handleInputChange("fromDate", date)}
+            value={getValues("fromDate") || null}
+            onChange={(value) => handleDateChange("fromDate", value)}
             placeholder="انتخاب تاریخ"
           />
         </div>
@@ -118,8 +121,8 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
             تا تاریخ ایجاد
           </label>
           <CustomDatePicker
-            value={formState.toDate || null}
-            onChange={(date) => handleInputChange("toDate", date)}
+            value={getValues("toDate") || null}
+            onChange={(value) => handleDateChange("toDate", value)}
             placeholder="انتخاب تاریخ"
           />
         </div>
@@ -127,19 +130,20 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
 
       <div className="flex items-center gap-4 mt-6">
         <button
-          onClick={handleApply}
+          type="submit"
           className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
         >
           اعمال فیلتر
         </button>
         <button
+          type="button"
           onClick={handleClear}
           className="bg-gray-100 text-gray-600 px-6 py-2 rounded-lg hover:bg-gray-200"
         >
           حذف فیلتر
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
