@@ -16,7 +16,7 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
 }) => {
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState("showName,asc");
-  const [pageSize, setPageSize] = useState(10);
+  const [pageSize, setPageSize] = useState<number>(10);
 
   const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
     queryKey: ["permission", page, pageSize, sort, filters],
@@ -58,6 +58,13 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
     { label: "نام سیستمی (نزولی)", value: "name,desc" },
   ];
 
+  const sizeOptions : Option[] = [
+    { label: "5", value: 5 },
+    { label: "10", value: 10 },
+    { label: "20", value: 20 },
+    { label: "50", value: 50 },
+  ]
+
   return (
     <div
       dir="rtl"
@@ -65,13 +72,21 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
     >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex-1">لیست دسترسی‌ها</h2>
+        <div  className="max-w-1/2 flex gap-2 items-center">
         <Select
-          className="max-w-1/2 lg:max-w-1/4"
+        className="min-w-[120px]"
           key={"sort"}
           options={sortOptions}
           onChange={(e) => setSort(e.target.value)}
           value={sort}
         />
+        <Select 
+          key={'size'}
+          value={pageSize}
+          options={sizeOptions}
+          onChange={(e) => setPageSize(Number(e.target.value))}
+        />
+        </div>
       </div>
 
       <div className="overflow-x-auto">
