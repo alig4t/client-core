@@ -1,6 +1,6 @@
 // src/models/modelMetaUtils.ts
 
-import type { FormFieldMetadata } from "../forms/fieldTypes";
+import type { FormFieldMetadata } from "../forms/FieldTypes";
 
 export const baseModelMeta = {
   fields: {

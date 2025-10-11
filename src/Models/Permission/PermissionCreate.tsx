@@ -9,9 +9,11 @@ import { useFormContext } from "react-hook-form";
 import permissionService from "@/Models/Permission/PermissionService";
 import type { PermissionModel } from "@/Models/Permission/PermissionModel";
 import Spinner from "@/components/general/Spinner";
-import { FormWrapper } from "@/components/shared/FormWrapper";
+// import { FormWrapper } from "@/components/shared/FormWrapper";
 import { ErrorFormText } from "@/components/form/ErrorFormText";
 import { permissionModelMeta } from "./PermissionModel.meta";
+import { FormWrapper } from "@/components/form/FormWrapper";
+import { FormInput } from "@/components/form/FormInput";
 
 // --- Schema and Type for validation ---
 const permissionSchema = z.object({
@@ -20,51 +22,51 @@ const permissionSchema = z.object({
 });
 type PermissionFormData = z.infer<typeof permissionSchema>;
 
-// --- Form Fields Component ---
-function PermissionFormFields() {
-  const {
-    register,
-    formState: { errors },
-  } = useFormContext<PermissionFormData>();
+// // --- Form Fields Component ---
+// function PermissionFormFields() {
+//   const {
+//     register,
+//     formState: { errors },
+//   } = useFormContext<PermissionFormData>();
 
-  return (
-    <>
-      <div className="w-full">
-        <label
-          htmlFor="showName"
-          className="block text-sm font-medium text-gray-700 text-right mb-1"
-        >
-          {permissionModelMeta.fields.showName?.label}
-        </label>
-        <input
-          id="showName"
-          type="text"
-          placeholder="مثلا مدیریت کاربران"
-          {...register("showName")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-        {errors.showName && <ErrorFormText msg={errors.showName.message} />}
-      </div>
+//   return (
+//     <>
+//       <div className="w-full">
+//         <label
+//           htmlFor="showName"
+//           className="block text-sm font-medium text-gray-700 text-right mb-1"
+//         >
+//           {permissionModelMeta.fields.showName?.label}
+//         </label>
+//         <input
+//           id="showName"
+//           type="text"
+//           placeholder="مثلا مدیریت کاربران"
+//           {...register("showName")}
+//           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+//         />
+//         {errors.showName && <ErrorFormText msg={errors.showName.message} />}
+//       </div>
 
-      <div className="w-full">
-        <label
-          htmlFor="name"
-          className="block text-sm font-medium text-gray-700 text-right mb-1"
-        >
-          {permissionModelMeta.fields.name?.label}
-        </label>
-        <input
-          id="name"
-          type="text"
-          placeholder="مثلا manage-users"
-          {...register("name")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
-        />
-        {errors.name && <ErrorFormText msg={errors.name.message} />}
-      </div>
-    </>
-  );
-}
+//       <div className="w-full">
+//         <label
+//           htmlFor="name"
+//           className="block text-sm font-medium text-gray-700 text-right mb-1"
+//         >
+//           {permissionModelMeta.fields.name?.label}
+//         </label>
+//         <input
+//           id="name"
+//           type="text"
+//           placeholder="مثلا manage-users"
+//           {...register("name")}
+//           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+//         />
+//         {errors.name && <ErrorFormText msg={errors.name.message} />}
+//       </div>
+//     </>
+//   );
+// }
 
 // --- Main Component for Create Permission Page ---
 const PermissionCreate: React.FC = () => {
@@ -72,7 +74,7 @@ const PermissionCreate: React.FC = () => {
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
-    mutationFn: (newPermission: Partial<PermissionModel>) => {
+    mutationFn: (newPermission: PermissionFormData) => {
       return permissionService.create(newPermission);
     },
     onSuccess: (data) => {
@@ -93,7 +95,8 @@ const PermissionCreate: React.FC = () => {
   });
 
   const onSubmit = (data: PermissionFormData) => {
-    mutation.mutate(data);
+    console.log(data);
+    // mutation.mutate(data);
   };
 
   const handleCancel = () => {
@@ -112,7 +115,17 @@ const PermissionCreate: React.FC = () => {
           onSubmit={onSubmit}
           className="space-y-6"
         >
-          <PermissionFormFields />
+          <FormInput
+            name="showName"
+            label={permissionModelMeta.fields.showName?.label || "نام نمایشی"}
+            placeholder="مثلاً مدیریت کاربران"
+          />
+          <FormInput
+            name="name"
+            label={permissionModelMeta.fields.name?.label || "نام سیستمی"}
+            placeholder="مثلاً manage-users"
+          />
+          {/* <PermissionFormFields /> */}
 
           <div className="flex items-center justify-end gap-4 mt-6">
             <button
