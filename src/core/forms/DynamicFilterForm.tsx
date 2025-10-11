@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { DateObject } from "react-multi-date-picker";
-import type { FilterField } from './Filter'; // ایمپورت نوع فیلد
+import type { FilterField } from './Filter'; // Import field type
 import Input from '@/components/form/Input';
 import CustomDatePicker from '@/components/form/CustomDatePicker';
 import Select from '@/components/form/Select';
@@ -11,15 +11,15 @@ export interface DynamicFilters {
 }
 
 interface DynamicFilterFormProps {
-  fields: FilterField[]; // آرایه تنظیمات فیلدها
+  fields: FilterField[]; // Array of field configurations
   onApplyFilters: (filters: DynamicFilters) => void;
 }
 
 const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({ fields, onApplyFilters }) => {
-  // یک استیت برای نگهداری مقادیر تمام فیلدها
+  // A state to hold values of all fields
   const [formState, setFormState] = useState<Record<string, any>>({});
 
-  // یک تابع برای مدیریت تغییرات تمام اینپوت‌ها
+  // A function to manage changes of all inputs
   const handleInputChange = (fieldName: string, value: any) => {
     setFormState(prevState => ({
       ...prevState,
@@ -30,11 +30,11 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({ fields, onApplyFi
   const handleApply = () => {
     const finalFilters: DynamicFilters = {};
 
-    // تبدیل استیت فرم به فرمت مورد نیاز API
+    // Convert form state to API required format
     for (const field of fields) {
       const value = formState[field.name];
       if (value !== null && value !== undefined && value !== '') {
-        // اگر تاریخ بود، فرمت شود
+        // If date, format it
         if (value instanceof DateObject) {
           finalFilters[field.filterKey] = value.format("YYYY-MM-DD");
         } else {
@@ -53,7 +53,7 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({ fields, onApplyFi
   return (
     <div dir="rtl">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* رندر داینامیک فیلدها بر اساس کانفیگ */}
+        {/* Dynamic render of fields based on config */}
         {fields.map((field) => (
           <div key={field.name}>
             <label className="block mb-2 text-sm font-medium text-gray-700">{field.label}</label>

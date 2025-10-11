@@ -1,14 +1,14 @@
 // src/components/ProtectedRoute.tsx
 
 import { Navigate, Outlet } from "react-router-dom";
-import { useAuth } from "../stores/AuthContext"; // مسیر صحیح به AuthContext
+import { useAuth } from "../stores/AuthContext"; // Correct path to AuthContext
 
 const ProtectedRoute = () => {
   const { isAuthenticated } = useAuth();
 
   console.log(isAuthenticated);
-  // اگر کاربر احراز هویت شده بود، اجازه دسترسی به روت‌های فرزند (Outlet) را بده
-  // در غیر این صورت، به صفحه لاگین هدایتش کن
+  // If user is authenticated, allow access to child routes (Outlet)
+  // Otherwise, navigate to the login page
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
 };
 

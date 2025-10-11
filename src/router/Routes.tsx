@@ -10,15 +10,15 @@ import NotFoundPage from "../components/NotFoundPage";
 import TagSearchPage from "../Models/Tag/TagSearchPage";
 import TagCreatePage from "../Models/Tag/TagCreatePage";
 import TagDisplayPage from "../Models/Tag/TagDisplayPage";
-import ProtectedRoute from "./ProtectedRoute"; // کامپوننت محافظت از روت‌ها
-import PublicRoute from "./PublicRoute"; // کامپوننت روت‌های عمومی
+import ProtectedRoute from "./ProtectedRoute"; // Protected Route component
+import PublicRoute from "./PublicRoute"; // Public Routes component
 import RegisterPage from "@/pages/RegisterPage";
 import PermissionPage from "@/Models/Permission/PermissionPage";
 import PermissionCreate from "@/Models/Permission/PermissionCreate";
 
 export const Routes: RouteObject[] = [
   {
-    // روت‌های عمومی که کاربر لاگین کرده نباید ببیند (مثل صفحه لاگین)
+    // Public routes that logged-in users should not see (like login page)
     path: "/",
     element: <PublicRoute />,
     children: [
@@ -33,7 +33,7 @@ export const Routes: RouteObject[] = [
     ],
   },
   {
-    // روت‌های محافظت‌شده که نیاز به احراز هویت دارند
+    // Protected routes that require authentication
     path: "/",
     element: <ProtectedRoute />,
     children: [
@@ -59,7 +59,7 @@ export const Routes: RouteObject[] = [
       },
     ],
   },
-  // روت ۴۰۴ برای مسیرهای پیدا نشده
+  // 404 route for not found paths
   {
     path: "*",
     element: <NotFoundPage />,

@@ -12,20 +12,20 @@ export type FieldType =
   | "radio"
   | "autocomplete";
 
-// گزینه‌های select یا autocomplete
+// Select or autocomplete options
 export interface SelectOption {
   value: string | number;
   label: string;
 }
 
-// متادیتای گسترش‌یافته برای فیلدهای فرم
+// Extended metadata for form fields
 export interface FormFieldMetadata {
   label: string;
-  sortable?: boolean; // برای جدول
-  type: FieldType; // نوع فیلد فرم
+  sortable?: boolean; // for table
+  type: FieldType; // form field type
   placeholder?: string;
   required?: boolean;
-  options?: SelectOption[]; // برای select, radio, autocomplete
+  options?: SelectOption[]; // for select, radio, autocomplete
   disabled?: boolean;
-  // می‌تونی بعداً اضافه کنی: min, max, step, rows, etc.
+  // You can add later: min, max, step, rows, etc.
 }

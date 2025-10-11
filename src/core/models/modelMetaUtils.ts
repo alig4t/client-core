@@ -22,7 +22,7 @@ export const baseModelMeta = {
   },
 } as const;
 
-// تابع عمومی برای ایجاد متادیتا
+// Generic function to create model metadata
 export function createModelMeta<T extends Record<string, any>, M extends FormFieldMetadata = FormFieldMetadata>(
   specificFields: { [K in keyof T]?: M },
   displayField: keyof T

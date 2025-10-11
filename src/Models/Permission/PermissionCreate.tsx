@@ -13,14 +13,14 @@ import { FormWrapper } from "@/components/shared/FormWrapper";
 import { ErrorFormText } from "@/components/form/ErrorFormText";
 import { permissionModelMeta } from "./PermissionModel.meta";
 
-// --- Schema و Type برای ولیدیشن ---
+// --- Schema and Type for validation ---
 const permissionSchema = z.object({
   showName: z.string().nonempty("نام نمایشی را وارد نمایید"),
   name: z.string().nonempty("نام سیستمی را وارد نمایید"),
 });
 type PermissionFormData = z.infer<typeof permissionSchema>;
 
-// --- کامپوننت فیلدهای فرم ---
+// --- Form Fields Component ---
 function PermissionFormFields() {
   const {
     register,
@@ -66,7 +66,7 @@ function PermissionFormFields() {
   );
 }
 
-// --- کامپوننت اصلی صفحه ایجاد دسترسی ---
+// --- Main Component for Create Permission Page ---
 const PermissionCreate: React.FC = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -81,7 +81,7 @@ const PermissionCreate: React.FC = () => {
         position: "bottom-left",
       });
       queryClient.invalidateQueries({ queryKey: ["permission"] });
-      // می‌توانید در اینجا به صفحه لیست دسترسی‌ها هدایت کنید
+      // You can navigate to the permissions list page here
       // navigate('/permissions');
     },
     onError: (error: any) => {

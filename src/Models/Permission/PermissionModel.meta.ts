@@ -5,7 +5,6 @@ import type { BaseModel } from "@/core/models/BaseModel";
 import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { PermissionModel } from "./PermissionModel";
 
-// متادیتا با پشتیبانی از انواع فیلد
 export const permissionModelMeta = createModelMeta<PermissionModel, FormFieldMetadata>(
   {
     name: {

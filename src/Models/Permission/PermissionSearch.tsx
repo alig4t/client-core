@@ -9,15 +9,15 @@ import Input from "@/components/form/Input";
 import CustomDatePicker from "@/components/form/CustomDatePicker";
 import { permissionModelMeta } from "./PermissionModel.meta";
 
-// --- نوع داده‌های فرم ---
+// --- Form data types ---
 interface PermissionSearchForm {
   showName?: string;
   name?: string;
-  fromDate?: Value; // ← از همان نوع CustomDatePicker
-  toDate?: Value; // ← از همان نوع CustomDatePicker
+  fromDate?: Value; // ← from the same type as CustomDatePicker
+  toDate?: Value; // ← from the same type as CustomDatePicker
 }
 
-// --- نوع خروجی فیلترها ---
+// --- Filter output types ---
 export interface PermissionFilters {
   [key: string]: any;
 }
@@ -39,14 +39,14 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
       },
     });
 
-  // تابع برای تبدیل Value به رشته ISO (YYYY-MM-DD)
+  // Function to convert Value to ISO string (YYYY-MM-DD)
   // const formatDateValue = (value: Value): string | null => {
   //   if (!value) return null;
-  //   // اگر DatePicker به‌صورت single است، value یک DateObject است
+  //   // If DatePicker is single, value is a DateObject
   //   if (value instanceof DatePicker.DateObject) {
   //     return value.format("YYYY-MM-DD");
   //   }
-  //   // اگر آرایه باشه (چندتایی)، اولین مورد رو برمی‌گردونیم (در این مورد نیاز نیست)
+  //   // If it's an array (multiple), return the first one (not needed in this case)
   //   if (Array.isArray(value) && value[0]) {
   //     return value[0].format("YYYY-MM-DD");
   //   }
@@ -81,7 +81,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
     onApplyFilters({});
   };
 
-  // مدیریت تغییر تاریخ
+  // Date change management
   const handleDateChange = (field: "fromDate" | "toDate", value: Value) => {
     setValue(field, value, { shouldValidate: true, shouldDirty: true });
   };
@@ -89,7 +89,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
   return (
     <form onSubmit={handleSubmit(onSubmit)} dir="rtl">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* فیلدهای متنی */}
+        {/* Text fields */}
         {(["showName", "name"] as const).map((fieldKey) => {
           const meta = permissionModelMeta.fields[fieldKey];
           return (
@@ -105,7 +105,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
           );
         })}
 
-        {/* فیلدهای تاریخ */}
+        {/* Date fields */}
         <div>
           <label className="block mb-2 text-sm font-medium text-gray-700">
             از تاریخ ایجاد

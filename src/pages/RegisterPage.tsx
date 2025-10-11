@@ -25,7 +25,7 @@ const registerSchema = z
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-// --- کامپوننت فیلدهای فرم با استایل جدید ---
+// --- Form Fields Component with new style ---
 function RegisterFormFields() {
   const {
     register,
@@ -107,7 +107,7 @@ function RegisterFormFields() {
   );
 }
 
-// --- کامپوننت اصلی صفحه ثبت‌نام با استایل جدید ---
+// --- Main Register Page Component with new style ---
 export default function RegisterPage() {
   const navigate = useNavigate();
 

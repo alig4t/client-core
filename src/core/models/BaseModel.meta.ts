@@ -1,4 +1,4 @@
-// متادیتای پایه — فقط یک‌بار تعریف می‌شه
+// Base metadata — defined only once
 import type { FieldMetadata } from "./types";
 
 export const baseModelMeta = {
@@ -15,7 +15,7 @@ export const baseModelMeta = {
             label: "تاریخ بروزرسانی",
             sortable: true,
         },
-        // deletedAt عموماً در لیست‌های عادی نمایش داده نمی‌شود
-        // پس آن را نمی‌آوریم (یا بعداً می‌تونی hidden بذاری)
+        // deletedAt is generally not displayed in normal lists
+        // so we don't include it (or you can set hidden later)
     },
 } as const;

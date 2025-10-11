@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import { ErrorFormText } from "@/components/form/ErrorFormText";
 
-// --- Schema و Type بدون تغییر ---
+// --- Schema and Type unchanged ---
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
   password: z.string().nonempty("رمز عبور را وارد نمایید"),
@@ -18,7 +18,7 @@ const loginSchema = z.object({
 });
 type LoginFormData = z.infer<typeof loginSchema>;
 
-// --- کامپوننت فیلدهای فرم با استایل جدید ---
+// --- Form Fields Component with new style ---
 function LoginFormFields() {
   const {
     register,
@@ -64,7 +64,7 @@ function LoginFormFields() {
   );
 }
 
-// --- کامپوننت اصلی صفحه لاگین با استایل جدید ---
+// --- Main Login Page Component with new style ---
 export default function LoginPage() {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
@@ -76,7 +76,7 @@ export default function LoginPage() {
   const mutation = useMutation({
     mutationFn: (data: LoginFormData) => login(data),
     onSuccess: (data) => {
-      // پاسخ سرور شما باید شامل accessToken و refreshToken باشد
+      // Your server response should include accessToken and refreshToken
       // authLogin(data.data.token);
 
       console.log("Data received on success:", data);
@@ -84,7 +84,7 @@ export default function LoginPage() {
       const token = data.data.token;
       const user = data.data.user;
 
-      // هر دو را به تابع login پاس می‌دهیم
+      // Pass both to the login function
 
       toast.success("ورود موفقیت آمیز بود", {
         description: "خوش آمدید! در حال انتقال به داشبورد...",
@@ -121,7 +121,7 @@ export default function LoginPage() {
             </svg> */}
         </div>
 
-        {/* بخش عنوان */}
+        {/* Title section */}
         <div className="text-center">
           <h1 className="!text-3xl font-bold text-gray-800 mb-2">
             ورود به پنل مدیریت
@@ -129,7 +129,7 @@ export default function LoginPage() {
           {/* <p className="mt-2 text-sm text-gray-500">ایمیل و رمز عبور خود را وارد کنید</p> */}
         </div>
 
-        {/* بخش فرم */}
+        {/* Form section */}
         <FormWrapper
           schema={loginSchema}
           onSubmit={onSubmit}
@@ -148,7 +148,7 @@ export default function LoginPage() {
           {/* </form> */}
         </FormWrapper>
 
-        {/* بخش قوانین */}
+        {/* Rules section */}
         <p className="text-xs text-center text-gray-400">
           ورود شما به منزله قبول{" "}
           <a href="#" className="font-semibold text-purple-600 hover:underline">
