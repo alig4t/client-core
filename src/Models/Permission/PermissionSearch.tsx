@@ -11,6 +11,10 @@ import { permissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
 import { DateInput } from "@/components/form/DateInput";
+import persian from "react-date-object/calendars/persian";
+import persian_fa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
 
 // --- Form data types ---
 interface PermissionSearchForm {
@@ -43,7 +47,6 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
   //   });
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    console.log(data.createdAt_ge.toDate());
     const filters: PermissionFilters = {};
 
     if (data.showName?.trim()) filters["showName_like"] = data.showName.trim();
@@ -51,11 +54,11 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
 
     if (data.createdAt_ge instanceof DateObject) {
       console.log(data.createdAt_ge.toDate());
-      filters["createdAt_ge"] = data.createdAt_ge.toDate();
+      filters["createdAt_ge"] = JALALI_TO_GEORGIAN(data.createdAt_ge)
     }
 
     if (data.createdAt_le instanceof DateObject) {
-      filters["createdAt_le"] = data.createdAt_le.toDate();
+      filters["createdAt_le"] = JALALI_TO_GEORGIAN(data.createdAt_le)
     }
 
     onApplyFilters(filters);

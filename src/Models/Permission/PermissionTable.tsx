@@ -10,6 +10,7 @@ import ErrorMessage from "@/components/general/ErrorMessage";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import Select, { type Option } from "@/components/form/Select";
+import { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
 
 const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
   filters,
@@ -58,12 +59,12 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
     { label: "نام سیستمی (نزولی)", value: "name,desc" },
   ];
 
-  const sizeOptions : Option[] = [
+  const sizeOptions: Option[] = [
     { label: "5", value: 5 },
     { label: "10", value: 10 },
     { label: "20", value: 20 },
     { label: "50", value: 50 },
-  ]
+  ];
 
   return (
     <div
@@ -72,20 +73,20 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
     >
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-lg font-semibold flex-1">لیست دسترسی‌ها</h2>
-        <div  className="max-w-1/2 flex gap-2 items-center">
-        <Select
-        className="min-w-[120px]"
-          key={"sort"}
-          options={sortOptions}
-          onChange={(e) => setSort(e.target.value)}
-          value={sort}
-        />
-        <Select 
-          key={'size'}
-          value={pageSize}
-          options={sizeOptions}
-          onChange={(e) => setPageSize(Number(e.target.value))}
-        />
+        <div className="max-w-1/2 flex gap-2 items-center">
+          <Select
+            className="min-w-[120px]"
+            key={"sort"}
+            options={sortOptions}
+            onChange={(e) => setSort(e.target.value)}
+            value={sort}
+          />
+          <Select
+            key={"size"}
+            value={pageSize}
+            options={sizeOptions}
+            onChange={(e) => setPageSize(Number(e.target.value))}
+          />
         </div>
       </div>
 
@@ -102,6 +103,9 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
               <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
                 نام سیستمی
               </th>
+              <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+                تاریخ ایجاد
+              </th>
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
@@ -116,6 +120,9 @@ const PermissionTable: React.FC<{ filters: DynamicFilters }> = ({
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {permission.name}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {GEORGIAN_TO_JALALI(permission.createdAt)}
                   </td>
                 </tr>
               ))
