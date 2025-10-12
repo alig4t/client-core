@@ -51,7 +51,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       placeholder,
       value,
       onChange: handleChange,
-      className: `w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className}`,
+      className: `w-full px-4 py-2 border border-gray-300 rounded-lg  text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className}`,
       ...rest,
     };
 
@@ -60,7 +60,7 @@ export const FormInput: React.FC<FormInputProps> = ({
         <div className="w-full">
           <label
             htmlFor={name}
-            className="block text-sm font-medium text-gray-700 text-right mb-1"
+            className="block text-sm font-medium text-gray-700 text-right mb-2"
           >
             {label}
           </label>
@@ -76,7 +76,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       <div className="w-full">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700 text-right mb-1"
+          className="block text-sm font-medium text-gray-700 text-right mb-2"
         >
           {label}
         </label>
@@ -94,6 +94,7 @@ export const FormInput: React.FC<FormInputProps> = ({
           <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
             <Search size={20} />
           </div>
+        
         </div>
       </div>
     );
@@ -129,7 +130,7 @@ export const FormInput: React.FC<FormInputProps> = ({
   const commonProps = {
     id: name,
     placeholder,
-    className: `w-full px-4 py-2 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className}`,
+    className: `w-full px-4 py-2 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className}`,
     ...registerRest,
     onChange: handleChange,
     ...rest,
@@ -140,7 +141,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       <div className="w-full">
         <label
           htmlFor={name}
-          className="block text-sm font-medium text-gray-700 text-right mb-1"
+          className="block text-sm font-medium text-gray-700 text-right mb-2"
         >
           {label}
         </label>
@@ -159,7 +160,7 @@ export const FormInput: React.FC<FormInputProps> = ({
     <div className="w-full">
       <label
         htmlFor={name}
-        className="block text-sm font-medium text-gray-700 text-right mb-1"
+        className="block text-sm font-medium text-gray-700 text-right mb-2"
       >
         {label}
       </label>

@@ -14,7 +14,7 @@ const PermissionPage: React.FC = () => {
   return (
     <div dir="rtl" className="p-8 bg-gray-50 min-h-screen font-sans">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">مدیریت دسترسی‌ها</h1>
+        <h1 className="!text-2xl font-bold">مدیریت دسترسی‌ها</h1>
         <button
           onClick={() => navigate("create")}
           className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
