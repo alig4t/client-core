@@ -5,6 +5,19 @@ import { useFormContext, useWatch } from "react-hook-form";
 import { ErrorFormText } from "@/components/form/ErrorFormText";
 import Input from "@/components/form/Input"; // فرض: کامپوننت Input ساده شما
 import { CircleX, Pencil, Search } from "lucide-react";
+import Label from "./Label";
+
+const ClearButton = ({onClick}:any) => {
+  return(
+    <button
+            type="button"
+            className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            onClick={onClick}
+          >
+            <CircleX size={18} />
+          </button>
+  )
+}
 
 interface BaseFormInputProps {
   name: string;
@@ -61,28 +74,21 @@ export const FormInput: React.FC<FormInputProps> = ({
     if (multiline) {
       return (
         <div className="w-full">
-          <label
-            htmlFor={name}
-            className="block text-sm font-medium text-gray-700 text-right mb-2"
-          >
-            {label}
-          </label>
+          <Label>{label}</Label>
+          <div className="relative w-full">
           <textarea
             {...(commonProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
             rows={rest.rows || 3}
           />
+          {boxIcon}
+</div>
         </div>
       );
     }
 
     return (
       <div className="w-full">
-        <label
-          htmlFor={name}
-          className="block text-sm font-medium text-gray-700 text-right mb-2"
-        >
-          {label}
-        </label>
+        <Label>{label}</Label>
         {/* <input
           {...(commonProps as React.InputHTMLAttributes<HTMLInputElement>)}
           type={type}
@@ -97,13 +103,7 @@ export const FormInput: React.FC<FormInputProps> = ({
           {boxIcon}
 
           {value && (
-          <button
-            type="button"
-            className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            onClick={()=>setValue("")}
-          >
-            <CircleX size={18} />
-          </button>
+             <ClearButton onClick={()=>setValue("")} />
         )}
           {/* <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
             <Search size={20} />
@@ -167,16 +167,12 @@ export const FormInput: React.FC<FormInputProps> = ({
   if (multiline) {
     return (
       <div className="w-full">
-        <label
-          htmlFor={name}
-          className="block text-sm font-medium text-gray-700 text-right mb-2"
-        >
-          {label}
-        </label>
+        <Label>{label}</Label>
         <textarea
           {...(commonProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
           rows={rest.rows || 3}
         />
+        {boxIcon}
         {errors[name] && (
           <ErrorFormText msg={errors[name]?.message as string} />
         )}
@@ -187,12 +183,7 @@ export const FormInput: React.FC<FormInputProps> = ({
 
   return (
     <div className="w-full">
-      <label
-        htmlFor={name}
-        className="block text-sm font-medium text-gray-700 text-right mb-2"
-      >
-        {label}
-      </label>
+      <Label>{label}</Label>
       <div className="relative w-full">
         <input
           {...(commonProps as React.InputHTMLAttributes<HTMLInputElement>)}
@@ -203,13 +194,7 @@ export const FormInput: React.FC<FormInputProps> = ({
         {boxIcon}
         {/* ✅ دکمه Clear */}
         {currentValue && (
-          <button
-            type="button"
-            className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-            onClick={handleClear}
-          >
-            <CircleX size={18} />
-          </button>
+          <ClearButton onClick={handleClear} />
         )}
       </div>
       {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}

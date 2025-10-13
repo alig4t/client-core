@@ -41,11 +41,15 @@ export const DateInput: React.FC<DateInputProps> = ({
         <label className="block mb-2 text-sm font-medium text-gray-700 text-right">
           {label}
         </label>
+        <div className="w-full ">
+
         <CustomDatePicker
           value={value}
           onChange={handleChange}
           placeholder={placeholder}
         />
+        </div>
+
       </div>
     );
   }

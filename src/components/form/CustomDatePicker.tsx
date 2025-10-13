@@ -14,6 +14,7 @@ interface CustomDatePickerProps {
 const CustomDatePicker: React.FC<CustomDatePickerProps> = ({ value, onChange, placeholder }) => {
   return (
     <DatePicker
+      containerClassName="w-full" 
       editable={true}
       value={value}
       onChange={onChange}

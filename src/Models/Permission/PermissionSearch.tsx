@@ -15,6 +15,8 @@ import persian from "react-date-object/calendars/persian";
 import persian_fa from "react-date-object/locales/persian_fa";
 import gregorian from "react-date-object/calendars/gregorian";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
+import { z } from "zod";
+import { Checkbox } from "@/components/form/Checkbox";
 
 // --- Form data types ---
 interface PermissionSearchForm {
@@ -23,6 +25,11 @@ interface PermissionSearchForm {
   fromDate?: Value; // ← from the same type as CustomDatePicker
   toDate?: Value; // ← from the same type as CustomDatePicker
 }
+
+// const permissionSchema = z.object({
+//   showName: z.string().nonempty("نام نمایشی را وارد نمایید"),
+//   name: z.string().nonempty("نام سیستمی را وارد نمایید"),
+// });
 
 // --- Filter output types ---
 export interface PermissionFilters {
@@ -81,10 +88,15 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
           <FormInput
             name="name"
             label={permissionModelMeta.fields["name"].label}
+            placeholder={"جستجو براساس نام سیستمی..."}
           />
           <DateInput
             name="createdAt_ge"
             label={permissionModelMeta.fields["createdAt"].label + " از"}
+          />
+          <Checkbox
+            name='is_married'
+            label={"آیا ازدواج کرده است؟"}
           />
 
           <DateInput
