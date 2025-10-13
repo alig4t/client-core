@@ -1,10 +1,10 @@
 // src/components/form/FormInput.tsx
 
 import React from "react";
-import { useFormContext } from "react-hook-form";
+import { useFormContext, useWatch } from "react-hook-form";
 import { ErrorFormText } from "@/components/form/ErrorFormText";
 import Input from "@/components/form/Input"; // فرض: کامپوننت Input ساده شما
-import { Search } from "lucide-react";
+import { CircleX, Pencil, Search } from "lucide-react";
 
 interface BaseFormInputProps {
   name: string;
@@ -21,6 +21,9 @@ type FormInputProps = BaseFormInputProps &
   Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange"> &
   Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "onChange">;
 
+const boxIcon = (<div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400">
+  <Pencil size={20} className="bg-white rounded-lg" />
+</div>)
 export const FormInput: React.FC<FormInputProps> = ({
   name,
   label,
@@ -51,7 +54,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       placeholder,
       value,
       onChange: handleChange,
-      className: `w-full px-4 py-2 border border-gray-300 rounded-lg  text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className}`,
+      className: `w-full pl-4 pr-10 py-2 border border-gray-300 rounded-lg  text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className} ${value && "pl-9"}`,
       ...rest,
     };
 
@@ -86,14 +89,25 @@ export const FormInput: React.FC<FormInputProps> = ({
         /> */}
         <div className="relative w-full">
           <input
-            className="w-full p-2 pl-10 border border-gray-300 rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+            className={`w-full p-2 pr-10 border border-gray-300 rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500 `}
             {...(commonProps as React.InputHTMLAttributes<HTMLInputElement>)}
             placeholder={placeholder}
             type={type}
           />
-          <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
+          {boxIcon}
+
+          {value && (
+          <button
+            type="button"
+            className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            onClick={()=>setValue("")}
+          >
+            <CircleX size={18} />
+          </button>
+        )}
+          {/* <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
             <Search size={20} />
-          </div>
+          </div> */}
         
         </div>
       </div>
@@ -114,7 +128,10 @@ export const FormInput: React.FC<FormInputProps> = ({
   const {
     register,
     formState: { errors },
+    setValue,
   } = formContext;
+
+  const currentValue = useWatch({ name, control: formContext.control });
 
   const { onChange: registerOnChange, ...registerRest } = register(name);
 
@@ -126,15 +143,26 @@ export const FormInput: React.FC<FormInputProps> = ({
       onValueChange(e.target.value);
     }
   };
+  
+  const handleClear = () => {
+    setValue(name, "", { shouldValidate: true, shouldDirty: true });
+    if (onValueChange) {
+      onValueChange("");
+    }
+  };
+  
 
   const commonProps = {
     id: name,
     placeholder,
-    className: `w-full px-4 py-2 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className}`,
+    className: `w-full pl-6 pr-10 py-2 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className} ${currentValue && "pl-9"}`,
     ...registerRest,
     onChange: handleChange,
     ...rest,
   };
+  
+
+  console.log(registerRest);
 
   if (multiline) {
     return (
@@ -155,6 +183,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       </div>
     );
   }
+  
 
   return (
     <div className="w-full">
@@ -166,16 +195,23 @@ export const FormInput: React.FC<FormInputProps> = ({
       </label>
       <div className="relative w-full">
         <input
-          className="w-full !p-2 pl-10 border border-gray-300 rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
           {...(commonProps as React.InputHTMLAttributes<HTMLInputElement>)}
-          placeholder={placeholder}
           type={type}
         />
-        <div className="absolute top-1/2 left-3 -translate-y-1/2 text-gray-400">
-          <Search size={20} className="bg-white rounded-lg" />
-        </div>
+        {/* آیکون Pencil را حذف یا نگه دارید — ولی Clear مهم‌تر است */}
+        {/*  */}
+        {boxIcon}
+        {/* ✅ دکمه Clear */}
+        {currentValue && (
+          <button
+            type="button"
+            className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+            onClick={handleClear}
+          >
+            <CircleX size={18} />
+          </button>
+        )}
       </div>
-
       {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}
     </div>
   );
