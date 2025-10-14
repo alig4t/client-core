@@ -116,7 +116,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
         </div>
       )}
 
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex flex-wrap justify-between items-center mb-4 w-full">
         <h2 className="text-lg font-semibold flex-1">لیست دسترسی‌ها</h2>
         <div className="max-w-2/3 flex gap-2 items-center">
         {/* {selectedIds.length > 0 && (<button

@@ -16,8 +16,8 @@ const TableErrorState: React.FC<TableErrorStateProps> = ({
     <div dir="rtl" className="p-6 bg-white rounded-lg border border-red-200">
       {/* جایگاه خالی برای عنوان و فیلتر مرتب‌سازی */}
       <div className="flex justify-between items-center mb-4">
-        <div className="h-5 w-32 bg-red-50 rounded"></div>
-        <div className="h-8 w-48 bg-red-50 rounded-md"></div>
+        <div className="h-5 w-8 sm:w-32 bg-red-50 rounded"></div>
+        <div className="h-8 w-8 sm:w-48 bg-red-50 rounded-md"></div>
       </div>
 
       <div className="overflow-x-auto">
@@ -67,9 +67,9 @@ const TableErrorState: React.FC<TableErrorStateProps> = ({
 
       {/* جایگاه خالی برای دکمه‌های صفحه‌بندی */}
       <div className="flex items-center justify-between mt-4">
-        <div className="h-8 w-16 bg-red-50 rounded"></div>
-        <div className="h-4 w-24 bg-red-50 rounded"></div>
-        <div className="h-8 w-16 bg-red-50 rounded"></div>
+        <div className="h-8 w-4 sm:w-16 bg-red-50 rounded"></div>
+        <div className="h-4 w-4 sm:w-24 bg-red-50 rounded"></div>
+        <div className="h-8 w-4 sm:w-16 bg-red-50 rounded"></div>
       </div>
     </div>
   );
