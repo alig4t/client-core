@@ -98,17 +98,17 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     register,
     formState: { errors },
   } = formContext;
-  
+
   const { onChange: registerOnChange, ...registerRest } = register(name);
   const currentValue = useWatch({ name, control: formContext.control });
-  
+
   const checkboxRef = React.useRef<HTMLInputElement>(null); // 👈 اضافه شد
-  
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     registerOnChange(e);
     if (onChange) onChange(e.target.checked);
   };
-  
+
   const handleDivClick = () => {
     if (checkboxRef.current && !disabled) {
       checkboxRef.current.click(); // شبیه‌سازی کلیک روی چک‌باکس
@@ -161,9 +161,12 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   // --- حالت فرم (با لیبل و خطا) ---
   return (
     <div className="">
-        <Label >{" "}</Label>
-      <div className={`flex items-center border border-gray-300 rounded-md px-2 ${className}`}>
-        
+      <Label> </Label>
+      <div
+        className={`flex items-center
+          rounded-md px-2 ${className}`}
+      >
+        {/* border border-gray-300 */}
         {renderCheckbox()}
         {label && (
           <label htmlFor={name} className="mr-2 text-sm text-gray-700">
@@ -175,7 +178,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         )}
       </div>
     </div>
-
   );
 };
 

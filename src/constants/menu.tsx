@@ -107,5 +107,10 @@ export const subMenus: Record<
       href: "/portal/permissions",
       icon: <CreditCard size={18} />,
     },
+    {
+      label: "ترکیبی ها",
+      href: "/portal/comprehensive",
+      icon: <CreditCard size={18} />,
+    },
   ],
 };

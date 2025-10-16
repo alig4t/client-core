@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Accordion from "@/components/general/Accordion";
-import DynamicFilterForm, {
+import {
   type DynamicFilters,
 } from "@/core/forms/DynamicFilterForm";
-import { permissionFiltersConfig } from "./PermissionFiltersConfig";
 import PermissionTable from "./PermissionTable";
 import { useNavigate } from "react-router-dom";
 import PermissionSearch from "./PermissionSearch";

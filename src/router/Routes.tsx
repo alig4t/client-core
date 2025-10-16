@@ -15,6 +15,8 @@ import PublicRoute from "./PublicRoute"; // Public Routes component
 import RegisterPage from "@/pages/RegisterPage";
 import PermissionPage from "@/Models/Permission/PermissionPage";
 import PermissionCreate from "@/Models/Permission/PermissionCreate";
+import ComprehensivePage from "@/Models/Comprehensive/ComprehensivePage";
+import ComprehensiveCreate from "@/Models/Comprehensive/ComprehensiveCreate";
 
 export const Routes: RouteObject[] = [
   {
@@ -53,6 +55,8 @@ export const Routes: RouteObject[] = [
               { path: "tags/:id", element: <TagDisplayPage /> },
               { path: "permissions", element: <PermissionPage /> },
               { path: "permissions/create", element: <PermissionCreate /> },
+              { path: "comprehensive", element: <ComprehensivePage /> },
+              { path: "comprehensive/create", element: <ComprehensiveCreate /> },
             ],
           },
         ],
