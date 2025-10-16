@@ -23,7 +23,7 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
   onSelectionChange,
 }) => {
   const [page, setPage] = useState(0);
-  const [sort, setSort] = useState("showName,asc");
+  const [sort, setSort] = useState("stringField,asc");
   const [pageSize, setPageSize] = useState<number>(10);
   const [selectedIds, setSelectedIds] = useState<number[]>([]); // ✅ مدیریت انتخاب‌ها
 

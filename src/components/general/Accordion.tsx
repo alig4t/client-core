@@ -9,11 +9,15 @@ interface AccordionProps {
   startOpen?: boolean; // پراپ اختیاری برای باز بودن اولیه
 }
 
-const Accordion: React.FC<AccordionProps> = ({ title, children, startOpen = false }) => {
+const Accordion: React.FC<AccordionProps> = ({
+  title,
+  children,
+  startOpen = false,
+}) => {
   const [isOpen, setIsOpen] = useState(startOpen);
 
   return (
-    <div className="border border-gray-200 rounded-lg mb-6 overflow-hidden">
+    <div className="border border-gray-200 rounded-lg mb-6">
       {/* هدر آکاردئون که با کلیک باز و بسته می‌شود */}
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -43,9 +47,7 @@ const Accordion: React.FC<AccordionProps> = ({ title, children, startOpen = fals
             transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
             className="bg-white"
           >
-            <div className="p-6 border-t border-gray-200">
-              {children}
-            </div>
+            <div className="p-6 border-t border-gray-200">{children}</div>
           </motion.section>
         )}
       </AnimatePresence>

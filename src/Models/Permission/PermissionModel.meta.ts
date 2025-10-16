@@ -1,4 +1,4 @@
-// src/models/permission/PermissionModel.ts
+// src/models/permission/PermissionModel.meta.ts
 
 import type { FormFieldMetadata } from "@/core/forms/FieldTypes";
 import type { BaseModel } from "@/core/models/BaseModel";

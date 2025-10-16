@@ -10,6 +10,11 @@ import { FormInput } from "@/components/form/FormInput";
 import { DateInput } from "@/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
 import { Checkbox } from "@/components/form/Checkbox";
+// import { FormSelect } from "@/components/form/FormSelect";
+import { z } from "zod";
+import { FormSelect } from "@/components/form/FormSelect";
+import { FormAutoComplete } from "@/components/form/FormAutoComplete";
+import PermissionService from "./PermissionService";
 
 // --- Form data types ---
 interface PermissionSearchForm {
@@ -19,10 +24,11 @@ interface PermissionSearchForm {
   toDate?: Value; // ← from the same type as CustomDatePicker
 }
 
-// const permissionSchema = z.object({
-//   showName: z.string().nonempty("نام نمایشی را وارد نمایید"),
-//   name: z.string().nonempty("نام سیستمی را وارد نمایید"),
-// });
+const permissionSchema = z.object({
+  showName: z.string().nonempty("نام نمایشی را وارد نمایید"),
+  name: z.string().nonempty("نام سیستمی را وارد نمایید"),
+  opts: z.array(z.string()).min(1, "انتخاب کنید"),
+});
 
 // --- Filter output types ---
 export interface PermissionFilters {
@@ -71,7 +77,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
 
   return (
     <>
-      <FormWrapper onSubmit={onSubmit}>
+      <FormWrapper onSubmit={onSubmit} schema={permissionSchema}>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <FormInput
             name="showName"
@@ -88,6 +94,31 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
             label={permissionModelMeta.fields["createdAt"].label + " از"}
           />
           <Checkbox name="is_married" label={"آیا ازدواج کرده است؟"} />
+
+          <FormSelect
+            label="انتخاب ایکس"
+            multi
+            name="opts"
+            options={[
+              {
+                label: "ssssssssss sssccccccc cccccccccc ccccccccccccs",
+                value: "sss",
+              },
+              { label: "ssss2", value: "sss2" },
+              { label: "ssss3", value: "sss3" },
+              { label: "ssss4", value: "sss4" },
+              { label: "ssss5", value: "sss5" },
+              { label: "ssss6", value: "sss6" },
+            ]}
+          />
+
+          <FormAutoComplete
+            name="op"
+            label="انتخاب اتو"
+            service={PermissionService}
+            labelKey="showName"
+            valueKey="id"
+          />
 
           <DateInput
             name="createdAt_le"
