@@ -8,7 +8,7 @@ import { z } from "zod";
 import permissionService from "@/Models/Permission/PermissionService";
 import Spinner from "@/components/general/Spinner";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
-import { permissionModelMeta } from "./PermissionModel.meta";
+import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
 
@@ -114,12 +114,12 @@ const PermissionCreate: React.FC = () => {
         >
           <FormInput
             name="showName"
-            label={permissionModelMeta.fields.showName?.label || "نام نمایشی"}
+            label={PermissionModelMeta.fields.showName?.label || "نام نمایشی"}
             placeholder="مثلاً مدیریت کاربران"
           />
           <FormInput
             name="name"
-            label={permissionModelMeta.fields.name?.label || "نام سیستمی"}
+            label={PermissionModelMeta.fields.name?.label || "نام سیستمی"}
             placeholder="مثلاً manage-users"
           />
           {/* <PermissionFormFields /> */}

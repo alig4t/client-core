@@ -4,7 +4,7 @@ import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { DateObject } from "react-multi-date-picker";
 import type { Value } from "react-multi-date-picker";
-import { permissionModelMeta } from "./PermissionModel.meta";
+import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
 import { DateInput } from "@/components/form/DateInput";
@@ -15,7 +15,7 @@ import { z } from "zod";
 import { FormSelect } from "@/components/form/FormSelect";
 import { FormAutoComplete } from "@/components/form/FormAutoComplete";
 import PermissionService from "./PermissionService";
-
+import type { PermissionModel } from "./PermissionModel";
 // --- Form data types ---
 interface PermissionSearchForm {
   showName?: string;
@@ -81,17 +81,17 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           <FormInput
             name="showName"
-            label={permissionModelMeta.fields["showName"].label}
+            label={PermissionModelMeta.fields["showName"].label}
             placeholder={"جستجو براساس نام نمایشی..."}
           />
           <FormInput
             name="name"
-            label={permissionModelMeta.fields["name"].label}
+            label={PermissionModelMeta.fields["name"].label}
             placeholder={"جستجو براساس نام سیستمی..."}
           />
           <DateInput
             name="createdAt_ge"
-            label={permissionModelMeta.fields["createdAt"].label + " از"}
+            label={PermissionModelMeta.fields["createdAt"].label + " از"}
           />
           <Checkbox name="is_married" label={"آیا ازدواج کرده است؟"} />
 
@@ -116,13 +116,14 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
             name="op"
             label="انتخاب اتو"
             service={PermissionService}
-            labelKey="showName"
+            labelKey={PermissionModelMeta.displayField}
+            extraFilters={{ name_like: "bot" }}
             valueKey="id"
           />
 
           <DateInput
             name="createdAt_le"
-            label={permissionModelMeta.fields["createdAt"].label + " تا"}
+            label={PermissionModelMeta.fields["createdAt"].label + " تا"}
           />
         </div>
 

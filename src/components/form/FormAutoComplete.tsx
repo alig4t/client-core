@@ -21,7 +21,7 @@ interface ServerSideParams {
   page?: number;
   size?: number;
   sort?: string;
-  filters?: Record<string, any>; // Used to send the search term
+  filters?: Record<string, any>; // Used to send the search term and extra filters
 }
 
 /** The structure of the paginated API response. */
@@ -125,14 +125,15 @@ const LoadingSpinner = () => (
 interface FormAutoCompleteProps<T extends BaseModel> {
   name: string;
   label: string;
-  service: IBaseService<T>; // Now uses the generic IBaseService interface
-  labelKey: keyof T; // Key for the display name (e.g., 'showName')
-  valueKey: keyof T; // Key for the actual value (e.g., 'id')
+  service: IBaseService<T>;
+  labelKey: keyof T;
+  valueKey: keyof T;
   multi?: boolean;
   className?: string;
   placeholder?: string;
   maxVisible?: number;
-  debounceTime?: number;
+  debounceTime?: number; // NEW PROP: Additional filters to be applied to the service call
+  extraFilters?: Record<string, any>;
 }
 
 export const FormAutoComplete = <T extends BaseModel>({
@@ -146,6 +147,7 @@ export const FormAutoComplete = <T extends BaseModel>({
   placeholder = "جستجو و انتخاب کنید",
   maxVisible = 2,
   debounceTime = 300,
+  extraFilters = {}, // Default to empty object
 }: FormAutoCompleteProps<T>) => {
   const formContext = useFormContext();
   if (!formContext) {
@@ -156,7 +158,7 @@ export const FormAutoComplete = <T extends BaseModel>({
     setValue,
     control,
     formState: { errors },
-  } = formContext;
+  } = formContext; // Internal component state
 
   // Internal component state
   const [isOpen, setIsOpen] = useState(false);
@@ -168,7 +170,7 @@ export const FormAutoComplete = <T extends BaseModel>({
   const [selectedLabelCache, setSelectedLabelCache] = useState<
     Record<string | number, string>
   >({});
-  const wrapperRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null); // --- RHF Watch and Select Logic ---
 
   // --- RHF Watch and Select Logic ---
   const currentValue = useWatch({ name, control });
@@ -191,18 +193,28 @@ export const FormAutoComplete = <T extends BaseModel>({
     return () => {
       clearTimeout(handler);
     };
-  }, [searchTerm, debounceTime]);
+  }, [searchTerm, debounceTime]); // --- Fetching Effect (Triggers on debounce, open, or extraFilters change) ---
 
-  // --- Fetching Effect (Triggers on debounce or open) ---
   const fetchOptions = useCallback(async () => {
     if (!isOpen) return;
 
     setLoading(true);
+
+    // 1. Construct the dynamic search filter key based on the labelKey
+    // Note: The key name must be determined by your backend API contract.
+    // Assuming the format requires a "_like" suffix for the search field.
+    const searchFilterKey = `${labelKey as string}_like`;
+
+    // 2. Combine static and dynamic filters
+    const combinedFilters = {
+      ...extraFilters,
+      [searchFilterKey]: debouncedSearchTerm,
+    };
+
     try {
       const results = await service.getAll({
-        // Pass the search term to the filters object
-        filters: { search: debouncedSearchTerm },
-        size: 20, // Limit results for a practical dropdown
+        filters: combinedFilters,
+        size: 20,
       });
       setFetchedOptions(results.data);
     } catch (e) {
@@ -211,13 +223,14 @@ export const FormAutoComplete = <T extends BaseModel>({
     } finally {
       setLoading(false);
     }
-  }, [isOpen, debouncedSearchTerm, service]);
+  }, [isOpen, debouncedSearchTerm, service, extraFilters, labelKey]); // extraFilters is a dependency
 
   useEffect(() => {
+    // Only fetch if the debounce term changes or if the extra filters change
+    // (isOpen is handled implicitly by the fetchOptions useCallback check)
     fetchOptions();
-  }, [fetchOptions]);
+  }, [fetchOptions]); // --- Unified Toggle Logic (Handles Selection and Cache Update) ---
 
-  // --- Unified Toggle Logic (Handles Selection and Cache Update) ---
   const handleToggle = useCallback(
     (value: string | number, label: string) => {
       let newValues;
@@ -228,8 +241,7 @@ export const FormAutoComplete = <T extends BaseModel>({
         if (newValues.includes(value)) {
           newValues = newValues.filter((v: string | number) => v !== value);
         } else {
-          newValues.push(value);
-          // Cache the label when selecting
+          newValues.push(value); // Cache the label when selecting
           setSelectedLabelCache((prev) => ({ ...prev, [value]: label }));
         }
       } else {
@@ -248,22 +260,18 @@ export const FormAutoComplete = <T extends BaseModel>({
       setValue(name, newValues, { shouldValidate: true, shouldDirty: true });
     },
     [currentValue, multi, name, setValue]
-  );
-
-  // --- Dynamic Options and Display Text Logic ---
-
+  ); // --- Dynamic Options and Display Text Logic ---
   // Combines fetched options with selected options (using cache)
-  const allUniqueOptions = useMemo(() => {
-    const optionMap = new Map<string | number, Option>();
 
-    // 1. Add current fetched options
+  const allUniqueOptions = useMemo(() => {
+    const optionMap = new Map<string | number, Option>(); // 1. Add current fetched options
+
     fetchedOptions.forEach((item) => {
       const value = item[valueKey] as string | number;
       const label = item[labelKey] as string;
       optionMap.set(value, { value, label });
-    });
+    }); // 2. Add previously selected options from the cache (if they are not already in fetched results)
 
-    // 2. Add previously selected options from the cache (if they are not already in fetched results)
     Object.entries(selectedLabelCache).forEach(([value, label]) => {
       // Ensure key is correctly typed (handling potential string-id in cache)
       const val = isNaN(Number(value)) ? value : Number(value);
@@ -271,15 +279,13 @@ export const FormAutoComplete = <T extends BaseModel>({
       if (selectedValues.includes(val) && !optionMap.has(val)) {
         optionMap.set(val, { value: val, label });
       }
-    });
+    }); // Sort alphabetically for clean display
 
-    // Sort alphabetically for clean display
     return Array.from(optionMap.values()).sort((a, b) =>
       a.label.localeCompare(b.label)
     );
-  }, [fetchedOptions, selectedValues, selectedLabelCache, labelKey, valueKey]);
+  }, [fetchedOptions, selectedValues, selectedLabelCache, labelKey, valueKey]); // Get the display summary text
 
-  // Get the display summary text
   const selectedLabels = useMemo(() => {
     return allUniqueOptions
       .filter((opt) => selectedValues.includes(opt.value))
@@ -303,9 +309,7 @@ export const FormAutoComplete = <T extends BaseModel>({
     }
   }
 
-  const isSelected = (value: string | number) => selectedValues.includes(value);
-
-  // --- Smart Positioning Logic ---
+  const isSelected = (value: string | number) => selectedValues.includes(value); // --- Smart Positioning Logic ---
 
   const [openDirection, setOpenDirection] = useState<"down" | "up">("down");
 
@@ -316,19 +320,16 @@ export const FormAutoComplete = <T extends BaseModel>({
         wrapperRef.current &&
         !wrapperRef.current.contains(event.target as Node)
       ) {
-        setIsOpen(false);
-        // Reset search term when closing to ensure fresh fetch next time
+        setIsOpen(false); // Reset search term when closing to ensure fresh fetch next time
         setSearchTerm("");
       }
-    }
+    } // Smart Positioning Logic (Runs only when opening)
 
-    // Smart Positioning Logic (Runs only when opening)
     if (isOpen && wrapperRef.current) {
       const rect = wrapperRef.current.getBoundingClientRect();
       const availableSpaceBelow = window.innerHeight - rect.bottom;
-      const availableSpaceAbove = rect.top;
+      const availableSpaceAbove = rect.top; // Estimated height of the dropdown (max-h-60 is 240px + search input)
 
-      // Estimated height of the dropdown (max-h-60 is 240px + search input)
       const estimatedDropdownHeight = 300;
 
       if (
@@ -345,16 +346,14 @@ export const FormAutoComplete = <T extends BaseModel>({
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, [isOpen]);
+  }, [isOpen]); // Dynamic classes for dropdown positioning
 
-  // Dynamic classes for dropdown positioning
   const dropdownPositionClasses =
     openDirection === "up" ? "bottom-full mb-1" : "top-full mt-1";
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
       <Label htmlFor={name}>{label}</Label>
-
       {/* Select Box / Trigger Button (Shows summary text) */}
       <button
         type="button"
@@ -365,13 +364,14 @@ export const FormAutoComplete = <T extends BaseModel>({
         aria-expanded={isOpen}
       >
         <span
-          className={`flex-1 truncate ${count > 0 ? "text-gray-900" : "text-gray-500"}`}
+          className={`flex-1 truncate ${
+            count > 0 ? "text-gray-900" : "text-gray-500"
+          }`}
         >
           {displayText}
         </span>
         <ChevronIcon isOpen={isOpen} />
       </button>
-
       {/* Dropdown Options List */}
       {isOpen && (
         <div
@@ -389,7 +389,6 @@ export const FormAutoComplete = <T extends BaseModel>({
               autoFocus
             />
           </div>
-
           <div className="max-h-60 overflow-y-auto">
             {loading && (
               <div className="flex justify-center items-center p-4 text-purple-600">
@@ -397,13 +396,11 @@ export const FormAutoComplete = <T extends BaseModel>({
                 <span className="mr-2">درحال بارگذاری...</span>
               </div>
             )}
-
             {!loading && allUniqueOptions.length === 0 && (
               <div className="p-4 text-sm text-gray-500 text-center">
                 موردی یافت نشد.
               </div>
             )}
-
             {!loading && allUniqueOptions.length > 0 && (
               <ul role="listbox" aria-labelledby={name} className="p-1">
                 {allUniqueOptions.map((option) => (
@@ -419,6 +416,7 @@ export const FormAutoComplete = <T extends BaseModel>({
                     }`}
                   >
                     <span className="text-right">{option.label}</span>
+
                     {multi ? (
                       <div
                         className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
@@ -439,10 +437,8 @@ export const FormAutoComplete = <T extends BaseModel>({
           </div>
         </div>
       )}
-
       {/* Hidden input for RHF registration and validation */}
       <input type="hidden" {...formContext.register(name)} />
-
       {/* Error Display */}
       {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}
     </div>
