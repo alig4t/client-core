@@ -42,7 +42,6 @@ interface IBaseService<T extends BaseModel> {
   getAll(params: ServerSideParams): Promise<ApiResponsePayload<T>>;
 }
 
-
 // ----------------------------------------------------------------------
 // 2. MOCK/SIMPLIFIED UI DEPENDENCIES (For self-contained file)
 // ----------------------------------------------------------------------
@@ -191,10 +190,13 @@ export const FormAutoComplete = <T extends BaseModel>({
     };
   }, [searchTerm, debounceTime]); // --- Fetching Effect (Triggers on debounce, open, or extraFilters change) ---
 
+  const [hasError, setHasError] = useState(false);
+
   const fetchOptions = useCallback(async () => {
-    if (!isOpen) return;
+    if (!isOpen || hasError) return;
 
     setLoading(true);
+    setHasError(false);
 
     // 1. Construct the dynamic search filter key based on the labelKey
     // Note: The key name must be determined by your backend API contract.
@@ -213,9 +215,11 @@ export const FormAutoComplete = <T extends BaseModel>({
         size: 20,
       });
       setFetchedOptions(results.data);
+      setHasError(false);
     } catch (e) {
       console.error("Failed to fetch autocomplete options:", e);
       setFetchedOptions([]);
+      setHasError(true);
     } finally {
       setLoading(false);
     }
@@ -263,6 +267,7 @@ export const FormAutoComplete = <T extends BaseModel>({
     const optionMap = new Map<string | number, Option>(); // 1. Add current fetched options
 
     fetchedOptions.forEach((item) => {
+      console.log(item);
       const value = item[valueKey] as string | number;
       const label = item[labelKey] as string;
       optionMap.set(value, { value, label });

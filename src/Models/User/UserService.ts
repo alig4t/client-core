@@ -4,7 +4,7 @@ import type { UserModel } from '@/Models/User/UserModel';
 
 class UserService extends BaseService<UserModel> {
   constructor() {
-    super('/users');
+    super('/auth');
   }
 
   // Add login, register, profile, etc. as needed

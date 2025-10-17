@@ -9,6 +9,7 @@ import { FormInput } from "@/components/form/FormInput";
 import { DateInput } from "@/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
 
 // --- Form data types ---
 interface PermissionSearchForm {
@@ -18,10 +19,16 @@ interface PermissionSearchForm {
   toDate?: Value; // ← from the same type as CustomDatePicker
 }
 
-// const permissionSchema = z.object({
-//   showName: z.string().nonempty("نام نمایشی را وارد نمایید"),
-//   name: z.string().nonempty("نام سیستمی را وارد نمایید"),
+// const comprehensiveSchema = z.object({
+//   stringField: z.string().nonempty("رشته متنی را وارد نمایید"),
+//   integerField: z.string().nonempty("رشته عددی را وارد نمایید"),
 // });
+
+const comprehensiveSchema = generateZodSchemaCode(comprehensiveModelMeta);
+console.log(comprehensiveSchema);
+
+// حالا comprehensiveSchema دقیقاً مثل دستی نویسی شده کار می‌کند
+// type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
 
 // --- Filter output types ---
 export interface ComprehensiveFilters {
@@ -83,6 +90,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             name="integerField"
             label={comprehensiveModelMeta.fields["integerField"].label}
             placeholder={"جستجو براساس نام سیستمی..."}
+            type="number"
           />
           <DateInput
             name="createdAt_ge"

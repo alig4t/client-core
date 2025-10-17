@@ -10,12 +10,14 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
       type: "text",
       placeholder: "مقدار رشته‌ای را وارد کنید",
       sortable: true,
+      required: true,
     },
     integerField: {
       label: "عدد صحیح",
       type: "number",
       placeholder: "مثلاً 42",
       sortable: true,
+      required: true,
     },
     longField: {
       label: "عدد بلند",

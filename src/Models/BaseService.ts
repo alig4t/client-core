@@ -56,6 +56,8 @@ export class BaseService<T> {
     if (!response.meta) {
       throw new Error('Pagination metadata missing in response');
     }
+
+    console.log('Response data:', response.data);
     
     return {
       data: response.data,

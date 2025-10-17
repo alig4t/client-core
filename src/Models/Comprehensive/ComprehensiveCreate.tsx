@@ -11,6 +11,14 @@ import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import Select from "@/components/form/Select";
+import { Checkbox } from "@/components/form/Checkbox";
+import { DateInput } from "@/components/form/DateInput";
+import { YES_OR_NO_OPTIONS } from "@/core/forms/OptionUtils";
+import { FormSelect } from "@/components/form/FormSelect";
+import { FormAutoComplete } from "@/components/form/FormAutoComplete";
+import UserService from "../User/UserService";
+import { UserModelMeta } from "../User/UserModel.meta";
 
 // --- Schema and Type for validation ---
 const comprehensiveSchema = z.object({
@@ -18,52 +26,6 @@ const comprehensiveSchema = z.object({
   integerField: z.number().nonnegative("عددی مثبت را وارد نمایید"),
 });
 type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
-
-// // --- Form Fields Component ---
-// function PermissionFormFields() {
-//   const {
-//     register,
-//     formState: { errors },
-//   } = useFormContext<PermissionFormData>();
-
-//   return (
-//     <>
-//       <div className="w-full">
-//         <label
-//           htmlFor="showName"
-//           className="block text-sm font-medium text-gray-700 text-right mb-1"
-//         >
-//           {permissionModelMeta.fields.showName?.label}
-//         </label>
-//         <input
-//           id="showName"
-//           type="text"
-//           placeholder="مثلا مدیریت کاربران"
-//           {...register("showName")}
-//           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
-//         />
-//         {errors.showName && <ErrorFormText msg={errors.showName.message} />}
-//       </div>
-
-//       <div className="w-full">
-//         <label
-//           htmlFor="name"
-//           className="block text-sm font-medium text-gray-700 text-right mb-1"
-//         >
-//           {permissionModelMeta.fields.name?.label}
-//         </label>
-//         <input
-//           id="name"
-//           type="text"
-//           placeholder="مثلا manage-users"
-//           {...register("name")}
-//           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
-//         />
-//         {errors.name && <ErrorFormText msg={errors.name.message} />}
-//       </div>
-//     </>
-//   );
-// }
 
 // --- Main Component for Create Permission Page ---
 const ComprehensiveCreate: React.FC = () => {
@@ -113,15 +75,69 @@ const ComprehensiveCreate: React.FC = () => {
           className="space-y-6"
         >
           <FormInput
-            name="showName"
-            label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
-            placeholder="مثلاً مدیریت کاربران"
+            name="stringField"
+            label={comprehensiveModelMeta.fields.stringField?.label}
+            placeholder={comprehensiveModelMeta.fields.stringField?.placeholder}
           />
           <FormInput
-            name="name"
-            label={comprehensiveModelMeta.fields.integerField?.label || "رشته"}
-            placeholder="مثلاً manage-users"
+            name="integerField"
+            type="number"
+            label={comprehensiveModelMeta.fields.integerField?.label}
+            placeholder={
+              comprehensiveModelMeta.fields.integerField?.placeholder
+            }
           />
+
+          <FormInput
+            name="longField"
+            type="number"
+            label={comprehensiveModelMeta.fields.longField?.label}
+            placeholder={comprehensiveModelMeta.fields.longField?.placeholder}
+          />
+
+          <FormInput
+            name="doubleField"
+            type="number"
+            label={comprehensiveModelMeta.fields.doubleField?.label}
+            placeholder={comprehensiveModelMeta.fields.doubleField?.placeholder}
+          />
+
+          <FormInput
+            name="bigDecimalField"
+            type="number"
+            label={comprehensiveModelMeta.fields.bigDecimalField?.label}
+            placeholder={
+              comprehensiveModelMeta.fields.bigDecimalField?.placeholder
+            }
+          />
+          <Checkbox
+            name="booleanField"
+            label={comprehensiveModelMeta.fields.booleanField?.label}
+          />
+
+          <DateInput
+            name="dateField"
+            label={comprehensiveModelMeta.fields.dateField?.label}
+            placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
+          />
+          <FormSelect
+            name="enumField"
+            label={comprehensiveModelMeta.fields.enumField?.label}
+            placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}
+            options={YES_OR_NO_OPTIONS}
+          />
+
+          <FormAutoComplete
+            name="oneToOneUser"
+            label={comprehensiveModelMeta.fields.oneToOneUser?.label}
+            // placeholder={
+            //   comprehensiveModelMeta.fields.oneToOneUser?.placeholder
+            // }
+            service={UserService}
+            labelKey={UserModelMeta.displayField}
+            valueKey="id"
+          />
+
           {/* <PermissionFormFields /> */}
 
           <div className="flex items-center justify-end gap-4 mt-6">
