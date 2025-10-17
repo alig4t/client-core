@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Filter, FileText } from "lucide-react";
 import Accordion from "@/components/general/Accordion";
-import TagsTable from "./TagsTable";
+// import TagsTable from "./TagsTable";
 import DynamicFilterForm, {
   type DynamicFilters,
 } from "@/core/forms/DynamicFilterForm";
@@ -124,7 +124,7 @@ const InstallmentsPage: React.FC = () => {
           <p className="mt-4 text-gray-500">اقساطی جهت نمایش وجود ندارد</p>
         </div>
       </div>
-      <TagsTable filters={activeFilters} />
+      {/* <TagsTable filters={activeFilters} /> */}
     </div>
   );
 };

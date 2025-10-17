@@ -18,7 +18,7 @@ export default function TagDisplayPage() {
     queryFn: () => {
       loadingStore.show();
       return TagService.getById(Number(id))
-        .then((res) => res.data.data)
+        .then((res) => res?.id)
         .finally(() => loadingStore.hide());
     },
     enabled: !!id,
@@ -53,7 +53,7 @@ export default function TagDisplayPage() {
         <Card>
           <CardContent className="p-0">
             <RowContainer>
-              <Column title="نام برچسب" value={data?.name || "—"} />
+              <Column title="نام برچسب" value={data || "—"} />
             </RowContainer>
           </CardContent>
         </Card>
