@@ -3,12 +3,8 @@
 import React, { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-import type { PermissionModel } from "@/Models/Permission/PermissionModel";
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { PagedResponse } from "../BaseService";
 import PermissionService from "./PermissionService";
-import Spinner from "@/components/general/Spinner";
-import ErrorMessage from "@/components/general/ErrorMessage";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import Select from "@/components/form/Select";

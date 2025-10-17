@@ -8,7 +8,6 @@ import { FormWrapper } from "@/components/form/FormWrapper";
 import { FormInput } from "@/components/form/FormInput";
 import { DateInput } from "@/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
-import { Checkbox } from "@/components/form/Checkbox";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 
 // --- Form data types ---

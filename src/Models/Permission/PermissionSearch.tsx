@@ -15,7 +15,6 @@ import { z } from "zod";
 import { FormSelect } from "@/components/form/FormSelect";
 import { FormAutoComplete } from "@/components/form/FormAutoComplete";
 import PermissionService from "./PermissionService";
-import type { PermissionModel } from "./PermissionModel";
 // --- Form data types ---
 interface PermissionSearchForm {
   showName?: string;
