@@ -35,12 +35,6 @@ const sortOptions: Option[] = [
   { label: "نام سیستمی (نزولی)", value: "name,desc" },
 ];
 
-const sizeOptions: Option[] = [
-  { label: "5", value: 5 },
-  { label: "10", value: 10 },
-  { label: "20", value: 20 },
-  { label: "50", value: 50 },
-];
 
 const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
   filters,

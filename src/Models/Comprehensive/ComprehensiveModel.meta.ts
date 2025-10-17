@@ -48,12 +48,12 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
     localDateField: {
       label: "تاریخ (بدون زمان)",
       type: "date",
-      sortable: true,
+      sortable: false,
     },
     localDateTimeField: {
       label: "تاریخ و زمان محلی",
       type: "datetime-local",
-      sortable: true,
+      sortable: false,
     },
     enumField: {
       label: "گزینه‌ها",
@@ -63,19 +63,19 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
         { value: "OPTION_B", label: "گزینه B" },
         // سایر گزینه‌ها را اضافه کن
       ],
-      sortable: true,
+      sortable: false,
     },
     uniqueField: {
       label: "فیلد یکتا",
       type: "text",
       placeholder: "مقدار یکتا",
-      sortable: true,
+      sortable: false,
     },
     indexedField: {
       label: "فیلد ایندکس‌شده",
       type: "text",
       placeholder: "مقدار ایندکس‌شده",
-      sortable: true,
+      sortable: false,
     },
     // نکته: فیلدهای رابطه‌ای (مثل oneToOneUser) معمولاً در فرم‌های مستقیم به صورت object نمایش داده نمی‌شوند.
     // بلکه با autocomplete یا select نمایش داده می‌شوند. اما اگر بخواهی metadata براشون بذاری:

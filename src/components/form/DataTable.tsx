@@ -312,9 +312,10 @@ const Table = <T extends { [key: string]: any }>({
               <tr>
                 {/* Adjust colspan based on whether the checkbox column is included (+1 if included) */}
                 <td
-                  colSpan={
-                    React.Children.count(header) + (isSelectionMode ? 1 : 0)
-                  }
+                  // colSpan={
+                  //   React.Children.count(header) + (isSelectionMode ? 1 : 0)
+                  // }
+                  colSpan={100}
                   className="text-center py-10 text-gray-500"
                 >
                   داده‌ای یافت نشد.
@@ -331,7 +332,7 @@ const Table = <T extends { [key: string]: any }>({
           {totalItems} رکورد
         </span>
 
-        <div className="flex items-center justify-center order-2 mx-auto sm:mx-0">
+        <div className="flex gap-1 items-center justify-center order-2 mx-auto sm:mx-0">
           <button
             onClick={() => onPageChange(Math.max(page - 1, 0))}
             disabled={page === 0}
@@ -350,9 +351,9 @@ const Table = <T extends { [key: string]: any }>({
             بعدی
           </button>
         </div>
-
+        {}
         <span className="text-sm text-gray-600 order-1 sm:order-3 w-full sm:w-auto mt-2 sm:mt-0 text-center sm:text-left">
-          صفحه {page + 1} از {totalPages}
+          صفحه {totalPages > 0 ? page + 1 : 0} از {totalPages}
         </span>
       </div>
     </div>
