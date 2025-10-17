@@ -1,3 +1,4 @@
+import type { Option } from "@/core/forms/OptionUtils";
 import React, {
   useState,
   useRef,
@@ -41,11 +42,6 @@ interface IBaseService<T extends BaseModel> {
   getAll(params: ServerSideParams): Promise<ApiResponsePayload<T>>;
 }
 
-/** The internal structure for UI options. */
-interface Option {
-  value: string | number;
-  label: string;
-}
 
 // ----------------------------------------------------------------------
 // 2. MOCK/SIMPLIFIED UI DEPENDENCIES (For self-contained file)

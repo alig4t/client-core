@@ -11,9 +11,10 @@ import Spinner from "@/components/general/Spinner";
 import ErrorMessage from "@/components/general/ErrorMessage";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
-import Select, { type Option } from "@/components/form/Select";
+import Select from "@/components/form/Select";
 import { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
 import { Checkbox } from "@/components/form/Checkbox";
+import type { Option } from "@/core/forms/OptionUtils";
 
 interface PermissionTableProps {
   filters: DynamicFilters;
@@ -48,9 +49,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
   // --- مدیریت انتخاب‌ها ---
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id]
+      prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
     );
   };
 
@@ -86,13 +85,15 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
 
   if (isLoading) return <TablePlaceholder rowCount={pageSize} />;
   if (isError) {
-    return <TableErrorState message={(error as Error).message} onRetry={refetch} />;
+    return (
+      <TableErrorState message={(error as Error).message} onRetry={refetch} />
+    );
   }
 
   return (
     <div
       dir="rtl"
-      className={`p-6 bg-white rounded-lg border border-gray-200 transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
+      className={`p-6 bg-white rounded-lg border  max-w-xs sm:max-w-full border-gray-200 transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
     >
       {/* دکمه عملیاتی (فقط وقتی چیزی انتخاب شده) */}
       {selectedIds.length > 0 && (
@@ -119,7 +120,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
       <div className="flex flex-wrap justify-between items-center mb-4 w-full">
         <h2 className="text-lg font-semibold flex-1">لیست دسترسی‌ها</h2>
         <div className="max-w-2/3 flex gap-2 items-center">
-        {/* {selectedIds.length > 0 && (<button
+          {/* {selectedIds.length > 0 && (<button
               onClick={() => {
                 // مثلاً حذف
                 console.log("حذف:", selectedIds);
@@ -137,7 +138,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
             value={sort}
           />
           <Select
-          className="max-w-[120px]"
+            className="max-w-[120px]"
             value={pageSize}
             options={sizeOptions}
             onChange={(e) => setPageSize(Number(e.target.value))}
@@ -146,7 +147,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
       </div>
 
       <div className="overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200">
+        <table className=" divide-y min-w-full divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
               {/* ستون چک‌باکس */}
@@ -173,19 +174,28 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
           <tbody className="bg-white divide-y divide-gray-200">
             {pageData.length > 0 ? (
               pageData.map((permission) => (
-                <tr key={permission.id} className="hover:bg-gray-50">
+                <tr
+                  key={permission.id}
+                  className="hover:bg-gray-50 whitespace-nowrap"
+                >
                   <td className="px-4 py-4 text-center">
-                  <Checkbox
-                    name={`row-${permission.id}`}
-                    standalone
-                    hideLabel
-                    checked={selectedIds.includes(permission.id)}
-                    onChange={() => toggleSelect(permission.id)}
-                  />
+                    <Checkbox
+                      name={`row-${permission.id}`}
+                      standalone
+                      hideLabel
+                      checked={selectedIds.includes(permission.id)}
+                      onChange={() => toggleSelect(permission.id)}
+                    />
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">{permission.id}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{permission.showName}</td>
-                  <td className="px-6 py-4 whitespace-nowrap">{permission.name}</td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {permission.id}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {permission.showName}
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    {permission.name}
+                  </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     {GEORGIAN_TO_JALALI(permission.createdAt)}
                   </td>
@@ -211,7 +221,9 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
         >
           قبلی
         </button>
-        <span>صفحه {currentPage + 1} از {totalPages}</span>
+        <span>
+          صفحه {currentPage + 1} از {totalPages}
+        </span>
         <button
           onClick={() => setPage((p) => Math.min(p + 1, totalPages - 1))}
           disabled={currentPage >= totalPages - 1}

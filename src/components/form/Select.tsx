@@ -1,10 +1,7 @@
+import type { Option } from "@/core/forms/OptionUtils";
 import React from "react";
 
-// تعریف نوع برای هر گزینه
-export interface Option {
-  value: string | number;
-  label: string;
-}
+
 
 // تعریف نوع برای پراپ‌های کامپوننت
 interface SelectProps {

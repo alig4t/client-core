@@ -1,13 +1,9 @@
+import type { Option } from "@/core/forms/OptionUtils";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 
 // --- MOCK/SIMPLIFIED DEPENDENCIES (For self-contained file) ---
 // In a real project, these would be imported from their respective paths.
-
-interface Option {
-  value: string | number;
-  label: string;
-}
 
 // Simplified Label component
 const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({

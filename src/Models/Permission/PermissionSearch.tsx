@@ -83,6 +83,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
             name="showName"
             label={PermissionModelMeta.fields["showName"].label}
             placeholder={"جستجو براساس نام نمایشی..."}
+            type="float"
           />
           <FormInput
             name="name"
