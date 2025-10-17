@@ -1,7 +1,7 @@
 // src/components/form/DynamicField.tsx
 import React, { type ReactNode } from "react";
 import { useFormContext } from "react-hook-form";
-import type { FieldType, SelectOption } from "./FieldTypes";
+import type { FieldType, SelectOption } from "./FieldFormTypes";
 
 interface DynamicFieldProps {
   name: string;
