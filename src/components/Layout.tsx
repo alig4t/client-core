@@ -8,8 +8,6 @@ import SubSidebar from "./SubSidebar";
 export default function Layout() {
   return (
     <div className="flex bg-muted/40 dark:bg-background">
-      {" "}
-      {/* تغییر اینجا */}
       <AppSidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />

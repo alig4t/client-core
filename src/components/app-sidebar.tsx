@@ -15,7 +15,7 @@ const Sidebar = () => {
 
   return (
     <TooltipProvider>
-      <div className=" h-auto w-16 bg-gray-900 flex flex-col items-center py-4">
+      <div className=" h-auto w-16 min-w-16 bg-gray-900 flex flex-col items-center py-4">
         {/* 🔹 لوگو بالا */}
         {/* #2cbabb */}
         <div className="mb-6">
