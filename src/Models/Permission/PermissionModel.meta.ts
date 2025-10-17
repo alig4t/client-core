@@ -1,8 +1,7 @@
 // src/models/permission/PermissionModel.meta.ts
-
-import type { FormFieldMetadata } from "@/core/forms/FieldTypes";
 import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { PermissionModel } from "./PermissionModel";
+import type { FormFieldMetadata } from "./../../core/forms/FieldTypes";
 
 export const PermissionModelMeta = createModelMeta<PermissionModel, FormFieldMetadata>(
   {

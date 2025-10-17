@@ -1,6 +1,7 @@
-import type { FormFieldMetadata } from "@/core/forms/FieldTypes";
+
 import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
+import type { FormFieldMetadata } from "./../../core/forms/FieldTypes";
 
 export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFieldMetadata>(
   {
