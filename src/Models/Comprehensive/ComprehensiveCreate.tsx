@@ -4,7 +4,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { z } from "zod";
+
 import Spinner from "@/components/general/Spinner";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
 import { FormWrapper } from "@/components/form/FormWrapper";
@@ -19,12 +19,30 @@ import { FormSelect } from "@/components/form/FormSelect";
 import { FormAutoComplete } from "@/components/form/FormAutoComplete";
 import UserService from "../User/UserService";
 import { UserModelMeta } from "../User/UserModel.meta";
+import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
+import errorMap from "@/core/forms/zod.config";
+import z from "@/core/forms/zod.config";
+
+
 
 // --- Schema and Type for validation ---
 const comprehensiveSchema = z.object({
-  stringField: z.string().nonempty("رشته را وارد نمایید"),
-  integerField: z.number().nonnegative("عددی مثبت را وارد نمایید"),
+  stringField: z.string().nonempty(),
+  integerField: z.number(),
+  longField: z.string().nonempty(),
+  doubleField: z.string().nonempty(),
+  bigDecimalField: z.string().nonempty(),
+  booleanField: z.boolean(), // بولین
+  dateField: z.string().nonempty(),
+  localDateField: z.string().nonempty(),
+  enumField: z.string().nonempty(),
 });
+
+
+// console.log(generateZodSchemaCode(comprehensiveModelMeta));
+
+
+
 type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
 
 // --- Main Component for Create Permission Page ---

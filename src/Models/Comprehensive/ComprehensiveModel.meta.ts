@@ -24,33 +24,39 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
       type: "number",
       placeholder: "مثلاً 9007199254740991",
       sortable: true,
+      required: true,
     },
     doubleField: {
       label: "عدد اعشاری",
       type: "number",
       placeholder: "مثلاً 3.14",
       sortable: true,
+      required: true,
     },
     bigDecimalField: {
       label: "عدد دقیق (BigDecimal)",
       type: "number", // یا "text" اگر به صورت رشته مدیریت می‌شود
       placeholder: "مثلاً 123.456789",
       sortable: true,
+      required: true,
     },
     booleanField: {
       label: "بولین",
       type: "boolean",
       sortable: true,
+      required: true,
     },
     dateField: {
       label: "تاریخ و زمان (UTC)",
       type: "datetime-local",
       sortable: true,
+      required: true,
     },
     localDateField: {
       label: "تاریخ (بدون زمان)",
       type: "date",
       sortable: false,
+      required: true,
     },
     localDateTimeField: {
       label: "تاریخ و زمان محلی",
@@ -66,6 +72,7 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
         // سایر گزینه‌ها را اضافه کن
       ],
       sortable: false,
+      required: true,
     },
     uniqueField: {
       label: "فیلد یکتا",
