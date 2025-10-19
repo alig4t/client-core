@@ -79,7 +79,9 @@ const ComprehensiveCreate: React.FC = () => {
   return (
     <div dir="rtl" className="p-8 min-h-screen font-sans">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="!text-2xl font-bold">ایجاد دسترسی جدید</h1>
+        <h1 className="!text-2xl font-bold text-[var(--primary-text)]">
+          ایجاد دسترسی جدید
+        </h1>
       </div>
 
       <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
