@@ -1,9 +1,7 @@
 import React, { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 // Assuming these are defined elsewhere or simplified for this file
-const ErrorFormText: React.FC<{ msg: string }> = ({ msg }) => (
-  <p className="mt-1 text-sm text-red-600 text-right">{msg}</p>
-);
+
 const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
   children,
 }) => (
@@ -12,6 +10,7 @@ const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
   </label>
 );
 import { CircleX, Pencil } from "lucide-react";
+import ErrorFormText from "./ErrorFormText";
 
 // The expanded set of field types supported by this component
 export type FormInputType =

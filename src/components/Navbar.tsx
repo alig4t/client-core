@@ -22,12 +22,12 @@ const Navbar = () => {
   };
 
   // if (!user) {
-  //   return null; 
+  //   return null;
   // }
   return (
     <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
       {/* Title (Right) */}
-      <h3 className="text-sm font-bold text-gray-800 dark:text-white hidden md:visible">
+      <h3 className="text-sm font-bold text-[var(--primary-text)] hidden md:visible">
         پنل مدیریت
       </h3>
 
@@ -102,8 +102,8 @@ const Navbar = () => {
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <div className="flex items-center gap-2 cursor-pointer">
-              <span className="text-sm font-medium text-gray-800 dark:text-white">
-              {user?.name}
+              <span className="text-sm font-medium text-[var(--primary-text)]">
+                {user?.name}
               </span>
               <img
                 src="https://i.pravatar.cc/40"
@@ -131,8 +131,8 @@ const Navbar = () => {
               <DropdownMenuItem className="text-blue-600 hover:text-blue-800 cursor-pointer">
                 تنظیمات
               </DropdownMenuItem>
-              <DropdownMenuItem 
-                onClick={logout} 
+              <DropdownMenuItem
+                onClick={logout}
                 className="text-red-600 hover:text-red-800 cursor-pointer"
               >
                 خروج

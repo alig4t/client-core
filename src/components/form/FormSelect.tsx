@@ -1,27 +1,25 @@
 import type { Option } from "@/core/forms/OptionUtils";
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import ErrorFormText from "./ErrorFormText";
+import Label from "./Label";
 
 // --- MOCK/SIMPLIFIED DEPENDENCIES (For self-contained file) ---
 // In a real project, these would be imported from their respective paths.
 
 // Simplified Label component
-const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
-  children,
-  htmlFor,
-}) => (
-  <label
-    htmlFor={htmlFor}
-    className="block text-sm font-medium text-gray-700 mb-1"
-  >
-    {children}
-  </label>
-);
+// const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
+//   children,
+//   htmlFor,
+// }) => (
+//   <label
+//     htmlFor={htmlFor}
+//     className="block text-sm font-medium text-gray-700 mb-1"
+//   >
+//     {children}
+//   </label>
+// );
 
-// Simplified ErrorFormText component
-const ErrorFormText: React.FC<{ msg: string }> = ({ msg }) => (
-  <p className="mt-1 text-sm text-red-600">{msg}</p>
-);
 
 // Icon components for clean UI
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
@@ -203,7 +201,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
-      <Label htmlFor={name}>{label}</Label>
+      <Label>{label}</Label>
 
       {/* Select Box / Trigger Button */}
       <button

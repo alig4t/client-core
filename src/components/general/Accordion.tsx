@@ -23,7 +23,7 @@ const Accordion: React.FC<AccordionProps> = ({
         onClick={() => setIsOpen(!isOpen)}
         className="w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition-colors"
       >
-        <div className="font-semibold text-gray-800">{title}</div>
+        <div className="font-semibold text-[var(--primary-text)]">{title}</div>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }} // انیمیشن چرخش آیکون
           transition={{ duration: 0.3 }}

@@ -17,6 +17,7 @@ import PermissionPage from "@/Models/Permission/PermissionPage";
 import PermissionCreate from "@/Models/Permission/PermissionCreate";
 import ComprehensivePage from "@/Models/Comprehensive/ComprehensivePage";
 import ComprehensiveCreate from "@/Models/Comprehensive/ComprehensiveCreate";
+import ComprehensiveDisplay from "@/Models/Comprehensive/ComprehensiveDisplay";
 
 export const Routes: RouteObject[] = [
   {
@@ -56,7 +57,11 @@ export const Routes: RouteObject[] = [
               { path: "permissions", element: <PermissionPage /> },
               { path: "permissions/create", element: <PermissionCreate /> },
               { path: "comprehensive", element: <ComprehensivePage /> },
-              { path: "comprehensive/create", element: <ComprehensiveCreate /> },
+              {
+                path: "comprehensive/create",
+                element: <ComprehensiveCreate />,
+              },
+              { path: "comprehensive/:id", element: <ComprehensiveDisplay /> },
             ],
           },
         ],

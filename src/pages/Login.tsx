@@ -8,7 +8,7 @@ import { useAuth } from "@/stores/AuthContext";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons";
 import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/shared/FormWrapper";
-import { ErrorFormText } from "@/components/form/ErrorFormText";
+import ErrorFormText from "@/components/form/ErrorFormText";
 
 // --- Schema and Type unchanged ---
 const loginSchema = z.object({
@@ -41,7 +41,9 @@ function LoginFormFields() {
           {...register("username")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.username && <ErrorFormText msg={errors.username.message} />}
+        {errors.username && (
+          <ErrorFormText msg={errors.username.message as string} />
+        )}
       </div>
 
       <div className="w-full">
@@ -58,7 +60,9 @@ function LoginFormFields() {
           {...register("password")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.password && <ErrorFormText msg={errors.password.message} />}
+        {errors.password && (
+          <ErrorFormText msg={errors.password.message as string} />
+        )}
       </div>
     </>
   );
@@ -123,7 +127,7 @@ export default function LoginPage() {
 
         {/* Title section */}
         <div className="text-center">
-          <h1 className="!text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="!text-3xl font-bold text-[var(--primary-text)] mb-2">
             ورود به پنل مدیریت
           </h1>
           {/* <p className="mt-2 text-sm text-gray-500">ایمیل و رمز عبور خود را وارد کنید</p> */}

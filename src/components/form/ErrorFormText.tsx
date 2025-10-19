@@ -1,9 +1,7 @@
+const ErrorFormText: React.FC<{ msg: string }> = ({ msg }) => (
+  <p className="mt-1 mr-2 text-xs text-red-600 text-right relative before:absolute before:right-[-8px] before:top-[-1px] before before:content-['*'] before:ml-1 before:mt-1">
+    {msg}
+  </p>
+);
 
-type Iprops = {
-    msg:string | undefined,
-    className?:string
-}
-export const ErrorFormText = ({msg,className=''}:Iprops) => {
-    if(!msg) return <p></p>
-    return  <p className={`text-[11px] text-red-800 mt-1.5 text-right ${className}`}>{msg}</p>
-}
+export default ErrorFormText;

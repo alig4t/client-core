@@ -2,8 +2,8 @@
 
 import React from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { ErrorFormText } from "@/components/form/ErrorFormText";
 import Label from "./Label";
+import ErrorFormText from "./ErrorFormText";
 
 interface BaseCheckboxProps {
   name: string;

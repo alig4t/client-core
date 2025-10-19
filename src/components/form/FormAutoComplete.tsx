@@ -7,6 +7,8 @@ import React, {
   useMemo,
 } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
+import ErrorFormText from "./ErrorFormText";
+import Label from "./Label";
 
 // ----------------------------------------------------------------------
 // 1. INTERFACE DEFINITIONS (Based on User's Provided Service/Model Contracts)
@@ -46,17 +48,13 @@ interface IBaseService<T extends BaseModel> {
 // 2. MOCK/SIMPLIFIED UI DEPENDENCIES (For self-contained file)
 // ----------------------------------------------------------------------
 
-const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
-  children,
-}) => (
-  <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
-    {children}
-  </label>
-);
-
-const ErrorFormText: React.FC<{ msg: string }> = ({ msg }) => (
-  <p className="mt-1 text-sm text-red-600 text-right">{msg}</p>
-);
+// const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
+//   children,
+// }) => (
+//   <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
+//     {children}
+//   </label>
+// );
 
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
   <svg
@@ -354,7 +352,7 @@ export const FormAutoComplete = <T extends BaseModel>({
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
-      <Label htmlFor={name}>{label}</Label>
+      <Label>{label}</Label>
       {/* Select Box / Trigger Button (Shows summary text) */}
       <button
         type="button"

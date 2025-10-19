@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو از اینجا وارد می‌شود
 import { FormWrapper } from "@/components/shared/FormWrapper";
-import { ErrorFormText } from "@/components/form/ErrorFormText";
+import ErrorFormText from "@/components/form/ErrorFormText";
 
 // --- Schema برای اعتبارسنجی فرم ثبت‌نام ---
 const registerSchema = z
@@ -48,7 +48,7 @@ function RegisterFormFields() {
           {...register("name")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.name && <ErrorFormText msg={errors.name.message} />}
+        {errors.name && <ErrorFormText msg={errors.name.message as string} />}
       </div>
 
       <div className="w-full">
@@ -65,7 +65,9 @@ function RegisterFormFields() {
           {...register("username")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.username && <ErrorFormText msg={errors.username.message} />}
+        {errors.username && (
+          <ErrorFormText msg={errors.username.message as string} />
+        )}
       </div>
 
       <div className="w-full">
@@ -82,7 +84,9 @@ function RegisterFormFields() {
           {...register("password")}
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
-        {errors.password && <ErrorFormText msg={errors.password.message} />}
+        {errors.password && (
+          <ErrorFormText msg={errors.password.message as string} />
+        )}
       </div>
 
       <div className="w-full">
@@ -100,7 +104,7 @@ function RegisterFormFields() {
           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
         />
         {errors.confirmPassword && (
-          <ErrorFormText msg={errors.confirmPassword.message} />
+          <ErrorFormText msg={errors.confirmPassword.message as string} />
         )}
       </div>
     </>
@@ -151,7 +155,7 @@ export default function RegisterPage() {
         </div>
 
         <div className="text-center">
-          <h1 className="!text-3xl font-bold text-gray-800 mb-2">
+          <h1 className="!text-3xl font-bold text-[var(--primary-text)] mb-2">
             ایجاد حساب کاربری
           </h1>
         </div>

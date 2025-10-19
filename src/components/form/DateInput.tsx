@@ -4,7 +4,8 @@ import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
 import CustomDatePicker from "@/components/form/CustomDatePicker";
 import type { Value } from "react-multi-date-picker";
-import { ErrorFormText } from "@/components/form/ErrorFormText";
+import ErrorFormText from "./ErrorFormText";
+import Label from "./Label";
 
 interface DateInputProps {
   name: string;
@@ -38,18 +39,14 @@ export const DateInput: React.FC<DateInputProps> = ({
 
     return (
       <div className={`w-full ${className}`}>
-        <label className="block mb-2 text-sm font-medium text-gray-700 text-right">
-          {label}
-        </label>
+        <Label>{label}</Label>
         <div className="w-full ">
-
-        <CustomDatePicker
-          value={value}
-          onChange={handleChange}
-          placeholder={placeholder}
-        />
+          <CustomDatePicker
+            value={value}
+            onChange={handleChange}
+            placeholder={placeholder}
+          />
         </div>
-
       </div>
     );
   }
@@ -71,9 +68,7 @@ export const DateInput: React.FC<DateInputProps> = ({
 
   return (
     <div className={`w-full ${className}`}>
-      <label className="block mb-2 text-sm font-medium text-gray-700 text-right">
-        {label}
-      </label>
+      <Label>{label}</Label>
       <Controller
         name={name}
         control={control}

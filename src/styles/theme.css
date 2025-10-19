@@ -4,11 +4,13 @@
        تم روشن (Light Mode)
        ========================================================================== */
     :root {
+        --white: #ffffff;
+        --primary-text: oklch(27.8% 0.033 256.848);
         --background: #F7F7F7;
         --foreground: #666666;
         --foreground-2: #424242;
 
-        --card: #ffffff;
+        --card: var(--color-gray-50);
         --card-foreground: #020817;
 
         --popover: #ffffff;
@@ -31,6 +33,8 @@
         --destructive-foreground: #f8fafc;
 
         /* --- تغییر رنگ حاشیه به خاکستری ملایم‌تر --- */
+        --card-border: oklch(92.8% 0.006 264.531);
+
         --border: #e5e7eb;
         /* gray-200 */
         --input: #e5e7eb;
@@ -60,10 +64,14 @@
        تم تاریک (Dark Mode)
        ========================================================================== */
     .dark {
+        --white: #101828;
+        --primary-text: oklch(92% 0.004 286.32);
+        
         --background: #101828;
         --foreground: #f8fafc;
         --foreground-2: #ebebeb;
-        --card: #1e2939;
+        --card: #101828;
+        /* #1e2939 */
         --card-foreground: #f8fafc;
 
         --popover: #020817;
@@ -84,6 +92,7 @@
         --destructive: #7f1d1d;
         --destructive-foreground: #f8fafc;
 
+        --card-border: oklch(44.6% 0.03 256.802);
         /* --- تغییر رنگ حاشیه به خاکستری تیره‌تر و نامحسوس‌تر --- */
         --border: #1f2937;
         /* gray-800 */
