@@ -2,15 +2,9 @@ import React, { useMemo } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 // Assuming these are defined elsewhere or simplified for this file
 
-const Label: React.FC<{ children: React.ReactNode; htmlFor?: string }> = ({
-  children,
-}) => (
-  <label className="block text-sm font-medium text-gray-700 mb-1 text-right">
-    {children}
-  </label>
-);
 import { CircleX, Pencil } from "lucide-react";
 import ErrorFormText from "./ErrorFormText";
+import Label from "./Label";
 
 // The expanded set of field types supported by this component
 export type FormInputType =
@@ -81,6 +75,9 @@ export const FormInput: React.FC<FormInputProps> = ({
     ? "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
     : "";
 
+  const CLASS_LIST_STYLES =
+    "w-full pl-6 pr-10 py-2 border border-[var(--input-border)] text-[var(--primary-text)] rounded-lg text-right placeholder:text-[var(--placeholder-text)] placeholder:font-thin focus:outline-none focus:ring-2 focus:ring-purple-500";
+
   // --- 1. Standalone Mode (No React Hook Form) ---
   if (standalone) {
     const [value, setValue] = React.useState("");
@@ -106,7 +103,7 @@ export const FormInput: React.FC<FormInputProps> = ({
       placeholder,
       value,
       onChange: handleChange,
-      className: `w-full pl-6 pr-10 py-2 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className} ${numericHiddenArrows}`,
+      className: `${CLASS_LIST_STYLES} ${className} ${numericHiddenArrows}`,
       ...rest,
     };
 
@@ -213,7 +210,7 @@ export const FormInput: React.FC<FormInputProps> = ({
     id: name,
     placeholder,
     // Add classes to hide arrows here
-    className: `w-full pl-6 pr-10 py-2 border border-gray-300 rounded-lg text-right focus:outline-none focus:ring-2 focus:ring-purple-500 ${className} ${numericHiddenArrows}`,
+    className: `${CLASS_LIST_STYLES} ${className} ${numericHiddenArrows}`,
     ...registerRest,
     onChange: handleChange,
     ...rest,

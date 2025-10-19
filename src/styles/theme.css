@@ -9,7 +9,7 @@
         --background: #F7F7F7;
         --foreground: #666666;
         --foreground-2: #424242;
-
+        --placeholder-text: #9f9fa9;
         --card: var(--color-gray-50);
         --card-foreground: #020817;
 
@@ -66,7 +66,9 @@
     .dark {
         --white: #101828;
         --primary-text: oklch(92% 0.004 286.32);
-        
+        --input-border: oklch(44.6% 0.03 256.802);
+        --placeholder-text: #575757;
+
         --background: #101828;
         --foreground: #f8fafc;
         --foreground-2: #ebebeb;

@@ -22,8 +22,7 @@ import { UserModelMeta } from "../User/UserModel.meta";
 import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
 import errorMap from "@/core/forms/zod.config";
 import z from "@/core/forms/zod.config";
-
-
+import { RowContainer } from "@/components/general/RowContainer";
 
 // --- Schema and Type for validation ---
 const comprehensiveSchema = z.object({
@@ -38,10 +37,7 @@ const comprehensiveSchema = z.object({
   enumField: z.string().nonempty(),
 });
 
-
 // console.log(generateZodSchemaCode(comprehensiveModelMeta));
-
-
 
 type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
 
@@ -81,80 +77,86 @@ const ComprehensiveCreate: React.FC = () => {
   };
 
   return (
-    <div dir="rtl" className="p-8 bg-gray-50 min-h-screen font-sans">
+    <div dir="rtl" className="p-8 min-h-screen font-sans">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">ایجاد دسترسی جدید</h1>
+        <h1 className="!text-2xl font-bold">ایجاد دسترسی جدید</h1>
       </div>
 
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-md max-w-2xl mx-auto">
+      <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
         <FormWrapper
           schema={comprehensiveSchema}
           onSubmit={onSubmit}
           className="space-y-6"
         >
-          <FormInput
-            name="stringField"
-            label={comprehensiveModelMeta.fields.stringField?.label}
-            placeholder={comprehensiveModelMeta.fields.stringField?.placeholder}
-          />
-          <FormInput
-            name="integerField"
-            type="number"
-            label={comprehensiveModelMeta.fields.integerField?.label}
-            placeholder={
-              comprehensiveModelMeta.fields.integerField?.placeholder
-            }
-          />
+          <RowContainer numberOfColumns={2}>
+            <FormInput
+              name="stringField"
+              label={comprehensiveModelMeta.fields.stringField?.label}
+              placeholder={
+                comprehensiveModelMeta.fields.stringField?.placeholder
+              }
+            />
+            <FormInput
+              name="integerField"
+              type="number"
+              label={comprehensiveModelMeta.fields.integerField?.label}
+              placeholder={
+                comprehensiveModelMeta.fields.integerField?.placeholder
+              }
+            />
 
-          <FormInput
-            name="longField"
-            type="number"
-            label={comprehensiveModelMeta.fields.longField?.label}
-            placeholder={comprehensiveModelMeta.fields.longField?.placeholder}
-          />
+            <FormInput
+              name="longField"
+              type="number"
+              label={comprehensiveModelMeta.fields.longField?.label}
+              placeholder={comprehensiveModelMeta.fields.longField?.placeholder}
+            />
 
-          <FormInput
-            name="doubleField"
-            type="number"
-            label={comprehensiveModelMeta.fields.doubleField?.label}
-            placeholder={comprehensiveModelMeta.fields.doubleField?.placeholder}
-          />
+            <FormInput
+              name="doubleField"
+              type="number"
+              label={comprehensiveModelMeta.fields.doubleField?.label}
+              placeholder={
+                comprehensiveModelMeta.fields.doubleField?.placeholder
+              }
+            />
 
-          <FormInput
-            name="bigDecimalField"
-            type="number"
-            label={comprehensiveModelMeta.fields.bigDecimalField?.label}
-            placeholder={
-              comprehensiveModelMeta.fields.bigDecimalField?.placeholder
-            }
-          />
-          <Checkbox
-            name="booleanField"
-            label={comprehensiveModelMeta.fields.booleanField?.label}
-          />
+            <FormInput
+              name="bigDecimalField"
+              type="number"
+              label={comprehensiveModelMeta.fields.bigDecimalField?.label}
+              placeholder={
+                comprehensiveModelMeta.fields.bigDecimalField?.placeholder
+              }
+            />
+            <Checkbox
+              name="booleanField"
+              label={comprehensiveModelMeta.fields.booleanField?.label}
+            />
 
-          <DateInput
-            name="dateField"
-            label={comprehensiveModelMeta.fields.dateField?.label}
-            placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
-          />
-          <FormSelect
-            name="enumField"
-            label={comprehensiveModelMeta.fields.enumField?.label}
-            placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}
-            options={YES_OR_NO_OPTIONS}
-          />
+            <DateInput
+              name="dateField"
+              label={comprehensiveModelMeta.fields.dateField?.label}
+              placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
+            />
+            <FormSelect
+              name="enumField"
+              label={comprehensiveModelMeta.fields.enumField?.label}
+              placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}
+              options={YES_OR_NO_OPTIONS}
+            />
 
-          <FormAutoComplete
-            name="oneToOneUser"
-            label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-            // placeholder={
-            //   comprehensiveModelMeta.fields.oneToOneUser?.placeholder
-            // }
-            service={UserService}
-            labelKey={UserModelMeta.displayField}
-            valueKey="id"
-          />
+            <FormAutoComplete
+              name="oneToOneUser"
+              label={comprehensiveModelMeta.fields.oneToOneUser?.label}
+              // placeholder={
+              //   comprehensiveModelMeta.fields.oneToOneUser?.placeholder
+              // }
+              service={UserService}
+              labelKey={UserModelMeta.displayField}
+              valueKey="id"
+            />
+          </RowContainer>
 
           {/* <PermissionFormFields /> */}
 
