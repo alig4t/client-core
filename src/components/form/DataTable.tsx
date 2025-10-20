@@ -4,6 +4,8 @@ import React, { useState, useEffect, useMemo } from "react";
 import { Checkbox } from "@/components/form/Checkbox";
 import Select from "@/components/form/Select";
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
+import { FormSelect } from "./FormSelect";
+import Button from "../Button/Button";
 
 // --- Types for Props ---
 type RenderRowFunction<T> = (
@@ -139,7 +141,7 @@ const Table = <T extends { [key: string]: any }>({
         <button
           key={0}
           onClick={() => onPageChange(0)}
-          className="px-2.5 py-1 text-xs border bg-gray-50 border-[#c8c9ca] rounded-md hover:bg-gray-100"
+          className="px-2.5 py-1 text-xs border bg-gray-50 dark:bg-gray-700 border-gray-400 dark:border-gray-600 rounded-md hover:bg-gray-100"
         >
           1
         </button>
@@ -148,7 +150,7 @@ const Table = <T extends { [key: string]: any }>({
         pages.push(
           <span
             key="start-ellipsis"
-            className="px-2.5 py-1 text-xs bg-gray-50 text-gray-500"
+            className="px-2.5 py-1 text-xs bg-gray-50 dark:bg-transparent text-gray-500"
           >
             ...
           </span>
@@ -162,11 +164,10 @@ const Table = <T extends { [key: string]: any }>({
         <button
           key={i}
           onClick={() => onPageChange(i)}
-          className={`px-2.5 py-1 text-xs border rounded-md ${
-            i === page
+          className={`px-2.5 py-1 text-xs border rounded-md ${i === page
               ? "bg-purple-600 text-white border-purple-600"
-              : "bg-white border-gray-400 hover:bg-gray-100"
-          }`}
+              : "bg-white dark:bg-gray-700 border-gray-400 dark:border-gray-600 hover:bg-gray-100"
+            }`}
         >
           {i + 1}
         </button>
@@ -189,7 +190,7 @@ const Table = <T extends { [key: string]: any }>({
         <button
           key={totalPages - 1}
           onClick={() => onPageChange(totalPages - 1)}
-          className="px-2.5 bg-gray-50 border-gray-200 py-1 text-xs border rounded-md hover:bg-gray-100"
+          className="px-2.5 bg-white dark:bg-gray-700 dark:border-gray-600 border-gray-200 py-1 text-xs border rounded-md hover:bg-gray-100"
         >
           {totalPages}
         </button>
@@ -208,17 +209,18 @@ const Table = <T extends { [key: string]: any }>({
     >
       {/* 1. Bulk Action Bar (Visible only if selection mode is active AND items are selected) */}
       {isSelectionMode && selectedIds.length > 0 && (
-        <div className="mb-4 p-3 bg-purple-50 rounded-lg flex justify-between items-center">
+        <div className="mb-4 p-3 bg-purple-50 dark:bg-gray-950 rounded-lg flex justify-between items-center">
           <span className="text-sm text-purple-700">
             **{selectedIds.length}** مورد انتخاب شده
           </span>
           <div className="space-x-2 space-x-reverse">
-            <button
+            <Button
+            variant="secondary"
               onClick={() => setSelectedIds([])}
-              className="px-2.5 py-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
+              // className="px-2.5 py-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
             >
-              لغو انتخاب
-            </button>
+             حذف موارد انتخاب شده
+            </Button>
             {/* Add your actual bulk actions here */}
           </div>
         </div>
@@ -227,20 +229,23 @@ const Table = <T extends { [key: string]: any }>({
       {/* Controls: Sort and Page Size (Unchanged) */}
 
       <div className="flex flex-wrap justify-between items-center mb-4 w-full">
-        <h2 className="text-lg font-semibold flex-1">{title}</h2>
+        <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">{title}</h2>
         <div className="max-w-2/3 flex gap-2 items-center">
+
           <Select
             className="min-w-[120px]"
             options={sortOptions}
             onChange={(e) => onSortChange(e.target.value)}
             value={sortValue}
           />
+
           <Select
             className="max-w-[120px]"
             value={pageSize}
             options={PAGE_SIZE_OPTIONS}
             onChange={(e) => onPageSizeChange(Number(e.target.value))}
           />
+
         </div>
       </div>
 
@@ -248,7 +253,7 @@ const Table = <T extends { [key: string]: any }>({
       <div className="overflow-x-auto">
         <table className="divide-y min-w-full divide-gray-200">
           {/* THEAD */}
-          <thead className="bg-gray-50">
+          <thead className="bg-gray-50 dark:bg-gray-800">
             <tr className="[&>th:first-child]:w-12">
               {/* 2. Checkbox Column (Only rendered if selection mode is active) */}
               {isSelectionMode && (
@@ -266,7 +271,7 @@ const Table = <T extends { [key: string]: any }>({
           </thead>
 
           {/* TBODY */}
-          <tbody className="bg-white divide-y divide-gray-200">
+          <tbody className="bg-[var(--white)] divide-y divide-gray-200 dark:divide-gray-700">
             {data.length > 0 ? (
               data.map((item, index) => {
                 const id = item[dataIdKey] as string | number;
@@ -289,7 +294,7 @@ const Table = <T extends { [key: string]: any }>({
                   <tr
                     key={id}
                     // Apply selection styling if applicable
-                    className={`hover:bg-gray-50 whitespace-nowrap ${isSelectionMode && isSelected ? "bg-purple-50" : ""}`}
+                    className={`hover:bg-gray-50 dark:hover:bg-gray-800  text-[var(--muted-text)]  whitespace-nowrap ${isSelectionMode && isSelected ? "bg-gray-800" : ""}`}
                   >
                     {/* 3. Checkbox TD (Only rendered if selection mode is active) */}
                     {isSelectionMode && (
@@ -336,7 +341,7 @@ const Table = <T extends { [key: string]: any }>({
           <button
             onClick={() => onPageChange(Math.max(page - 1, 0))}
             disabled={page === 0}
-            className="px-4 py-2 border-gray-500 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
+            className="px-4 py-2 border-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
           >
             قبلی
           </button>
@@ -346,12 +351,12 @@ const Table = <T extends { [key: string]: any }>({
           <button
             onClick={() => onPageChange(Math.min(page + 1, totalPages - 1))}
             disabled={page >= totalPages - 1}
-            className="px-4 py-2 border-gray-500 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
+            className="px-4 py-2 border-gray-500  dark:bg-gray-700 dark:hover:bg-gray-600 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
           >
             بعدی
           </button>
         </div>
-        {}
+        { }
         <span className="text-sm text-gray-600 order-1 sm:order-3 w-full sm:w-auto mt-2 sm:mt-0 text-center sm:text-left">
           صفحه {totalPages > 0 ? page + 1 : 0} از {totalPages}
         </span>

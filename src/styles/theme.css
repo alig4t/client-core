@@ -10,6 +10,7 @@
     :root {
         --white: #ffffff;
         --primary-text: oklch(27.8% 0.033 256.848);
+        --muted-text: var(--color-gray-800);
         --background: #F7F7F7;
         --foreground: #666666;
         --foreground-2: #424242;
@@ -70,6 +71,7 @@
     .dark {
         --white: #101828;
         --primary-text: oklch(92% 0.004 286.32);
+        --muted-text: var(--color-gray-300);
         --input-border: oklch(44.6% 0.03 256.802);
         --placeholder-text: #575757;
 

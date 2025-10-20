@@ -129,7 +129,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
           />
         </div>
 
-        <div className="flex items-center gap-4 mt-6">
+        {/* <div className="flex items-center gap-4 mt-6">
           <button
             type="submit"
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
@@ -143,7 +143,7 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
           >
             حذف فیلتر
           </button>
-        </div>
+        </div> */}
 
          <ButtonPanel align="start">
           <Button variant="success">
