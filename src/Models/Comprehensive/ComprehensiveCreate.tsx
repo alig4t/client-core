@@ -154,12 +154,9 @@ const ComprehensiveCreate: React.FC = () => {
             <FormAutoComplete
               name="oneToOneUser"
               label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-              placeholder={
-                comprehensiveModelMeta.fields.oneToOneUser?.placeholder
-              }
               multi
-              service={PermissionService}
-              labelKey={PermissionModelMeta.displayField}
+              service={UserService}
+              labelKey={UserModelMeta.displayField}
               valueKey="id"
             />
           </RowContainer>
