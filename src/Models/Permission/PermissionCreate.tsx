@@ -10,7 +10,7 @@ import Spinner from "@/components/general/Spinner";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
 import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/components/form/FormWrapper";
-import { FormInput } from "@/components/form/FormInput";
+import FormInput from "@/components/form/FormInput";
 
 // --- Schema and Type for validation ---
 const permissionSchema = z.object({

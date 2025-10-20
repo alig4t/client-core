@@ -31,3 +31,10 @@ const finalFormat = isoString.replace('Z', '+00:00');
 
 return finalFormat;
 }
+
+const DateUtil = {
+    GEORGIAN_TO_JALALI,
+    JALALI_TO_GEORGIAN
+}
+
+export default DateUtil;

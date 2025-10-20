@@ -6,7 +6,7 @@ import { DateObject } from "react-multi-date-picker";
 import type { Value } from "react-multi-date-picker";
 import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/components/form/FormWrapper";
-import { FormInput } from "@/components/form/FormInput";
+
 import { DateInput } from "@/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
 import { Checkbox } from "@/components/form/Checkbox";
@@ -17,6 +17,7 @@ import { FormAutoComplete } from "@/components/form/FormAutoComplete";
 import PermissionService from "./PermissionService";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
+import FormInput from "@/components/form/FormInput";
 // --- Form data types ---
 interface PermissionSearchForm {
   showName?: string;
@@ -145,15 +146,9 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
           </button>
         </div> */}
 
-         <ButtonPanel align="start">
-          <Button variant="success">
-            اعمال فیلتر
-          </Button>
-          <Button
-            variant="secondary"
-            type="submit"
-            onClick={handleClear}
-          >
+        <ButtonPanel align="start">
+          <Button variant="success">اعمال فیلتر</Button>
+          <Button variant="secondary" type="submit" onClick={handleClear}>
             حذف فیلتر
           </Button>
         </ButtonPanel>

@@ -5,13 +5,13 @@ import type { SubmitHandler } from "react-hook-form";
 import { DateObject } from "react-multi-date-picker";
 import type { Value } from "react-multi-date-picker";
 import { FormWrapper } from "@/components/form/FormWrapper";
-import { FormInput } from "@/components/form/FormInput";
 import { DateInput } from "@/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
+import FormInput from "@/components/form/FormInput";
 
 // --- Form data types ---
 interface PermissionSearchForm {
@@ -125,11 +125,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           <Button variant="success" type="submit">
             اعمال فیلتر
           </Button>
-          <Button
-            variant="secondary"
-            type="submit"
-            onClick={handleClear}
-          >
+          <Button variant="secondary" type="submit" onClick={handleClear}>
             حذف فیلتر
           </Button>
         </ButtonPanel>

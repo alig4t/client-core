@@ -7,7 +7,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import PermissionService from "./PermissionService";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
-import { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
+import DateUtil, { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
 import { Checkbox } from "@/components/form/Checkbox";
 import type { Option } from "@/core/forms/OptionUtils";
 import Table from "@/components/form/DataTable";
@@ -34,7 +34,6 @@ const sortOptions: Option[] = [
   { label: "نام سیستمی (صعودی)", value: "name,asc" },
   { label: "نام سیستمی (نزولی)", value: "name,desc" },
 ];
-
 
 const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
   filters,
@@ -99,7 +98,7 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
       <td className="px-6 py-4 whitespace-nowrap">{permission.showName}</td>
       <td className="px-6 py-4 whitespace-nowrap">{permission.name}</td>
       <td className="px-6 py-4 whitespace-nowrap">
-        {GEORGIAN_TO_JALALI(permission.createdAt)}
+        {DateUtil.GEORGIAN_TO_JALALI(permission.createdAt)}
       </td>
     </tr>
   );

@@ -52,3 +52,11 @@ export function buildSortOptions<
 
   return options;
 }
+
+const OptionUtils = {
+  YES_OR_NO_OPTIONS,
+  PAGE_SIZE_OPTIONS,
+  buildSortOptions
+}
+
+export default OptionUtils;

@@ -1,47 +1,63 @@
 // src/pages/PermissionCreate.tsx
 
-import React, { useMemo } from "react";
+import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import Spinner from "@/components/general/Spinner";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
 import { FormWrapper } from "@/components/form/FormWrapper";
-import { FormInput } from "@/components/form/FormInput";
+
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import Select from "@/components/form/Select";
 import { Checkbox } from "@/components/form/Checkbox";
 import { DateInput } from "@/components/form/DateInput";
-import { YES_OR_NO_OPTIONS } from "@/core/forms/OptionUtils";
+import OptionUtils from "@/core/forms/OptionUtils";
 import { FormSelect } from "@/components/form/FormSelect";
 import { FormAutoComplete } from "@/components/form/FormAutoComplete";
 import UserService from "../User/UserService";
 import { UserModelMeta } from "../User/UserModel.meta";
-import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
-import errorMap from "@/core/forms/zod.config";
 import z from "@/core/forms/zod.config";
 import { RowContainer } from "@/components/general/RowContainer";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
 import PageHeader from "@/components/general/PageHeader";
-import PermissionService from "../Permission/PermissionService";
-import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
+import FormInput from "@/components/form/FormInput";
+import MyValidation from "@/core/forms/validation";
 
 // --- Schema and Type for validation ---
-const comprehensiveSchema = z.object({
-  stringField: z.string().nonempty(),
-  integerField: z.number(),
-  longField: z.string().nonempty(),
-  doubleField: z.string().nonempty(),
-  bigDecimalField: z.string().nonempty(),
-  booleanField: z.boolean(), // بولین
-  dateField: z.string().nonempty(),
-  localDateField: z.string().nonempty(),
-  enumField: z.string().nonempty(),
-});
+// const comprehensiveSchema = z.object({
+//   stringField: z.string().nonempty(),
+//   integerField: z.number(),
+//   longField: z.string().nonempty(),
+//   doubleField: z.string().nonempty(),
+//   bigDecimalField: z.string().nonempty(),
+//   booleanField: z.boolean(), // بولین
+//   dateField: z.string().nonempty(),
+//   localDateField: z.string().nonempty(),
+//   enumField: z.string().nonempty(),
+// });
+// src/schemas/comprehensiveSchema.ts
 
+const comprehensiveSchema = z.object({
+  stringField: MyValidation.text(255),
+
+  integerField: MyValidation.integer(),
+  longField: MyValidation.long(),
+  floatField: MyValidation.float(),
+  doubleField: MyValidation.double(),
+  bigDecimalField: MyValidation.bigDecimal(),
+
+  booleanField: MyValidation.boolean(),
+  dateField: MyValidation.date(),
+  localDateField: MyValidation.date(),
+
+  // برای enumField و oneToOneUser هم می‌تونی ولیدیشن جداگانه بنویسی
+  enumField: MyValidation.multiSelect(),
+  oneToOneUser: z
+    .array(z.object({ id: z.string() }))
+    .min(1, "یک کاربر انتخاب کنید"),
+});
 // console.log(generateZodSchemaCode(comprehensiveModelMeta));
 
 type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
@@ -83,7 +99,6 @@ const ComprehensiveCreate: React.FC = () => {
 
   return (
     <div dir="rtl" className="p-8 min-h-screen font-sans">
-
       <PageHeader title="ایجاد دسترسی جدید" />
 
       <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
@@ -94,6 +109,7 @@ const ComprehensiveCreate: React.FC = () => {
         >
           <RowContainer numberOfColumns={2}>
             <FormInput
+              type="text"
               name="stringField"
               label={comprehensiveModelMeta.fields.stringField?.label}
               placeholder={
@@ -111,14 +127,14 @@ const ComprehensiveCreate: React.FC = () => {
 
             <FormInput
               name="longField"
-              type="number"
+              type="long"
               label={comprehensiveModelMeta.fields.longField?.label}
               placeholder={comprehensiveModelMeta.fields.longField?.placeholder}
             />
 
             <FormInput
               name="doubleField"
-              type="number"
+              type="float"
               label={comprehensiveModelMeta.fields.doubleField?.label}
               placeholder={
                 comprehensiveModelMeta.fields.doubleField?.placeholder
@@ -127,12 +143,13 @@ const ComprehensiveCreate: React.FC = () => {
 
             <FormInput
               name="bigDecimalField"
-              type="number"
+              type="double"
               label={comprehensiveModelMeta.fields.bigDecimalField?.label}
               placeholder={
                 comprehensiveModelMeta.fields.bigDecimalField?.placeholder
               }
             />
+
             <Checkbox
               name="booleanField"
               label={comprehensiveModelMeta.fields.booleanField?.label}
@@ -144,11 +161,11 @@ const ComprehensiveCreate: React.FC = () => {
               placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
             />
             <FormSelect
-            multi
+              multi
               name="enumField"
               label={comprehensiveModelMeta.fields.enumField?.label}
               placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}
-              options={YES_OR_NO_OPTIONS}
+              options={OptionUtils.YES_OR_NO_OPTIONS}
             />
 
             <FormAutoComplete
@@ -200,7 +217,6 @@ const ComprehensiveCreate: React.FC = () => {
               ذخیره
             </Button>
           </ButtonPanel>
-
         </FormWrapper>
       </div>
     </div>

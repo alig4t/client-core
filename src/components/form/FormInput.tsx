@@ -1,33 +1,21 @@
-import React, { useMemo } from "react";
+// FormInput.tsx
+import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-// Assuming these are defined elsewhere or simplified for this file
-
-import { CircleX, Pencil } from "lucide-react";
+import { CircleX, Eye, EyeOff, Pencil } from "lucide-react";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
 
-// The expanded set of field types supported by this component
 export type FormInputType =
   | "text"
   | "email"
   | "password"
-  | "number" // Integer or general number type
-  | "float" // Custom type for explicit floating-point numbers
+  | "number" // برای int
+  | "long" // برای long
+  | "float" // برای float
+  | "double" // برای double
+  | "bigDecimal" // برای BigDecimal
   | "date"
   | "datetime-local";
-
-// Simplified Clear Button component
-const ClearButton = ({ onClick }: { onClick: () => void }) => {
-  return (
-    <button
-      type="button"
-      className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
-      onClick={onClick}
-    >
-      <CircleX size={18} />
-    </button>
-  );
-};
 
 interface BaseFormInputProps {
   name: string;
@@ -37,22 +25,27 @@ interface BaseFormInputProps {
   onValueChange?: (value: string) => void;
   multiline?: boolean;
   standalone?: boolean;
+  maxLength?: number; // برای رشته‌ها
 }
 
-// Combine input and textarea attributes, and specifically allow our expanded type
 type FormInputProps = BaseFormInputProps &
   Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange" | "type"> &
   Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, "onChange"> & {
     type?: FormInputType;
   };
 
-const boxIcon = (
-  <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 z-10">
-    <Pencil size={20} className="bg-transparent rounded-lg" />
-  </div>
+const ClearButton = ({ onClick }: { onClick: () => void }) => (
+  <button
+    type="button"
+    className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+    onClick={onClick}
+    aria-label="پاک کردن"
+  >
+    <CircleX size={18} />
+  </button>
 );
 
-export const FormInput: React.FC<FormInputProps> = ({
+const FormInput: React.FC<FormInputProps> = ({
   name,
   label,
   placeholder,
@@ -61,41 +54,86 @@ export const FormInput: React.FC<FormInputProps> = ({
   multiline = false,
   standalone = false,
   className = "",
+  maxLength: customMaxLength,
   ...rest
 }) => {
-  const isNumeric = type === "number" || type === "float";
+  // تعیین maxLength بر اساس نوع
+  const getDefaultMaxLength = () => {
+    switch (type) {
+      case "number":
+        return 11; // int: -2147483648 (11 chars)
+      case "long":
+        return 20; // long: -9223372036854775808 (20 chars)
+      case "float":
+        return 15; // float: مثلاً -1.2345678e+38 (15 منطقی)
+      case "double":
+        return 25; // double: تا ~17 رقم معنی‌دار + نماد
+      case "bigDecimal":
+        return 50; // قابل تنظیم، ولی پیش‌فرض 50
+      case "text":
+      case "email":
+      case "password":
+        return customMaxLength ?? 255;
+      default:
+        return undefined;
+    }
+  };
 
-  // Use HTML type="number" for both, but control decimal input via 'step'
-  const htmlInputType = isNumeric ? "number" : type;
-  // Allow decimals for 'float', otherwise use passed step or browser default
-  const stepAttr = type === "float" ? "any" : rest.step;
+  const maxLength = getDefaultMaxLength();
 
-  // Tailwind classes to hide the numeric spin buttons across major browsers
-  const numericHiddenArrows = isNumeric
-    ? "[appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-    : "";
+  // برای password toggle
+  const [showPassword, setShowPassword] = useState(false);
+
+  // آیکون چشم برای password
+  const passwordToggleIcon = type === "password" && (
+    <button
+      type="button"
+      className="absolute !p-0 top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+      onClick={() => setShowPassword(!showPassword)}
+      aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
+    >
+      {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+    </button>
+  );
+
+  // آیکون pencil برای غیر-password
+  const pencilIcon = type !== "password" && (
+    <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 z-10">
+      <Pencil size={20} className="bg-transparent rounded-lg" />
+    </div>
+  );
 
   const CLASS_LIST_STYLES =
-    "w-full pl-6 pr-10 py-2 border border-[var(--input-border)] text-[var(--primary-text)] rounded-lg text-right placeholder:text-[var(--placeholder-text)] placeholder:font-thin focus:outline-none focus:ring-2 focus:ring-purple-500";
+    "w-full pl-7 pr-10 py-2 border border-[var(--input-border)] text-[var(--primary-text)] rounded-lg text-right placeholder:text-[var(--placeholder-text)] placeholder:font-thin focus:outline-none focus:ring-2 focus:ring-purple-500";
 
-  // --- 1. Standalone Mode (No React Hook Form) ---
+  // --- Standalone Mode ---
   if (standalone) {
-    const [value, setValue] = React.useState("");
+    const [value, setValue] = useState("");
 
     const handleChange = (
       e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => {
-      const rawValue = e.target.value;
-      setValue(rawValue);
+      let rawValue = e.target.value;
 
-      if (onValueChange) {
-        onValueChange(rawValue);
+      // ولیدیشن کاراکترهای مجاز بر اساس نوع
+      if (["number", "long", "float", "double", "bigDecimal"].includes(type)) {
+        const regex =
+          type === "number" || type === "long"
+            ? /^-?\d*$/ // فقط عدد صحیح (مثبت/منفی)
+            : /^-?\d*\.?\d*$/; // اعشاری
+
+        if (rawValue !== "" && !regex.test(rawValue)) {
+          return; // ورودی نامعتبر — نادیده گرفته می‌شود
+        }
       }
+
+      setValue(rawValue);
+      onValueChange?.(rawValue);
     };
 
     const handleClear = () => {
       setValue("");
-      if (onValueChange) onValueChange("");
+      onValueChange?.("");
     };
 
     const commonProps = {
@@ -103,7 +141,8 @@ export const FormInput: React.FC<FormInputProps> = ({
       placeholder,
       value,
       onChange: handleChange,
-      className: `${CLASS_LIST_STYLES} ${className} ${numericHiddenArrows}`,
+      className: `${CLASS_LIST_STYLES} ${className}`,
+      maxLength,
       ...rest,
     };
 
@@ -116,7 +155,7 @@ export const FormInput: React.FC<FormInputProps> = ({
               {...(commonProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
               rows={rest.rows || 3}
             />
-            {boxIcon}
+            {pencilIcon}
           </div>
         </div>
       );
@@ -128,99 +167,77 @@ export const FormInput: React.FC<FormInputProps> = ({
         <div className="relative w-full">
           <input
             {...(commonProps as React.InputHTMLAttributes<HTMLInputElement>)}
-            type={htmlInputType}
-            step={stepAttr}
+            type={
+              type === "password"
+                ? showPassword
+                  ? "text"
+                  : "password"
+                : "text"
+            }
           />
-          {boxIcon}
+          {passwordToggleIcon}
+          {pencilIcon}
           {value && <ClearButton onClick={handleClear} />}
         </div>
       </div>
     );
   }
 
-  // --- 2. RHF Mode (With React Hook Form) ---
+  // --- RHF Mode ---
   const formContext = useFormContext();
-
   if (!formContext) {
     throw new Error(
-      "FormInput must be used inside a FormWrapper (FormProvider). " +
-        "If you want to use it standalone, pass standalone={true}."
+      "FormInput must be used inside a FormWrapper (FormProvider). Use standalone={true} for standalone usage."
     );
   }
 
   const {
     register,
     formState: { errors },
-    setValue,
     control,
   } = formContext;
 
-  const currentValue = useWatch({ name, control });
-
+  const currentValue = useWatch({ name, control }) ?? "";
   const { onChange: registerOnChange, ...registerRest } = register(name);
 
-  // Custom Change Handler for both text and number types
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
-    const rawValue = e.target.value;
+    let rawValue = e.target.value;
 
-    if (isNumeric) {
-      // --- Special Handling for Numbers and Floats ---
-      let newValue: number | null = null;
+    // محدودیت کاراکترهای مجاز بر اساس نوع
+    if (["number", "long", "float", "double", "bigDecimal"].includes(type)) {
+      const isIntegerType = type === "number" || type === "long";
+      const regex = isIntegerType ? /^-?\d*$/ : /^-?\d*\.?\d*$/;
 
-      if (rawValue !== "") {
-        const parsed = parseFloat(rawValue);
-
-        if (isFinite(parsed)) {
-          if (type === "number") {
-            // If the type is explicitly 'number' (integer), truncate the float part
-            newValue = Math.trunc(parsed);
-          } else {
-            // If the type is 'float', keep the decimal value
-            newValue = parsed;
-          }
-        }
+      if (rawValue !== "" && !regex.test(rawValue)) {
+        return; // ورودی نامعتبر — تغییری اعمال نمی‌شود
       }
 
-      // Use setValue directly to update RHF state with the correct type (number or null)
-      setValue(name, newValue, { shouldValidate: true, shouldDirty: true });
-    } else {
-      // --- Standard Handling for Text/Date/etc. (string value) ---
-      registerOnChange(e as any);
+      // جلوگیری از چندین نقطه (مثلاً 12..34)
+      if (!isIntegerType && (rawValue.match(/\./g) || []).length > 1) {
+        return;
+      }
     }
 
-    if (onValueChange) {
-      onValueChange(rawValue);
-    }
+    registerOnChange(e);
+    onValueChange?.(rawValue);
   };
 
   const handleClear = () => {
-    // Clear to null for numeric fields to work with optional Zod numbers.
-    // Clear to empty string for text fields.
-    const clearValue = isNumeric ? null : "";
-
-    setValue(name, clearValue, { shouldValidate: true, shouldDirty: true });
-    if (onValueChange) {
-      onValueChange("");
-    }
+    registerOnChange({ target: { name, value: "" } });
+    onValueChange?.("");
   };
 
   const commonProps = {
     id: name,
     placeholder,
-    // Add classes to hide arrows here
-    className: `${CLASS_LIST_STYLES} ${className} ${numericHiddenArrows}`,
+    className: `${CLASS_LIST_STYLES} ${className}`,
+    maxLength,
     ...registerRest,
     onChange: handleChange,
     ...rest,
   };
-
-  const inputDisplayValue = isNumeric
-    ? currentValue === null || currentValue === undefined
-      ? ""
-      : String(currentValue)
-    : currentValue;
 
   if (multiline) {
     return (
@@ -229,9 +246,10 @@ export const FormInput: React.FC<FormInputProps> = ({
         <div className="relative w-full">
           <textarea
             {...(commonProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)}
+            value={currentValue as string}
             rows={rest.rows || 3}
           />
-          {boxIcon}
+          {pencilIcon}
         </div>
         {errors[name] && (
           <ErrorFormText msg={errors[name]?.message as string} />
@@ -246,16 +264,18 @@ export const FormInput: React.FC<FormInputProps> = ({
       <div className="relative w-full">
         <input
           {...(commonProps as React.InputHTMLAttributes<HTMLInputElement>)}
-          type={htmlInputType}
-          step={stepAttr} // Applies step="any" for 'float' type
-          value={inputDisplayValue}
+          type={
+            type === "password" ? (showPassword ? "text" : "password") : "text"
+          }
+          value={currentValue as string}
         />
-        {boxIcon}
-        {currentValue !== undefined &&
-          currentValue !== null &&
-          currentValue !== "" && <ClearButton onClick={handleClear} />}
+        {passwordToggleIcon}
+        {pencilIcon}
+        {currentValue !== "" && <ClearButton onClick={handleClear} />}
       </div>
       {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}
     </div>
   );
 };
+
+export default FormInput;
