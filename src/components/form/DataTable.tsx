@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect, useMemo } from "react";
 import { Checkbox } from "@/components/form/Checkbox";
-import Select from "@/components/form/Select";
+
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
-import { FormSelect } from "./FormSelect";
+
 import Button from "../Button/Button";
+import { Select } from "./Select";
 
 // --- Types for Props ---
 type RenderRowFunction<T> = (
@@ -164,10 +165,11 @@ const Table = <T extends { [key: string]: any }>({
         <button
           key={i}
           onClick={() => onPageChange(i)}
-          className={`px-2.5 py-1 text-xs border rounded-md ${i === page
+          className={`px-2.5 py-1 text-xs border rounded-md ${
+            i === page
               ? "bg-purple-600 text-white border-purple-600"
               : "bg-white dark:bg-gray-700 border-gray-400 dark:border-gray-600 hover:bg-gray-100"
-            }`}
+          }`}
         >
           {i + 1}
         </button>
@@ -215,11 +217,11 @@ const Table = <T extends { [key: string]: any }>({
           </span>
           <div className="space-x-2 space-x-reverse">
             <Button
-            variant="secondary"
+              variant="secondary"
               onClick={() => setSelectedIds([])}
               // className="px-2.5 py-2 bg-gray-500 text-white text-sm rounded hover:bg-gray-600"
             >
-             حذف موارد انتخاب شده
+              حذف موارد انتخاب شده
             </Button>
             {/* Add your actual bulk actions here */}
           </div>
@@ -229,13 +231,14 @@ const Table = <T extends { [key: string]: any }>({
       {/* Controls: Sort and Page Size (Unchanged) */}
 
       <div className="flex flex-wrap justify-between items-center mb-4 w-full">
-        <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">{title}</h2>
+        <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">
+          {title}
+        </h2>
         <div className="max-w-2/3 flex gap-2 items-center">
-
           <Select
             className="min-w-[120px]"
             options={sortOptions}
-            onChange={(e) => onSortChange(e.target.value)}
+            onChange={(value) => onSortChange(value as string)}
             value={sortValue}
           />
 
@@ -243,9 +246,8 @@ const Table = <T extends { [key: string]: any }>({
             className="max-w-[120px]"
             value={pageSize}
             options={PAGE_SIZE_OPTIONS}
-            onChange={(e) => onPageSizeChange(Number(e.target.value))}
+            onChange={(value) => onPageSizeChange(Number(value))}
           />
-
         </div>
       </div>
 
@@ -356,7 +358,7 @@ const Table = <T extends { [key: string]: any }>({
             بعدی
           </button>
         </div>
-        { }
+        {}
         <span className="text-sm text-gray-600 order-1 sm:order-3 w-full sm:w-auto mt-2 sm:mt-0 text-center sm:text-left">
           صفحه {totalPages > 0 ? page + 1 : 0} از {totalPages}
         </span>

@@ -108,6 +108,8 @@ interface FormAutoCompleteProps<T extends BaseModel> {
   extraFilters?: Record<string, any>;
 }
 
+const EMPTY_FILTERS = {};
+
 export const FormAutoComplete = <T extends BaseModel>({
   name,
   label,
@@ -119,7 +121,7 @@ export const FormAutoComplete = <T extends BaseModel>({
   placeholder = "جستجو و انتخاب کنید",
   maxVisible = 2,
   debounceTime = 300,
-  extraFilters = {},
+  extraFilters = EMPTY_FILTERS,
 }: FormAutoCompleteProps<T>) => {
   const formContext = useFormContext();
   if (!formContext) {

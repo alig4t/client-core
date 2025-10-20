@@ -67,6 +67,28 @@ export const select = () =>
   export const multiSelect = () =>
     z.array(z.string()).min(1, "حداقل یک گزینه انتخاب کنید");
 
+  // src/lib/validation.ts
+
+// ولیدیشن برای یک آبجکت با id و label (تک‌انتخاب)
+export const reference = () =>
+    z
+      .object({
+        id: z.union([z.string(), z.number()]),
+        // label اختیاری است، ولی برای اطمینان می‌تونی اضافه‌اش کنی
+      })
+      .refine((obj) => obj.id != null, {
+        message: "لطفاً یک مورد انتخاب کنید",
+      });
+  
+  // ولیدیشن برای آرایه‌ای از آبجکت‌ها (چندانتخاب)
+  export const multiReference = () =>
+    z
+      .array(
+        z.object({
+          id: z.union([z.string(), z.number()]),
+        })
+      )
+      .min(1, "حداقل یک مورد انتخاب کنید");
 // اگر خواستی ولیدیشن‌های بیشتری اضافه کنی، اینجا جای مناسبی‌ست
 
 // صادر کردن همه ولیدیشن‌ها تحت یک نام (مثل MyValidation)
@@ -82,7 +104,9 @@ const MyValidation = {
   dateTime,
   date,
   select,
-  multiSelect
+  multiSelect,
+  reference,
+  multiReference
 };
 
 export default MyValidation;

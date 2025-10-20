@@ -54,9 +54,8 @@ const comprehensiveSchema = z.object({
 
   // برای enumField و oneToOneUser هم می‌تونی ولیدیشن جداگانه بنویسی
   enumField: MyValidation.multiSelect(),
-  oneToOneUser: z
-    .array(z.object({ id: z.string() }))
-    .min(1, "یک کاربر انتخاب کنید"),
+  oneToOneUser: MyValidation.reference(), // multi={false}
+  // oneToManyUsers: MyValidation.multiReference(), // multi={true}
 });
 // console.log(generateZodSchemaCode(comprehensiveModelMeta));
 
