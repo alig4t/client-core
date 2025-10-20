@@ -142,6 +142,7 @@ const ComprehensiveCreate: React.FC = () => {
               placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
             />
             <FormSelect
+            multi
               name="enumField"
               label={comprehensiveModelMeta.fields.enumField?.label}
               placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}

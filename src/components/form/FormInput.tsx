@@ -48,7 +48,7 @@ type FormInputProps = BaseFormInputProps &
 
 const boxIcon = (
   <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 z-10">
-    <Pencil size={20} className="bg-white rounded-lg" />
+    <Pencil size={20} className="bg-transparent rounded-lg" />
   </div>
 );
 

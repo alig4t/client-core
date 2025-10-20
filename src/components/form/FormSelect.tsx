@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
+import { ChevronDown } from "lucide-react";
 
 // --- MOCK/SIMPLIFIED DEPENDENCIES (For self-contained file) ---
 // In a real project, these would be imported from their respective paths.
@@ -23,24 +24,25 @@ import Label from "./Label";
 
 // Icon components for clean UI
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
-  <svg
-    className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-      clipRule="evenodd"
-    />
-  </svg>
+<ChevronDown size={14} className={` text-gray-600 dark:text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`} />
+  // <svg
+  //   className={`w-4 h-4 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
+  //   xmlns="http://www.w3.org/2000/svg"
+  //   viewBox="0 0 20 20"
+  //   fill="currentColor"
+  //   aria-hidden="true"
+  // >
+  //   <path
+  //     fillRule="evenodd"
+  //     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+  //     clipRule="evenodd"
+  //   />
+  // </svg>
 );
 
 const CheckIcon = () => (
   <svg
-    className="w-4 h-4 text-purple-600"
+    className="w-4 h-4 text-zinc-100"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
     fill="currentColor"
@@ -207,7 +209,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
       <button
         type="button"
         id={name}
-        className="flex justify-between items-center w-full p-3 text-right bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -223,7 +225,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
       {/* Dropdown Options List */}
       {isOpen && (
         <div
-          className={`absolute z-50 w-full bg-white border border-gray-200 rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
+          className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
         >
           <ul role="listbox" aria-labelledby={name} className="p-1">
             {options.map((option) => (
@@ -232,11 +234,11 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                 role={multi ? "option" : "listitem"}
                 aria-selected={isSelected(option.value)}
                 onClick={() => handleToggle(option.value)}
-                className={`flex justify-between items-center p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 ${
-                  isSelected(option.value) ? "bg-purple-100 font-semibold" : ""
+                className={`flex justify-right gap-2 items-center my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
+                  isSelected(option.value) ? "bg-purple-100 dark:bg-gray-400 font-semibold" : ""
                 }`}
               >
-                <span>{option.label}</span>
+                
                 {multi ? (
                   // Checkbox style for multi-select
                   <div
@@ -246,12 +248,13 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                         : "bg-gray-200 border-gray-300"
                     }`}
                   >
-                    {isSelected(option.value) && <CheckIcon />}
+                    {isSelected(option.value) && <span className="!text-white"><CheckIcon /></span>}
                   </div>
                 ) : (
                   // Checkmark style for single select
                   isSelected(option.value) && <CheckIcon />
                 )}
+                <span>{option.label}</span>
               </li>
             ))}
           </ul>

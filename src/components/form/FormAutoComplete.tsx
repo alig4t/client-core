@@ -9,6 +9,7 @@ import React, {
 import { useFormContext, useWatch } from "react-hook-form";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
+import { ChevronDown } from "lucide-react";
 
 // ----------------------------------------------------------------------
 // 1. INTERFACE DEFINITIONS (Based on User's Provided Service/Model Contracts)
@@ -57,19 +58,20 @@ interface IBaseService<T extends BaseModel> {
 // );
 
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
-  <svg
-    className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-      clipRule="evenodd"
-    />
-  </svg>
+  <ChevronDown size={14} className={` text-gray-600 dark:text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`} />
+  // <svg
+  //   className={`w-4 h-4 text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
+  //   xmlns="http://www.w3.org/2000/svg"
+  //   viewBox="0 0 20 20"
+  //   fill="currentColor"
+  //   aria-hidden="true"
+  // >
+  //   <path
+  //     fillRule="evenodd"
+  //     d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+  //     clipRule="evenodd"
+  //   />
+  // </svg>
 );
 
 const CheckIcon = () => (
@@ -194,6 +196,7 @@ export const FormAutoComplete = <T extends BaseModel>({
     if (!isOpen || hasError) return;
 
     setLoading(true);
+   
     setHasError(false);
 
     // 1. Construct the dynamic search filter key based on the labelKey
@@ -219,7 +222,10 @@ export const FormAutoComplete = <T extends BaseModel>({
       setFetchedOptions([]);
       setHasError(true);
     } finally {
-      setLoading(false);
+       setTimeout(()=>{
+setLoading(false);
+    },6000)
+      
     }
   }, [isOpen, debouncedSearchTerm, service, extraFilters, labelKey]); // extraFilters is a dependency
 
@@ -357,7 +363,7 @@ export const FormAutoComplete = <T extends BaseModel>({
       <button
         type="button"
         id={name}
-        className="flex justify-between items-center w-full p-3 text-right bg-white border border-gray-300 rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300  border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
@@ -374,14 +380,14 @@ export const FormAutoComplete = <T extends BaseModel>({
       {/* Dropdown Options List */}
       {isOpen && (
         <div
-          className={`absolute z-50 w-full bg-white border border-gray-200 rounded-lg shadow-xl ${dropdownPositionClasses}`}
+          className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl ${dropdownPositionClasses}`}
           onMouseDown={(e) => e.stopPropagation()}
         >
           {/* Search Input Box */}
-          <div className="p-2 border-b border-gray-100 sticky top-0 bg-white z-10">
+          <div className="p-2 border-b border-gray-100 sticky top-0 bg-white dark:bg-gray-400 z-10">
             <input
               type="text"
-              className="w-full p-2 text-right border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
+              className="w-full p-2 placeholder:text-[var(--placeholder-text)]  text-right border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500 dark:focus:ring-gray-700"
               placeholder="جستجو..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
@@ -408,9 +414,9 @@ export const FormAutoComplete = <T extends BaseModel>({
                     role={multi ? "option" : "listitem"}
                     aria-selected={isSelected(option.value)}
                     onClick={() => handleToggle(option.value, option.label)}
-                    className={`flex justify-between items-center p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 ${
+                    className={`flex justify-between items-center p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
                       isSelected(option.value)
-                        ? "bg-purple-100 font-semibold"
+                        ? "bg-purple-100 dark:bg-gray-400 font-semibold"
                         : ""
                     }`}
                   >
