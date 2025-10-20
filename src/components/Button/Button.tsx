@@ -20,11 +20,11 @@ export const variantClasses = {
   success:
     'bg-green-600 text-white shadow-md hover:bg-green-700 focus:ring-green-500 disabled:bg-green-300',
   secondary:
-    'border border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-100 hover:!text-gray-700 focus:ring-gray-500',
+    'border bg-gray-100 border-gray-300 !text-gray-600 dark:text-gray-400 hover:!bg-gray-200 hover:!text-gray-600 focus:ring-gray-500',
   cancel:
     'border border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-100 hover:!text-gray-700 focus:ring-gray-500',
 };
-
+   
 const Button = ({
   children,
   variant = 'primary',

@@ -10,6 +10,8 @@ import { DateInput } from "@/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
+import ButtonPanel from "@/components/Button/ButtonPanel";
+import Button from "@/components/Button/Button";
 
 // --- Form data types ---
 interface PermissionSearchForm {
@@ -103,7 +105,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           />
         </div>
 
-        <div className="flex items-center gap-4 mt-6">
+        {/* <div className="flex items-center gap-4 mt-6">
           <button
             type="submit"
             className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
@@ -117,7 +119,20 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           >
             حذف فیلتر
           </button>
-        </div>
+        </div> */}
+
+        <ButtonPanel align="start">
+          <Button variant="success" type="submit">
+            اعمال فیلتر
+          </Button>
+          <Button
+            variant="secondary"
+            type="submit"
+            onClick={handleClear}
+          >
+            حذف فیلتر
+          </Button>
+        </ButtonPanel>
       </FormWrapper>
     </>
   );

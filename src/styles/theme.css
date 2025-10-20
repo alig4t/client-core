@@ -1,3 +1,7 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+
 @layer base {
 
     /* ==========================================================================
@@ -35,7 +39,7 @@
         /* --- تغییر رنگ حاشیه به خاکستری ملایم‌تر --- */
         --card-border: oklch(92.8% 0.006 264.531);
 
-        --border: #e5e7eb;
+        --border: var(--color-gray-200);
         /* gray-200 */
         --input: #e5e7eb;
         --input-border: #e5e7eb;
@@ -96,7 +100,7 @@
 
         --card-border: oklch(44.6% 0.03 256.802);
         /* --- تغییر رنگ حاشیه به خاکستری تیره‌تر و نامحسوس‌تر --- */
-        --border: #1f2937;
+        --border: var(--color-gray-700);
         /* gray-800 */
         --input: #1f2937;
         /* gray-800 */

@@ -15,6 +15,8 @@ import { z } from "zod";
 import { FormSelect } from "@/components/form/FormSelect";
 import { FormAutoComplete } from "@/components/form/FormAutoComplete";
 import PermissionService from "./PermissionService";
+import ButtonPanel from "@/components/Button/ButtonPanel";
+import Button from "@/components/Button/Button";
 // --- Form data types ---
 interface PermissionSearchForm {
   showName?: string;
@@ -142,6 +144,19 @@ const PermissionSearch: React.FC<PermissionSearchProps> = ({
             حذف فیلتر
           </button>
         </div>
+
+         <ButtonPanel align="start">
+          <Button variant="success">
+            اعمال فیلتر
+          </Button>
+          <Button
+            variant="secondary"
+            type="submit"
+            onClick={handleClear}
+          >
+            حذف فیلتر
+          </Button>
+        </ButtonPanel>
       </FormWrapper>
     </>
   );

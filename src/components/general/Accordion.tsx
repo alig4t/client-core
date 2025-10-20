@@ -17,11 +17,11 @@ const Accordion: React.FC<AccordionProps> = ({
   const [isOpen, setIsOpen] = useState(startOpen);
 
   return (
-    <div className="border border-gray-200 rounded-lg mb-6">
+    <div className="border border-[var(--border)] bg-[var(--white)] dark:bg-[var(--black)] rounded-lg mb-6">
       {/* هدر آکاردئون که با کلیک باز و بسته می‌شود */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center p-4 bg-white hover:bg-gray-50 transition-colors"
+        className="w-full flex justify-between items-center p-4 bg-[var(--white)] hover:bg-gray-50 dark:hover:bg-[#0b111d] transition-colors duration-300"
       >
         <div className="font-semibold text-[var(--primary-text)]">{title}</div>
         <motion.div
@@ -45,9 +45,9 @@ const Accordion: React.FC<AccordionProps> = ({
               collapsed: { opacity: 0, height: 0 },
             }}
             transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
-            className="bg-white"
+            className="bg-[var(--white)]"
           >
-            <div className="p-6 border-t border-gray-200">{children}</div>
+            <div className="p-6 border-t border-[var(--border)] mb-1.5">{children}</div>
           </motion.section>
         )}
       </AnimatePresence>

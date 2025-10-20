@@ -11,7 +11,7 @@ const ComprehensivePage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
   return (
-    <div dir="rtl" className="sm:p-8 bg-gray-50 min-h-screen font-sans">
+    <div dir="rtl" className="sm:p-8 min-h-screen font-sans max-w-[1600px]">
       
       <PageHeader
         title="مدیریت ترکیبی"

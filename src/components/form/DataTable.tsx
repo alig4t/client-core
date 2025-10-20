@@ -204,7 +204,7 @@ const Table = <T extends { [key: string]: any }>({
   return (
     <div
       dir="rtl"
-      className={`p-6 bg-white rounded-lg border max-w-xs min-w-full sm:max-w-sm sm:min-w-full md:max-w-full border-gray-200 transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
+      className={`p-6 bg-[var(--white)] rounded-lg border max-w-xs min-w-full sm:max-w-sm sm:min-w-full md:max-w-full border-[var(--border)] transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
     >
       {/* 1. Bulk Action Bar (Visible only if selection mode is active AND items are selected) */}
       {isSelectionMode && selectedIds.length > 0 && (
