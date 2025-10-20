@@ -222,10 +222,7 @@ export const FormAutoComplete = <T extends BaseModel>({
       setFetchedOptions([]);
       setHasError(true);
     } finally {
-       setTimeout(()=>{
-setLoading(false);
-    },6000)
-      
+      setLoading(false); 
     }
   }, [isOpen, debouncedSearchTerm, service, extraFilters, labelKey]); // extraFilters is a dependency
 

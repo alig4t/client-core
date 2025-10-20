@@ -23,6 +23,11 @@ import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
 import errorMap from "@/core/forms/zod.config";
 import z from "@/core/forms/zod.config";
 import { RowContainer } from "@/components/general/RowContainer";
+import ButtonPanel from "@/components/Button/ButtonPanel";
+import Button from "@/components/Button/Button";
+import PageHeader from "@/components/general/PageHeader";
+import PermissionService from "../Permission/PermissionService";
+import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 
 // --- Schema and Type for validation ---
 const comprehensiveSchema = z.object({
@@ -78,11 +83,8 @@ const ComprehensiveCreate: React.FC = () => {
 
   return (
     <div dir="rtl" className="p-8 min-h-screen font-sans">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="!text-2xl font-bold text-[var(--primary-text)]">
-          ایجاد دسترسی جدید
-        </h1>
-      </div>
+
+      <PageHeader title="ایجاد دسترسی جدید" />
 
       <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
         <FormWrapper
@@ -155,19 +157,19 @@ const ComprehensiveCreate: React.FC = () => {
               // placeholder={
               //   comprehensiveModelMeta.fields.oneToOneUser?.placeholder
               // }
-              service={UserService}
-              labelKey={UserModelMeta.displayField}
+              service={PermissionService}
+              labelKey={PermissionModelMeta.displayField}
               valueKey="id"
             />
           </RowContainer>
 
           {/* <PermissionFormFields /> */}
 
-          <div className="flex items-center justify-end gap-4 mt-6">
+          {/* <div className="flex items-center justify-end gap-4 mt-6">
             <button
               type="button"
               onClick={handleCancel}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 dark:text-gray-400 font-medium hover:bg-gray-100 hover:!text-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
             >
               لغو
             </button>
@@ -185,7 +187,22 @@ const ComprehensiveCreate: React.FC = () => {
                 "ذخیره"
               )}
             </button>
-          </div>
+          </div> */}
+
+          <ButtonPanel align="end">
+            <Button variant="cancel" onClick={handleCancel}>
+              لغو
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              loading={mutation.isPending}
+              disabled={mutation.isPending}
+            >
+              ذخیره
+            </Button>
+          </ButtonPanel>
+
         </FormWrapper>
       </div>
     </div>

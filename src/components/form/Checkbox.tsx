@@ -169,7 +169,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         {/* border border-gray-300 */}
         {renderCheckbox()}
         {label && (
-          <label htmlFor={name} className="mr-2 text-sm text-gray-700">
+          <label htmlFor={name} className="mr-2 text-sm text-gray-700 dark:text-gray-300">
             {label}
           </label>
         )}
