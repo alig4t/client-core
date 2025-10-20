@@ -198,8 +198,8 @@ export const FormSelect: React.FC<FormSelectProps> = ({
   // Dynamic classes for dropdown positioning (The Fix!)
   const dropdownPositionClasses =
     openDirection === "up"
-      ? "bottom-full mb-1" // Positions above the select box, with a small margin (mb-1)
-      : "top-full mt-1"; // Positions below the select box, with a small margin (mt-1)
+      ? "bottom-[72%] mb-1" // Positions above the select box, with a small margin (mb-1)
+      : "top-full mt-2"; // Positions below the select box, with a small margin (mt-1)
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>

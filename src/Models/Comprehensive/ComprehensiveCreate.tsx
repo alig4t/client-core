@@ -1,6 +1,6 @@
 // src/pages/PermissionCreate.tsx
 
-import React from "react";
+import React, { useMemo } from "react";
 import { useNavigate } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -154,9 +154,10 @@ const ComprehensiveCreate: React.FC = () => {
             <FormAutoComplete
               name="oneToOneUser"
               label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-              // placeholder={
-              //   comprehensiveModelMeta.fields.oneToOneUser?.placeholder
-              // }
+              placeholder={
+                comprehensiveModelMeta.fields.oneToOneUser?.placeholder
+              }
+              multi
               service={PermissionService}
               labelKey={PermissionModelMeta.displayField}
               valueKey="id"

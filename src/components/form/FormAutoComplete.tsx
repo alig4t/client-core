@@ -117,6 +117,8 @@ const LoadingSpinner = () => (
 // 3. MAIN COMPONENT
 // ----------------------------------------------------------------------
 
+const EMPTY_FILTERS = {};
+
 interface FormAutoCompleteProps<T extends BaseModel> {
   name: string;
   label: string;
@@ -142,7 +144,7 @@ export const FormAutoComplete = <T extends BaseModel>({
   placeholder = "جستجو و انتخاب کنید",
   maxVisible = 2,
   debounceTime = 300,
-  extraFilters = {}, // Default to empty object
+  extraFilters = EMPTY_FILTERS,
 }: FormAutoCompleteProps<T>) => {
   const formContext = useFormContext();
   if (!formContext) {
@@ -196,7 +198,7 @@ export const FormAutoComplete = <T extends BaseModel>({
     if (!isOpen || hasError) return;
 
     setLoading(true);
-   
+
     setHasError(false);
 
     // 1. Construct the dynamic search filter key based on the labelKey
@@ -222,7 +224,7 @@ export const FormAutoComplete = <T extends BaseModel>({
       setFetchedOptions([]);
       setHasError(true);
     } finally {
-      setLoading(false); 
+      setLoading(false);
     }
   }, [isOpen, debouncedSearchTerm, service, extraFilters, labelKey]); // extraFilters is a dependency
 
@@ -351,7 +353,7 @@ export const FormAutoComplete = <T extends BaseModel>({
   }, [isOpen]); // Dynamic classes for dropdown positioning
 
   const dropdownPositionClasses =
-    openDirection === "up" ? "bottom-full mb-1" : "top-full mt-1";
+    openDirection === "up" ? "bottom-[72%] mb-1" : "top-[80%] mt-1";
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
@@ -366,9 +368,8 @@ export const FormAutoComplete = <T extends BaseModel>({
         aria-expanded={isOpen}
       >
         <span
-          className={`flex-1 truncate ${
-            count > 0 ? "text-gray-900" : "text-gray-500"
-          }`}
+          className={`flex-1 truncate ${count > 0 ? "text-gray-900" : "text-gray-500"
+            }`}
         >
           {displayText}
         </span>
@@ -411,27 +412,26 @@ export const FormAutoComplete = <T extends BaseModel>({
                     role={multi ? "option" : "listitem"}
                     aria-selected={isSelected(option.value)}
                     onClick={() => handleToggle(option.value, option.label)}
-                    className={`flex justify-between items-center p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
-                      isSelected(option.value)
+                    className={`flex justify-right items-center gap-2 p-2 my-0.5 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${isSelected(option.value)
                         ? "bg-purple-100 dark:bg-gray-400 font-semibold"
                         : ""
-                    }`}
+                      }`}
                   >
-                    <span className="text-right">{option.label}</span>
 
                     {multi ? (
                       <div
-                        className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
-                          isSelected(option.value)
+                        className={`w-5 h-5 flex  items-center justify-center border rounded transition-all ${isSelected(option.value)
                             ? "bg-purple-600 border-purple-600"
                             : "bg-gray-200 border-gray-300"
-                        }`}
+                          }`}
                       >
                         {isSelected(option.value) && <CheckIcon />}
                       </div>
                     ) : (
                       isSelected(option.value) && <CheckIcon />
                     )}
+                    <span className="">{option.label}</span>
+
                   </li>
                 ))}
               </ul>
