@@ -298,7 +298,7 @@ const Table = <T extends { [key: string]: any }>({
                   <tr
                     key={id}
                     // Apply selection styling if applicable
-                    className={`hover:bg-gray-50 dark:hover:bg-gray-800  text-[var(--muted-text)]  whitespace-nowrap ${isSelectionMode && isSelected ? "bg-gray-800" : ""}`}
+                    className={`hover:bg-gray-50 dark:hover:bg-gray-800  text-[var(--muted-text)]  whitespace-nowrap ${isSelectionMode && isSelected ? "bg-gray-100 dark:bg-gray-950" : ""}`}
                   >
                     {/* 3. Checkbox TD (Only rendered if selection mode is active) */}
                     {isSelectionMode && (
