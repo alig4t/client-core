@@ -5,10 +5,12 @@ import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
 import { ChevronDown } from "lucide-react";
 
-
 // Icon components for clean UI
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
-<ChevronDown size={14} className={` text-gray-600 dark:text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`} />
+  <ChevronDown
+    size={14}
+    className={` text-gray-600 dark:text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
+  />
 );
 
 const CheckIcon = () => (
@@ -31,7 +33,8 @@ const CheckIcon = () => (
 
 interface FormSelectProps {
   name: string;
-  label: string;
+  label?: string;
+  minilabel?: string;
   options: Option[];
   multi?: boolean; // New prop to enable multi-select mode
   className?: string;
@@ -42,6 +45,7 @@ interface FormSelectProps {
 export const FormSelect: React.FC<FormSelectProps> = ({
   name,
   label,
+  minilabel,
   options,
   multi = false, // Default to single select
   className = "",
@@ -174,17 +178,22 @@ export const FormSelect: React.FC<FormSelectProps> = ({
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
-      <Label>{label}</Label>
+      <Label>{label ?? ""}</Label>
 
       {/* Select Box / Trigger Button */}
       <button
         type="button"
         id={name}
-        className="flex justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex relative justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
+        {minilabel && (
+          <span className="absolute right-2 px-1 w-fit bg-white dark:bg-gray-200 dark:text-gray-950 text-gray-400 top-0 -translate-y-1/2 text-[9px]  rounded-sm">
+            {minilabel}
+          </span>
+        )}
         <span
           className={`flex-1 truncate ${count > 0 ? "text-gray-900" : "text-gray-500"}`}
         >
@@ -206,10 +215,11 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                 aria-selected={isSelected(option.value)}
                 onClick={() => handleToggle(option.value)}
                 className={`flex justify-right gap-2 items-center my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
-                  isSelected(option.value) ? "bg-purple-100 dark:bg-gray-400 font-semibold" : ""
+                  isSelected(option.value)
+                    ? "bg-purple-100 dark:bg-gray-400 font-semibold"
+                    : ""
                 }`}
               >
-                
                 {multi ? (
                   // Checkbox style for multi-select
                   <div
@@ -219,7 +229,11 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                         : "bg-gray-200 border-gray-300"
                     }`}
                   >
-                    {isSelected(option.value) && <span className="!text-white"><CheckIcon /></span>}
+                    {isSelected(option.value) && (
+                      <span className="!text-white">
+                        <CheckIcon />
+                      </span>
+                    )}
                   </div>
                 ) : (
                   // Checkmark style for single select

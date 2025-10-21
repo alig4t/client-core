@@ -7,8 +7,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
-import Select from "@/components/form/Select";
-import DateUtil, { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
+import DateUtil from "@/core/forms/DateUtils";
 import { Checkbox } from "@/components/form/Checkbox";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";

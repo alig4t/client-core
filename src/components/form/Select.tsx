@@ -18,7 +18,7 @@ const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
 
 const CheckIcon = () => (
   <svg
-    className="w-4 h-4 text-zinc-100"
+    className="w-4 h-4 text-zinc-500 dark:text-zinc-100"
     xmlns="http://www.w3.org/2000/svg"
     viewBox="0 0 20 20"
     fill="currentColor"
@@ -40,6 +40,7 @@ interface SelectProps {
   className?: string;
   placeholder?: string;
   label?: string; // اختیاری
+  minilabel?: string;
 }
 
 export const Select: React.FC<SelectProps> = ({
@@ -49,6 +50,7 @@ export const Select: React.FC<SelectProps> = ({
   className = "",
   placeholder = "انتخاب کنید",
   label,
+  minilabel,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [openDirection, setOpenDirection] = useState<"down" | "up">("down");
@@ -57,7 +59,10 @@ export const Select: React.FC<SelectProps> = ({
   // Click outside + smart positioning
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (wrapperRef.current && !wrapperRef.current.contains(event.target as Node)) {
+      if (
+        wrapperRef.current &&
+        !wrapperRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -68,7 +73,10 @@ export const Select: React.FC<SelectProps> = ({
       const availableSpaceAbove = rect.top;
       const estimatedDropdownHeight = Math.min(options.length * 40 + 20, 240);
 
-      if (availableSpaceBelow < estimatedDropdownHeight && availableSpaceAbove > availableSpaceBelow) {
+      if (
+        availableSpaceBelow < estimatedDropdownHeight &&
+        availableSpaceAbove > availableSpaceBelow
+      ) {
         setOpenDirection("up");
       } else {
         setOpenDirection("down");
@@ -87,11 +95,11 @@ export const Select: React.FC<SelectProps> = ({
     [onChange]
   );
 
-  const selectedOption = options.find(opt => opt.value === value);
+  const selectedOption = options.find((opt) => opt.value === value);
   const displayText = selectedOption ? selectedOption.label : placeholder;
 
   const dropdownPositionClasses =
-    openDirection === "up" ? "bottom-[72%] mb-1" : "top-full mt-2";
+    openDirection === "up" ? "bottom-full mb-1" : "top-full mt-2";
 
   return (
     <div className={`relative w-full ${className}`} ref={wrapperRef}>
@@ -103,11 +111,18 @@ export const Select: React.FC<SelectProps> = ({
 
       <button
         type="button"
-        className="flex justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex gap-1 relative justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
         onClick={() => setIsOpen(!isOpen)}
         aria-expanded={isOpen}
       >
-        <span className={`flex-1 truncate ${value !== undefined && value !== "" ? "text-gray-900" : "text-gray-500"}`}>
+        {minilabel && (
+          <span className="absolute right-2 px-1 w-fit bg-white dark:bg-gray-200 dark:text-gray-950 text-gray-400 top-0 -translate-y-1/2 text-[9px]  rounded-sm">
+            {minilabel}
+          </span>
+        )}
+        <span
+          className={`flex-1 truncate ${value !== undefined && value !== "" ? "text-gray-900" : "text-gray-500"}`}
+        >
           {displayText}
         </span>
         <ChevronIcon isOpen={isOpen} />
@@ -125,7 +140,9 @@ export const Select: React.FC<SelectProps> = ({
                 aria-selected={option.value === value}
                 onClick={() => handleSelect(option.value)}
                 className={`flex items-center gap-2 my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
-                  option.value === value ? "bg-purple-100 dark:bg-gray-400 font-semibold" : ""
+                  option.value === value
+                    ? "bg-purple-100 dark:bg-gray-400 font-semibold"
+                    : ""
                 }`}
               >
                 {option.value === value && <CheckIcon />}

@@ -234,16 +234,18 @@ const Table = <T extends { [key: string]: any }>({
         <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">
           {title}
         </h2>
-        <div className="max-w-2/3 flex gap-2 items-center">
+        <div className="max-w-2/3 flex gap-2 items-end">
           <Select
-            className="min-w-[120px]"
+            minilabel="مرتب سازی براساس"
+            className="min-w-[180px]"
             options={sortOptions}
             onChange={(value) => onSortChange(value as string)}
             value={sortValue}
           />
 
           <Select
-            className="max-w-[120px]"
+            minilabel="تعداد در صفحه"
+            className="min-w-[100px]"
             value={pageSize}
             options={PAGE_SIZE_OPTIONS}
             onChange={(value) => onPageSizeChange(Number(value))}
