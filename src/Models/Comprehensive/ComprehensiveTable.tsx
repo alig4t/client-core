@@ -14,6 +14,7 @@ import ComprehensiveService from "./ComprehensiveService";
 import { buildSortOptions, type Option } from "@/core/forms/OptionUtils";
 import Table from "@/components/form/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import { Eye } from "lucide-react";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -99,6 +100,15 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       <td className="px-6 py-4 whitespace-nowrap">
         {DateUtil.GEORGIAN_TO_JALALI(comprehensive.createdAt)}
       </td>
+      <td className="px-6 py-4 text-center whitespace-nowrap">
+        <button
+          // onClick={() => handleViewDetails(comprehensive.id)}
+          className="p-2 text-gray-400 rounded-full opacity-0 group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
+          aria-label={`View details for ${comprehensive.stringField}`}
+        >
+          <Eye size={20} />
+        </button>
+      </td>
     </tr>
   );
 
@@ -126,6 +136,9 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
           </th>
           <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
             تاریخ ایجاد
+          </th>
+          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+            عملیات
           </th>
         </>
       }

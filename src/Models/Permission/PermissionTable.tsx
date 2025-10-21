@@ -11,6 +11,8 @@ import DateUtil, { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
 import { Checkbox } from "@/components/form/Checkbox";
 import type { Option } from "@/core/forms/OptionUtils";
 import Table from "@/components/form/DataTable";
+import { Eye, Pencil } from "lucide-react";
+import Tooltip from "@/components/general/Tooltip";
 
 // Define the expected structure of a single permission item
 interface Permission {
@@ -100,6 +102,24 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
       <td className="px-6 py-4 whitespace-nowrap">
         {DateUtil.GEORGIAN_TO_JALALI(permission.createdAt)}
       </td>
+      <td className="px-6 py-4 text-center flex items-center whitespace-nowrap">
+        <Tooltip content="ویرایش">
+          <button
+            // onClick={() => handleViewDetails(comprehensive.id)}
+            className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
+            aria-label={`View details for ${permission.showName}`}
+          >
+            <Pencil size={16} />
+          </button>
+        </Tooltip>
+        <button
+          // onClick={() => handleViewDetails(comprehensive.id)}
+          className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
+          aria-label={`View details for ${permission.showName}`}
+        >
+          <Eye size={20} />
+        </button>
+      </td>
     </tr>
   );
 
@@ -131,6 +151,9 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
           </th>
           <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
             تاریخ ایجاد
+          </th>
+          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+            عملیات
           </th>
         </>
       }
