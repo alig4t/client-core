@@ -1,13 +1,14 @@
 // src/components/form/DateInput.tsx
 import React from "react";
 import { useFormContext, Controller } from "react-hook-form";
-import CustomDatePicker from "@/components/form/CustomDatePicker";
+import CustomDatePicker from "@/core/components/form/CustomDatePicker";
 import { DateObject, type Value } from "react-multi-date-picker"; // Value = DateObject | null
 import persian from "react-date-object/calendars/persian";
 import gregorian from "react-date-object/calendars/gregorian";
-import ErrorFormText from "./ErrorFormText";
-import Label from "./Label";
+
 import DateUtil from "@/core/forms/DateUtils";
+import Label from "./Label";
+import ErrorFormText from "@/core/components/form/ErrorFormText";
 
 interface DateInputProps {
   name: string;

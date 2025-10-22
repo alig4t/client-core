@@ -8,11 +8,11 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import DateUtil from "@/core/forms/DateUtils";
-import { Checkbox } from "@/components/form/Checkbox";
+import { Checkbox } from "@/core/components/form/Checkbox";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";
 import { buildSortOptions, type Option } from "@/core/forms/OptionUtils";
-import Table from "@/components/form/DataTable";
+import Table from "@/core/components/Table/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Eye } from "lucide-react";
 

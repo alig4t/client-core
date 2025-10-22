@@ -5,19 +5,19 @@ import type { SubmitHandler } from "react-hook-form";
 import { DateObject } from "react-multi-date-picker";
 import type { Value } from "react-multi-date-picker";
 import { PermissionModelMeta } from "./PermissionModel.meta";
-import { FormWrapper } from "@/components/form/FormWrapper";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
 
-import { DateInput } from "@/components/form/DateInput";
+import { DateInput } from "@/core/components/form/DateInput";
 import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
-import { Checkbox } from "@/components/form/Checkbox";
+import { Checkbox } from "@/core/components/form/Checkbox";
 // import { FormSelect } from "@/components/form/FormSelect";
 import { z } from "zod";
-import { FormSelect } from "@/components/form/FormSelect";
-import { FormAutoComplete } from "@/components/form/FormAutoComplete";
+import { FormSelect } from "@/core/components/form/FormSelect";
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import PermissionService from "./PermissionService";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/core/components/form/FormInput";
 // --- Form data types ---
 interface PermissionSearchForm {
   showName?: string;

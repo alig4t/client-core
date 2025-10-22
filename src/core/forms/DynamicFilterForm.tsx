@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { DateObject } from "react-multi-date-picker";
 import type { FilterField } from "./Filter"; // Import field type
-import Input from "@/components/form/Input";
-import CustomDatePicker from "@/components/form/CustomDatePicker";
-import { Select } from "@/components/form/Select";
+import Input from "@/core/components/form/Input";
+import CustomDatePicker from "@/core/components/form/CustomDatePicker";
+import { Select } from "@/core/components/form/Select";
 
 export interface DynamicFilters {
   [key: string]: any; // e.g., { "name_like": "test", "createdAt_ge": "2025-10-07" }

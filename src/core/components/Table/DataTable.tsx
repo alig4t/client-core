@@ -1,12 +1,12 @@
 // src/components/Table/Table.tsx
 
 import React, { useState, useEffect, useMemo } from "react";
-import { Checkbox } from "@/components/form/Checkbox";
+import { Checkbox } from "@/core/components/form/Checkbox";
 
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
 
-import Button from "../Button/Button";
-import { Select } from "./Select";
+import Button from "../../../components/Button/Button";
+import { Select } from "../form/Select";
 
 // --- Types for Props ---
 type RenderRowFunction<T> = (

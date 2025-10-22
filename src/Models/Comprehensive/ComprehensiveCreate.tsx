@@ -6,15 +6,15 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 // import { FormWrapper } from "@/components/shared/FormWrapper";
-import { FormWrapper } from "@/components/form/FormWrapper";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
 
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import { Checkbox } from "@/components/form/Checkbox";
-import { DateInput } from "@/components/form/DateInput";
+import { Checkbox } from "@/core/components/form/Checkbox";
+import { DateInput } from "@/core/components/form/DateInput";
 import OptionUtils from "@/core/forms/OptionUtils";
-import { FormSelect } from "@/components/form/FormSelect";
-import { FormAutoComplete } from "@/components/form/FormAutoComplete";
+import { FormSelect } from "@/core/components/form/FormSelect";
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import UserService from "../User/UserService";
 import { UserModelMeta } from "../User/UserModel.meta";
 import z from "@/core/forms/zod.config";
@@ -22,9 +22,9 @@ import { RowContainer } from "@/components/general/RowContainer";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
 import PageHeader from "@/components/general/PageHeader";
-import FormInput from "@/components/form/FormInput";
+import FormInput from "@/core/components/form/FormInput";
 import MyValidation from "@/core/forms/validation";
-import { FormUploader } from "@/components/form/FormUpload";
+import { FormUploader } from "@/core/components/form/FormUpload";
 import Breadcrumb, { type BreadcrumbItem } from "@/components/general/BreadCrumb";
 
 // --- Schema and Type for validation ---

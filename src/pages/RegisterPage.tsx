@@ -6,7 +6,7 @@ import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو از اینجا وارد می‌شود
 import { FormWrapper } from "@/components/shared/FormWrapper";
-import ErrorFormText from "@/components/form/ErrorFormText";
+import ErrorFormText from "@/core/components/form/ErrorFormText";
 
 // --- Schema برای اعتبارسنجی فرم ثبت‌نام ---
 const registerSchema = z

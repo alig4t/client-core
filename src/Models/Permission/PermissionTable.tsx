@@ -8,9 +8,9 @@ import PermissionService from "./PermissionService";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import DateUtil, { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
-import { Checkbox } from "@/components/form/Checkbox";
+import { Checkbox } from "@/core/components/form/Checkbox";
 import type { Option } from "@/core/forms/OptionUtils";
-import Table from "@/components/form/DataTable";
+import Table from "@/core/components/Table/DataTable";
 import { Eye, Pencil } from "lucide-react";
 import Tooltip from "@/components/general/Tooltip";
 
