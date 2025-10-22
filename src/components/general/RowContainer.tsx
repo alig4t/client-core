@@ -6,7 +6,7 @@ import type { FC, ReactNode } from "react";
 interface RowContainerProps {
   children: ReactNode;
   /** Defines the number of columns in the grid layout on larger screens. Default is 3. */
-  numberOfColumns?: 2 | 3 | 4;
+  numberOfColumns?: 1 | 2 | 3 | 4;
 }
 
 /**
@@ -17,6 +17,7 @@ export const RowContainer: FC<RowContainerProps> = ({
   numberOfColumns = 3,
 }) => {
   const gridClass = {
+    1: "sm:grid-cols-1",
     2: "sm:grid-cols-2",
     3: "sm:grid-cols-3",
     4: "sm:grid-cols-4",

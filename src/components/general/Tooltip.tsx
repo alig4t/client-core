@@ -72,25 +72,25 @@ const Tooltip: React.FC<TooltipProps> = ({
           className={`absolute w-2 h-2 bg-gray-800 dark:bg-black transform ${arrowClasses[position]}`}
         /> */}
         {/* <div className={`absolute w-2 h-2 border-solid border-t-[6.9px] border-r-[4px] border-l-[4px] border-b-0 border-l-transparent border-r-transparent border-t-gray-800 border-b-transparent ${arrowClasses[position]}`}></div> */}
-     <div
-  className={`absolute w-0 h-0 border-solid border-gray-800 dark:border-black ${arrowClasses[position]}`}
-  style={{
-    borderWidth: '6px', // کمی ضخیم‌تر
-    borderLeftColor: 'transparent',
-    borderRightColor: 'transparent',
-    borderBottomColor: 'transparent',
-    // borderTopColor: 'rgb(31, 41, 55)', // gray-800
-    ...(position === 'bottom' && {
-      transform: 'translateX(-50%)',
-    }),
-    ...(position === 'left' && {
-      transform: ' translateY(-50%)',
-    }),
-    ...(position === 'right' && {
-      transform: 'translateY(-50%)',
-    }),
-  }}
-/>
+        <div
+          className={`absolute w-0 h-0 border-solid border-gray-800 dark:border-black ${arrowClasses[position]}`}
+          style={{
+            borderWidth: '6px', // کمی ضخیم‌تر
+            borderLeftColor: 'transparent',
+            borderRightColor: 'transparent',
+            borderBottomColor: 'transparent',
+            // borderTopColor: 'rgb(31, 41, 55)', // gray-800
+            ...(position === 'bottom' && {
+              transform: 'translateX(-50%)',
+            }),
+            ...(position === 'left' && {
+              transform: ' translateY(-50%)',
+            }),
+            ...(position === 'right' && {
+              transform: 'translateY(-50%)',
+            }),
+          }}
+        />
       </div>
     </div>
   );

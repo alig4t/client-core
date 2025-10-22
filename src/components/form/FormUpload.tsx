@@ -132,7 +132,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
               alt="Preview"
               className="w-full h-full object-cover"
             />
-            <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+            <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
               <button
                 type="button"
                 onClick={handleRemoveImage}
@@ -167,12 +167,12 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
                 className={`mt-2 text-sm ${hasError ? "text-red-600" : "text-gray-600 dark:text-gray-400"}`}
               >
                 <span className="font-semibold text-purple-600 dark:text-purple-400">
-                  Click to upload
+                  برای آپلود کلیک کنید
                 </span>{" "}
-                or drag and drop
+               یا بکشید و رها کنید
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-500">
-                PNG, JPG, GIF up to 10MB
+                PNG, JPG, GIF تا حداکثر 10MB
               </p>
             </div>
           </div>

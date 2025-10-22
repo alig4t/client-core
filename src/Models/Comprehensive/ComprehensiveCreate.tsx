@@ -24,6 +24,7 @@ import Button from "@/components/Button/Button";
 import PageHeader from "@/components/general/PageHeader";
 import FormInput from "@/components/form/FormInput";
 import MyValidation from "@/core/forms/validation";
+import { FormUploader } from "@/components/form/FormUpload";
 
 // --- Schema and Type for validation ---
 // const comprehensiveSchema = z.object({
@@ -139,7 +140,12 @@ const ComprehensiveCreate: React.FC = () => {
                 comprehensiveModelMeta.fields.doubleField?.placeholder
               }
             />
+</RowContainer>
+<RowContainer numberOfColumns={1}>
+            <FormUploader name="file" label="فایل" />
 
+  </RowContainer>
+  <RowContainer numberOfColumns={3}>
             <FormInput
               name="bigDecimalField"
               type="double"
@@ -175,6 +181,7 @@ const ComprehensiveCreate: React.FC = () => {
               labelKey={UserModelMeta.displayField}
               valueKey="id"
             />
+
           </RowContainer>
 
           {/* <PermissionFormFields /> */}
