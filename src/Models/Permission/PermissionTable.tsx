@@ -102,8 +102,8 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
       <td className="px-6 py-4 whitespace-nowrap">
         {DateUtil.GEORGIAN_TO_JALALI(permission.createdAt)}
       </td>
-      <td className="px-6 py-4 text-center flex items-center whitespace-nowrap">
-        <Tooltip content="ویرایش">
+      <td className="px-6 py-4 text-center flex gap-2 items-center whitespace-nowrap">
+        <Tooltip content="ویرایش" position="right">
           <button
             // onClick={() => handleViewDetails(comprehensive.id)}
             className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
@@ -112,6 +112,7 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
             <Pencil size={16} />
           </button>
         </Tooltip>
+          <Tooltip content="مشاهده" position={_ === pageSize - 1 ? "left" : "bottom"}>
         <button
           // onClick={() => handleViewDetails(comprehensive.id)}
           className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
@@ -119,6 +120,7 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
         >
           <Eye size={20} />
         </button>
+        </Tooltip>
       </td>
     </tr>
   );
