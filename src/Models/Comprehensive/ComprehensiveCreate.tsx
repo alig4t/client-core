@@ -14,33 +14,32 @@ import { DateInput } from "@/core/components/form/DateInput";
 import OptionUtils from "@/core/forms/OptionUtils";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
-import UserService from "@/Models/User/UserService";
-import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import z from "@/core/forms/zod.config";
 import { RowContainer } from "@/components/general/RowContainer";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
 import PageHeader from "@/core/components/general/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
-import MyValidation from "@/core/forms/validation";
+
 import { FormUploader } from "@/core/components/form/FormUpload";
-import Breadcrumb, { type BreadcrumbItem } from "@/core/components/general/BreadCrumb";
+import Breadcrumb, {
+  type BreadcrumbItem,
+} from "@/core/components/general/BreadCrumb";
 import PermissionService from "../Permission/PermissionService";
 import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
-
-
+import Validator from "@/core/forms/validation";
 
 const comprehensiveSchema = z.object({
-  stringField: MyValidation.notNull(),
-  integerField: MyValidation.notNull(),
-  longField: MyValidation.notNull(),
-  doubleField: MyValidation.notNull(),
-  bigDecimalField: MyValidation.notNull(),
-  booleanField: MyValidation.notNull(),
-  dateField: MyValidation.notNull(),
-  enumField: MyValidation.notNull(),
-  oneToOneUser: MyValidation.optional(),
-  file:MyValidation.optional(),
+  stringField: Validator.notNull(),
+  integerField: Validator.notNull(),
+  longField: Validator.notNull(),
+  doubleField: Validator.notNull(),
+  bigDecimalField: Validator.notNull(),
+  booleanField: Validator.notNull(),
+  dateField: Validator.notNull(),
+  enumField: Validator.notNull(),
+  oneToOneUser: Validator.optional(),
+  file: Validator.optional(),
 });
 // console.log(generateZodSchemaCode(comprehensiveModelMeta));
 
@@ -56,8 +55,8 @@ const ComprehensiveCreate: React.FC = () => {
       return ComprehensiveService.create(newComprehensive);
     },
     onSuccess: (data) => {
-      toast.success("ایجاد دسترسی موفقیت‌آمیز بود", {
-        description: "دسترسی جدید با موفقیت ایجاد شد.",
+      toast.success(comprehensiveModelMeta.messages.create.success.title, {
+        description: comprehensiveModelMeta.messages.create.success.description,
         position: "bottom-left",
       });
       queryClient.invalidateQueries({ queryKey: ["permission"] });
@@ -65,8 +64,10 @@ const ComprehensiveCreate: React.FC = () => {
       // navigate('/permissions');
     },
     onError: (error: any) => {
-      toast.error("خطا در ایجاد دسترسی", {
-        description: error?.message || "مشکلی در اتصال به سرور رخ داده است.",
+      toast.error(comprehensiveModelMeta.messages.create.error.title, {
+        description:
+          error?.message ||
+          comprehensiveModelMeta.messages.create.error.defaultDescription,
         position: "bottom-left",
       });
     },
@@ -90,95 +91,98 @@ const ComprehensiveCreate: React.FC = () => {
   return (
     <div dir="rtl">
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
-    <div className="p-8 min-h-screen font-sans">
-      <PageHeader title="ایجاد ترکیبی جدید" />
+      <div className="p-8 min-h-screen font-sans">
+        <PageHeader title="ایجاد ترکیبی جدید" />
 
-      <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
-        <FormWrapper
-          schema={comprehensiveSchema}
-          onSubmit={onSubmit}
-          className="space-y-6"
-        >
-          <RowContainer numberOfColumns={2}>
-            <FormInput
-              type="text"
-              name="stringField"
-              label={comprehensiveModelMeta.fields.stringField?.label}
-              placeholder={
-                comprehensiveModelMeta.fields.stringField?.placeholder
-              }
-            />
-            <FormInput
-              name="integerField"
-              type="number"
-              label={comprehensiveModelMeta.fields.integerField?.label}
-              placeholder={
-                comprehensiveModelMeta.fields.integerField?.placeholder
-              }
-            />
+        <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
+          <FormWrapper
+            schema={comprehensiveSchema}
+            onSubmit={onSubmit}
+            className="space-y-6"
+          >
+            <RowContainer numberOfColumns={2}>
+              <FormInput
+                type="text"
+                name="stringField"
+                label={comprehensiveModelMeta.fields.stringField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.stringField?.placeholder
+                }
+              />
+              <FormInput
+                name="integerField"
+                type="number"
+                label={comprehensiveModelMeta.fields.integerField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.integerField?.placeholder
+                }
+              />
 
-            <FormInput
-              name="longField"
-              type="long"
-              label={comprehensiveModelMeta.fields.longField?.label}
-              placeholder={comprehensiveModelMeta.fields.longField?.placeholder}
-            />
+              <FormInput
+                name="longField"
+                type="long"
+                label={comprehensiveModelMeta.fields.longField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.longField?.placeholder
+                }
+              />
 
-            <FormInput
-              name="doubleField"
-              type="float"
-              label={comprehensiveModelMeta.fields.doubleField?.label}
-              placeholder={
-                comprehensiveModelMeta.fields.doubleField?.placeholder
-              }
-            />
-</RowContainer>
-<RowContainer numberOfColumns={1}>
-            <FormUploader name="file" label="فایل" />
+              <FormInput
+                name="doubleField"
+                type="float"
+                label={comprehensiveModelMeta.fields.doubleField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.doubleField?.placeholder
+                }
+              />
+            </RowContainer>
+            <RowContainer numberOfColumns={1}>
+              <FormUploader name="file" label="فایل" />
+            </RowContainer>
+            <RowContainer numberOfColumns={3}>
+              <FormInput
+                name="bigDecimalField"
+                type="double"
+                label={comprehensiveModelMeta.fields.bigDecimalField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.bigDecimalField?.placeholder
+                }
+              />
 
-  </RowContainer>
-  <RowContainer numberOfColumns={3}>
-            <FormInput
-              name="bigDecimalField"
-              type="double"
-              label={comprehensiveModelMeta.fields.bigDecimalField?.label}
-              placeholder={
-                comprehensiveModelMeta.fields.bigDecimalField?.placeholder
-              }
-            />
+              <Checkbox
+                name="booleanField"
+                label={comprehensiveModelMeta.fields.booleanField?.label}
+              />
 
-            <Checkbox
-              name="booleanField"
-              label={comprehensiveModelMeta.fields.booleanField?.label}
-            />
+              <DateInput
+                name="dateField"
+                label={comprehensiveModelMeta.fields.dateField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.dateField?.placeholder
+                }
+              />
+              <FormSelect
+                name="enumField"
+                label={comprehensiveModelMeta.fields.enumField?.label}
+                placeholder={
+                  comprehensiveModelMeta.fields.enumField?.placeholder
+                }
+                options={OptionUtils.YES_OR_NO_OPTIONS}
+              />
 
-            <DateInput
-              name="dateField"
-              label={comprehensiveModelMeta.fields.dateField?.label}
-              placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
-            />
-            <FormSelect
-            
-              name="enumField"
-              label={comprehensiveModelMeta.fields.enumField?.label}
-              placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}
-              options={OptionUtils.YES_OR_NO_OPTIONS}
-            />
+              <FormAutoComplete
+                name="oneToOneUser"
+                label={comprehensiveModelMeta.fields.oneToOneUser?.label}
+                // multi
+                service={PermissionService}
+                labelKey={PermissionModelMeta.displayField}
+                valueKey="id"
+              />
+            </RowContainer>
 
-            <FormAutoComplete
-              name="oneToOneUser"
-              label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-              // multi
-              service={PermissionService}
-              labelKey={PermissionModelMeta.displayField}
-              valueKey="id"
-            />
+            {/* <PermissionFormFields /> */}
 
-          </RowContainer>
-
-          {/* <PermissionFormFields /> */}
-
-          {/* <div className="flex items-center justify-end gap-4 mt-6">
+            {/* <div className="flex items-center justify-end gap-4 mt-6">
             <button
               type="button"
               onClick={handleCancel}
@@ -202,22 +206,22 @@ const ComprehensiveCreate: React.FC = () => {
             </button>
           </div> */}
 
-          <ButtonPanel align="end">
-            <Button variant="cancel" onClick={handleCancel}>
-              لغو
-            </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              loading={mutation.isPending}
-              disabled={mutation.isPending}
-            >
-              ذخیره
-            </Button>
-          </ButtonPanel>
-        </FormWrapper>
+            <ButtonPanel align="end">
+              <Button variant="cancel" onClick={handleCancel}>
+                لغو
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                ذخیره
+              </Button>
+            </ButtonPanel>
+          </FormWrapper>
+        </div>
       </div>
-    </div>
     </div>
   );
 };

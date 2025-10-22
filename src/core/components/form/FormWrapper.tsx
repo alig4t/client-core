@@ -11,6 +11,10 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { ZodSchema, ZodTypeAny } from "zod";
 
+export interface searchFilters {
+  [key: string]: any;
+}
+
 // --- Props با تایپ‌های دقیق ---
 interface FormWrapperProps<T extends FieldValues> {
   children: React.ReactNode;

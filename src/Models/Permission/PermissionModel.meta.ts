@@ -19,12 +19,21 @@ export const PermissionModelMeta = createModelMeta<PermissionModel, FormFieldMet
     },
   },
   GET_AUTOCOMPLETE_DISPLAY_FIELD(),
+  GET_DISPLAY_NAME(),
+  GET_PLURAL_DISPLAY_NAME()
 );
 
 function GET_AUTOCOMPLETE_DISPLAY_FIELD() : keyof PermissionModel{
     return "showName"
 }
 
+function GET_DISPLAY_NAME() : string{
+  return "دسترسی"
+}
+
+function GET_PLURAL_DISPLAY_NAME() : string{
+  return "دسترسی ها"
+}
 
 // import { createModelMeta } from "@/core/models/modelMetaUtils";
 // import type { PermissionModel } from "./PermissionModel";

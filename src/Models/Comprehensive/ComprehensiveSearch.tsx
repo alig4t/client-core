@@ -1,136 +1,206 @@
-// src/pages/permission/PermissionSearch.tsx
-
+// src/pages/permission/ComprehensiveSearch.tsx
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { DateObject } from "react-multi-date-picker";
-import type { Value } from "react-multi-date-picker";
-import { FormWrapper } from "@/core/components/form/FormWrapper";
+import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
 import { DateInput } from "@/core/components/form/DateInput";
-import { JALALI_TO_GEORGIAN } from "@/core/forms/DateUtils";
-import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import { generateZodSchemaCode } from "@/core/scripts/generateZodSchema";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
 import FormInput from "@/core/components/form/FormInput";
+import { z } from "zod";
+import { FilterOperator } from "@/core/forms/FilterOperators";
+import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import Validator from "@/core/forms/validation";
+import { Checkbox } from "@/core/components/form/Checkbox";
+import { FormSelect } from "@/core/components/form/FormSelect";
+import OptionUtils from "@/core/forms/OptionUtils";
 
-// --- Form data types ---
-interface PermissionSearchForm {
-  showName?: string;
-  name?: string;
-  fromDate?: Value; // ← from the same type as CustomDatePicker
-  toDate?: Value; // ← from the same type as CustomDatePicker
-}
-
-// const comprehensiveSchema = z.object({
-//   stringField: z.string().nonempty("رشته متنی را وارد نمایید"),
-//   integerField: z.string().nonempty("رشته عددی را وارد نمایید"),
-// });
-
-const comprehensiveSchema = generateZodSchemaCode(comprehensiveModelMeta);
-console.log(comprehensiveSchema);
-
-// حالا comprehensiveSchema دقیقاً مثل دستی نویسی شده کار می‌کند
-// type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
-
-// --- Filter output types ---
-export interface ComprehensiveFilters {
-  [key: string]: any;
-}
+// --- Filter output interface ---
 
 interface ComprehensiveSearchProps {
-  onApplyFilters: (filters: ComprehensiveFilters) => void;
+  onApplyFilters: (filters: searchFilters) => void;
 }
+
+// --- Schema: همه فیلدها اختیاری هستند ---
+const searchSchema = z.object({
+  // رشته‌ای
+  [`stringField_${FilterOperator.LIKE}`]: Validator.optional(),
+
+  // عددی: هر کدام دو فیلد min/max دارند
+  [`integerField_${FilterOperator.GE}`]: Validator.optional(),
+  [`integerField_${FilterOperator.LE}`]: Validator.optional(),
+  [`longField_${FilterOperator.GE}`]: Validator.optional(),
+  [`longField_${FilterOperator.LE}`]: Validator.optional(),
+  [`doubleField_${FilterOperator.GE}`]: Validator.optional(),
+  [`doubleField_${FilterOperator.LE}`]: Validator.optional(),
+
+  [`bigDecimalField_${FilterOperator.GE}`]: Validator.optional(),
+  [`bigDecimalField_${FilterOperator.LE}`]: Validator.optional(),
+
+  [`booleanField_${FilterOperator.EQ}`]: Validator.optional(),
+
+  // تاریخ‌ها (از/تا)
+  [`dateField_${FilterOperator.GE}`]: Validator.optional(),
+  [`dateField_${FilterOperator.LE}`]: Validator.optional(),
+  [`createdAt_${FilterOperator.GE}`]: Validator.optional(),
+  [`createdAt_${FilterOperator.LE}`]: Validator.optional(),
+
+  // enum (جستجوی دقیق)
+  [`enumField_${FilterOperator.EQ}`]: Validator.optional(),
+});
+
+type SearchFormData = z.infer<typeof searchSchema>;
 
 const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
   onApplyFilters,
 }) => {
-  // const { register, handleSubmit, reset, control } =
-  //   useForm<PermissionSearchForm>({
-  //     defaultValues: {
-  //       showName: "",
-  //       name: "",
-  //       fromDate: null,
-  //       toDate: null,
-  //     },
-  //   });
-
-  const onSubmit: SubmitHandler<any> = (data) => {
-    const filters: ComprehensiveFilters = {};
-
-    if (data.stringField?.trim())
-      filters["stringField_like"] = data.stringField.trim();
-    if (data.integerField?.trim())
-      filters["integerField_like"] = data.integerField.trim();
-
-    if (data.createdAt_ge instanceof DateObject) {
-      console.log(data.createdAt_ge.toDate());
-      filters["createdAt_ge"] = JALALI_TO_GEORGIAN(data.createdAt_ge);
-    }
-
-    if (data.createdAt_le instanceof DateObject) {
-      filters["createdAt_le"] = JALALI_TO_GEORGIAN(data.createdAt_le);
-    }
-
-    onApplyFilters(filters);
+  const onSubmit: SubmitHandler<SearchFormData> = (data) => {
+    console.log(data);
+    // const filters: ComprehensiveFilters = {};
+    onApplyFilters(data);
   };
 
   const handleClear = () => {
-    // reset();
     onApplyFilters({});
   };
 
+  // کمکی برای ساخت label برای min/max
+  const makeRangeLabel = (baseLabel: string, suffix: "min" | "max") => {
+    return suffix === "min" ? `${baseLabel} از` : `${baseLabel} تا`;
+  };
+
   return (
-    <>
-      <FormWrapper onSubmit={onSubmit}>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          <FormInput
-            name="stringField"
-            label={comprehensiveModelMeta.fields["stringField"].label}
-            placeholder={"جستجو براساس نام نمایشی..."}
-          />
-          <FormInput
-            name="integerField"
-            label={comprehensiveModelMeta.fields["integerField"].label}
-            placeholder={"جستجو براساس نام سیستمی..."}
-            type="number"
-          />
-          <DateInput
-            name="createdAt_ge"
-            label={comprehensiveModelMeta.fields["createdAt"].label + " از"}
-          />
+    <FormWrapper onSubmit={onSubmit} schema={searchSchema}>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        {/* رشته */}
+        <FormInput
+          name={`stringField_${FilterOperator.LIKE}`}
+          label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
+          placeholder="جستجو..."
+        />
 
-          <DateInput
-            name="createdAt_le"
-            label={comprehensiveModelMeta.fields["createdAt"].label + " تا"}
-          />
-        </div>
+        {/* عددی: integerField */}
+        <FormInput
+          name={`integerField_${FilterOperator.GE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.integerField?.label,
+            "min"
+          )}
+          type="text"
+          placeholder="مثلاً 10"
+        />
 
-        {/* <div className="flex items-center gap-4 mt-6">
-          <button
-            type="submit"
-            className="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700"
-          >
-            اعمال فیلتر
-          </button>
-          <button
-            type="button"
-            onClick={handleClear}
-            className="bg-gray-100 text-gray-600 px-6 py-2 rounded-lg hover:bg-gray-200"
-          >
-            حذف فیلتر
-          </button>
-        </div> */}
+        <FormInput
+          name={`integerField_${FilterOperator.LE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.integerField?.label,
+            "max"
+          )}
+          type="text"
+          placeholder="مثلاً 100"
+        />
 
-        <ButtonPanel align="start">
-          <Button variant="success" type="submit">
-            اعمال فیلتر
-          </Button>
-          <Button variant="secondary" type="submit" onClick={handleClear}>
-            حذف فیلتر
-          </Button>
-        </ButtonPanel>
-      </FormWrapper>
-    </>
+        {/* عددی: longField */}
+        <FormInput
+          name={`longField_${FilterOperator.GE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.longField?.label,
+            "min"
+          )}
+          type="text"
+          placeholder="از"
+        />
+        <FormInput
+          name={`longField_${FilterOperator.LE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.longField?.label,
+            "max"
+          )}
+          type="text"
+          placeholder="تا"
+        />
+
+        {/* عددی: doubleField */}
+        <FormInput
+          name={`doubleField_${FilterOperator.GE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.doubleField?.label,
+            "min"
+          )}
+          type="text"
+          placeholder="از"
+        />
+        <FormInput
+          name={`doubleField_${FilterOperator.LE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.doubleField?.label,
+            "max"
+          )}
+          type="text"
+          placeholder="تا"
+        />
+
+        {/* عددی: bigDecimalField */}
+        <FormInput
+          name={`bigDecimalField_${FilterOperator.GE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.bigDecimalField?.label,
+            "min"
+          )}
+          type="text"
+          placeholder="از"
+        />
+        <FormInput
+          name={`bigDecimalField_${FilterOperator.LE}`}
+          label={makeRangeLabel(
+            comprehensiveModelMeta.fields.bigDecimalField?.label,
+            "max"
+          )}
+          type="text"
+          placeholder="تا"
+        />
+
+        <Checkbox
+          name={`booleanField_${FilterOperator.EQ}`}
+          label={comprehensiveModelMeta.fields.booleanField?.label}
+        />
+
+        {/* تاریخ‌ها */}
+        <DateInput
+          name={`dateField_${FilterOperator.GE}`}
+          label={`${comprehensiveModelMeta.fields.dateField?.label} از`}
+        />
+        <DateInput
+          name={`dateField_${FilterOperator.LE}`}
+          label={`${comprehensiveModelMeta.fields.dateField?.label} تا`}
+        />
+
+        {/* enum */}
+        <FormSelect
+          name={`enumField_${FilterOperator.EQ}`}
+          label={comprehensiveModelMeta.fields.enumField?.label}
+          placeholder="انتخاب کنید"
+          options={OptionUtils.YES_OR_NO_OPTIONS}
+        />
+
+        <DateInput
+          name={`createdAt_${FilterOperator.GE}`}
+          label={`تاریخ ایجاد از`}
+        />
+        <DateInput
+          name={`createdAt_${FilterOperator.LE}`}
+          label={`تاریخ ایجاد تا`}
+        />
+      </div>
+
+      <ButtonPanel align="start" className="mt-4">
+        <Button variant="success" type="submit">
+          اعمال فیلتر
+        </Button>
+        <Button variant="secondary" type="button" onClick={handleClear}>
+          حذف فیلتر
+        </Button>
+      </ButtonPanel>
+    </FormWrapper>
   );
 };
 

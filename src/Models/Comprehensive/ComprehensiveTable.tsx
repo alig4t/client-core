@@ -15,6 +15,7 @@ import { buildSortOptions, type Option } from "@/core/forms/OptionUtils";
 import Table from "@/core/components/Table/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Eye } from "lucide-react";
+import { createMessages } from "@/core/forms/MessageUtils";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -143,7 +144,7 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
         </>
       }
       renderRow={renderPermissionRow}
-      title="لیست ترکیبی ها "
+      title={comprehensiveModelMeta.messages.list.title}
       page={currentPage}
       pageSize={pageSize}
       totalPages={totalPages}

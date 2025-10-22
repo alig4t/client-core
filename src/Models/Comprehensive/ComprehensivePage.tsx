@@ -6,13 +6,17 @@ import { useNavigate } from "react-router-dom";
 import ComprehensiveSearch from "./ComprehensiveSearch";
 import ComprehensiveTable from "./ComprehensiveTable";
 import PageHeader from "@/core/components/general/PageHeader";
-import Breadcrumb, { type BreadcrumbItem } from "@/core/components/general/BreadCrumb";
+import Breadcrumb, {
+  type BreadcrumbItem,
+} from "@/core/components/general/BreadCrumb";
+import { createMessages } from "@/core/forms/MessageUtils";
+import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "خانه", href: "/" }, 
-    { label: "مدیریت دسترسی‌ها" }, // Current page
-  ];
-  
+const breadcrumbItems: BreadcrumbItem[] = [
+  { label: "خانه", href: "/" },
+  { label: "مدیریت دسترسی‌ها" }, // Current page
+];
+
 const ComprehensivePage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
@@ -21,11 +25,10 @@ const ComprehensivePage: React.FC = () => {
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
       <div className="sm:p-8 min-h-screen font-sans max-w-[1600px]">
-        
         <PageHeader
-          title="مدیریت ترکیبی"
+          title={comprehensiveModelMeta.messages.manage.title}
           actionButton={{
-            label: "افزودن مورد جدید",
+            label: comprehensiveModelMeta.messages.createButton,
             onClick: () => navigate("create"),
             variant: "success",
           }}
@@ -37,7 +40,6 @@ const ComprehensivePage: React.FC = () => {
         <ComprehensiveTable filters={activeFilters} />
       </div>
     </div>
-
   );
 };
 

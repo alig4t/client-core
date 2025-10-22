@@ -1,5 +1,11 @@
-export const createMessages = (modelName: string) => {
+// src/utils/MessageUtils.ts
+
+/**
+ * ساخت پیام‌های استاندارد برای هر مدل با نام فارسی
+ */
+export const createMessages = (modelName: string, pluralName?: string) => {
   const capitalized = modelName.charAt(0).toUpperCase() + modelName.slice(1);
+  const plural = pluralName || `${capitalized}‌ها`;
 
   return {
     create: {
@@ -32,5 +38,12 @@ export const createMessages = (modelName: string) => {
         defaultDescription: "مشکلی در اتصال به سرور رخ داده است.",
       },
     },
+    list: {
+      title: `لیست ${plural}`,
+    },
+    manage: {
+      title: `مدیریت ${modelName}`,
+    },
+    createButton: `افزودن ${modelName} جدید`,
   };
 };

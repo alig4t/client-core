@@ -109,7 +109,7 @@ export const notNull = (message: string = "این فیلد اجباری است")
 // اگر خواستی ولیدیشن‌های بیشتری اضافه کنی، اینجا جای مناسبی‌ست
 
 // صادر کردن همه ولیدیشن‌ها تحت یک نام (مثل MyValidation)
-const MyValidation = {
+const Validator = {
   integer,
   long,
   float,
@@ -128,4 +128,4 @@ const MyValidation = {
   optional
 };
 
-export default MyValidation;
+export default Validator;
