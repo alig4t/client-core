@@ -1,7 +1,10 @@
 // src/pages/permission/ComprehensiveSearch.tsx
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
-import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
+import {
+  FormWrapper,
+  type searchFilters,
+} from "@/core/components/form/FormWrapper";
 import { DateInput } from "@/core/components/form/DateInput";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
@@ -13,6 +16,7 @@ import Validator from "@/core/forms/validation";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import OptionUtils from "@/core/forms/OptionUtils";
+import RowContainer from "@/components/RowContainer";
 
 // --- Filter output interface ---
 
@@ -70,7 +74,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
 
   return (
     <FormWrapper onSubmit={onSubmit} schema={searchSchema}>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <RowContainer>
         {/* رشته */}
         <FormInput
           name={`stringField_${FilterOperator.LIKE}`}
@@ -190,7 +194,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           name={`createdAt_${FilterOperator.LE}`}
           label={`تاریخ ایجاد تا`}
         />
-      </div>
+      </RowContainer>
 
       <ButtonPanel align="start" className="mt-4">
         <Button variant="success" type="submit">
