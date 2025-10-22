@@ -28,19 +28,7 @@ import Breadcrumb, { type BreadcrumbItem } from "@/core/components/general/Bread
 import PermissionService from "../Permission/PermissionService";
 import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 
-// --- Schema and Type for validation ---
-// const comprehensiveSchema = z.object({
-//   stringField: z.string().nonempty(),
-//   integerField: z.number(),
-//   longField: z.string().nonempty(),
-//   doubleField: z.string().nonempty(),
-//   bigDecimalField: z.string().nonempty(),
-//   booleanField: z.boolean(), // بولین
-//   dateField: z.string().nonempty(),
-//   localDateField: z.string().nonempty(),
-//   enumField: z.string().nonempty(),
-// });
-// src/schemas/comprehensiveSchema.ts
+
 
 const comprehensiveSchema = z.object({
   stringField: MyValidation.notNull(),

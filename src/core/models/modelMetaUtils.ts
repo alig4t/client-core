@@ -25,7 +25,9 @@ export const baseModelMeta = {
 // Generic function to create model metadata
 export function createModelMeta<T extends Record<string, any>, M extends FormFieldMetadata = FormFieldMetadata>(
   specificFields: { [K in keyof T]?: M },
-  displayField: keyof T
+  displayField: keyof T,
+  displayName: string,
+  PluralDisplayName: string
 ) {
   return {
     fields: {
@@ -33,5 +35,7 @@ export function createModelMeta<T extends Record<string, any>, M extends FormFie
       ...specificFields,
     },
     displayField,
+    displayName,
+    PluralDisplayName,
   };
 }
