@@ -25,6 +25,7 @@ import PageHeader from "@/components/general/PageHeader";
 import FormInput from "@/components/form/FormInput";
 import MyValidation from "@/core/forms/validation";
 import { FormUploader } from "@/components/form/FormUpload";
+import Breadcrumb, { type BreadcrumbItem } from "@/components/general/BreadCrumb";
 
 // --- Schema and Type for validation ---
 // const comprehensiveSchema = z.object({
@@ -97,8 +98,17 @@ const ComprehensiveCreate: React.FC = () => {
     navigate(-1);
   };
 
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: "خانه", href: "/" },
+    { label: "پورتال", href: "/portal" },
+    { label: "مدیریت ترکیبی", href: "/portal/comprehensive" },
+    { label: "ایجاد ترکیبی جدید" },
+  ];
+
   return (
-    <div dir="rtl" className="p-8 min-h-screen font-sans">
+    <div dir="rtl">
+      <Breadcrumb items={breadcrumbItems} className="mb-4" />
+    <div className="p-8 min-h-screen font-sans">
       <PageHeader title="ایجاد دسترسی جدید" />
 
       <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
@@ -225,6 +235,7 @@ const ComprehensiveCreate: React.FC = () => {
           </ButtonPanel>
         </FormWrapper>
       </div>
+    </div>
     </div>
   );
 };
