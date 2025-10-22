@@ -7,7 +7,6 @@ import { toast } from "sonner";
 
 // import { FormWrapper } from "@/components/shared/FormWrapper";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
-
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Checkbox } from "@/core/components/form/Checkbox";
@@ -15,17 +14,19 @@ import { DateInput } from "@/core/components/form/DateInput";
 import OptionUtils from "@/core/forms/OptionUtils";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
-import UserService from "../User/UserService";
-import { UserModelMeta } from "../User/UserModel.meta";
+import UserService from "@/Models/User/UserService";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import z from "@/core/forms/zod.config";
 import { RowContainer } from "@/components/general/RowContainer";
 import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
-import PageHeader from "@/components/general/PageHeader";
+import PageHeader from "@/core/components/general/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
 import MyValidation from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
-import Breadcrumb, { type BreadcrumbItem } from "@/components/general/BreadCrumb";
+import Breadcrumb, { type BreadcrumbItem } from "@/core/components/general/BreadCrumb";
+import PermissionService from "../Permission/PermissionService";
+import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 
 // --- Schema and Type for validation ---
 // const comprehensiveSchema = z.object({
@@ -42,22 +43,16 @@ import Breadcrumb, { type BreadcrumbItem } from "@/components/general/BreadCrumb
 // src/schemas/comprehensiveSchema.ts
 
 const comprehensiveSchema = z.object({
-  stringField: MyValidation.text(255),
-
-  integerField: MyValidation.integer(),
-  longField: MyValidation.long(),
-  floatField: MyValidation.float(),
-  doubleField: MyValidation.double(),
-  bigDecimalField: MyValidation.bigDecimal(),
-
-  booleanField: MyValidation.boolean(),
-  dateField: MyValidation.date(),
-  localDateField: MyValidation.date(),
-
-  // برای enumField و oneToOneUser هم می‌تونی ولیدیشن جداگانه بنویسی
-  enumField: MyValidation.multiSelect(),
-  oneToOneUser: MyValidation.reference(), // multi={false}
-  // oneToManyUsers: MyValidation.multiReference(), // multi={true}
+  stringField: MyValidation.notNull(),
+  integerField: MyValidation.notNull(),
+  longField: MyValidation.notNull(),
+  doubleField: MyValidation.notNull(),
+  bigDecimalField: MyValidation.notNull(),
+  booleanField: MyValidation.notNull(),
+  dateField: MyValidation.notNull(),
+  enumField: MyValidation.notNull(),
+  oneToOneUser: MyValidation.optional(),
+  file:MyValidation.optional(),
 });
 // console.log(generateZodSchemaCode(comprehensiveModelMeta));
 
@@ -91,7 +86,6 @@ const ComprehensiveCreate: React.FC = () => {
 
   const onSubmit = (data: ComprehensiveFormData) => {
     console.log(data);
-    // mutation.mutate(data);
   };
 
   const handleCancel = () => {
@@ -109,7 +103,7 @@ const ComprehensiveCreate: React.FC = () => {
     <div dir="rtl">
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
     <div className="p-8 min-h-screen font-sans">
-      <PageHeader title="ایجاد دسترسی جدید" />
+      <PageHeader title="ایجاد ترکیبی جدید" />
 
       <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
         <FormWrapper
@@ -176,7 +170,7 @@ const ComprehensiveCreate: React.FC = () => {
               placeholder={comprehensiveModelMeta.fields.dateField?.placeholder}
             />
             <FormSelect
-              multi
+            
               name="enumField"
               label={comprehensiveModelMeta.fields.enumField?.label}
               placeholder={comprehensiveModelMeta.fields.enumField?.placeholder}
@@ -186,9 +180,9 @@ const ComprehensiveCreate: React.FC = () => {
             <FormAutoComplete
               name="oneToOneUser"
               label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-              multi
-              service={UserService}
-              labelKey={UserModelMeta.displayField}
+              // multi
+              service={PermissionService}
+              labelKey={PermissionModelMeta.displayField}
               valueKey="id"
             />
 

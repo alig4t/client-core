@@ -5,8 +5,8 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import ComprehensiveSearch from "./ComprehensiveSearch";
 import ComprehensiveTable from "./ComprehensiveTable";
-import PageHeader from "@/components/general/PageHeader";
-import Breadcrumb, { type BreadcrumbItem } from "@/components/general/BreadCrumb";
+import PageHeader from "@/core/components/general/PageHeader";
+import Breadcrumb, { type BreadcrumbItem } from "@/core/components/general/BreadCrumb";
 
   const breadcrumbItems: BreadcrumbItem[] = [
     { label: "خانه", href: "/" }, 
