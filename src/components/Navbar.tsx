@@ -1,145 +1,281 @@
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
-import { Bell, MoonIcon, SunIcon } from "lucide-react";
-import { useState } from "react";
-import { Separator } from "./ui/separator";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  useCallback,
+  type FC,
+} from "react";
+import { Bell, MoonIcon, SunIcon, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/stores/AuthContext";
 
-const Navbar = () => {
+// --- TypeScript Interfaces ---
+
+/** Mock User interface based on usage in Navbar */
+interface User {
+  name: string;
+  username: string;
+}
+
+interface CustomDropdownProps {
+  trigger: React.ReactNode;
+  children: React.ReactNode;
+  align?: "start" | "end";
+  dir?: "rtl" | "ltr";
+  className?: string;
+}
+
+interface CustomSeparatorProps {
+  orientation?: "horizontal" | "vertical";
+  className?: string;
+}
+
+// Extend base button attributes for CustomButton
+interface CustomButtonProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  children: React.ReactNode;
+  className?: string;
+}
+
+interface NotificationItemProps {
+  text: string;
+  time: string;
+}
+
+// --- Custom Components & Logic ---
+
+// 1. Custom Dropdown Component (Replaces DropdownMenu family)
+const CustomDropdown: FC<CustomDropdownProps> = ({
+  trigger,
+  children,
+  align = "end",
+  dir = "rtl",
+  className = "",
+}) => {
+  const [isOpen, setIsOpen] = useState(false);
+  // Type useRef for a div element
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  const toggleOpen = () => setIsOpen(!isOpen);
+
+  // Close when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  // In RTL, 'end' means right, 'start' means left
+  const alignClass = align === "end" ? "left-0" : "right-0";
+
+  return (
+    <div
+      className={`relative inline-block text-left ${className}`}
+      ref={dropdownRef}
+      dir={dir}
+    >
+      {/* Trigger element */}
+      <div onClick={toggleOpen}>{trigger}</div>
+
+      {/* Content */}
+      <div
+        className={`absolute z-50 mt-2 w-64 origin-top-right rounded-xl shadow-2xl transition-all duration-300 overflow-hidden
+        ${alignClass}
+        ${
+          isOpen
+            ? "scale-100 opacity-100 translate-y-0"
+            : "scale-95 opacity-0 -translate-y-2 pointer-events-none"
+        }
+        bg-[var(--background)] border border-gray-100 dark:border-gray-700
+      `}
+      >
+        {children}
+      </div>
+    </div>
+  );
+};
+
+// 2. Custom Separator (Replaces Shadcn Separator)
+const CustomSeparator: FC<CustomSeparatorProps> = ({
+  orientation = "horizontal",
+  className = "",
+}) => {
+  if (orientation === "vertical") {
+    return (
+      <div
+        className={`w-px h-6 bg-gray-300 dark:bg-gray-700 mx-2 ${className}`}
+        aria-hidden="true"
+      ></div>
+    );
+  }
+  return (
+    <div className={`w-full h-px bg-gray-100 dark:bg-gray-700 ${className}`} />
+  );
+};
+
+// 3. Custom Button (Replaces Shadcn Button)
+const CustomButton: FC<CustomButtonProps> = ({
+  children,
+  className = "",
+  ...props
+}) => {
+  return (
+    <button
+      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${className}`}
+      {...props}
+    >
+      {children}
+    </button>
+  );
+};
+
+// 4. Notification Item
+const NotificationItem: FC<NotificationItemProps> = ({ text, time }) => (
+  <div className="flex items-start justify-between p-3 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+    <span className="text-sm text-[var(--primary-text)]">{text}</span>
+    <span className="text-xs text-gray-400">{time}</span>
+  </div>
+);
+
+// --- Main Navbar Component ---
+
+const Navbar: FC = () => {
   const [darkMode, setDarkMode] = useState(false);
-  const { user, logout } = useAuth();
+  // Casting useAuth return for clarity, assuming a structure with user and logout
+  const { user, logout } = useAuth() as {
+    user: User | null;
+    logout: () => void;
+  };
+
+  // Mock user details for a placeholder
+  const initials = user?.name
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .toUpperCase()
+        .slice(0, 2)
+    : "AU"; // AU for Anonymous User
 
   const toggleDarkMode = () => {
     setDarkMode(!darkMode);
     document.documentElement.classList.toggle("dark");
   };
 
-  // if (!user) {
-  //   return null;
-  // }
+  const handleLogout = useCallback(() => {
+    logout();
+  }, [logout]);
+
   return (
-    <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-4">
+    <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-6">
       {/* Title (Right) */}
-      <h3 className="text-sm font-bold text-[var(--primary-text)] hidden md:visible">
+      <h3 className="text-lg font-bold text-[var(--primary-text)] hidden md:block">
         پنل مدیریت
       </h3>
 
-      {/* Upgrade Button */}
-      <div className="hidden md:visible md:flex gap-2">
-        <Button
-          className=" !bg-white !border-0 !shadow-none
-         !text-sm hover:!text-gray-900 transition !text-zinc-500 dark:text-gray-700"
-        >
+      {/* Action Buttons (Center/Left) */}
+      <div className="hidden md:flex gap-3">
+        <CustomButton className="bg-white border border-gray-200 dark:bg-gray-800 dark:border-gray-700 text-zinc-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-700 shadow-sm">
           پشتیبانی
-        </Button>
+        </CustomButton>
 
-        <Button className="!bg-[#c5226c] hover:!bg-[#c11764] !font-bold hover:!text-white !text-xs text-zinc-50">
+        <CustomButton className="bg-[#c5226c] hover:bg-[#c11764] font-bold text-xs text-white shadow-lg shadow-[#c5226c]/40">
           ارتقای حساب
-        </Button>
+        </CustomButton>
       </div>
 
-      {/* Dark Mode Toggle */}
-
-      <div className="flex items-center gap-2 space-x-1">
-        <DropdownMenu dir="rtl">
-          <DropdownMenuTrigger asChild>
-            <button className="relative text-gray-700 dark:text-white !bg-gray-50 dark:!bg-gray-900 rounded-md p-2 border-gray-200 dark:hover:!border-gray-800">
+      {/* Controls: Notifications, Dark Mode, User Menu */}
+      <div className="flex items-center gap-4">
+        {/* 1. Notifications Dropdown */}
+        <CustomDropdown
+          trigger={
+            <button className="relative text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-900 rounded-lg p-2.5 border border-transparent hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-[var(--background)]">
                 3
               </span>
             </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-64 text-right !bg-[var(--background)]">
-            <DropdownMenuLabel className="text-center">
+          }
+          align="start" // Align notification menu to the right (start in RTL)
+          className="ml-4"
+        >
+          <div className="py-2 text-right">
+            <p className="text-center font-semibold text-sm p-2 text-[var(--primary-text)] border-b border-gray-100 dark:border-gray-700">
               اطلاع رسانی‌ها
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
+            </p>
+            <NotificationItem text="شما یک پیام جدید دارید" time="لخظاتی پیش" />
+            <NotificationItem text="اکانت شما ارتقا یافت" time="2 ساعت پیش" />
+            <NotificationItem text="هشدار امنیتی جدید" time="هفته گذشته" />
+          </div>
+        </CustomDropdown>
 
-            <DropdownMenuItem className="flex items-start justify-between gap-2">
-              <span className="text-sm">شما یک پیام جدید دارید</span>
-              <span className="text-xs text-gray-300">لخظاتی پیش</span>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem className="flex items-start justify-between gap-2">
-              <span className="text-sm">اکانت شما ارتقا یافت</span>
-              <span className="text-xs text-gray-300">2 ساعت پیش</span>
-            </DropdownMenuItem>
-
-            <DropdownMenuItem className="flex items-start justify-between gap-2">
-              <span className="text-sm">هشدار امنیتی جدید</span>
-              <span className="text-xs text-gray-300">هفته گذشته</span>
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-
+        {/* 2. Dark Mode Toggle */}
         <div
-          className="flex items-center w-10 h-12 text-gray-700
-           dark:text-gray-100 justify-center cursor-pointer
+          className="flex items-center w-8 h-8 text-gray-700 dark:text-gray-100 justify-center cursor-pointer
             transition-all duration-300 hover:rotate-12 hover:scale-110"
           onClick={toggleDarkMode}
         >
           {darkMode ? (
-            <SunIcon className="h-6 w-6 transition-transform duration-300" />
+            <SunIcon className="h-6 w-6 text-yellow-500" />
           ) : (
-            <MoonIcon className="h-6 w-6 transition-transform duration-300" />
+            <MoonIcon className="h-6 w-6 text-indigo-500" />
           )}
         </div>
 
-        <Separator
-          orientation="vertical"
-          className="!h-6 !text-gray-300 !mr-1 !ml-4"
-        />
+        <CustomSeparator orientation="vertical" className="!h-6 mx-2" />
 
-        {/* User Dropdown */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div className="flex items-center gap-2 cursor-pointer">
-              <span className="text-sm font-medium text-[var(--primary-text)]">
-                {user?.name}
+        {/* 3. User Dropdown (Elegant Placeholder) */}
+        <CustomDropdown
+          trigger={
+            <div className="flex items-center gap-3 cursor-pointer p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+              <span className="text-sm font-medium text-[var(--primary-text)] hidden sm:block">
+                {user?.name || "کاربر مهمان"}
               </span>
-              <img
-                src="https://i.pravatar.cc/40"
-                alt="User Avatar"
-                className="w-8 h-8 rounded-full"
-              />
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent
-            align="end"
-            className="w-56 text-right  !bg-[var(--background)]"
-          >
-            <div className="flex items-center gap-3 p-3 border-b border-[var(--border)]">
-              <img
-                src="https://i.pravatar.cc/40"
-                alt="User Avatar"
-                className="w-10 h-10 rounded-full"
-              />
-              <div className="flex flex-col items-end">
-                <p className="font-medium"> {user?.name}</p>
-                <p className="text-xs text-gray-500">{user?.username}</p>
+              {/* Custom Avatar Placeholder */}
+              <div className="w-10 h-10 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-lg ring-2 ring-purple-300 dark:ring-purple-700 shadow-md">
+                {initials}
               </div>
             </div>
-            <div className="flex justify-between px-3 py-2 text-sm">
-              <DropdownMenuItem className="text-blue-600 hover:text-blue-800 cursor-pointer">
-                تنظیمات
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={logout}
-                className="text-red-600 hover:text-red-800 cursor-pointer"
-              >
-                خروج
-              </DropdownMenuItem>
+          }
+          align="end"
+          className="z-50"
+        >
+          {/* User Info Header */}
+          <div className="flex items-center gap-3 p-4 border-b border-gray-100 dark:border-gray-700">
+            <div className="w-12 h-12 rounded-full bg-purple-600 text-white flex items-center justify-center font-bold text-xl ring-2 ring-purple-300 dark:ring-purple-700 flex-shrink-0">
+              {initials}
             </div>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            <div className="flex flex-col items-end overflow-hidden">
+              <p className="font-semibold text-base text-[var(--primary-text)] truncate w-full">
+                {user?.name}
+              </p>
+              <p className="text-xs text-gray-500 truncate w-full">
+                {user?.username}
+              </p>
+            </div>
+          </div>
+
+          {/* User Actions Footer */}
+          <div className="p-2 flex flex-col space-y-1">
+            <button className="flex items-center gap-3 p-2 text-sm text-gray-700 dark:text-gray-300 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors w-full justify-end">
+              <span className="flex-1 text-right">تنظیمات حساب</span>
+              <Settings className="h-4 w-4 text-blue-500" />
+            </button>
+            <button
+              onClick={handleLogout}
+              className="flex items-center gap-3 p-2 text-sm text-red-600 rounded-lg hover:bg-red-50 dark:hover:bg-gray-800 transition-colors w-full justify-end"
+            >
+              <span className="flex-1 text-right">خروج</span>
+              <LogOut className="h-4 w-4" />
+            </button>
+          </div>
+        </CustomDropdown>
       </div>
     </div>
   );
