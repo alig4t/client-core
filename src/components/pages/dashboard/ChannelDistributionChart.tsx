@@ -1,20 +1,12 @@
 import { Layers } from "lucide-react";
 import type { FC } from "react";
 import {
-  LineChart,
-  Line,
-  BarChart as ReBarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
   Tooltip,
   Legend,
   ResponsiveContainer,
   PieChart,
   Pie,
   Cell,
-  Sector,
 } from "recharts";
 import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 import { renderCustomizedLabel } from "./ChartUtils";
@@ -67,7 +59,7 @@ export const ChannelDistributionChart: FC<{ channelDistributionData: any }> = ({
             align="left"
             verticalAlign="middle"
             wrapperStyle={{
-              direction: "rtl",
+              direction: "ltr",
               paddingRight: "15px",
               fontSize: "12px",
             }}

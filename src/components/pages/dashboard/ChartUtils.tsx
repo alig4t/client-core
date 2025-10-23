@@ -49,8 +49,10 @@ export const renderCustomizedLabel = ({
       textAnchor={x > cx ? "start" : "end"}
       dominantBaseline="central"
       style={{ fontSize: "12px" }}
+      className="!bg-gray-200"
     >
-      {`${name} (${(percent * 100).toFixed(0)}%)`}
+      {/* {`${name} (${(percent * 100).toFixed(0)}%)`} */}
+      {` (${(percent * 100).toFixed(0)}%)`}
     </text>
   );
 };
