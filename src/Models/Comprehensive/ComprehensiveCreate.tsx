@@ -21,13 +21,13 @@ import Button from "@/components/Button/Button";
 import PageHeader from "@/core/components/general/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
 
-import { FormUploader } from "@/core/components/form/FormUpload";
 import Breadcrumb, {
   type BreadcrumbItem,
 } from "@/core/components/general/BreadCrumb";
 import PermissionService from "../Permission/PermissionService";
 import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 import Validator from "@/core/forms/validation";
+import { FormUploader } from "@/core/components/form/FormUpload";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
@@ -75,6 +75,7 @@ const ComprehensiveCreate: React.FC = () => {
 
   const onSubmit = (data: ComprehensiveFormData) => {
     console.log(data);
+    mutation.mutate(data);
   };
 
   const handleCancel = () => {

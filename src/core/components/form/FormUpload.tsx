@@ -1,7 +1,9 @@
-import React, { useRef, useState } from "react";
+// components/FormUploader.tsx
+import React, { useRef, useState, useEffect } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { UploadCloud, X } from "lucide-react";
+import { UploadCloud, X, Loader2 } from "lucide-react";
 import type { FieldError } from "react-hook-form";
+import DocumentService from "@/Models/Document/DocumentService";
 
 // --- Helper Component Types ---
 interface LabelProps {
@@ -19,7 +21,7 @@ interface FormUploaderProps {
   className?: string;
 }
 
-// --- Helper Components (Typed for TypeScript) ---
+// --- Helper Components ---
 const Label: React.FC<LabelProps> = ({ children }) => (
   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-right">
     {children}
@@ -31,7 +33,7 @@ const ErrorFormText: React.FC<ErrorFormTextProps> = ({ msg }) => {
   return <p className="text-sm text-red-600 mt-1">{msg}</p>;
 };
 
-// --- ✨ Converted & Enhanced FormUploader Component (.tsx) ✨ ---
+// --- ✨ Main Component: FormUploader (آپلود واقعی با id) ✨ ---
 export const FormUploader: React.FC<FormUploaderProps> = ({
   name,
   label,
@@ -42,33 +44,58 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setValue,
     formState: { errors },
   } = useFormContext();
+
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false);
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+  const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  // Watch the current value of the field from react-hook-form
-  const currentValue = useWatch({ name, control });
+  // مقدار فعلی فیلد (باید عدد باشه: id فایل)
+  const fileId = useWatch({ name, control });
 
-  // --- File Processing Logic ---
-  const processFile = (file: File | null | undefined) => {
-    if (!file) return;
+  // --- وقتی fileId تغییر کرد، previewUrl را به‌روز کن ---
+  useEffect(() => {
+    if (typeof fileId === "number") {
+      const fetchPreview = async () => {
+        try {
+          const token = await DocumentService.getToken(fileId);
+          const url = DocumentService.getDownloadUrl(token);
+          setPreviewUrl(url);
+        } catch (err) {
+          console.error("Failed to fetch preview token", err);
+          setPreviewUrl(null);
+        }
+      };
+      fetchPreview();
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [fileId]);
 
-    // Validate that the file is an image
+  // --- آپلود فایل ---
+  // در FormUploader.tsx
+  const uploadFile = async (file: File) => {
     if (!file.type.startsWith("image/")) {
-      console.error("Only image files are accepted.");
-      // Set an error in your form state and clear the value
       setValue(name, null, { shouldValidate: true });
       return;
     }
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64String = reader.result as string;
-      setValue(name, base64String, { shouldValidate: true, shouldDirty: true });
-    };
-    reader.onerror = (error) => {
-      console.error("Error converting file to Base64:", error);
-    };
-    reader.readAsDataURL(file);
+    setIsUploading(true);
+    try {
+      const doc = await DocumentService.upload(file);
+      // فقط id رو در فرم ذخیره کن
+      setValue(name, doc.id, { shouldValidate: true, shouldDirty: true });
+    } catch (error) {
+      console.error("Upload failed", error);
+      setValue(name, null, { shouldValidate: true });
+    } finally {
+      setIsUploading(false);
+    }
+  };
+  // --- پردازش فایل انتخاب‌شده ---
+  const processFile = (file: File | null | undefined) => {
+    if (!file) return;
+    uploadFile(file);
   };
 
   // --- Event Handlers ---
@@ -79,8 +106,9 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const handleRemoveImage = () => {
     setValue(name, null, { shouldValidate: true, shouldDirty: true });
     if (fileInputRef.current) {
-      fileInputRef.current.value = ""; // Reset the file input
+      fileInputRef.current.value = "";
     }
+    setPreviewUrl(null);
   };
 
   // Drag and Drop Handlers
@@ -103,7 +131,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const hasError = !!errors[name];
   const errorMessage = (errors[name] as FieldError)?.message;
 
-  // --- Dynamic ClassNames for Dropzone ---
+  // --- Dropzone Classes ---
   const dropzoneBaseClasses =
     "w-full h-48 flex flex-col justify-center items-center border-2 border-dashed rounded-lg cursor-pointer transition-all duration-300";
   const dropzoneErrorClasses = "border-red-500 bg-red-50 dark:bg-red-900/10";
@@ -124,13 +152,14 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     <div className={`w-full ${className}`}>
       <Label>{label}</Label>
       <div className="mt-1">
-        {currentValue ? (
-          // --- Image Preview ---
+        {previewUrl ? (
+          // --- Image Preview with Remove Button ---
           <div className="relative group w-full h-48 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600">
             <img
-              src={currentValue}
+              src={previewUrl}
               alt="Preview"
               className="w-full h-full object-cover"
+              onError={() => setPreviewUrl(null)} // اگر لود نشد، پیش‌نمایش رو پاک کن
             />
             <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
               <button
@@ -142,6 +171,14 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
                 <X size={20} />
               </button>
             </div>
+          </div>
+        ) : isUploading ? (
+          // --- Uploading State ---
+          <div className="w-full h-48 flex flex-col justify-center items-center border-2 border-dashed border-purple-500 rounded-lg bg-purple-50 dark:bg-purple-900/10">
+            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+            <p className="mt-2 text-sm text-purple-600 dark:text-purple-400">
+              در حال آپلود...
+            </p>
           </div>
         ) : (
           // --- Dropzone ---
@@ -169,7 +206,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
                 <span className="font-semibold text-purple-600 dark:text-purple-400">
                   برای آپلود کلیک کنید
                 </span>{" "}
-               یا بکشید و رها کنید
+                یا بکشید و رها کنید
               </p>
               <p className="text-xs text-gray-500 dark:text-gray-500">
                 PNG, JPG, GIF تا حداکثر 10MB

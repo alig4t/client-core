@@ -11,6 +11,7 @@ import Breadcrumb, {
 } from "@/core/components/general/BreadCrumb";
 import { createMessages } from "@/core/forms/MessageUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import { PageWrapper } from "@/components/Layout/PageWrapper";
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "خانه", href: "/" },
@@ -21,7 +22,7 @@ const ComprehensivePage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
   return (
-    <div dir="rtl">
+    <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
       <div className="sm:p-8 min-h-screen font-sans max-w-[1600px]">
@@ -39,7 +40,7 @@ const ComprehensivePage: React.FC = () => {
 
         <ComprehensiveTable filters={activeFilters} />
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

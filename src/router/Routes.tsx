@@ -18,6 +18,7 @@ import PermissionCreate from "@/Models/Permission/PermissionCreate";
 import ComprehensivePage from "@/Models/Comprehensive/ComprehensivePage";
 import ComprehensiveCreate from "@/Models/Comprehensive/ComprehensiveCreate";
 import ComprehensiveDisplay from "@/Models/Comprehensive/ComprehensiveDisplay";
+import Dashboard from "@/pages/Dashboard/Index/Main";
 
 export const Routes: RouteObject[] = [
   {
@@ -44,7 +45,7 @@ export const Routes: RouteObject[] = [
         path: "/",
         element: <Layout />,
         children: [
-          { index: true, element: <div className="p-4">صفحه اصلی</div> },
+          { index: true, element: <Dashboard /> },
           { path: "profile", element: <Profile /> },
           { path: "settings", element: <Settings /> },
           { path: "posts", element: <Post /> },

@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import { Bell, MoonIcon, SunIcon, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/stores/AuthContext";
+import Dropdown from "./general/DropDown";
 
 // --- TypeScript Interfaces ---
 
@@ -14,14 +15,6 @@ import { useAuth } from "@/stores/AuthContext";
 interface User {
   name: string;
   username: string;
-}
-
-interface CustomDropdownProps {
-  trigger: React.ReactNode;
-  children: React.ReactNode;
-  align?: "start" | "end";
-  dir?: "rtl" | "ltr";
-  className?: string;
 }
 
 interface CustomSeparatorProps {
@@ -44,62 +37,6 @@ interface NotificationItemProps {
 // --- Custom Components & Logic ---
 
 // 1. Custom Dropdown Component (Replaces DropdownMenu family)
-const CustomDropdown: FC<CustomDropdownProps> = ({
-  trigger,
-  children,
-  align = "end",
-  dir = "rtl",
-  className = "",
-}) => {
-  const [isOpen, setIsOpen] = useState(false);
-  // Type useRef for a div element
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  const toggleOpen = () => setIsOpen(!isOpen);
-
-  // Close when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        dropdownRef.current &&
-        !dropdownRef.current.contains(event.target as Node)
-      ) {
-        setIsOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
-  // In RTL, 'end' means right, 'start' means left
-  const alignClass = align === "end" ? "left-0" : "right-0";
-
-  return (
-    <div
-      className={`relative inline-block text-left ${className}`}
-      ref={dropdownRef}
-      dir={dir}
-    >
-      {/* Trigger element */}
-      <div onClick={toggleOpen}>{trigger}</div>
-
-      {/* Content */}
-      <div
-        className={`absolute z-50 mt-2 w-64 origin-top-right rounded-xl shadow-2xl transition-all duration-300 overflow-hidden
-        ${alignClass}
-        ${
-          isOpen
-            ? "scale-100 opacity-100 translate-y-0"
-            : "scale-95 opacity-0 -translate-y-2 pointer-events-none"
-        }
-        bg-[var(--background)] border border-gray-100 dark:border-gray-700
-      `}
-      >
-        {children}
-      </div>
-    </div>
-  );
-};
 
 // 2. Custom Separator (Replaces Shadcn Separator)
 const CustomSeparator: FC<CustomSeparatorProps> = ({
@@ -193,12 +130,12 @@ const Navbar: FC = () => {
       {/* Controls: Notifications, Dark Mode, User Menu */}
       <div className="flex items-center gap-4">
         {/* 1. Notifications Dropdown */}
-        <CustomDropdown
+        <Dropdown
           trigger={
             <button className="relative text-gray-700 dark:text-white bg-gray-100 dark:bg-gray-900 rounded-lg p-2.5 border border-transparent hover:border-gray-300 dark:hover:border-gray-700 transition-colors">
               <Bell className="h-5 w-5" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs font-semibold rounded-full w-4 h-4 flex items-center justify-center ring-2 ring-[var(--background)]">
-                3
+              <span className="absolute  -top-2 p-0.5 pt-1 min-w-5 min-h-5 -right-1 bg-red-600 text-white text-[10px] font-semibold rounded-full flex items-center justify-center ring-2 ring-[var(--background)]">
+                2
               </span>
             </button>
           }
@@ -213,7 +150,7 @@ const Navbar: FC = () => {
             <NotificationItem text="اکانت شما ارتقا یافت" time="2 ساعت پیش" />
             <NotificationItem text="هشدار امنیتی جدید" time="هفته گذشته" />
           </div>
-        </CustomDropdown>
+        </Dropdown>
 
         {/* 2. Dark Mode Toggle */}
         <div
@@ -231,7 +168,7 @@ const Navbar: FC = () => {
         <CustomSeparator orientation="vertical" className="!h-6 mx-2" />
 
         {/* 3. User Dropdown (Elegant Placeholder) */}
-        <CustomDropdown
+        <Dropdown
           trigger={
             <div className="flex items-center gap-3 cursor-pointer p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
               <span className="text-sm font-medium text-[var(--primary-text)] hidden sm:block">
@@ -275,7 +212,7 @@ const Navbar: FC = () => {
               <LogOut className="h-4 w-4" />
             </button>
           </div>
-        </CustomDropdown>
+        </Dropdown>
       </div>
     </div>
   );
