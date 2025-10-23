@@ -18,7 +18,7 @@ import PermissionCreate from "@/Models/Permission/PermissionCreate";
 import ComprehensivePage from "@/Models/Comprehensive/ComprehensivePage";
 import ComprehensiveCreate from "@/Models/Comprehensive/ComprehensiveCreate";
 import ComprehensiveDisplay from "@/Models/Comprehensive/ComprehensiveDisplay";
-import Dashboard from "@/pages/Dashboard/Index/Main";
+import Dashboard from "@/pages/Dashboard/Main/Main";
 
 export const Routes: RouteObject[] = [
   {

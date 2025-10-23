@@ -16,8 +16,8 @@ import {
   Cell,
   Sector,
 } from "recharts";
-import { DashboardData } from "./DashboardData";
-import { renderCustomizedLabel } from "@/components/pages/dashboard/ChartUtils";
+import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
+import { renderCustomizedLabel } from "./ChartUtils";
 import ChartContainer from "./ChartContainer";
 
 // نمودار دایره‌ای توزیع کانال

@@ -9,12 +9,14 @@ import {
   YAxis,
   BarChart as ReBarChart,
 } from "recharts";
-import { DashboardData } from "./DashboardData";
+import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 import ChartContainer from "./ChartContainer";
 import { BarChart } from "lucide-react";
 
 // نمودار میله‌ای فراوانی کلیدواژه‌ها
-const KeywordFrequencyChart: FC<{frequencyData: any}> = ({frequencyData}) => (
+const KeywordFrequencyChart: FC<{ frequencyData: any }> = ({
+  frequencyData,
+}) => (
   <ChartContainer
     title="فراوانی کل تطابق‌ها بر اساس کلیدواژه"
     icon={BarChart}

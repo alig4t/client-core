@@ -1,19 +1,19 @@
 import { type FC } from "react";
 import { RefreshCw } from "lucide-react";
-import GlassStatCardList from "./GlassStatCardList";
-import ChartHeroContainer from "./ChartHeroContainer";
-import KeywordFrequencyChart from "./KeywordFrequencyChart";
-import TopKeywordMiniChart from "./TopKeywordMiniChart";
-import { ChannelDistributionChart } from "./ChannelDistributionChart";
-import { RecentActivityList } from "./RecentActivityList";
-import { WeeklySummaryCard } from "./WeeklySummaryCard";
+import GlassStatCardList from "../../../components/pages/dashboard/GlassStatCardList";
+import ChartHeroContainer from "../../../components/pages/dashboard/ChartHeroContainer";
+import KeywordFrequencyChart from "../../../components/pages/dashboard/KeywordFrequencyChart";
+import TopKeywordMiniChart from "../../../components/pages/dashboard/TopKeywordMiniChart";
+import { ChannelDistributionChart } from "../../../components/pages/dashboard/ChannelDistributionChart";
+import { RecentActivityList } from "../../../components/pages/dashboard/RecentActivityList";
+import { WeeklySummaryCard } from "../../../components/pages/dashboard/WeeklySummaryCard";
 import { DashboardData } from "./DashboardData";
 
 const Dashboard: FC = () => {
   return (
     <div
       dir="rtl"
-      className="p-4 md:p-8 bg-gradient-to-br  from-gray-50 to-zinc-200 dark:from-gray-900 dark:to-gray-800 min-h-screen font-sans transition-colors duration-300 rounded-xl"
+      className="p-4 md:p-8 bg-gradient-to-br  from-gray-50 to-zinc-200 dark:from-gray-900 dark:to-gray-800 min-h-screen font-sans transition-colors duration-300"
     >
       {/* 1. Header and Welcome */}
       <div className="mb-8 flex justify-between items-center">

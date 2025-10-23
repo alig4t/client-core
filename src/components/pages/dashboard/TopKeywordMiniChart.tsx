@@ -8,7 +8,7 @@ import {
   YAxis,
   BarChart as ReBarChart,
 } from "recharts";
-import { DashboardData } from "./DashboardData";
+import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 
 // --- نمودار افقی کوچک برای ستون کناری ---
 const TopKeywordMiniChart: FC<{ topKeywordPerformance: any }> = ({

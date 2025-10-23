@@ -1,7 +1,7 @@
 import type { FC } from "react";
 import ChartContainer from "./ChartContainer";
 import { ChevronRight, List } from "lucide-react";
-import { DashboardData } from "./DashboardData";
+import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 
 // 3. کامپوننت لیست فعالیت‌های اخیر
 export const RecentActivityList: FC<{ recentActivityData: any[] }> = ({

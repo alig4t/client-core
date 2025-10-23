@@ -1,5 +1,5 @@
 import type { FC } from "react";
-import { DashboardData } from "./DashboardData";
+import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 
 interface StatCardProps {
   title: string;
