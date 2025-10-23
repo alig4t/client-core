@@ -1,15 +1,13 @@
 // src/routes.tsx
 
 import type { RouteObject } from "react-router-dom";
-import Layout from "../components/Layout";
+import Layout from "../components/Layout/Layout";
 import Profile from "../pages/Profile";
 import Settings from "../pages/Settings";
 import LoginPage from "../pages/Login";
 import Post from "../pages/Post";
 import NotFoundPage from "../components/NotFoundPage";
-import TagSearchPage from "../Models/Tag/TagSearchPage";
-import TagCreatePage from "../Models/Tag/TagCreatePage";
-import TagDisplayPage from "../Models/Tag/TagDisplayPage";
+
 import ProtectedRoute from "./ProtectedRoute"; // Protected Route component
 import PublicRoute from "./PublicRoute"; // Public Routes component
 import RegisterPage from "@/pages/RegisterPage";
@@ -18,7 +16,7 @@ import PermissionCreate from "@/Models/Permission/PermissionCreate";
 import ComprehensivePage from "@/Models/Comprehensive/ComprehensivePage";
 import ComprehensiveCreate from "@/Models/Comprehensive/ComprehensiveCreate";
 import ComprehensiveDisplay from "@/Models/Comprehensive/ComprehensiveDisplay";
-import Dashboard from "@/pages/Dashboard/Main/Main";
+import Dashboard from "@/pages/Dashboard/Main/DashboardMain";
 
 export const Routes: RouteObject[] = [
   {
@@ -52,9 +50,6 @@ export const Routes: RouteObject[] = [
           {
             path: "portal",
             children: [
-              { path: "tags", element: <TagSearchPage /> },
-              { path: "tags/create", element: <TagCreatePage /> },
-              { path: "tags/:id", element: <TagDisplayPage /> },
               { path: "permissions", element: <PermissionPage /> },
               { path: "permissions/create", element: <PermissionCreate /> },
               { path: "comprehensive", element: <ComprehensivePage /> },

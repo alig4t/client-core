@@ -1,11 +1,3 @@
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "./ui/table";
 import Card from "./Card";
 
 // const sessions = [
@@ -81,43 +73,6 @@ export default function SessionTable() {
           </tbody>
         </table>
       </div> */}
-        <Table className="w-[95%] m-auto">
-          {/* <TableCaption>A list of your recent invoices.</TableCaption> */}
-          <TableHeader>
-            <TableRow>
-              <TableHead className="text-right text-gray-700 py-5 font-bold">
-                Invoice
-              </TableHead>
-              <TableHead className="text-right text-gray-700  font-bold">
-                Status
-              </TableHead>
-              <TableHead className="text-right text-gray-700   font-bold">
-                Method
-              </TableHead>
-              <TableHead className="text-right text-gray-700  font-bold">
-                Amount
-              </TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {invoices.map((invoice) => (
-              <TableRow key={invoice.invoice}>
-                <TableCell className="text-right py-4">
-                  {invoice.invoice}
-                </TableCell>
-                <TableCell className="text-right">
-                  {invoice.paymentStatus}
-                </TableCell>
-                <TableCell className="text-right">
-                  {invoice.paymentMethod}
-                </TableCell>
-                <TableCell className="text-right">
-                  {invoice.totalAmount}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
       </>
     </Card>
   );

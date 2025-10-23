@@ -1,9 +1,9 @@
 // src/components/Layout.tsx
 
 import AppSidebar from "@/components/app-sidebar";
-import Navbar from "./Navbar";
+import Navbar from "../Navbar";
 import { Outlet } from "react-router-dom";
-import SubSidebar from "./SubSidebar";
+import SubSidebar from "../SubSidebar";
 
 export default function Layout() {
   return (
