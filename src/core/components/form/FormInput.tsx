@@ -1,7 +1,7 @@
 // FormInput.tsx
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { CircleX, Eye, EyeOff, Pencil } from "lucide-react";
+import { Binary, CircleX, Eye, EyeOff, Pencil } from "lucide-react";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
 
@@ -99,7 +99,15 @@ const FormInput: React.FC<FormInputProps> = ({
   // آیکون pencil برای غیر-password
   const pencilIcon = type !== "password" && (
     <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 z-10">
-      <Pencil size={20} className="bg-transparent rounded-lg" />
+      {type === "number" ||
+      type === "long" ||
+      type === "float" ||
+      type === "double" ||
+      type === "bigDecimal" ? (
+        <Binary size={20} className="bg-transparent rounded-lg" />
+      ) : (
+        <Pencil size={20} className="bg-transparent rounded-lg" />
+      )}
     </div>
   );
 

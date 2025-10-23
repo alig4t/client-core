@@ -89,7 +89,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.integerField?.label,
             "min"
           )}
-          type="text"
+          type="number"
           placeholder="مثلاً 10"
         />
 
@@ -99,7 +99,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.integerField?.label,
             "max"
           )}
-          type="text"
+          type="number"
           placeholder="مثلاً 100"
         />
 
@@ -110,7 +110,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.longField?.label,
             "min"
           )}
-          type="text"
+          type="long"
           placeholder="از"
         />
         <FormInput
@@ -119,7 +119,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.longField?.label,
             "max"
           )}
-          type="text"
+          type="long"
           placeholder="تا"
         />
 
@@ -130,7 +130,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.doubleField?.label,
             "min"
           )}
-          type="text"
+          type="double"
           placeholder="از"
         />
         <FormInput
@@ -139,7 +139,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.doubleField?.label,
             "max"
           )}
-          type="text"
+          type="double"
           placeholder="تا"
         />
 
@@ -150,7 +150,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.bigDecimalField?.label,
             "min"
           )}
-          type="text"
+          type="bigDecimal"
           placeholder="از"
         />
         <FormInput
@@ -159,7 +159,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             comprehensiveModelMeta.fields.bigDecimalField?.label,
             "max"
           )}
-          type="text"
+          type="bigDecimal"
           placeholder="تا"
         />
 
