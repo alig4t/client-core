@@ -17,6 +17,7 @@ import { Checkbox } from "@/core/components/form/Checkbox";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import OptionUtils from "@/core/forms/OptionUtils";
 import RowContainer from "@/components/RowContainer";
+import { PageWrapper } from "@/components/Layout/PageWrapper";
 
 // --- Filter output interface ---
 
@@ -73,138 +74,140 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
   };
 
   return (
-    <FormWrapper onSubmit={onSubmit} schema={searchSchema}>
-      <RowContainer>
-        {/* رشته */}
-        <FormInput
-          name={`stringField_${FilterOperator.LIKE}`}
-          label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
-          placeholder="جستجو..."
-        />
+    <PageWrapper>
+      <FormWrapper onSubmit={onSubmit} schema={searchSchema}>
+        <RowContainer>
+          {/* رشته */}
+          <FormInput
+            name={`stringField_${FilterOperator.LIKE}`}
+            label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
+            placeholder="جستجو..."
+          />
 
-        {/* عددی: integerField */}
-        <FormInput
-          name={`integerField_${FilterOperator.GE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.integerField?.label,
-            "min"
-          )}
-          type="number"
-          placeholder="مثلاً 10"
-        />
+          {/* عددی: integerField */}
+          <FormInput
+            name={`integerField_${FilterOperator.GE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.integerField?.label,
+              "min"
+            )}
+            type="number"
+            placeholder="مثلاً 10"
+          />
 
-        <FormInput
-          name={`integerField_${FilterOperator.LE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.integerField?.label,
-            "max"
-          )}
-          type="number"
-          placeholder="مثلاً 100"
-        />
+          <FormInput
+            name={`integerField_${FilterOperator.LE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.integerField?.label,
+              "max"
+            )}
+            type="number"
+            placeholder="مثلاً 100"
+          />
 
-        {/* عددی: longField */}
-        <FormInput
-          name={`longField_${FilterOperator.GE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.longField?.label,
-            "min"
-          )}
-          type="long"
-          placeholder="از"
-        />
-        <FormInput
-          name={`longField_${FilterOperator.LE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.longField?.label,
-            "max"
-          )}
-          type="long"
-          placeholder="تا"
-        />
+          {/* عددی: longField */}
+          <FormInput
+            name={`longField_${FilterOperator.GE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.longField?.label,
+              "min"
+            )}
+            type="long"
+            placeholder="از"
+          />
+          <FormInput
+            name={`longField_${FilterOperator.LE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.longField?.label,
+              "max"
+            )}
+            type="long"
+            placeholder="تا"
+          />
 
-        {/* عددی: doubleField */}
-        <FormInput
-          name={`doubleField_${FilterOperator.GE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.doubleField?.label,
-            "min"
-          )}
-          type="double"
-          placeholder="از"
-        />
-        <FormInput
-          name={`doubleField_${FilterOperator.LE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.doubleField?.label,
-            "max"
-          )}
-          type="double"
-          placeholder="تا"
-        />
+          {/* عددی: doubleField */}
+          <FormInput
+            name={`doubleField_${FilterOperator.GE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.doubleField?.label,
+              "min"
+            )}
+            type="double"
+            placeholder="از"
+          />
+          <FormInput
+            name={`doubleField_${FilterOperator.LE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.doubleField?.label,
+              "max"
+            )}
+            type="double"
+            placeholder="تا"
+          />
 
-        {/* عددی: bigDecimalField */}
-        <FormInput
-          name={`bigDecimalField_${FilterOperator.GE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.bigDecimalField?.label,
-            "min"
-          )}
-          type="bigDecimal"
-          placeholder="از"
-        />
-        <FormInput
-          name={`bigDecimalField_${FilterOperator.LE}`}
-          label={makeRangeLabel(
-            comprehensiveModelMeta.fields.bigDecimalField?.label,
-            "max"
-          )}
-          type="bigDecimal"
-          placeholder="تا"
-        />
+          {/* عددی: bigDecimalField */}
+          <FormInput
+            name={`bigDecimalField_${FilterOperator.GE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.bigDecimalField?.label,
+              "min"
+            )}
+            type="bigDecimal"
+            placeholder="از"
+          />
+          <FormInput
+            name={`bigDecimalField_${FilterOperator.LE}`}
+            label={makeRangeLabel(
+              comprehensiveModelMeta.fields.bigDecimalField?.label,
+              "max"
+            )}
+            type="bigDecimal"
+            placeholder="تا"
+          />
 
-        <Checkbox
-          name={`booleanField_${FilterOperator.EQ}`}
-          label={comprehensiveModelMeta.fields.booleanField?.label}
-        />
+          <Checkbox
+            name={`booleanField_${FilterOperator.EQ}`}
+            label={comprehensiveModelMeta.fields.booleanField?.label}
+          />
 
-        {/* تاریخ‌ها */}
-        <DateInput
-          name={`dateField_${FilterOperator.GE}`}
-          label={`${comprehensiveModelMeta.fields.dateField?.label} از`}
-        />
-        <DateInput
-          name={`dateField_${FilterOperator.LE}`}
-          label={`${comprehensiveModelMeta.fields.dateField?.label} تا`}
-        />
+          {/* تاریخ‌ها */}
+          <DateInput
+            name={`dateField_${FilterOperator.GE}`}
+            label={`${comprehensiveModelMeta.fields.dateField?.label} از`}
+          />
+          <DateInput
+            name={`dateField_${FilterOperator.LE}`}
+            label={`${comprehensiveModelMeta.fields.dateField?.label} تا`}
+          />
 
-        {/* enum */}
-        <FormSelect
-          name={`enumField_${FilterOperator.EQ}`}
-          label={comprehensiveModelMeta.fields.enumField?.label}
-          placeholder="انتخاب کنید"
-          options={OptionUtils.YES_OR_NO_OPTIONS}
-        />
+          {/* enum */}
+          <FormSelect
+            name={`enumField_${FilterOperator.EQ}`}
+            label={comprehensiveModelMeta.fields.enumField?.label}
+            placeholder="انتخاب کنید"
+            options={OptionUtils.YES_OR_NO_OPTIONS}
+          />
 
-        <DateInput
-          name={`createdAt_${FilterOperator.GE}`}
-          label={`تاریخ ایجاد از`}
-        />
-        <DateInput
-          name={`createdAt_${FilterOperator.LE}`}
-          label={`تاریخ ایجاد تا`}
-        />
-      </RowContainer>
+          <DateInput
+            name={`createdAt_${FilterOperator.GE}`}
+            label={`تاریخ ایجاد از`}
+          />
+          <DateInput
+            name={`createdAt_${FilterOperator.LE}`}
+            label={`تاریخ ایجاد تا`}
+          />
+        </RowContainer>
 
-      <ButtonPanel align="start" className="mt-4">
-        <Button variant="success" type="submit">
-          اعمال فیلتر
-        </Button>
-        <Button variant="secondary" type="button" onClick={handleClear}>
-          حذف فیلتر
-        </Button>
-      </ButtonPanel>
-    </FormWrapper>
+        <ButtonPanel align="start" className="mt-4">
+          <Button variant="success" type="submit">
+            اعمال فیلتر
+          </Button>
+          <Button variant="secondary" type="button" onClick={handleClear}>
+            حذف فیلتر
+          </Button>
+        </ButtonPanel>
+      </FormWrapper>
+    </PageWrapper>
   );
 };
 

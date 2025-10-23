@@ -28,6 +28,7 @@ import PermissionService from "../Permission/PermissionService";
 import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 import Validator from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
+import { PageWrapper } from "@/components/Layout/PageWrapper";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
@@ -90,7 +91,7 @@ const ComprehensiveCreate: React.FC = () => {
   ];
 
   return (
-    <div dir="rtl">
+    <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <div className="p-8 min-h-screen font-sans">
         <PageHeader title="ایجاد ترکیبی جدید" />
@@ -223,7 +224,7 @@ const ComprehensiveCreate: React.FC = () => {
           </FormWrapper>
         </div>
       </div>
-    </div>
+    </PageWrapper>
   );
 };
 

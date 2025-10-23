@@ -16,6 +16,7 @@ import Table from "@/core/components/Table/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Eye } from "lucide-react";
 import { createMessages } from "@/core/forms/MessageUtils";
+import { PageWrapper } from "@/components/Layout/PageWrapper";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -121,42 +122,44 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
   }
 
   return (
-    <Table<ComprehensiveModel>
-      data={pageData}
-      dataIdKey="id"
-      header={
-        <>
-          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-            ID
-          </th>
-          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-            نام نمایشی
-          </th>
-          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-            نام سیستمی
-          </th>
-          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-            تاریخ ایجاد
-          </th>
-          <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-            عملیات
-          </th>
-        </>
-      }
-      renderRow={renderPermissionRow}
-      title={comprehensiveModelMeta.messages.list.title}
-      page={currentPage}
-      pageSize={pageSize}
-      totalPages={totalPages}
-      totalItems={totalItems}
-      sortValue={sort}
-      sortOptions={sortOptions}
-      onPageChange={setPage}
-      onPageSizeChange={handlePageSizeChange}
-      onSortChange={handleSortChange}
-      onSelectionChange={(ids) => console.log(ids)}
-      isFetching={isFetching}
-    />
+    <PageWrapper>
+      <Table<ComprehensiveModel>
+        data={pageData}
+        dataIdKey="id"
+        header={
+          <>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              ID
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              نام نمایشی
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              نام سیستمی
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              تاریخ ایجاد
+            </th>
+            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
+              عملیات
+            </th>
+          </>
+        }
+        renderRow={renderPermissionRow}
+        title={comprehensiveModelMeta.messages.list.title}
+        page={currentPage}
+        pageSize={pageSize}
+        totalPages={totalPages}
+        totalItems={totalItems}
+        sortValue={sort}
+        sortOptions={sortOptions}
+        onPageChange={setPage}
+        onPageSizeChange={handlePageSizeChange}
+        onSortChange={handleSortChange}
+        onSelectionChange={(ids) => console.log(ids)}
+        isFetching={isFetching}
+      />
+    </PageWrapper>
   );
 };
 
