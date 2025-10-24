@@ -1,5 +1,3 @@
-import SessionTable from "@/components/SessionTable";
-
 const Profile = () => {
   return (
     <>
