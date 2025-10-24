@@ -9,7 +9,7 @@ const ProtectedRoute = () => {
   console.log(isAuthenticated);
   // If user is authenticated, allow access to child routes (Outlet)
   // Otherwise, navigate to the login page
-  return isAuthenticated ? <Outlet /> : <Navigate to="/login" replace />;
+  return isAuthenticated ? <Outlet /> : <Navigate to="/" replace />;
 };
 
 export default ProtectedRoute;

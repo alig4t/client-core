@@ -46,7 +46,7 @@ function RegisterFormFields() {
           type="text"
           placeholder="نام خود را وارد کنید"
           {...register("name")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
         {errors.name && <ErrorFormText msg={errors.name.message as string} />}
       </div>
@@ -63,7 +63,7 @@ function RegisterFormFields() {
           type="text"
           placeholder="مثلا aligh75"
           {...register("username")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
         {errors.username && (
           <ErrorFormText msg={errors.username.message as string} />
@@ -82,7 +82,7 @@ function RegisterFormFields() {
           type="password"
           placeholder="یک رمز عبور قوی انتخاب کنید"
           {...register("password")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
         {errors.password && (
           <ErrorFormText msg={errors.password.message as string} />
@@ -101,7 +101,7 @@ function RegisterFormFields() {
           type="password"
           placeholder="رمز عبور را دوباره وارد کنید"
           {...register("confirmPassword")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
         {errors.confirmPassword && (
           <ErrorFormText msg={errors.confirmPassword.message as string} />
@@ -112,7 +112,13 @@ function RegisterFormFields() {
 }
 
 // --- Main Register Page Component with new style ---
-export default function RegisterPage() {
+export default function RegisterPage({
+  inModal,
+  switchModal,
+}: {
+  inModal: boolean;
+  switchModal: () => void;
+}) {
   const navigate = useNavigate();
 
   const mutation = useMutation({
@@ -128,8 +134,12 @@ export default function RegisterPage() {
         position: "bottom-left",
       });
       setTimeout(() => {
-        navigate("/login");
-      }, 2000);
+        if (inModal) {
+          switchModal();
+        } else {
+          navigate("/login");
+        }
+      }, 1500);
     },
     onError: (error: any) => {
       toast.error("ثبت‌نام ناموفق بود", {
@@ -142,6 +152,39 @@ export default function RegisterPage() {
   const onSubmit = (data: RegisterFormData) => {
     mutation.mutate(data);
   };
+
+  if (inModal) {
+    return (
+      <div className="w-full max-w-sm sm:max-w-[480px] p-6 pt-3 space-y-4 bg-white rounded-2xl">
+        <FormWrapper
+          schema={registerSchema}
+          onSubmit={onSubmit}
+          className="space-y-2"
+        >
+          <RegisterFormFields />
+          <button
+            disabled={mutation.isPending}
+            type="submit"
+            className="w-full px-4 py-3 font-bold text-white mt-4 bg-indigo-600 rounded-xl shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:bg-indigo-400 transition-all transform hover:scale-[1.01] duration-300"
+          >
+            {mutation.isPending ? "در حال ایجاد حساب..." : "ثبت نام"}
+          </button>
+        </FormWrapper>
+        {/* </form> */}
+        {/* </FormProvider> */}
+
+        <p className="text-[11px] text-center text-gray-500">
+          حساب کاربری دارید؟{" "}
+          <span
+            onClick={switchModal}
+            className="font-semibold cursor-pointer text-indigo-600 hover:text-indigo-700 hover:underline"
+          >
+            وارد شوید
+          </span>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen sm:bg-gray-50 sm:py-12">
@@ -171,7 +214,7 @@ export default function RegisterPage() {
           <button
             disabled={mutation.isPending}
             type="submit"
-            className="w-full px-4 py-3 mt-4 font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-purple-300 transition-colors duration-300"
+            className="w-full px-4 py-3 font-bold text-white mt-4 bg-indigo-600 rounded-xl shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:bg-indigo-400 transition-all transform hover:scale-[1.01] duration-300"
           >
             {mutation.isPending ? "در حال ایجاد حساب..." : "ثبت نام"}
           </button>

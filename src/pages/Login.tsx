@@ -39,7 +39,7 @@ function LoginFormFields() {
           type="text"
           placeholder="مثلا aligh75"
           {...register("username")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
         {errors.username && (
           <ErrorFormText msg={errors.username.message as string} />
@@ -58,8 +58,9 @@ function LoginFormFields() {
           type="password"
           placeholder="رمز عبور خود را وارد کنید"
           {...register("password")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
+
         {errors.password && (
           <ErrorFormText msg={errors.password.message as string} />
         )}
@@ -69,7 +70,13 @@ function LoginFormFields() {
 }
 
 // --- Main Login Page Component with new style ---
-export default function LoginPage() {
+export default function LoginPage({
+  inModal,
+  switchModal,
+}: {
+  inModal: boolean;
+  switchModal: () => void;
+}) {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
@@ -96,6 +103,7 @@ export default function LoginPage() {
       });
       setTimeout(() => {
         authLogin(token, user);
+        navigate("/dashboard");
       }, 1000);
     },
     onError: (error: any) => {
@@ -110,6 +118,53 @@ export default function LoginPage() {
   const onSubmit = (data: LoginFormData) => {
     mutation.mutate(data);
   };
+
+  if (inModal) {
+    return (
+      <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6  rounded-2xl">
+        <FormWrapper
+          schema={loginSchema}
+          onSubmit={onSubmit}
+          className="space-y-5"
+        >
+          {/* <FormProvider {...methods}>
+        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
+          <LoginFormFields />
+          <button
+            disabled={mutation.isPending}
+            type="submit"
+            className="w-full px-4 py-3 font-bold text-white mt-4 bg-indigo-600 rounded-xl shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:bg-indigo-400 transition-all transform hover:scale-[1.01] duration-300"
+          >
+            {mutation.isPending ? "در حال بررسی..." : "تایید و ادامه"}
+          </button>
+          {/* </form> */}
+        </FormWrapper>
+
+        {/* Rules section */}
+        <p className="text-xs text-center text-gray-400">
+          ورود شما به منزله قبول{" "}
+          <a href="#" className="font-semibold text-purple-600 hover:underline">
+            قوانین و مقررات
+          </a>{" "}
+          رایانوین است.
+        </p>
+
+        <div className="pt-4 text-center">
+          <p className=" text-gray-500  text-[11px]">
+            هنوز حساب کاربری نساخته‌اید؟{" "}
+            <span
+              onClick={() => {
+                switchModal();
+              }}
+              className="font-semibold cursor-pointer text-indigo-600 hover:text-indigo-700 hover:underline"
+            >
+              ایجاد حساب کاربری
+            </span>
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-center min-h-screen sm:bg-gray-50">
@@ -145,7 +200,7 @@ export default function LoginPage() {
           <button
             disabled={mutation.isPending}
             type="submit"
-            className="w-full px-4 py-3 font-semibold text-white mt-4 bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-purple-300 transition-colors duration-300"
+            className="w-full px-4 py-3 font-bold text-white mt-4 bg-indigo-600 rounded-xl shadow-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:bg-indigo-400 transition-all transform hover:scale-[1.01] duration-300"
           >
             {mutation.isPending ? "در حال بررسی..." : "تایید و ادامه"}
           </button>

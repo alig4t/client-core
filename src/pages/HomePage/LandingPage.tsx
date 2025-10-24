@@ -40,7 +40,7 @@ const LandingPage: React.FC = () => {
               <div className="lg:w-1/2 text-center lg:text-right z-10">
                 <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl leading-tight">
                   <span className="text-indigo-600 dark:text-indigo-400">
-                    SocialMon:
+                    رایا نوین:
                   </span>{" "}
                   مدیریت پیام‌رسان‌ها،{" "}
                   <span className="block text-gray-900 dark:text-white mt-2">

@@ -8,7 +8,7 @@ const PublicRoute = () => {
 
   // If the user is logged in, go to the dashboard
   // Otherwise, allow access to the login page (Outlet)
-  return isAuthenticated ? <Navigate to="/" replace /> : <Outlet />;
+  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />;
 };
 
 export default PublicRoute;
