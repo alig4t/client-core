@@ -7,8 +7,9 @@ import NotFoundPage from "@/components/NotFoundPage";
 import { routeConfig } from "./Routes"; // ✅ بدون 'type'
 import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
+import LazyFallbackElement from "./LazyFallbackElement";
 
-const LazyFallback = () => <div>در حال بارگذاری...</div>;
+const LazyFallback = () => <LazyFallbackElement />;
 
 const buildRoutes = (routes: typeof routeConfig): RouteObject[] => {
   return routes.map((route) => {
