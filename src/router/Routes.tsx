@@ -5,6 +5,7 @@ import Layout from "../components/Layout/Layout";
 import NotFoundPage from "../components/NotFoundPage";
 import ProtectedRoute from "./ProtectedRoute";
 import PublicRoute from "./PublicRoute";
+import LandingPage from "@/pages/HomePage/LandingPage";
 
 // Lazy-loaded pages
 const LoginPage = lazy(() => import("../pages/Login"));
@@ -42,6 +43,14 @@ export const Routes: RouteObject[] = [
     element: <PublicRoute />,
     children: [
       {
+        path: "/",
+        element: (
+          <LazyRoute>
+            <LandingPage />
+          </LazyRoute>
+        ),
+      },
+      {
         path: "login",
         element: (
           <LazyRoute>
@@ -64,7 +73,7 @@ export const Routes: RouteObject[] = [
     element: <ProtectedRoute />,
     children: [
       {
-        path: "/",
+        path: "/dashboard",
         element: <Layout />,
         children: [
           {
@@ -76,7 +85,7 @@ export const Routes: RouteObject[] = [
             ),
           },
           {
-            path: "profile",
+            path: "/dashboard/profile",
             element: (
               <LazyRoute>
                 <Profile />
@@ -84,7 +93,7 @@ export const Routes: RouteObject[] = [
             ),
           },
           {
-            path: "settings",
+            path: "/dashboard/settings",
             element: (
               <LazyRoute>
                 <Settings />
@@ -92,7 +101,7 @@ export const Routes: RouteObject[] = [
             ),
           },
           {
-            path: "posts",
+            path: "/dashboard/posts",
             element: (
               <LazyRoute>
                 <Post />
@@ -100,10 +109,10 @@ export const Routes: RouteObject[] = [
             ),
           },
           {
-            path: "portal",
+            path: "/dashboard/portal",
             children: [
               {
-                path: "permissions",
+                path: "/dashboard/portal/permissions",
                 element: (
                   <LazyRoute>
                     <PermissionPage />
@@ -111,7 +120,7 @@ export const Routes: RouteObject[] = [
                 ),
               },
               {
-                path: "permissions/create",
+                path: "/dashboard/portal/permissions/create",
                 element: (
                   <LazyRoute>
                     <PermissionCreate />
@@ -119,7 +128,7 @@ export const Routes: RouteObject[] = [
                 ),
               },
               {
-                path: "comprehensive",
+                path: "/dashboard/portal/comprehensive",
                 element: (
                   <LazyRoute>
                     <ComprehensivePage />
@@ -127,7 +136,7 @@ export const Routes: RouteObject[] = [
                 ),
               },
               {
-                path: "comprehensive/create",
+                path: "/dashboard/portal/comprehensive/create",
                 element: (
                   <LazyRoute>
                     <ComprehensiveCreate />
@@ -135,7 +144,7 @@ export const Routes: RouteObject[] = [
                 ),
               },
               {
-                path: "comprehensive/:id",
+                path: "/dashboard/portal/comprehensive/:id",
                 element: (
                   <LazyRoute>
                     <ComprehensiveDisplay />
