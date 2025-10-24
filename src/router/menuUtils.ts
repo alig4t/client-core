@@ -1,5 +1,5 @@
 // src/lib/menuUtils.ts
-import type { RouteMeta } from "./route.types.ts";
+import type { RouteMeta } from "./path.types.ts";
 import { routeConfig } from "./Routes";
 
 // فقط آیتم‌هایی که باید در منو نمایش داده شوند

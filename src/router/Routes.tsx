@@ -41,7 +41,7 @@ import {
   NotebookPen,
   Bolt,
 } from "lucide-react";
-import type { RouteConfig } from "./route.types.ts";
+import type { RouteConfig } from "./path.types.ts";
 
 // تابع برای مسیرهای پارامتری
 export const withId = (base: string) => `${base}/:id`;

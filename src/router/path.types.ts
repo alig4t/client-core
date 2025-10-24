@@ -1,4 +1,3 @@
-// src/types/route.types.ts
 import type { ReactNode } from "react";
 
 export type Permission = string;
