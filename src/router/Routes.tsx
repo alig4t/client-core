@@ -1,41 +1,65 @@
 // src/routes.tsx
-
 import type { RouteObject } from "react-router-dom";
+import { lazy, Suspense } from "react";
 import Layout from "../components/Layout/Layout";
-import Profile from "../pages/Profile";
-import Settings from "../pages/Settings";
-import LoginPage from "../pages/Login";
-import Post from "../pages/Post";
 import NotFoundPage from "../components/NotFoundPage";
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 
-import ProtectedRoute from "./ProtectedRoute"; // Protected Route component
-import PublicRoute from "./PublicRoute"; // Public Routes component
-import RegisterPage from "@/pages/RegisterPage";
-import PermissionPage from "@/Models/Permission/PermissionPage";
-import PermissionCreate from "@/Models/Permission/PermissionCreate";
-import ComprehensivePage from "@/Models/Comprehensive/ComprehensivePage";
-import ComprehensiveCreate from "@/Models/Comprehensive/ComprehensiveCreate";
-import ComprehensiveDisplay from "@/Models/Comprehensive/ComprehensiveDisplay";
-import Dashboard from "@/pages/Dashboard/Main/DashboardMain";
+// Lazy-loaded pages
+const LoginPage = lazy(() => import("../pages/Login"));
+const RegisterPage = lazy(() => import("@/pages/RegisterPage"));
+const Profile = lazy(() => import("../pages/Profile"));
+const Settings = lazy(() => import("../pages/Settings"));
+const Post = lazy(() => import("../pages/Post"));
+const Dashboard = lazy(() => import("@/pages/Dashboard/Main/DashboardMain"));
+
+// Permission Module
+const PermissionPage = lazy(() => import("@/Models/Permission/PermissionPage"));
+const PermissionCreate = lazy(
+  () => import("@/Models/Permission/PermissionCreate")
+);
+
+// Comprehensive Module
+const ComprehensivePage = lazy(
+  () => import("@/Models/Comprehensive/ComprehensivePage")
+);
+const ComprehensiveCreate = lazy(
+  () => import("@/Models/Comprehensive/ComprehensiveCreate")
+);
+const ComprehensiveDisplay = lazy(
+  () => import("@/Models/Comprehensive/ComprehensiveDisplay")
+);
+
+// Wrapper for lazy components with Suspense fallback (optional: you can customize fallback)
+const LazyRoute = ({ children }: { children: React.ReactNode }) => (
+  <Suspense fallback={<div>در حال بارگذاری...</div>}>{children}</Suspense>
+);
 
 export const Routes: RouteObject[] = [
   {
-    // Public routes that logged-in users should not see (like login page)
     path: "/",
     element: <PublicRoute />,
     children: [
       {
         path: "login",
-        element: <LoginPage />,
+        element: (
+          <LazyRoute>
+            <LoginPage />
+          </LazyRoute>
+        ),
       },
       {
         path: "register",
-        element: <RegisterPage />,
+        element: (
+          <LazyRoute>
+            <RegisterPage />
+          </LazyRoute>
+        ),
       },
     ],
   },
   {
-    // Protected routes that require authentication
     path: "/",
     element: <ProtectedRoute />,
     children: [
@@ -43,28 +67,87 @@ export const Routes: RouteObject[] = [
         path: "/",
         element: <Layout />,
         children: [
-          { index: true, element: <Dashboard /> },
-          { path: "profile", element: <Profile /> },
-          { path: "settings", element: <Settings /> },
-          { path: "posts", element: <Post /> },
+          {
+            index: true,
+            element: (
+              <LazyRoute>
+                <Dashboard />
+              </LazyRoute>
+            ),
+          },
+          {
+            path: "profile",
+            element: (
+              <LazyRoute>
+                <Profile />
+              </LazyRoute>
+            ),
+          },
+          {
+            path: "settings",
+            element: (
+              <LazyRoute>
+                <Settings />
+              </LazyRoute>
+            ),
+          },
+          {
+            path: "posts",
+            element: (
+              <LazyRoute>
+                <Post />
+              </LazyRoute>
+            ),
+          },
           {
             path: "portal",
             children: [
-              { path: "permissions", element: <PermissionPage /> },
-              { path: "permissions/create", element: <PermissionCreate /> },
-              { path: "comprehensive", element: <ComprehensivePage /> },
+              {
+                path: "permissions",
+                element: (
+                  <LazyRoute>
+                    <PermissionPage />
+                  </LazyRoute>
+                ),
+              },
+              {
+                path: "permissions/create",
+                element: (
+                  <LazyRoute>
+                    <PermissionCreate />
+                  </LazyRoute>
+                ),
+              },
+              {
+                path: "comprehensive",
+                element: (
+                  <LazyRoute>
+                    <ComprehensivePage />
+                  </LazyRoute>
+                ),
+              },
               {
                 path: "comprehensive/create",
-                element: <ComprehensiveCreate />,
+                element: (
+                  <LazyRoute>
+                    <ComprehensiveCreate />
+                  </LazyRoute>
+                ),
               },
-              { path: "comprehensive/:id", element: <ComprehensiveDisplay /> },
+              {
+                path: "comprehensive/:id",
+                element: (
+                  <LazyRoute>
+                    <ComprehensiveDisplay />
+                  </LazyRoute>
+                ),
+              },
             ],
           },
         ],
       },
     ],
   },
-  // 404 route for not found paths
   {
     path: "*",
     element: <NotFoundPage />,
