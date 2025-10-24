@@ -1,6 +1,6 @@
 // src/lib/menuUtils.ts
-import { routeConfig } from "./Routes";
 import type { RouteMeta } from "./route.types";
+import { routeConfig } from "./Routes";
 
 // فقط آیتم‌هایی که باید در منو نمایش داده شوند
 const validMenuItems = routeConfig.filter((r): r is RouteMeta => {
