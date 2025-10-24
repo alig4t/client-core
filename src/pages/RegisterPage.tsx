@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو از اینجا وارد می‌شود
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
+import { useAuth } from "@/stores/AuthContext";
 
 // --- Schema برای اعتبارسنجی فرم ثبت‌نام ---
 const registerSchema = z
@@ -120,6 +121,7 @@ export default function RegisterPage({
   switchModal: () => void;
 }) {
   const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
 
   const mutation = useMutation({
     mutationFn: (data: RegisterFormData) =>
@@ -128,18 +130,26 @@ export default function RegisterPage({
         username: data.username,
         password: data.password,
       }),
-    onSuccess: () => {
+    onSuccess: (data) => {
       toast.success("ثبت‌نام موفقیت آمیز بود", {
-        description: "حساب کاربری شما ایجاد شد. به صفحه ورود منتقل می‌شوید.",
+        description: "حساب کاربری شما ایجاد شد. در حال انتقال به داشبورد.",
         position: "bottom-left",
       });
+      const token = data.data.token;
+      const user = data.data.user;
+
       setTimeout(() => {
-        if (inModal) {
-          switchModal();
-        } else {
-          navigate("/login");
-        }
-      }, 1500);
+        authLogin(token, user);
+        navigate("/dashboard");
+      }, 1000);
+
+      // setTimeout(() => {
+      //   if (inModal) {
+      //     switchModal();
+      //   } else {
+      //     navigate("/login");
+      //   }
+      // }, 1500);
     },
     onError: (error: any) => {
       toast.error("ثبت‌نام ناموفق بود", {

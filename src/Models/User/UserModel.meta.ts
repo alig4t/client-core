@@ -19,8 +19,20 @@ export const UserModelMeta = createModelMeta<UserModel, FormFieldMetadata>(
     },
   },
   GET_AUTOCOMPLETE_DISPLAY_FIELD(),
+  GET_DISPLAY_NAME(),
+  GET_PLURAL_DISPLAY_NAME()
 );
+
+
 
 function GET_AUTOCOMPLETE_DISPLAY_FIELD() : keyof UserModel{
     return "username"
+}
+
+function GET_DISPLAY_NAME() : string{
+  return "کاربر"
+}
+
+function GET_PLURAL_DISPLAY_NAME() : string{
+  return "کاربران"
 }

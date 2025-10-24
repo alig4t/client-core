@@ -54,7 +54,7 @@ export const Routes: RouteObject[] = [
         path: "login",
         element: (
           <LazyRoute>
-            <LoginPage />
+            <LoginPage inModal={false} switchModal={() => {}} />
           </LazyRoute>
         ),
       },
@@ -62,7 +62,7 @@ export const Routes: RouteObject[] = [
         path: "register",
         element: (
           <LazyRoute>
-            <RegisterPage />
+            <RegisterPage inModal={false} switchModal={() => {}} />
           </LazyRoute>
         ),
       },

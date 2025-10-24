@@ -1,5 +1,5 @@
 import { FolderSearch } from "lucide-react";
-import { Button } from "./ui/button";
+import Button from "./Button/Button";
 
 export default function ServiceErrorDisplay({
   refetch,
@@ -19,7 +19,7 @@ export default function ServiceErrorDisplay({
       </p>
 
       <Button
-        variant="outline"
+        type="button"
         className="!bg-[#c5226c] hover:!bg-[#c11764] p-2 !font-bold  shadow-md rounded-md transition hover:!text-zinc-100 !text-xs !text-white"
         onClick={() => refetch()}
       >

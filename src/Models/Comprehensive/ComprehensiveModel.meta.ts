@@ -4,9 +4,6 @@ import type { ComprehensiveModel } from "./ComprehensiveModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
 
-const DISPLAY_NAME = "ترکیبی";
-const PLURAL_DISPLAY_NAME = "ترکیبی‌ها";
-const AUTOCOMPLETE_DISPLAY_FIELD = "stringField";
 
 export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFieldMetadata>(
   {
@@ -106,9 +103,21 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
       sortable: false,
     },
   },
-  AUTOCOMPLETE_DISPLAY_FIELD,
-  DISPLAY_NAME,
-  PLURAL_DISPLAY_NAME,
+  GET_AUTOCOMPLETE_DISPLAY_FIELD(),
+  GET_DISPLAY_NAME(),
+  GET_PLURAL_DISPLAY_NAME(),
 );
+
+function GET_AUTOCOMPLETE_DISPLAY_FIELD() : keyof ComprehensiveModel{
+    return "stringField"
+}
+
+function GET_DISPLAY_NAME() : string{
+  return "ترکیبی"
+}
+
+function GET_PLURAL_DISPLAY_NAME() : string{
+  return "ترکیبی ها"
+}
 
 

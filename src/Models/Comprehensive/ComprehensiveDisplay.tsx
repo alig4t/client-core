@@ -55,14 +55,14 @@ const ComprehensiveDisplayPage: React.FC = () => {
         <DisplayField label="فیلد انوم" value={comprehensiveRecord.enumField} />
 
         {/* Example of linking to a related model record */}
-        <DisplayField
+        {/* <DisplayField
           label="کاربر مرتبط"
           value={comprehensiveRecord.oneToOneUserName}
           link={{
             view: "user-display",
             id: comprehensiveRecord.oneToOneUserId,
           }}
-        />
+        /> */}
 
         {/* Example of a field spanning all columns */}
         <DisplayField

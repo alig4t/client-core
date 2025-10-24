@@ -78,7 +78,9 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({
             {field.type === "select" && (
               <Select
                 value={formState[field.name] || ""}
-                onChange={(e) => handleInputChange(field.name, e.target.value)}
+                onChange={(e) =>
+                  handleInputChange(field.name, (e as any).target.value)
+                }
                 options={field.options || []}
               />
             )}

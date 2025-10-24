@@ -17,15 +17,23 @@ import {
 import type { JSX } from "react";
 
 export const mainMenu = [
-  { icon: <Home size={24} />, label: "خانه", href: "/" },
-  { icon: <User size={24} />, label: "پروفایل", href: "/profile" },
-  { icon: <Bolt size={24} />, label: "پورتال", href: "/portal" },
+  { icon: <Home size={24} />, label: "خانه", href: "/dashboard" },
+  { icon: <User size={24} />, label: "پروفایل", href: "/dashboard/profile" },
+  { icon: <Bolt size={24} />, label: "پورتال", href: "/dashboard/portal" },
 
-  { icon: <Settings size={24} />, label: "تنظیمات", href: "/settings" },
+  {
+    icon: <Settings size={24} />,
+    label: "تنظیمات",
+    href: "/dashboard/settings",
+  },
 
-  { icon: <Home size={24} />, label: "آمار", href: "/stats" },
-  { icon: <NotebookPen size={24} />, label: "پست ها", href: "/posts" },
-  { icon: <Settings size={24} />, label: "امنیت", href: "/security" },
+  { icon: <Home size={24} />, label: "آمار", href: "/dashboard/stats" },
+  {
+    icon: <NotebookPen size={24} />,
+    label: "پست ها",
+    href: "/dashboard/posts",
+  },
+  { icon: <Settings size={24} />, label: "امنیت", href: "/dashboard/security" },
 ];
 
 // لیست زیرمنوها
@@ -33,83 +41,91 @@ export const subMenus: Record<
   string,
   { label: string; href: string; icon: JSX.Element }[]
 > = {
-  "/settings": [
+  "/dashboard/settings": [
     {
       label: "اتصال اکانت‌ها",
-      href: "/settings/accounts",
+      href: "/dashboard/settings/accounts",
       icon: <Plug size={18} />,
     },
-    { label: "اعضای تیم", href: "/settings/team", icon: <Users size={18} /> },
+    {
+      label: "اعضای تیم",
+      href: "/dashboard/settings/team",
+      icon: <Users size={18} />,
+    },
     {
       label: "ادغام ابزارها",
-      href: "/settings/integrations",
+      href: "/dashboard/settings/integrations",
       icon: <PlusSquare size={18} />,
     },
     {
       label: "تیکت پشتیبانی",
-      href: "/settings/tickets",
+      href: "/dashboard/settings/tickets",
       icon: <LifeBuoy size={18} />,
     },
     {
       label: "تنظیمات حساب",
-      href: "/settings/profile",
+      href: "/dashboard/settings/profile",
       icon: <Settings size={18} />,
     },
     {
       label: "تنظیمات امنیتی",
-      href: "/settings/security",
+      href: "/dashboard/settings/security",
       icon: <Shield size={18} />,
     },
-    { label: "توسعه دهندگان", href: "/settings/dev", icon: <Code size={18} /> },
+    {
+      label: "توسعه دهندگان",
+      href: "/dashboard/settings/dev",
+      icon: <Code size={18} />,
+    },
     {
       label: "تنظیمات اطلاع‌رسانی",
-      href: "/settings/notifications",
+      href: "/dashboard/settings/notifications",
       icon: <Bell size={18} />,
     },
     {
       label: "ارتقا اشتراک",
-      href: "/settings/upgrade",
+      href: "/dashboard/settings/upgrade",
       icon: <Zap size={18} />,
     },
     {
       label: "سوابق مالی",
-      href: "/settings/billing",
+      href: "/dashboard/settings/billing",
       icon: <CreditCard size={18} />,
     },
   ],
-  "/profile": [
+  "/dashboard/profile": [
     {
       label: "محتواها",
-      href: "/profile/billing",
+      href: "/dashboard/profile/billing",
       icon: <CreditCard size={18} />,
     },
   ],
-  "/posts": [
+  "/dashboard/posts": [
     {
       label: "محتواها",
-      href: "/posts/billing",
+      href: "/dashboard/posts/billing",
       icon: <CreditCard size={18} />,
     },
   ],
-  "/portal": [
+  "/dashboard/portal": [
     {
       label: "تگ ها",
-      href: "/portal/tags",
+      href: "/dashboard/portal/tags",
       icon: <CreditCard size={18} />,
     },
     {
       label: "پست ها",
-      href: "/portal/posts",
+      href: "/dashboard/portal/posts",
       icon: <CreditCard size={18} />,
     },
     {
       label: "مجوز ها",
-      href: "/portal/permissions",
+      href: "/dashboard/portal/permissions",
       icon: <CreditCard size={18} />,
     },
     {
       label: "ترکیبی ها",
-      href: "/portal/comprehensive",
+      href: "/dashboard/portal/comprehensive",
       icon: <CreditCard size={18} />,
     },
   ],
