@@ -1,4 +1,4 @@
-import { type FC } from "react";
+import { useEffect, useState, type FC } from "react";
 import { RefreshCw } from "lucide-react";
 import GlassStatCardList from "../../../components/pages/dashboard/GlassStatCardList";
 import ChartHeroContainer from "../../../components/pages/dashboard/ChartHeroContainer";
@@ -10,6 +10,12 @@ import { WeeklySummaryCard } from "../../../components/pages/dashboard/WeeklySum
 import { DashboardData } from "./DashboardData";
 
 const Dashboard: FC = () => {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 4000);
+  }, []);
   return (
     <div
       dir="rtl"
@@ -36,14 +42,24 @@ const Dashboard: FC = () => {
 
       <div className="grid grid-cols-12 gap-6">
         <div className="col-span-12 lg:col-span-8 space-y-6">
-          <GlassStatCardList kpiData={DashboardData.kpiData} />
-          <ChartHeroContainer timeSeriesData={DashboardData.timeSeriesData} />
+          <GlassStatCardList
+            kpiData={DashboardData.kpiData}
+            isLoading={loading}
+          />
+          <ChartHeroContainer
+            timeSeriesData={DashboardData.timeSeriesData}
+            isLoading={loading}
+          />
+
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <KeywordFrequencyChart
               frequencyData={DashboardData.frequencyData}
+              isLoading={loading}
             />
+
             <TopKeywordMiniChart
               topKeywordPerformance={DashboardData.topKeywordPerformance}
+              isLoading={loading}
             />
           </div>
         </div>
@@ -51,12 +67,15 @@ const Dashboard: FC = () => {
         {/* RIGHT COLUMN: Recent Activity and Summary (Spans 3 columns on large screens) */}
         <div className="col-span-12 lg:col-span-4 space-y-6">
           <ChannelDistributionChart
+            isLoading={loading}
             channelDistributionData={DashboardData.channelDistributionData}
           />
           <RecentActivityList
             recentActivityData={DashboardData.recentActivityData}
+            isLoading={loading}
           />
-          <WeeklySummaryCard />
+
+          <WeeklySummaryCard isLoading={loading} />
         </div>
         {/* RIGHT COLUMN: Recent Activity and Summary (Spans 3 columns on large screens) */}
       </div>

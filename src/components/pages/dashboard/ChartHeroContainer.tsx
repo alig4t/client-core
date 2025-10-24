@@ -1,4 +1,4 @@
-import type { FC } from "react";
+import type { FC, ReactElement } from "react";
 import {
   CartesianGrid,
   Legend,
@@ -10,8 +10,8 @@ import {
   YAxis,
 } from "recharts";
 import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
-import ChartContainer from "./ChartContainer";
-import { TrendingUp } from "lucide-react";
+import ChartContainer, { ChartSkeleton } from "./ChartContainer";
+import { Layers, TrendingUp } from "lucide-react";
 
 // نمودار خطی روند زمانی (Hero Chart)
 const MonitoringTrendChart: FC<{ timeSeriesData: any }> = ({
@@ -85,9 +85,13 @@ const MonitoringTrendChart: FC<{ timeSeriesData: any }> = ({
     </ResponsiveContainer>
   </div>
 );
-const ChartHeroContainer: FC<{ timeSeriesData: any }> = ({
+const ChartHeroContainer: FC<{ timeSeriesData: any; isLoading: boolean }> = ({
   timeSeriesData,
+  isLoading,
 }) => {
+  if (isLoading) {
+    return Skeleton;
+  }
   return (
     <div className="mb-6">
       <ChartContainer
@@ -102,3 +106,85 @@ const ChartHeroContainer: FC<{ timeSeriesData: any }> = ({
 };
 
 export default ChartHeroContainer;
+
+const Skeleton: ReactElement = (
+  <div className="col-span-1">
+    <ChartSkeleton
+      title="توزیع کلیدواژه‌ها بر اساس کانال"
+      icon={Layers}
+      className="h-[40rem]"
+    >
+      {/* بخش نمودار */}
+      <div className="relative h-42 border-b border-gray-200 pt-0 pb-6">
+        {/* محور Y - خطوط افقی خیالی */}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute left-0 right-0 h-px bg-gray-200"
+            style={{ top: `${(i + 1) * 20}%` }}
+          ></div>
+        ))}
+
+        {/* خط خیالی */}
+        {/* <div className="absolute bottom-8 left-0 right-0 h-px bg-purple-500 animate-pulse"></div>
+        <div
+          className="absolute bottom-0 left-0 right-0 h-px bg-green-500 animate-pulse"
+          style={{ top: "10%" }}
+        ></div> */}
+
+        {/* نقاط خیالی روی خطوط */}
+        {Array.from({ length: 7 }).map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-3 h-3 bg-purple-500/45 rounded-full animate-pulse"
+            style={{
+              left: `${(i + 1) * 14}%`,
+              bottom: `${Math.random() * 60 + 10}%`,
+            }}
+          ></div>
+        ))}
+
+        {Array.from({ length: 7 }).map((_, i) => (
+          <div
+            key={`green-${i}`}
+            className="absolute w-3 h-3 bg-green-500/45 rounded-full animate-pulse"
+            style={{
+              left: `${(i + 1) * 14}%`,
+              bottom: `${Math.random() * 60 + 10}%`,
+            }}
+          ></div>
+        ))}
+
+        {/* محور X - برچسب‌های خیالی */}
+        <div className="absolute bottom-0 left-0 right-0 flex justify-between px-4 text-xs text-gray-500">
+          {[
+            "۱ تیر",
+            "۸ تیر",
+            "۱۵ تیر",
+            "۲۲ تیر",
+            "۲۹ تیر",
+            "۵ مرداد",
+            "۱۲ مرداد",
+          ].map((label, i) => (
+            <div
+              key={i}
+              className="h-3 w-1/12 bg-gray-300 rounded animate-pulse"
+            ></div>
+          ))}
+        </div>
+      </div>
+
+      {/* لِجِند */}
+      <div className="flex flex-row-reverse justify-center mt-4 space-x-6 rtl:space-x-reverse">
+        <div className="flex items-center gap-2 space-x-2 rtl:space-x-reverse">
+          <div className="w-4 h-4 bg-purple-500 rounded animate-pulse"></div>
+          <div className="h-3 w-12 bg-gray-300 rounded animate-pulse"></div>
+        </div>
+        <div className="flex items-center gap-2 space-x-2 rtl:space-x-reverse">
+          <div className="w-4 h-4 bg-green-500 rounded animate-pulse"></div>
+          <div className="h-3 w-12 bg-gray-300 rounded animate-pulse"></div>
+        </div>
+      </div>
+    </ChartSkeleton>
+  </div>
+);
