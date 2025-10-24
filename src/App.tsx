@@ -4,11 +4,11 @@ import { useRoutes } from "react-router-dom";
 import "./App.css";
 import { Toaster } from "./components/ui/sonner";
 import GlobalLoaderProvider from "./components/GlobalLoaderProvider";
-import { Routes } from "./router/Routes";
+import { appRoutes } from "@/router/index"; // ✅ import از src/routes/index.tsx
 
 function App() {
   // استفاده از هوک useRoutes برای رندر کردن ساختار روت‌ها
-  const element = useRoutes(Routes);
+  const element = useRoutes(appRoutes);
 
   return (
     <>

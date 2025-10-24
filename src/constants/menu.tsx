@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import type { JSX } from "react";
 
-export const mainMenu = [
+const mainMenu = [
   { icon: <Home size={24} />, label: "خانه", href: "/dashboard" },
   { icon: <User size={24} />, label: "پروفایل", href: "/dashboard/profile" },
   { icon: <Bolt size={24} />, label: "پورتال", href: "/dashboard/portal" },

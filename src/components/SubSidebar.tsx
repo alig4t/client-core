@@ -1,35 +1,30 @@
+// src/components/SubSidebar/SubSidebar.tsx
 import { Link, useLocation } from "react-router-dom";
-import { subMenus } from "@/constants/menu";
+
 import { useEffect, useState } from "react";
+import { subMenus } from "@/router/menuUtils";
 
 const SubSidebar = () => {
   const location = useLocation();
   const [loading, setLoading] = useState(true);
 
-  // پیدا کردن کلید مرتبط (مثلاً /settings)
   const matchedKey = Object.keys(subMenus).find((prefix) =>
     location.pathname.startsWith(prefix)
   );
 
   const menuItems = matchedKey ? subMenus[matchedKey] : [];
 
-  // زمانی که مسیر تغییر کنه، دوباره لودینگ اجرا میشه
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 1500);
+    const timer = setTimeout(() => setLoading(false), 150);
     return () => clearTimeout(timer);
   }, [matchedKey]);
 
-  // اگر هیچ زیرمنویی پیدا نشد، اصلاً چیزی نشون نده
   if (!matchedKey) return null;
 
   return (
-    <aside className="w-full  lg:w-60 bg-[var(--background)] border-l border-r border-gray-200 dark:border-gray-600 py-8 lg:py-4 px-6 lg:px-2">
-      <ul
-        className="
-      grid grid-cols-3 sm:grid-cols-4 gap-3 
-      lg:block lg:space-y-1 w-full transition-all"
-      >
+    <aside className="w-full lg:w-60 bg-[var(--background)] border-l border-r border-gray-200 dark:border-gray-600 py-8 lg:py-4 px-6 lg:px-2">
+      <ul className="grid grid-cols-3 sm:grid-cols-4 gap-3 lg:block lg:space-y-1 w-full transition-all">
         {loading
           ? Array.from({ length: menuItems.length }).map((_, idx) => (
               <li
@@ -41,11 +36,11 @@ const SubSidebar = () => {
               </li>
             ))
           : menuItems.map((item, idx) => {
-              const isActive = location.pathname === item.href;
+              const isActive = location.pathname === item.path;
               return (
                 <li key={idx}>
                   <Link
-                    to={item.href}
+                    to={item.path}
                     className={`
                   group flex flex-col lg:flex-row items-center justify-center lg:justify-start gap-2 lg:gap-3 p-4 lg:p-2 rounded-lg text-[12px] lg:text-sm font-medium shadow-sm lg:shadow-none
                   ${

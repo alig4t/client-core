@@ -64,7 +64,7 @@ const CustomButton: FC<CustomButtonProps> = ({
 }) => {
   return (
     <button
-      className={`px-3 py-2 text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${className}`}
+      className={`!px-3 !py-1.5 text-sm font-medium rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 ${className}`}
       {...props}
     >
       {children}
@@ -122,7 +122,7 @@ const Navbar: FC = () => {
           پشتیبانی
         </CustomButton>
 
-        <CustomButton className="bg-[#c5226c] hover:bg-[#c11764] font-bold text-xs text-white shadow-lg shadow-[#c5226c]/40">
+        <CustomButton className="bg-[#c5226c] hover:bg-[#c11764] font-bold text-xs text-white shadow-sm shadow-[#c5226c]/40">
           ارتقای حساب
         </CustomButton>
       </div>
