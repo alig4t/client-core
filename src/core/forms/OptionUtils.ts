@@ -10,6 +10,12 @@ export const YES_OR_NO_OPTIONS: Option[] = [
     { value: 0, label: "نه" },
 ];
 
+export const GET_BOOLEAN_OPTION = (value: boolean): string => {
+    return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
+}
+
+
+
 export const PAGE_SIZE_OPTIONS: Option[] = [
   { label: "5", value: 5 },
   { label: "10", value: 10 },
@@ -55,6 +61,7 @@ export function buildSortOptions<
 
 const OptionUtils = {
   YES_OR_NO_OPTIONS,
+  GET_BOOLEAN_OPTION,
   PAGE_SIZE_OPTIONS,
   buildSortOptions
 }
