@@ -36,8 +36,6 @@ const Sidebar = () => {
             const itemBase = item.path.split("/")[2] || "";
             const isActive = currentBase === itemBase;
 
-            console.log(itemBase, currentBase, isActive);
-
             return (
               <Tooltip key={index}>
                 <TooltipTrigger asChild>

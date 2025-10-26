@@ -12,7 +12,7 @@ const PermissionPage: React.FC = () => {
   const { hasPermission } = useAuth();
 
 
-  if (!hasPermission("permission:readss")) {
+  if (!hasPermission(Permission.Permission_Read)) {
     return <ForbiddenPage />;
   }
 
