@@ -1,25 +1,29 @@
 // src/constants/routes.ts
 import { lazy } from "react";
-// Lazy components (همان‌هایی که در routes.tsx داشتی)
+
+// Lazy components
 const LandingPage = lazy(() => import("@/pages/HomePage/LandingPage"));
 const LoginPage = lazy(() => import("@/pages/Login"));
 const RegisterPage = lazy(() => import("@/pages/RegisterPage"));
 const Dashboard = lazy(() => import("@/pages/Dashboard/Main/DashboardMain"));
 const Profile = lazy(() => import("@/pages/Profile"));
 const Settings = lazy(() => import("@/pages/Settings"));
-const Post = lazy(() => import("@/pages/Post"));
 
-// Permission & Comprehensive
+// Permission Module
 const PermissionPage = lazy(() => import("@/Models/Permission/PermissionPage"));
 const PermissionCreate = lazy(
   () => import("@/Models/Permission/PermissionCreate")
 );
+// const PermissionEdit = lazy(() => import("@/Models/Permission/PermissionEdit"));
+
+// Comprehensive Module
 const ComprehensivePage = lazy(
   () => import("@/Models/Comprehensive/ComprehensivePage")
 );
 const ComprehensiveCreate = lazy(
   () => import("@/Models/Comprehensive/ComprehensiveCreate")
 );
+// const ComprehensiveEdit = lazy(() => import("@/Models/Comprehensive/ComprehensiveEdit"));
 const ComprehensiveDisplay = lazy(
   () => import("@/Models/Comprehensive/ComprehensiveDisplay")
 );
@@ -29,49 +33,38 @@ import {
   Home,
   User,
   Settings as SettingsIcon,
-  Plug,
-  Users,
-  PlusSquare,
-  LifeBuoy,
   Shield,
   Code,
-  Bell,
-  Zap,
-  CreditCard,
   NotebookPen,
   Bolt,
+  Bot,
+  Hash,
+  MapPin,
+  MessageSquare,
+  Users,
+  Key,
+  Database,
+  Globe,
+  UserCheck,
 } from "lucide-react";
-import type { RouteConfig } from "./path.types.ts";
+import type { RouteConfig } from "./path.types";
+import { Permission } from "./Permission";
 
 // تابع برای مسیرهای پارامتری
 export const withId = (base: string) => `${base}/:id`;
 
-// ✅ تمام مسیرهای شما — دقیقاً مطابق منوی فعلی، اما با متادیتا
 export const routeConfig: RouteConfig[] = [
   // --- Public ---
-  {
-    path: "/",
-    label: "صفحه اصلی",
-    element: LandingPage,
-    isPublic: true,
-    showInMenu: false,
-  },
-  {
-    path: "/login",
-    label: "ورود",
-    element: LoginPage,
-    isPublic: true,
-    showInMenu: false,
-  },
+  { path: "/", element: LandingPage, isPublic: true, showInMenu: false },
+  { path: "/login", element: LoginPage, isPublic: true, showInMenu: false },
   {
     path: "/register",
-    label: "ثبت‌نام",
     element: RegisterPage,
     isPublic: true,
     showInMenu: false,
   },
 
-  // --- Main Menu Items (showInMenu: true, بدون parent) ---
+  // --- Dashboard (main) ---
   {
     path: "/dashboard",
     label: "خانه",
@@ -79,6 +72,8 @@ export const routeConfig: RouteConfig[] = [
     element: Dashboard,
     showInMenu: true,
   },
+
+  // --- Profile ---
   {
     path: "/dashboard/profile",
     label: "پروفایل",
@@ -86,12 +81,8 @@ export const routeConfig: RouteConfig[] = [
     element: Profile,
     showInMenu: true,
   },
-  {
-    path: "/dashboard/portal",
-    label: "پورتال",
-    icon: <Bolt size={24} />,
-    showInMenu: true,
-  }, // بدون element — فقط والد
+
+  // --- Settings ---
   {
     path: "/dashboard/settings",
     label: "تنظیمات",
@@ -99,163 +90,176 @@ export const routeConfig: RouteConfig[] = [
     element: Settings,
     showInMenu: true,
   },
+
+  // --- Portal (main entry) ---
   {
-    path: "/dashboard/stats",
-    label: "آمار",
-    icon: <Home size={24} />,
-    showInMenu: true,
-  }, // بدون element فعلاً
-  {
-    path: "/dashboard/posts",
-    label: "پست ها",
-    icon: <NotebookPen size={24} />,
-    element: Post,
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/security",
-    label: "امنیت",
-    icon: <SettingsIcon size={24} />,
+    path: "/dashboard/portal",
+    label: "پورتال",
+    icon: <Bolt size={24} />,
     showInMenu: true,
   },
 
-  // --- Submenus: Portal ---
-  {
-    path: "/dashboard/portal/tags",
-    label: "تگ ها",
-    icon: <CreditCard size={18} />,
-    parent: "/dashboard/portal",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/portal/posts",
-    label: "پست ها",
-    icon: <CreditCard size={18} />,
-    parent: "/dashboard/portal",
-    showInMenu: true,
-  },
+  // ================================
+  // 🔐 صفحات مدیریت مجوزها (Permission)
+  // ================================
   {
     path: "/dashboard/portal/permissions",
     label: "مجوز ها",
     icon: <Shield size={18} />,
     element: PermissionPage,
     parent: "/dashboard/portal",
+    permission: Permission.Permission_Read,
     showInMenu: true,
   },
+  {
+    path: "/dashboard/portal/permissions/create",
+    element: PermissionCreate,
+    permission: Permission.Permission_Create,
+    showInMenu: false,
+  },
+  {
+    path: withId("/dashboard/portal/permissions"),
+    // element: PermissionEdit,
+    permission: Permission.Permission_Update,
+    showInMenu: false,
+  },
+
+  // ================================
+  // 🧩 صفحات ComprehensiveEntity
+  // ================================
   {
     path: "/dashboard/portal/comprehensive",
     label: "ترکیبی ها",
     icon: <Code size={18} />,
     element: ComprehensivePage,
     parent: "/dashboard/portal",
+    permission: Permission.ComprehensiveEntity_Read,
     showInMenu: true,
-  },
-
-  // --- Submenus: Settings ---
-  {
-    path: "/dashboard/settings/accounts",
-    label: "اتصال اکانت‌ها",
-    icon: <Plug size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/team",
-    label: "اعضای تیم",
-    icon: <Users size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/integrations",
-    label: "ادغام ابزارها",
-    icon: <PlusSquare size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/tickets",
-    label: "تیکت پشتیبانی",
-    icon: <LifeBuoy size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/profile",
-    label: "تنظیمات حساب",
-    icon: <SettingsIcon size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/security",
-    label: "تنظیمات امنیتی",
-    icon: <Shield size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/dev",
-    label: "توسعه دهندگان",
-    icon: <Code size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/notifications",
-    label: "اطلاع‌رسانی",
-    icon: <Bell size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/upgrade",
-    label: "ارتقا اشتراک",
-    icon: <Zap size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/settings/billing",
-    label: "سوابق مالی",
-    icon: <CreditCard size={18} />,
-    parent: "/dashboard/settings",
-    showInMenu: true,
-  },
-
-  // --- Extra (برای profile و posts) ---
-  {
-    path: "/dashboard/profile/billing",
-    label: "محتواها",
-    icon: <CreditCard size={18} />,
-    parent: "/dashboard/profile",
-    showInMenu: true,
-  },
-  {
-    path: "/dashboard/posts/billing",
-    label: "محتواها",
-    icon: <CreditCard size={18} />,
-    parent: "/dashboard/posts",
-    showInMenu: true,
-  },
-
-  // --- Create & Detail Pages (not in menu) ---
-  {
-    path: "/dashboard/portal/permissions/create",
-    element: PermissionCreate,
-    permission: "create:permissions",
-    showInMenu: false,
   },
   {
     path: "/dashboard/portal/comprehensive/create",
     element: ComprehensiveCreate,
-    permission: "create:comprehensive",
+    permission: Permission.ComprehensiveEntity_Create,
     showInMenu: false,
   },
   {
     path: withId("/dashboard/portal/comprehensive"),
     element: ComprehensiveDisplay,
-    permission: "view:comprehensive",
+    permission: Permission.ComprehensiveEntity_Read,
     showInMenu: false,
+  },
+  {
+    path: `${withId("/dashboard/portal/comprehensive")}/edit`,
+    // element: ComprehensiveEdit,
+    permission: Permission.ComprehensiveEntity_Update,
+    showInMenu: false,
+  },
+
+  // ================================
+  // 🤖 Bot
+  // ================================
+  {
+    path: "/dashboard/portal/bots",
+    label: "ربات‌ها",
+    icon: <Bot size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.Bot_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 📢 Channel
+  // ================================
+  {
+    path: "/dashboard/portal/channels",
+    label: "کانال‌ها",
+    icon: <Hash size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.Channel_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 🏙️ City
+  // ================================
+  {
+    path: "/dashboard/portal/cities",
+    label: "شهرها",
+    icon: <MapPin size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.City_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 💬 Message
+  // ================================
+  {
+    path: "/dashboard/portal/messages",
+    label: "پیام‌ها",
+    icon: <MessageSquare size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.Message_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 👥 User
+  // ================================
+  {
+    path: "/dashboard/portal/users",
+    label: "کاربران",
+    icon: <Users size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.User_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 🔑 Keyword
+  // ================================
+  {
+    path: "/dashboard/portal/keywords",
+    label: "کلمات کلیدی",
+    icon: <Key size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.Keyword_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 🌐 MessagingPlatform
+  // ================================
+  {
+    path: "/dashboard/portal/platforms",
+    label: "پلتفرم‌ها",
+    icon: <Globe size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.MessagingPlatform_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 👤 Person
+  // ================================
+  {
+    path: "/dashboard/portal/persons",
+    label: "افراد",
+    icon: <UserCheck size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.Person_Read,
+    showInMenu: true,
+  },
+
+  // ================================
+  // 🗃️ DashboardData
+  // ================================
+  {
+    path: "/dashboard/portal/data",
+    label: "داده‌های داشبورد",
+    icon: <Database size={18} />,
+    parent: "/dashboard/portal",
+    permission: Permission.DashboardData_Read,
+    showInMenu: true,
   },
 ];

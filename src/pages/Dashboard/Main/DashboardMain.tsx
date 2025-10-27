@@ -14,7 +14,7 @@ const Dashboard: FC = () => {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-    }, 4000);
+    }, 2000);
   }, []);
   return (
     <div

@@ -2,25 +2,43 @@
 import { Link, useLocation } from "react-router-dom";
 
 import { useEffect, useState } from "react";
-import { subMenus } from "@/router/menuUtils";
+import { getSubMenus } from "@/router/menuUtils";
+import { useAuth } from "@/stores/AuthContext";
+// import { subMenus } from "@/router/menuUtils";
 
 const SubSidebar = () => {
   const location = useLocation();
+  const { hasPermission } = useAuth();
   const [loading, setLoading] = useState(true);
 
-  const matchedKey = Object.keys(subMenus).find((prefix) =>
+  // دریافت تمام زیرمنوها (بدون فیلتر)
+  const allSubMenus = getSubMenus();
+
+  // پیدا کردن کلید والد مرتبط (مثلاً /dashboard/settings)
+  const matchedKey = Object.keys(allSubMenus).find((prefix) =>
     location.pathname.startsWith(prefix)
   );
 
-  const menuItems = matchedKey ? subMenus[matchedKey] : [];
+  // فیلتر کردن آیتم‌های زیرمنو بر اساس مجوز
+  const menuItems = matchedKey
+    ? allSubMenus[matchedKey].filter((item) => {
+        // اگر آیتم مجوز نیاز دارد و کاربر آن را ندارد → نشان نده
+        if (item.permission && !hasPermission(item.permission)) {
+          return false;
+        }
+        return true;
+      })
+    : [];
 
+  // مدیریت لودینگ
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => setLoading(false), 150);
     return () => clearTimeout(timer);
   }, [matchedKey]);
 
-  if (!matchedKey) return null;
+  // اگر هیچ زیرمنویی برای نمایش وجود ندارد، چیزی نشان نده
+  if (!matchedKey || menuItems.length === 0) return null;
 
   return (
     <aside className="w-full lg:w-60 bg-[var(--background)] border-l border-r border-gray-200 dark:border-gray-600 py-8 lg:py-4 px-6 lg:px-2">

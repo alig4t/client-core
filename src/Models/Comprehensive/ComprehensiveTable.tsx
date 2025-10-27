@@ -11,12 +11,21 @@ import DateUtil from "@/core/forms/DateUtils";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";
-import { buildSortOptions, type Option } from "@/core/forms/OptionUtils";
-import Table from "@/core/components/Table/DataTable";
+import OptionUtils, {
+  buildSortOptions,
+  type Option,
+} from "@/core/forms/OptionUtils";
+import Table, { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import { Eye } from "lucide-react";
+import { Eye, Pencil } from "lucide-react";
 import { createMessages } from "@/core/forms/MessageUtils";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
+import { DisplayField } from "@/components/general/DisplayField";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -82,7 +91,7 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       className={`hover:bg-gray-50 whitespace-nowrap ${isSelected ? "bg-purple-50" : ""}`}
     >
       {/* Checkbox Column - Handled by the Table component */}
-      <td className="px-4 py-4 text-center">
+      <TBODY className="text-center">
         <Checkbox
           name={`row-${comprehensive.id}`}
           standalone
@@ -90,27 +99,66 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
           checked={isSelected}
           onChange={toggleSelect}
         />
-      </td>
+      </TBODY>
       {/* Data Columns */}
-      <td className="px-6 py-4 whitespace-nowrap">{comprehensive.id}</td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        {comprehensive.stringField}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        {comprehensive.integerField}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        {DateUtil.GEORGIAN_TO_JALALI(comprehensive.createdAt)}
-      </td>
-      <td className="px-6 py-4 text-center whitespace-nowrap">
-        <button
-          // onClick={() => handleViewDetails(comprehensive.id)}
-          className="p-2 text-gray-400 rounded-full opacity-0 group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
-          aria-label={`View details for ${comprehensive.stringField}`}
-        >
-          <Eye size={20} />
-        </button>
-      </td>
+      <TBODY>{comprehensive.id}</TBODY>
+      <TBODY>{comprehensive.stringField}</TBODY>
+      <TBODY>{comprehensive.integerField}</TBODY>
+      <TBODY>{comprehensive.longField}</TBODY>
+      <TBODY>{comprehensive.doubleField}</TBODY>
+      <TBODY>{comprehensive.bigDecimalField}</TBODY>
+      <TBODY>{comprehensive.booleanField ? "بله" : "خیر"}</TBODY>
+      <TBODY>{comprehensive.dateField}</TBODY>
+      <TBODY>{comprehensive.localDateField}</TBODY>
+      <TBODY>{comprehensive.localDateTimeField}</TBODY>
+      <TBODY>
+        {OptionUtils.GET_BOOLEAN_OPTION(comprehensive.booleanField)}
+      </TBODY>
+      <TBODY>{comprehensive.uniqueField}</TBODY>
+      <TBODY>{comprehensive.indexedField}</TBODY>
+      <TBODY>
+        <DisplayField
+          label="کاربر مرتبط"
+          value={comprehensive.oneToOneUser.name}
+          link={{
+            to: `/user-display/${comprehensive.oneToOneUser.id}`,
+          }}
+        />
+      </TBODY>
+      <TBODY>{comprehensive.manyToOneChannel.channelName}</TBODY>
+      <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.createdAt)}</TBODY>
+      <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.updatedAt)}</TBODY>
+
+      <TBODY>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              // onClick={() => handleViewDetails(comprehensive.id)}
+              className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
+              aria-label={`View details for ${comprehensive.stringField}`}
+            >
+              <Pencil size={16} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="left" sideOffset={10}>
+            <p>ویرایش</p>
+          </TooltipContent>
+        </Tooltip>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <button
+              // onClick={() => handleViewDetails(comprehensive.id)}
+              className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
+              aria-label={`View details for ${comprehensive.stringField}`}
+            >
+              <Eye size={20} />
+            </button>
+          </TooltipTrigger>
+          <TooltipContent side="left" sideOffset={10}>
+            <p>مشاهده</p>
+          </TooltipContent>
+        </Tooltip>
+      </TBODY>
     </tr>
   );
 
@@ -122,44 +170,47 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
   }
 
   return (
-    <PageWrapper>
-      <Table<ComprehensiveModel>
-        data={pageData}
-        dataIdKey="id"
-        header={
-          <>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-              ID
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-              نام نمایشی
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-              نام سیستمی
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-              تاریخ ایجاد
-            </th>
-            <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
-              عملیات
-            </th>
-          </>
-        }
-        renderRow={renderPermissionRow}
-        title={comprehensiveModelMeta.messages.list.title}
-        page={currentPage}
-        pageSize={pageSize}
-        totalPages={totalPages}
-        totalItems={totalItems}
-        sortValue={sort}
-        sortOptions={sortOptions}
-        onPageChange={setPage}
-        onPageSizeChange={handlePageSizeChange}
-        onSortChange={handleSortChange}
-        onSelectionChange={(ids) => console.log(ids)}
-        isFetching={isFetching}
-      />
-    </PageWrapper>
+    <Table<ComprehensiveModel>
+      data={pageData}
+      dataIdKey="id"
+      header={
+        <>
+          <THEAD>{comprehensiveModelMeta.fields.id.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.stringField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.integerField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.longField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.doubleField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.bigDecimalField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.booleanField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.dateField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.localDateField.label}</THEAD>
+          <THEAD>
+            {comprehensiveModelMeta.fields.localDateTimeField.label}
+          </THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.enumField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.uniqueField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.indexedField.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.oneToOneUser.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.manyToOneChannel.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.createdAt.label}</THEAD>
+          <THEAD>{comprehensiveModelMeta.fields.updatedAt.label}</THEAD>
+          <THEAD>عملیات</THEAD>
+        </>
+      }
+      renderRow={renderPermissionRow}
+      title={comprehensiveModelMeta.messages.list.title}
+      page={currentPage}
+      pageSize={pageSize}
+      totalPages={totalPages}
+      totalItems={totalItems}
+      sortValue={sort}
+      sortOptions={sortOptions}
+      onPageChange={setPage}
+      onPageSizeChange={handlePageSizeChange}
+      onSortChange={handleSortChange}
+      onSelectionChange={(ids) => console.log(ids)}
+      isFetching={isFetching}
+    />
   );
 };
 

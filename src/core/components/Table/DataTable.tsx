@@ -1,12 +1,34 @@
 // src/components/Table/Table.tsx
 
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, type FC } from "react";
 import { Checkbox } from "@/core/components/form/Checkbox";
 
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
 
 import Button from "../../../components/Button/Button";
 import { Select } from "../form/Select";
+
+export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
+  className,
+  children,
+}) => {
+  return (
+    <th
+      className={`px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase ${className}`}
+    >
+      {children}
+    </th>
+  );
+};
+
+export const TBODY: FC<{ className?: string; children: React.ReactNode }> = ({
+  className,
+  children,
+}) => {
+  return (
+    <td className={`px-6 py-4 whitespace-nowrap ${className}`}>{children}</td>
+  );
+};
 
 // --- Types for Props ---
 type RenderRowFunction<T> = (
@@ -207,7 +229,7 @@ const Table = <T extends { [key: string]: any }>({
   return (
     <div
       dir="rtl"
-      className={`p-6 bg-[var(--white)] rounded-lg border max-w-xs min-w-full sm:max-w-sm sm:min-w-full md:max-w-full border-[var(--border)] transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
+      className={`p-6 bg-[var(--white)] rounded-lg border max-w-xs min-w-full sm:max-w-sm sm:min-w-full md:max-w-xl border-[var(--border)] transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
     >
       {/* 1. Bulk Action Bar (Visible only if selection mode is active AND items are selected) */}
       {isSelectionMode && selectedIds.length > 0 && (

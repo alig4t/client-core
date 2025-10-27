@@ -3,11 +3,25 @@ import type { ReactNode } from "react";
 
 // 1. Define type for user object
 // Adjust this type based on the actual structure of your user object
-interface User {
+
+// انواع مربوط به داده‌های permission
+interface Permission {
+  id: number;
+  name: string; // e.g., "bot:create"
+  showName: string;
+}
+
+interface Role {
+  id: number;
+  name: string;
+  permission: Permission[];
+}
+
+export interface User {
   id: number;
   name: string;
   username: string;
-  roles?: string[]; // roles may not exist
+  roles: Role[]; // ✅ تغییر از string[] به Role[]
 }
 
 // 2. Define type for values that the Context provides
@@ -17,6 +31,7 @@ interface AuthContextType {
   isAuthenticated: boolean;
   login: (token: string, user: User) => void;
   logout: () => void;
+  hasPermission: (permissionName: string) => boolean; //
 }
 
 // 3. Create Context
@@ -30,6 +45,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.getItem("token")
   );
 
+  // داخل AuthProvider
+  const hasPermission = (permissionName: string): boolean => {
+    if (!user?.roles) return false;
+
+    // بررسی تمام نقش‌ها و مجوزهای آن‌ها
+    return user.roles.some((role) =>
+      role.permission.some((p) => p.name === permissionName)
+    );
+  };
+
   // Read user information from localStorage on initial load
   const [user, setUser] = useState<User | null>(() => {
     const storedUser = localStorage.getItem("user");
@@ -41,7 +66,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       return null;
     }
   });
-
 
   // --- Effects for synchronization ---
   // This Effect updates localStorage whenever token or user changes
@@ -56,7 +80,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [token, user]);
 
-
   // --- Main functions ---
   // The login function now receives and stores both token and user
   const login = (newToken: string, newUser: User) => {
@@ -70,24 +93,20 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
-
   // --- Derived State ---
   // The isAuthenticated variable is calculated based on the presence of the token
   const isAuthenticated =
-    !!token &&
-    token !== "undefined" &&
-    token !== "null" &&
-    token.length > 10;
-
+    !!token && token !== "undefined" && token !== "null" && token.length > 10;
 
   // --- Providing values to child components ---
   return (
-    <AuthContext.Provider value={{ token, user, isAuthenticated, login, logout }}>
+    <AuthContext.Provider
+      value={{ token, user, isAuthenticated, login, logout, hasPermission }}
+    >
       {children}
     </AuthContext.Provider>
   );
 }
-
 
 // 5. Custom hook for easy use of Context
 export function useAuth() {

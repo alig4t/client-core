@@ -2,10 +2,20 @@ import React, { useState } from "react";
 import Accordion from "@/components/general/Accordion";
 import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import PermissionTable from "./PermissionTable";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 import PermissionSearch from "./PermissionSearch";
+import { useAuth } from "@/stores/AuthContext";
+import { Permission } from "@/router/Permission";
+import ForbiddenPage from "@/pages/ForbiddenPage";
 
 const PermissionPage: React.FC = () => {
+  const { hasPermission } = useAuth();
+
+
+  if (!hasPermission(Permission.Permission_Read)) {
+    return <ForbiddenPage />;
+  }
+
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
   return (
@@ -19,7 +29,7 @@ const PermissionPage: React.FC = () => {
           افزودن مورد جدید
         </button>
       </div>
-      
+
       <Accordion title="فیلتر‌ها" startOpen={true}>
         <PermissionSearch onApplyFilters={setActiveFilters} />
       </Accordion>
