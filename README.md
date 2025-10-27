@@ -1,54 +1,23 @@
-# React + TypeScript + Vite
+# Monitoring Platform – Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A React-based frontend for a keyword monitoring platform that tracks mentions across messaging channels (e.g., Telegram, Discord). Designed for ease of use, real-time insights, and role-based access.
 
-Currently, two official plugins are available:
+## ✨ Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Authentication**: Secure login and signup with email/username and password.
+- **Dashboard**: Overview of active channels, keywords, and recent matches with visual charts.
+- **Channel Management**: Add, view, and manage monitored channels by messenger type.
+- **Keyword Management**: Define and track custom keywords per channel.
+- **Monitoring Results**: Filterable insights with time-series charts and match summaries.
+- **User Settings**: Profile editing, password change, and admin-only role management.
+- **Responsive UI**: Built with reusable components (Sidebar, Modals, Tables, Charts, Filters).
 
-## Expanding the ESLint configuration
+## 🛠 Tech Highlights
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- React + TypeScript
+- Charting with Recharts (Line & Bar charts)
+- Form handling & validation
+- Role-based UI rendering
+- Centralized utilities for messages and date formatting
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Ideal for teams needing real-time social or community monitoring with fine-grained control.
