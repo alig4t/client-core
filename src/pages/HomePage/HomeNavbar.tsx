@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import ModalAnimation from "../../components/general/Modal";
 import LoginPage from "../Login";
 import RegisterPage from "../RegisterPage";
+import { APP_LOGO_SMALL_BLUE, APP_LOGO_SMALL_GRAY } from "@/constants/images";
 
 const navItems = [
   { name: "ویژگی‌ها", href: "#" },
@@ -39,9 +40,13 @@ const Navbar: React.FC = () => {
         <div className="flex lg:flex-1">
           <a
             href="#"
-            className="-m-1.5 p-1.5 text-2xl font-bold text-indigo-600 dark:text-indigo-400"
+            className="-m-1.5 p-1.5 gap-1 flex items-center justify-center text-2xl font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
           >
-            رایانوین
+            <img
+              src={APP_LOGO_SMALL_BLUE}
+              className="w-8 h-8 opacity-90 hover:opacity-100 transition-all"
+            />
+            {import.meta.env.VITE_APP_TITLE}
           </a>
         </div>
 

@@ -12,7 +12,7 @@ const LandingPage: React.FC = () => {
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-y-auto">
       {/* Navbar */}
       <Navbar />
-
+    
       {/* Hero Section */}
       <main className="relative isolate pt-[5rem] min-h-screen">
         {/* پس‌زمینه با گرادیان و افکت‌های نوری */}
@@ -40,7 +40,7 @@ const LandingPage: React.FC = () => {
               <div className="lg:w-1/2 text-center lg:text-right z-10">
                 <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl leading-tight">
                   <span className="text-indigo-600 dark:text-indigo-400">
-                    رایا نوین:
+                    {import.meta.env.VITE_APP_TITLE}:
                   </span>{" "}
                   مدیریت پیام‌رسان‌ها،{" "}
                   <span className="block text-gray-900 dark:text-white mt-2">
