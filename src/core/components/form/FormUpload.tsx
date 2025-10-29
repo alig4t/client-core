@@ -1,11 +1,10 @@
 // components/FormUploader.tsx
-import React, { useRef, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { UploadCloud, X, Loader2 } from "lucide-react";
 import type { FieldError } from "react-hook-form";
 import DocumentService from "@/Models/Document/DocumentService";
 
-// --- Helper Component Types ---
 interface LabelProps {
   children: React.ReactNode;
 }
@@ -14,14 +13,12 @@ interface ErrorFormTextProps {
   msg?: string;
 }
 
-// --- Main Component Props Type ---
 interface FormUploaderProps {
   name: string;
   label: string;
   className?: string;
 }
 
-// --- Helper Components ---
 const Label: React.FC<LabelProps> = ({ children }) => (
   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 text-right">
     {children}
@@ -33,7 +30,6 @@ const ErrorFormText: React.FC<ErrorFormTextProps> = ({ msg }) => {
   return <p className="text-sm text-red-600 mt-1">{msg}</p>;
 };
 
-// --- ✨ Main Component: FormUploader (آپلود واقعی با id) ✨ ---
 export const FormUploader: React.FC<FormUploaderProps> = ({
   name,
   label,
@@ -50,31 +46,51 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
 
-  // مقدار فعلی فیلد (باید عدد باشه: id فایل)
   const fileId = useWatch({ name, control });
 
-  // --- وقتی fileId تغییر کرد، previewUrl را به‌روز کن ---
+  // --- Fetch preview as Blob (with Authorization header) ---
   useEffect(() => {
-    if (typeof fileId === "number") {
-      const fetchPreview = async () => {
-        try {
-          const token = await DocumentService.getToken(fileId);
-          const url = DocumentService.getDownloadUrl(token);
-          setPreviewUrl(url);
-        } catch (err) {
-          console.error("Failed to fetch preview token", err);
+    if (typeof fileId !== "number") {
+      setPreviewUrl(null);
+      return;
+    }
+
+    const abortController = new AbortController();
+    let objectUrl: string | null = null;
+
+    const fetchPreview = async () => {
+      try {
+        // 1. Get token using fileId
+        const token = await DocumentService.getToken(fileId);
+        if (abortController.signal.aborted) return;
+
+        // 2. Download image as Blob (with Authorization header)
+        const blob = await DocumentService.downloadAsBlob(token);
+        if (abortController.signal.aborted) return;
+
+        // 3. Create local object URL
+        objectUrl = URL.createObjectURL(blob);
+        setPreviewUrl(objectUrl);
+      } catch (err) {
+        if (!abortController.signal.aborted) {
+          console.error("Failed to load image preview", err);
           setPreviewUrl(null);
         }
-      };
-      fetchPreview();
-    } else {
-      setPreviewUrl(null);
-    }
+      }
+    };
+
+    fetchPreview();
+
+    // Cleanup on unmount or fileId change
+    return () => {
+      abortController.abort();
+      if (objectUrl) {
+        URL.revokeObjectURL(objectUrl);
+      }
+    };
   }, [fileId]);
 
-  // --- آپلود فایل ---
-  // در FormUploader.tsx
-  const uploadFile = async (file: File) => {
+  const uploadFile = useCallback(async (file: File) => {
     if (!file.type.startsWith("image/")) {
       setValue(name, null, { shouldValidate: true });
       return;
@@ -83,7 +99,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setIsUploading(true);
     try {
       const doc = await DocumentService.upload(file);
-      // فقط id رو در فرم ذخیره کن
+      console.log(doc);
       setValue(name, doc.id, { shouldValidate: true, shouldDirty: true });
     } catch (error) {
       console.error("Upload failed", error);
@@ -91,14 +107,13 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     } finally {
       setIsUploading(false);
     }
-  };
-  // --- پردازش فایل انتخاب‌شده ---
+  }, [name, setValue]);
+
   const processFile = (file: File | null | undefined) => {
     if (!file) return;
     uploadFile(file);
   };
 
-  // --- Event Handlers ---
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     processFile(event.target.files?.[0]);
   };
@@ -111,14 +126,12 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setPreviewUrl(null);
   };
 
-  // Drag and Drop Handlers
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDragging(true);
   };
 
-  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
-    event.preventDefault();
+  const handleDragLeave = () => {
     setIsDragging(false);
   };
 
@@ -131,7 +144,6 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const hasError = !!errors[name];
   const errorMessage = (errors[name] as FieldError)?.message;
 
-  // --- Dropzone Classes ---
   const dropzoneBaseClasses =
     "w-full h-48 flex flex-col justify-center items-center border-2 border-dashed rounded-lg cursor-pointer transition-all duration-300";
   const dropzoneErrorClasses = "border-red-500 bg-red-50 dark:bg-red-900/10";
@@ -153,13 +165,15 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
       <Label>{label}</Label>
       <div className="mt-1">
         {previewUrl ? (
-          // --- Image Preview with Remove Button ---
           <div className="relative group w-full h-48 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600">
             <img
               src={previewUrl}
               alt="Preview"
               className="w-full h-full object-cover"
-              onError={() => setPreviewUrl(null)} // اگر لود نشد، پیش‌نمایش رو پاک کن
+              onError={() => {
+                setPreviewUrl(null);
+                // Note: object URL will be revoked in next useEffect cleanup
+              }}
             />
             <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
               <button
@@ -167,13 +181,13 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
                 onClick={handleRemoveImage}
                 className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
                 aria-label="Remove image"
+                disabled={isUploading}
               >
                 <X size={20} />
               </button>
             </div>
           </div>
         ) : isUploading ? (
-          // --- Uploading State ---
           <div className="w-full h-48 flex flex-col justify-center items-center border-2 border-dashed border-purple-500 rounded-lg bg-purple-50 dark:bg-purple-900/10">
             <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
             <p className="mt-2 text-sm text-purple-600 dark:text-purple-400">
@@ -181,7 +195,6 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
             </p>
           </div>
         ) : (
-          // --- Dropzone ---
           <div
             onClick={() => fileInputRef.current?.click()}
             onDragOver={handleDragOver}
