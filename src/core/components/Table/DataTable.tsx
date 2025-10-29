@@ -252,11 +252,11 @@ const Table = <T extends { [key: string]: any }>({
 
       {/* Controls: Sort and Page Size (Unchanged) */}
 
-      <div className="flex flex-wrap justify-between items-center mb-4 w-full">
+      <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center mb-4 w-full gap-y-3">
         <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">
           {title}
         </h2>
-        <div className="max-w-2/3 flex gap-2 items-end">
+        <div className="sm:max-w-2/3 flex gap-2 items-center sm:items-end">
           <Select
             minilabel="مرتب سازی براساس"
             className="min-w-[180px]"

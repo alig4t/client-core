@@ -25,7 +25,7 @@ const ComprehensivePage: React.FC = () => {
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
-      <div className="sm:p-8 min-h-screen font-sans max-w-fit">
+      <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
         <PageHeader
           title={comprehensiveModelMeta.messages.manage.title}
           actionButton={{

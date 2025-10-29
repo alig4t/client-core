@@ -2,6 +2,8 @@
 import React from "react";
 import { RecordDisplayLayout } from "@/components/general/RecordDisplayLayout";
 import { RowContainer } from "@/components/general/RowContainer";
+import LinkView from "@/components/general/LinkView";
+import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/components/general/DisplayField";
 
 // Mock data (replace with actual fetch logic)
@@ -54,15 +56,18 @@ const ComprehensiveDisplayPage: React.FC = () => {
         />
         <DisplayField label="فیلد انوم" value={comprehensiveRecord.enumField} />
 
-        {/* Example of linking to a related model record */}
-        {/* <DisplayField
+        
+        <DisplayField
           label="کاربر مرتبط"
-          value={comprehensiveRecord.oneToOneUserName}
-          link={{
-            view: "user-display",
-            id: comprehensiveRecord.oneToOneUserId,
-          }}
-        /> */}
+          value={
+            <LinkView
+              viewName={VIEWNAME.COMPREHENSIVE_DISPLAY}
+              id={comprehensiveRecord.oneToOneUserId}
+              label={comprehensiveRecord.oneToOneUserName}
+            />
+          }
+        
+        />
 
         {/* Example of a field spanning all columns */}
         <DisplayField

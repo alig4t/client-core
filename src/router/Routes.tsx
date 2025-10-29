@@ -47,21 +47,36 @@ import {
   Globe,
   UserCheck,
 } from "lucide-react";
+
 import type { RouteConfig } from "./path.types";
 import { Permission } from "./Permission";
+import { VIEWNAME } from "./ViewName";
 
 // تابع برای مسیرهای پارامتری
 export const withId = (base: string) => `${base}/:id`;
 
 export const routeConfig: RouteConfig[] = [
   // --- Public ---
-  { path: "/", element: LandingPage, isPublic: true, showInMenu: false },
-  { path: "/login", element: LoginPage, isPublic: true, showInMenu: false },
+  {
+    path: "/",
+    element: LandingPage,
+    isPublic: true,
+    showInMenu: false,
+    name: VIEWNAME.LANDING,
+  },
+  {
+    path: "/login",
+    element: LoginPage,
+    isPublic: true,
+    showInMenu: false,
+    name: VIEWNAME.LOGIN,
+  },
   {
     path: "/register",
     element: RegisterPage,
     isPublic: true,
     showInMenu: false,
+    name: VIEWNAME.REGISTER,
   },
 
   // --- Dashboard (main) ---
@@ -71,6 +86,7 @@ export const routeConfig: RouteConfig[] = [
     icon: <Home size={24} />,
     element: Dashboard,
     showInMenu: true,
+    name: VIEWNAME.DASHBOARD,
   },
 
   // --- Profile ---
@@ -80,6 +96,7 @@ export const routeConfig: RouteConfig[] = [
     icon: <User size={24} />,
     element: Profile,
     showInMenu: true,
+    name: VIEWNAME.PROFILE,
   },
 
   // --- Settings ---
@@ -89,6 +106,7 @@ export const routeConfig: RouteConfig[] = [
     icon: <SettingsIcon size={24} />,
     element: Settings,
     showInMenu: true,
+    name: VIEWNAME.SETTINGS,
   },
 
   // --- Portal (main entry) ---
@@ -97,6 +115,7 @@ export const routeConfig: RouteConfig[] = [
     label: "پورتال",
     icon: <Bolt size={24} />,
     showInMenu: true,
+    // بدون element و name — فقط گروه‌بندی منو
   },
 
   // ================================
@@ -110,18 +129,21 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Permission_Read,
     showInMenu: true,
+    name: VIEWNAME.PERMISSION_LIST,
   },
   {
     path: "/dashboard/portal/permissions/create",
     element: PermissionCreate,
     permission: Permission.Permission_Create,
     showInMenu: false,
+    name: VIEWNAME.PERMISSION_CREATE,
   },
   {
     path: withId("/dashboard/portal/permissions"),
     // element: PermissionEdit,
     permission: Permission.Permission_Update,
     showInMenu: false,
+    name: VIEWNAME.PERMISSION_EDIT,
   },
 
   // ================================
@@ -135,24 +157,28 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.ComprehensiveEntity_Read,
     showInMenu: true,
+    name: VIEWNAME.COMPREHENSIVE_LIST,
   },
   {
     path: "/dashboard/portal/comprehensive/create",
     element: ComprehensiveCreate,
     permission: Permission.ComprehensiveEntity_Create,
     showInMenu: false,
+    name: VIEWNAME.COMPREHENSIVE_CREATE,
   },
   {
     path: withId("/dashboard/portal/comprehensive"),
     element: ComprehensiveDisplay,
     permission: Permission.ComprehensiveEntity_Read,
     showInMenu: false,
+    name: VIEWNAME.COMPREHENSIVE_DISPLAY,
   },
   {
     path: `${withId("/dashboard/portal/comprehensive")}/edit`,
     // element: ComprehensiveEdit,
     permission: Permission.ComprehensiveEntity_Update,
     showInMenu: false,
+    name: VIEWNAME.COMPREHENSIVE_EDIT,
   },
 
   // ================================
@@ -165,6 +191,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Bot_Read,
     showInMenu: true,
+    name: VIEWNAME.BOTS,
   },
 
   // ================================
@@ -177,6 +204,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Channel_Read,
     showInMenu: true,
+    name: VIEWNAME.CHANNELS,
   },
 
   // ================================
@@ -189,6 +217,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.City_Read,
     showInMenu: true,
+    name: VIEWNAME.CITIES,
   },
 
   // ================================
@@ -201,6 +230,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Message_Read,
     showInMenu: true,
+    name: VIEWNAME.MESSAGES,
   },
 
   // ================================
@@ -213,6 +243,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.User_Read,
     showInMenu: true,
+    name: VIEWNAME.USERS,
   },
 
   // ================================
@@ -225,6 +256,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Keyword_Read,
     showInMenu: true,
+    name: VIEWNAME.KEYWORDS,
   },
 
   // ================================
@@ -237,6 +269,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.MessagingPlatform_Read,
     showInMenu: true,
+    name: VIEWNAME.PLATFORMS,
   },
 
   // ================================
@@ -249,6 +282,7 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Person_Read,
     showInMenu: true,
+    name: VIEWNAME.PERSONS,
   },
 
   // ================================
@@ -261,5 +295,6 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.DashboardData_Read,
     showInMenu: true,
+    name: VIEWNAME.DASHBOARD_DATA,
   },
 ];

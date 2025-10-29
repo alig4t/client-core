@@ -26,7 +26,7 @@ const Sidebar = () => {
 
   return (
     <TooltipProvider>
-      <div className="h-auto w-16 min-w-16 bg-gray-900 flex flex-col items-center py-4">
+      <div className="h-auto hidden w-16 min-w-16 bg-gray-900 sm:flex flex-col items-center py-4">
         <div className="mb-6">
           <LayoutDashboard size={28} className="text-white" />
         </div>

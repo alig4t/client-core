@@ -10,6 +10,7 @@ export interface RouteMeta {
   showInMenu?: boolean;
   parent?: string;
   isPublic?: boolean;
+  name?: string;
 }
 
 export type RouteConfig = RouteMeta & {
