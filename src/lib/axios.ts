@@ -72,6 +72,9 @@ api.interceptors.response.use(
   // Cast to any to allow returning ApiResponse instead of AxiosResponse
   ((response: AxiosResponse<ApiResponse>) => {
     stopProgress();
+     if (response.config.responseType === 'blob') {
+      return response; // کل response را برگردان
+    }
     const responseData = response.data;
     if (responseData && responseData.type === 'error' && responseData.status >= 400) {
       const errorMessage = (responseData.data as string) || 'خطایی از سمت سرور رخ داده است.';

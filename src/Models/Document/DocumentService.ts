@@ -28,11 +28,15 @@ class DocumentService {
 
   // ✅ دانلود تصویر با axios + responseType: 'blob'
   async downloadAsBlob(token: string): Promise<Blob> {
-    const response = await api.get<Blob>(`/document/stream/${token}`, {
-      responseType: 'blob', // ⚠️ این خط حیاتی است
+    const response = await api.get(`/document/stream/${token}`, {
+      responseType: 'blob',
     });
-    return response.data;
+    console.log(response.data instanceof Blob)
+    console.log('Download response:', response);
+
+    return response.data; // حالا واقعاً یک Blob است
   }
+
 }
 
 export default new DocumentService();

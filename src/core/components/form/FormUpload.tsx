@@ -1,9 +1,16 @@
 // components/FormUploader.tsx
 import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { UploadCloud, X, Loader2 } from "lucide-react";
+import { UploadCloud, X, Loader2, FileText } from "lucide-react";
 import type { FieldError } from "react-hook-form";
 import DocumentService from "@/Models/Document/DocumentService";
+import { ACCEPT_FILE_STRING, ALLOWED_FILE_EXTENSIONS, ALLOWED_FILE_TYPES } from "./fileUtils";
+
+
+// تشخیص تصویر از روی mimeType
+const isImageMimeType = (mimeType: string): boolean => {
+  return mimeType.startsWith('image/');
+};
 
 interface LabelProps {
   children: React.ReactNode;
@@ -45,13 +52,25 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
+  const [isDocument, setIsDocument] = useState<boolean>(false);
+  const [isImageFile, setIsImageFile] = useState<boolean>(false); // ✅ اضافه شد
 
   const fileId = useWatch({ name, control });
 
-  // --- Fetch preview as Blob (with Authorization header) ---
+  // --- برای فایل‌های جدید: mimeType را از آپلود بگیر
+  const handleUploadSuccess = useCallback((doc: any) => {
+    const mimeType = doc.mimeType || '';
+    const isImage = isImageMimeType(mimeType);
+    setIsImageFile(isImage);
+    setIsDocument(!isImage);
+  }, []);
+
+  // --- Fetch preview for existing fileId (فقط سعی کن، اگر لود شد خوبه)
   useEffect(() => {
     if (typeof fileId !== "number") {
       setPreviewUrl(null);
+      setIsDocument(false);
+      setIsImageFile(false);
       return;
     }
 
@@ -60,28 +79,28 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
 
     const fetchPreview = async () => {
       try {
-        // 1. Get token using fileId
         const token = await DocumentService.getToken(fileId);
         if (abortController.signal.aborted) return;
 
-        // 2. Download image as Blob (with Authorization header)
         const blob = await DocumentService.downloadAsBlob(token);
         if (abortController.signal.aborted) return;
 
-        // 3. Create local object URL
         objectUrl = URL.createObjectURL(blob);
         setPreviewUrl(objectUrl);
+        setIsImageFile(true); // ✅ فرض می‌کنیم تصویر است تا ثابت شود خلاف آن
+        setIsDocument(false);
       } catch (err) {
         if (!abortController.signal.aborted) {
-          console.error("Failed to load image preview", err);
+          console.error("Preview failed for fileId", fileId, err);
           setPreviewUrl(null);
+          setIsImageFile(false);
+          setIsDocument(true);
         }
       }
     };
 
     fetchPreview();
 
-    // Cleanup on unmount or fileId change
     return () => {
       abortController.abort();
       if (objectUrl) {
@@ -91,7 +110,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   }, [fileId]);
 
   const uploadFile = useCallback(async (file: File) => {
-    if (!file.type.startsWith("image/")) {
+    if (!ALLOWED_FILE_TYPES.includes(file.type)) {
       setValue(name, null, { shouldValidate: true });
       return;
     }
@@ -99,15 +118,17 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setIsUploading(true);
     try {
       const doc = await DocumentService.upload(file);
-      console.log(doc);
+      handleUploadSuccess(doc); // ✅ mimeType را پردازش کن
       setValue(name, doc.id, { shouldValidate: true, shouldDirty: true });
     } catch (error) {
       console.error("Upload failed", error);
       setValue(name, null, { shouldValidate: true });
+      setIsImageFile(false);
+      setIsDocument(false);
     } finally {
       setIsUploading(false);
     }
-  }, [name, setValue]);
+  }, [name, setValue, handleUploadSuccess]);
 
   const processFile = (file: File | null | undefined) => {
     if (!file) return;
@@ -120,10 +141,10 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
 
   const handleRemoveImage = () => {
     setValue(name, null, { shouldValidate: true, shouldDirty: true });
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
-    }
+    if (fileInputRef.current) fileInputRef.current.value = "";
     setPreviewUrl(null);
+    setIsDocument(false);
+    setIsImageFile(false);
   };
 
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
@@ -131,9 +152,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setIsDragging(true);
   };
 
-  const handleDragLeave = () => {
-    setIsDragging(false);
-  };
+  const handleDragLeave = () => setIsDragging(false);
 
   const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
@@ -144,90 +163,113 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const hasError = !!errors[name];
   const errorMessage = (errors[name] as FieldError)?.message;
 
+  // --- Render Preview ---
+  const renderPreview = () => {
+    if (isUploading) {
+      return (
+        <div className="w-full h-48 flex flex-col justify-center items-center border-2 border-dashed border-purple-500 rounded-lg bg-purple-50 dark:bg-purple-900/10">
+          <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+          <p className="mt-2 text-sm text-purple-600 dark:text-purple-400">در حال آپلود...</p>
+        </div>
+      );
+    }
+
+    if (previewUrl && isImageFile) {
+      return (
+        <div className="relative group w-full h-48 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600">
+          <img
+            src={previewUrl}
+            alt="Preview"
+            className="w-full h-full object-cover"
+            onError={() => {
+              // اگر لود نشد، فایل غیرتصویر است
+              setPreviewUrl(null);
+              setIsImageFile(false);
+              setIsDocument(true);
+            }}
+          />
+          <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={handleRemoveImage}
+              className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
+              aria-label="Remove file"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    if (isDocument) {
+      return (
+        <div className="relative group w-full h-48 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/20">
+          <FileText className="h-12 w-12 text-gray-500 dark:text-gray-400 mb-2" />
+          <p className="text-sm text-center px-2 text-gray-700 dark:text-gray-300">
+            فایل آپلود شده
+          </p>
+          <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
+            <button
+              type="button"
+              onClick={handleRemoveImage}
+              className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
+              aria-label="Remove file"
+            >
+              <X size={20} />
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div
+        onClick={() => fileInputRef.current?.click()}
+        onDragOver={handleDragOver}
+        onDragLeave={handleDragLeave}
+        onDrop={handleDrop}
+        className={`${dropzoneBaseClasses} ${
+          isDragging
+            ? dropzoneDraggingClasses
+            : hasError
+              ? dropzoneErrorClasses
+              : dropzoneDefaultClasses
+        }`}
+      >
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          accept={ACCEPT_FILE_STRING}
+        />
+        <div className="text-center pointer-events-none">
+          <UploadCloud
+            className={`mx-auto h-12 w-12 ${hasError ? "text-red-500" : "text-gray-400"}`}
+          />
+          <p className={`mt-2 text-sm ${hasError ? "text-red-600" : "text-gray-600 dark:text-gray-400"}`}>
+            <span className="font-semibold text-purple-600 dark:text-purple-400">برای آپلود کلیک کنید</span> یا بکشید و رها کنید
+          </p>
+          <p className="text-xs text-gray-500 dark:text-gray-500">
+            {ALLOWED_FILE_EXTENSIONS.map(ext => `.${ext}`).join(', ')} تا حداکثر 10MB
+          </p>
+        </div>
+      </div>
+    );
+  };
+
   const dropzoneBaseClasses =
     "w-full h-48 flex flex-col justify-center items-center border-2 border-dashed rounded-lg cursor-pointer transition-all duration-300";
   const dropzoneErrorClasses = "border-red-500 bg-red-50 dark:bg-red-900/10";
   const dropzoneDefaultClasses =
     "border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700/20 hover:border-purple-500 hover:bg-purple-50 dark:hover:bg-purple-900/10";
-  const dropzoneDraggingClasses =
-    "border-purple-600 bg-purple-100 dark:bg-purple-900/20";
-
-  const dropzoneClassName = `${dropzoneBaseClasses} ${
-    isDragging
-      ? dropzoneDraggingClasses
-      : hasError
-        ? dropzoneErrorClasses
-        : dropzoneDefaultClasses
-  }`;
+  const dropzoneDraggingClasses = "border-purple-600 bg-purple-100 dark:bg-purple-900/20";
 
   return (
     <div className={`w-full ${className}`}>
       <Label>{label}</Label>
-      <div className="mt-1">
-        {previewUrl ? (
-          <div className="relative group w-full h-48 rounded-lg overflow-hidden border-2 border-dashed border-gray-300 dark:border-gray-600">
-            <img
-              src={previewUrl}
-              alt="Preview"
-              className="w-full h-full object-cover"
-              onError={() => {
-                setPreviewUrl(null);
-                // Note: object URL will be revoked in next useEffect cleanup
-              }}
-            />
-            <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
-              <button
-                type="button"
-                onClick={handleRemoveImage}
-                className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
-                aria-label="Remove image"
-                disabled={isUploading}
-              >
-                <X size={20} />
-              </button>
-            </div>
-          </div>
-        ) : isUploading ? (
-          <div className="w-full h-48 flex flex-col justify-center items-center border-2 border-dashed border-purple-500 rounded-lg bg-purple-50 dark:bg-purple-900/10">
-            <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
-            <p className="mt-2 text-sm text-purple-600 dark:text-purple-400">
-              در حال آپلود...
-            </p>
-          </div>
-        ) : (
-          <div
-            onClick={() => fileInputRef.current?.click()}
-            onDragOver={handleDragOver}
-            onDragLeave={handleDragLeave}
-            onDrop={handleDrop}
-            className={dropzoneClassName}
-          >
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleFileChange}
-              className="hidden"
-              accept="image/*"
-            />
-            <div className="text-center pointer-events-none">
-              <UploadCloud
-                className={`mx-auto h-12 w-12 ${hasError ? "text-red-500" : "text-gray-400"}`}
-              />
-              <p
-                className={`mt-2 text-sm ${hasError ? "text-red-600" : "text-gray-600 dark:text-gray-400"}`}
-              >
-                <span className="font-semibold text-purple-600 dark:text-purple-400">
-                  برای آپلود کلیک کنید
-                </span>{" "}
-                یا بکشید و رها کنید
-              </p>
-              <p className="text-xs text-gray-500 dark:text-gray-500">
-                PNG, JPG, GIF تا حداکثر 10MB
-              </p>
-            </div>
-          </div>
-        )}
-      </div>
+      <div className="mt-1">{renderPreview()}</div>
       {hasError && <ErrorFormText msg={errorMessage} />}
     </div>
   );
