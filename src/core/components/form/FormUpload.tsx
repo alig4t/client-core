@@ -203,26 +203,47 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     }
 
     if (isDocument) {
-      return (
-        <div className="relative group w-full h-48 flex flex-col items-center justify-center border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/20">
-          <FileText className="h-12 w-12 text-gray-500 dark:text-gray-400 mb-2" />
-          <p className="text-sm text-center px-2 text-gray-700 dark:text-gray-300">
-            فایل آپلود شده
-          </p>
-          <div className="absolute inset-0 bg-[#8080808f] bg-opacity-0 group-hover:bg-opacity-50 transition-all duration-300 flex items-center justify-center">
-            <button
-              type="button"
-              onClick={handleRemoveImage}
-              className="p-2 bg-red-500 text-white rounded-full opacity-0 group-hover:opacity-100 transform scale-75 group-hover:scale-100 transition-all duration-300"
-              aria-label="Remove file"
-            >
-              <X size={20} />
-            </button>
-          </div>
-        </div>
-      );
-    }
+  return (
+    <div className="relative group w-full h-48 flex flex-col items-center justify-center 
+                  border border-gray-200 dark:border-gray-700 
+                  rounded-xl shadow-lg hover:shadow-xl transition-shadow duration-300 
+                  bg-white dark:bg-gray-800">
+      
+      {/* Document Icon and Text - Ensure these are visually above the overlay if possible */}
+      <div className="z-10 flex flex-col items-center justify-center">
+        <FileText className="h-12 w-12 text-blue-500 dark:text-blue-400 mb-3" />
+        <p className="text-base font-semibold text-gray-800 dark:text-gray-200">
+          فایل آپلود شده
+        </p>
+        <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+          document-name.pdf
+        </p>
+      </div>
 
+      {/* Overlay and Remove Button - z-20 puts the button on top of the text, but the overlay is still there. */}
+      {/* The key change: using 'bg-gray-900/10' instead of 'bg-black' for light mode, 
+         and a softer transition for dark mode. */}
+      <div className="absolute inset-0 rounded-xl z-20
+                      bg-gray-900/0 group-hover:bg-gray-900/10   {/* Subtle, lighter dark overlay on hover (Light Mode) */}
+                      dark:group-hover:bg-black/30              {/* Less harsh overlay on hover (Dark Mode) */}
+                      transition-all duration-300 
+                      flex items-center justify-center cursor-pointer">
+        <button
+          type="button"
+          onClick={handleRemoveImage}
+          className="p-3 bg-red-600 hover:bg-red-700 text-white 
+                     rounded-full opacity-0 group-hover:opacity-100 
+                     transform scale-90 group-hover:scale-100 transition-all duration-300 
+                     shadow-md hover:shadow-lg focus:outline-none focus:ring-2 focus:ring-red-500"
+          aria-label="Remove file"
+        >
+          <X size={24} /> 
+        </button>
+      </div>
+    </div>
+  );
+}
+    
     return (
       <div
         onClick={() => fileInputRef.current?.click()}
