@@ -77,7 +77,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
           colSpan="full"
         />
 
-        <FilePreview fileId={35} previewSize="md" className="mr-2" />
+        <FilePreview fileId={35} previewSize="full" className="mr-2" />
       </RowContainer>
     </RecordDisplayLayout>
   );
