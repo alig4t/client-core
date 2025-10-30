@@ -18,32 +18,17 @@ import OptionUtils, {
 import Table, { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Eye, Pencil } from "lucide-react";
-import { createMessages } from "@/core/forms/MessageUtils";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
 
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-
-import { Link } from "react-router-dom";
 import LinkView from "@/components/general/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
+import TableLink from "@/core/components/general/TableLink";
+import { getViewPath } from "@/router/RouteUtils";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
   onSelectionChange?: (selectedIds: number[]) => void; // برای ارتباط با والد
 }
 
-// const sortOptions: Option[] = [
-//   { label: "تاریخ ایجاد (صعودی)", value: "createdAt,asc" },
-//   { label: "تاریخ ایجاد (نزولی)", value: "createdAt,desc" },
-//   { label: "رشته متنی (صعودی)", value: "stringField,asc" },
-//   { label: "رشته متنی (نزولی)", value: "stringField,desc" },
-//   { label: "رشته عددی (صعودی)", value: "integerField,asc" },
-//   { label: "رشته عددی (نزولی)", value: "integerField,desc" },
-// ];
 const sortOptions: Option[] = buildSortOptions(comprehensiveModelMeta);
 
 const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
@@ -52,7 +37,7 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
 }) => {
   // State for Table control (Managed by the Parent)
   const [page, setPage] = useState(0);
-  const [sort, setSort] = useState("stringField,asc");
+  const [sort, setSort] = useState("createdAt,desc");
   const [pageSize, setPageSize] = useState<number>(10);
 
   // --- Data Fetching (tanstack/react-query) ---
@@ -131,34 +116,18 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.createdAt)}</TBODY>
       <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.updatedAt)}</TBODY>
 
-      <TBODY className="flex">
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <button
-              // onClick={() => handleViewDetails(comprehensive.id)}
-              className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200"
-              aria-label={`View details for ${comprehensive.stringField}`}
-            >
-              <Pencil size={16} />
-            </button>
-          </TooltipTrigger>
-          <TooltipContent side="right" sideOffset={10}>
-            <p>ویرایش</p>
-          </TooltipContent>
-        </Tooltip>
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <Link to={'/dashboard/portal/comprehensive/' + comprehensive.id} className="!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200">
-
-              <Eye size={20} />
-            </Link>
-          </TooltipTrigger>
-          <TooltipContent side="left" sideOffset={10}>
-
-            <p>مشاهده</p>
-
-          </TooltipContent>
-        </Tooltip>
+      <TBODY className="flex gap-x-2">
+        <TableLink
+          tooltipText="ویرایش"
+          to={getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, comprehensive.id)}
+        >
+          <Pencil size={20} />
+        </TableLink>
+        <TableLink
+          to={getViewPath(VIEWNAME.COMPREHENSIVE_DISPLAY, comprehensive.id)}
+        >
+          <Eye size={20} />
+        </TableLink>
       </TBODY>
     </tr>
   );

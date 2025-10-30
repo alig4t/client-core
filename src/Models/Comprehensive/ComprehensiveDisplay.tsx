@@ -57,7 +57,6 @@ const ComprehensiveDisplayPage: React.FC = () => {
         />
         <DisplayField label="فیلد انوم" value={comprehensiveRecord.enumField} />
 
-        
         <DisplayField
           label="کاربر مرتبط"
           value={
@@ -67,7 +66,6 @@ const ComprehensiveDisplayPage: React.FC = () => {
               label={comprehensiveRecord.oneToOneUserName}
             />
           }
-        
         />
 
         {/* Example of a field spanning all columns */}
@@ -77,7 +75,10 @@ const ComprehensiveDisplayPage: React.FC = () => {
           colSpan="full"
         />
 
-        <FilePreview fileId={35} previewSize="full" className="mr-2" />
+        <DisplayField
+          label="پیوست"
+          value={<FilePreview fileId={35} previewSize="sm" className="mr-2" />}
+        />
       </RowContainer>
     </RecordDisplayLayout>
   );

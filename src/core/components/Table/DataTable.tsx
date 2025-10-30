@@ -9,12 +9,12 @@ import Button from "../../../components/Button/Button";
 import { Select } from "../form/Select";
 
 export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
-  className,
+  className = "",
   children,
 }) => {
   return (
     <th
-      className={`px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase ${className}`}
+      className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center ${className}`}
     >
       {children}
     </th>
@@ -26,7 +26,9 @@ export const TBODY: FC<{ className?: string; children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <td className={`px-6 py-4 whitespace-nowrap ${className}`}>{children}</td>
+    <td className={`px-6 py-4 whitespace-nowrap text-center ${className}`}>
+      {children}
+    </td>
   );
 };
 
@@ -364,23 +366,27 @@ const Table = <T extends { [key: string]: any }>({
         </span>
 
         <div className="flex gap-1 items-center justify-center order-2 mx-auto sm:mx-0">
-          <button
-            onClick={() => onPageChange(Math.max(page - 1, 0))}
-            disabled={page === 0}
-            className="px-4 py-2 border-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
-          >
-            قبلی
-          </button>
+          {totalPages > 0 && (
+            <button
+              onClick={() => onPageChange(Math.max(page - 1, 0))}
+              disabled={page === 0}
+              className="px-4 py-2 border-gray-500 dark:bg-gray-700 dark:hover:bg-gray-600 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
+            >
+              قبلی
+            </button>
+          )}
 
           {renderPageButtons()}
 
-          <button
-            onClick={() => onPageChange(Math.min(page + 1, totalPages - 1))}
-            disabled={page >= totalPages - 1}
-            className="px-4 py-2 border-gray-500  dark:bg-gray-700 dark:hover:bg-gray-600 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
-          >
-            بعدی
-          </button>
+          {totalPages > 0 && (
+            <button
+              onClick={() => onPageChange(Math.min(page + 1, totalPages - 1))}
+              disabled={page >= totalPages - 1}
+              className="px-4 py-2 border-gray-500  dark:bg-gray-700 dark:hover:bg-gray-600 text-sm border rounded-md disabled:opacity-50 hover:bg-gray-100"
+            >
+              بعدی
+            </button>
+          )}
         </div>
         {}
         <span className="text-sm text-gray-600 order-1 sm:order-3 w-full sm:w-auto mt-2 sm:mt-0 text-center sm:text-left">
