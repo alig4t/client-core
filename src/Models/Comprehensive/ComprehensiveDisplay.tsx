@@ -5,6 +5,7 @@ import { RowContainer } from "@/components/general/RowContainer";
 import LinkView from "@/components/general/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/components/general/DisplayField";
+import FilePreview from "@/core/components/form/FilePreview";
 
 // Mock data (replace with actual fetch logic)
 const comprehensiveRecord = {
@@ -75,6 +76,8 @@ const ComprehensiveDisplayPage: React.FC = () => {
           value="این یک متن طولانی است که می‌تواند فضای بیشتری را اشغال کند و به همین دلیل از colSpan='full' برای آن استفاده شده است."
           colSpan="full"
         />
+
+        <FilePreview fileId={35} previewSize="md" className="mr-2" />
       </RowContainer>
     </RecordDisplayLayout>
   );
