@@ -29,6 +29,8 @@ import { VIEWNAME } from "@/router/ViewName";
 import TableLink from "@/core/components/general/TableLink";
 import { getViewPath } from "@/router/RouteUtils";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
+import { useAuth } from "@/stores/AuthContext";
+import { Permission } from "@/router/Permission";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -46,6 +48,8 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
   const [page, setPage] = useState(0);
   const [sort, setSort] = useState("createdAt,desc");
   const [pageSize, setPageSize] = useState<number>(10);
+
+  const { hasPermission } = useAuth();
 
   const deleteMutation = useMutation({
     mutationFn: (id: number) => ComprehensiveService.delete(id),
@@ -164,24 +168,32 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.updatedAt)}</TBODY>
 
       <TBODY className="flex gap-x-2">
-        <TableLink
-          tooltipText="ویرایش"
-          to={getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, comprehensive.id)}
-        >
-          <Pencil size={20} />
-        </TableLink>
-        <TableLink
-          to={getViewPath(VIEWNAME.COMPREHENSIVE_DISPLAY, comprehensive.id)}
-        >
-          <Eye size={20} />
-        </TableLink>
-        <TableLink
-          tooltipText="حذف"
-          onClick={() => handleDeleteClick(comprehensive.id)} // فراخوانی هندلر مودال
-          className="text-red-600 hover:text-red-800" // استایل قرمز برای دکمه حذف
-        >
-          <Trash2 size={20} />
-        </TableLink>
+        {hasPermission(Permission.ComprehensiveEntity_Update) && (
+          <TableLink
+            tooltipText="ویرایش"
+            to={getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, comprehensive.id)}
+          >
+            <Pencil size={20} />
+          </TableLink>
+        )}
+
+        {hasPermission(Permission.ComprehensiveEntity_Read) && (
+          <TableLink
+            to={getViewPath(VIEWNAME.COMPREHENSIVE_DISPLAY, comprehensive.id)}
+          >
+            <Eye size={20} />
+          </TableLink>
+        )}
+
+        {hasPermission(Permission.ComprehensiveEntity_Delete) && (
+          <TableLink
+            tooltipText="حذف"
+            onClick={() => handleDeleteClick(comprehensive.id)} // فراخوانی هندلر مودال
+            className="text-red-600 hover:text-red-800" // استایل قرمز برای دکمه حذف
+          >
+            <Trash2 size={20} />
+          </TableLink>
+        )}
       </TBODY>
     </tr>
   );
