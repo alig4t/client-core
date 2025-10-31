@@ -4,14 +4,13 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 
 import { useNavigate } from "react-router-dom";
 import ComprehensiveSearch from "./ComprehensiveSearch";
-import ComprehensiveTable from "./ComprehensiveTable";
 import PageHeader from "@/core/components/general/PageHeader";
 import Breadcrumb, {
   type BreadcrumbItem,
 } from "@/core/components/general/BreadCrumb";
-import { createMessages } from "@/core/forms/MessageUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
+import ComprehensiveTableWrapper from "./ComprehensiveTable";
 
 const breadcrumbItems: BreadcrumbItem[] = [
   { label: "خانه", href: "/" },
@@ -38,7 +37,7 @@ const ComprehensivePage: React.FC = () => {
           <ComprehensiveSearch onApplyFilters={setActiveFilters} />
         </Accordion>
 
-        <ComprehensiveTable filters={activeFilters} />
+        <ComprehensiveTableWrapper filters={activeFilters} />
       </div>
     </PageWrapper>
   );
