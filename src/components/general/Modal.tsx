@@ -1,5 +1,7 @@
+// src/components/Layout/ModalAnimation.tsx
+
 import React, { useEffect } from "react";
-import ReactDOM from "react-dom"; // ✅ 1. ایمپورت کردن ReactDOM
+import ReactDOM from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Variants } from "framer-motion";
 import { FiX } from "react-icons/fi";
@@ -27,26 +29,44 @@ const modalVariants: Variants = {
   exit: { opacity: 0, y: 30 },
 };
 
-interface ModalProps {
-  isOpen: boolean;
-  onDismiss: () => void;
-  children: React.ReactNode;
-  title: string;
-}
-
-// ... (Variants بدون تغییر)
-
 const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
+  // ⭐️ مدیریت وضعیت تاریخچه برای جلوگیری از برگشت به صفحه قبل
   useEffect(() => {
+    let historyPushed = false;
+
     if (isOpen) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "unset";
+
+      // 1. اضافه کردن یک حالت (state) جدید به تاریخچه مرورگر
+      history.pushState({ modal: true }, "");
+      historyPushed = true;
     }
-    return () => {
-      document.body.style.overflow = "unset";
+
+    // 2. هندلر برای رویداد PopState (فشار دادن دکمه Back)
+    const handlePopState = (e: PopStateEvent) => {
+      // اگر دکمه Back زده شد، history.back() اتفاق می‌افتد و ما باید مودال را ببندیم.
+      // e.state?.modal بررسی می‌کند که آیا به state قبل از باز شدن مودال برگشته‌ایم یا خیر.
+      if (isOpen && !e.state?.modal) {
+        // اگر هنوز باز است و state مودال ندارد، مودال را ببند.
+        onDismiss();
+      }
     };
-  }, [isOpen]);
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+      document.body.style.overflow = "unset";
+
+      // 3. هنگام بسته شدن با onDismiss (دکمه‌های داخلی):
+      // اگر state را اضافه کرده‌ایم و هنوز باز است (یعنی با دکمه‌های داخلی بسته شده است)،
+      // باید آن state را از تاریخچه حذف کنیم تا کاربر مجبور نباشد دوباره Back بزند.
+      if (historyPushed && isOpen) {
+        history.back();
+      }
+    };
+  }, [isOpen, onDismiss]);
+  // onDismiss باید در اینجا باشد تا هنگام بسته شدن با دکمه‌های داخلی، useEffect دوباره اجرا شود.
 
   const modalContent = (
     <AnimatePresence>
@@ -54,11 +74,11 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6" // اضافه کردن پدینگ برای موبایل
+          className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6"
         >
-          {/* Backdrop (افزایش تیرگی) */}
+          {/* Backdrop (پس زمینه روشن‌تر: bg-black/40) */}
           <motion.div
-            className="absolute inset-0 bg-black/70 backdrop-blur-sm" // bg-black/70 و backdrop-blur-sm
+            className="absolute inset-0 bg-black/40 backdrop-blur-sm" // 💡 روشن‌تر شد
             variants={backdropVariants}
             initial="hidden"
             animate="visible"
@@ -66,23 +86,22 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
             onClick={onDismiss}
           />
 
-          {/* Modal Panel (استایل مدرن) */}
+          {/* Modal Panel */}
           <motion.div
             dir="rtl"
-            className="relative mx-auto w-full max-w-lg bg-white dark:bg-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[95vh] transform transition-all overflow-hidden" // rounded-3xl و shadow-2xl
+            className="relative mx-auto w-full max-w-lg bg-white dark:bg-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[95vh] transform transition-all overflow-hidden"
             variants={modalVariants}
             initial="hidden"
             animate="visible"
-            exit="hidden"
+            exit="exit" // 💡 تغییر 'hidden' به 'exit' برای استفاده از انیمیشن خروج
           >
-            {/* Header (استایل تمیزتر) */}
+            {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
               <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">
                 {title}
               </h2>
               <button
                 onClick={onDismiss}
-                // دکمه بستن با رنگ تم و افکت هاور جذاب
                 className="p-2 rounded-full text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-gray-700 transition-colors"
                 aria-label="بستن مودال"
               >
@@ -90,11 +109,8 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
               </button>
             </div>
 
-            {/* Content (بدون تغییر عمده - scrollbar-thin نیاز به پلاگین Tailwind دارد) */}
-            <div
-              className="p-6 flex-1 overflow-y-auto 
-                          scrollbar-thin scrollbar-thumb-indigo-300 dark:scrollbar-thumb-indigo-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-900 scrollbar-thumb-rounded-full"
-            >
+            {/* Content */}
+            <div className="p-6 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-300 dark:scrollbar-thumb-indigo-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-900 scrollbar-thumb-rounded-full">
               {children}
             </div>
           </motion.div>
@@ -103,7 +119,6 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
     </AnimatePresence>
   );
 
-  // استفاده از پورتال
   return ReactDOM.createPortal(
     modalContent,
     document.getElementById("modal-root")!
