@@ -9,6 +9,7 @@ import { SOCIAL_MEDIA_LOGO } from "@/assets/icons";
 import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
+import { APP_LOGO_SMALL_BLUE } from "@/constants/images";
 
 // --- Schema and Type unchanged ---
 const loginSchema = z.object({
@@ -169,16 +170,15 @@ export default function LoginPage({
   return (
     <div className="flex items-center justify-center min-h-screen sm:bg-gray-50">
       <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6 bg-white sm:shadow-xl rounded-2xl">
-        <div className="flex justify-center">
+        <a
+          href="#"
+          className="-m-1.5 p-1.5 mb-2 gap-1 flex items-center justify-center text-2xl font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
+        >
           <img
-            src={`data:image/png;base64,${SOCIAL_MEDIA_LOGO}`}
-            alt="Logo"
-            className=""
+            src={APP_LOGO_SMALL_BLUE}
+            className="w-20 h-20 opacity-90 hover:opacity-100 transition-all"
           />
-          {/* <svg className="w-40 h-auto" viewBox="0 0 150 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <text x="50" y="30" fontFamily="Arial, sans-serif" fontSize="24" fill="#5A2E8E" fontWeight="bold">رایا نوین</text>
-            </svg> */}
-        </div>
+        </a>
 
         {/* Title section */}
         <div className="text-center">

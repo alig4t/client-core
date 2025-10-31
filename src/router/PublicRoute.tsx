@@ -1,14 +1,17 @@
-// src/components/PublicRoute.tsx
-
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../stores/AuthContext";
 
 const PublicRoute = () => {
   const { isAuthenticated } = useAuth();
+  const location = useLocation();
 
-  // If the user is logged in, go to the dashboard
-  // Otherwise, allow access to the login page (Outlet)
-  return isAuthenticated ? <Navigate to="/dashboard" replace /> : <Outlet />;
+  // اگر کاربر لاگین کرده و داره می‌ره به /login یا /register، بفرستش به داشبورد
+  if (isAuthenticated && ["/login", "/register"].includes(location.pathname)) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  // در غیر این صورت، اجازه بده صفحه عمومی نمایش داده بشه
+  return <Outlet />;
 };
 
 export default PublicRoute;

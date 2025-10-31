@@ -1,5 +1,6 @@
 import { createContext, useContext, useState, useEffect } from "react";
 import type { ReactNode } from "react";
+import { useNavigate } from "react-router-dom";
 
 // 1. Define type for user object
 // Adjust this type based on the actual structure of your user object
@@ -39,6 +40,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // 4. Create Provider (main component)
 export function AuthProvider({ children }: { children: ReactNode }) {
+  const navigate = useNavigate();
   // --- States ---
   // Read token from localStorage on initial load
   const [token, setToken] = useState<string | null>(() =>

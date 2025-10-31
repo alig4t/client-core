@@ -8,6 +8,7 @@ import React, {
 import { Bell, MoonIcon, SunIcon, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/stores/AuthContext";
 import Dropdown from "./general/DropDown";
+import { useNavigate } from "react-router-dom";
 
 // --- TypeScript Interfaces ---
 
@@ -90,6 +91,7 @@ const Navbar: FC = () => {
     logout: () => void;
   };
 
+  const navigate = useNavigate();
   // Mock user details for a placeholder
   const initials = user?.name
     ? user.name
@@ -107,6 +109,7 @@ const Navbar: FC = () => {
 
   const handleLogout = useCallback(() => {
     logout();
+    navigate("/");
   }, [logout]);
 
   return (
