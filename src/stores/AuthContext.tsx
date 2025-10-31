@@ -87,12 +87,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = (newToken: string, newUser: User) => {
     setToken(newToken);
     setUser(newUser);
+    navigate("/dashboard");
   };
 
   // The logout function clears both token and user states
   const logout = () => {
     setToken(null);
     setUser(null);
+    navigate("/");
   };
 
   // --- Derived State ---

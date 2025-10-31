@@ -16,6 +16,7 @@ createRoot(document.getElementById("root")!).render(
       <QueryClientProvider client={queryClient}>
         <AuthProvider>
           <App />
+          <div id="modal-root"></div>
         </AuthProvider>
       </QueryClientProvider>
     </BrowserRouter>

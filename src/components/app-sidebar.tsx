@@ -28,7 +28,9 @@ const Sidebar = () => {
     <TooltipProvider>
       <div className="h-auto hidden w-16 min-w-16 bg-gray-900 sm:flex flex-col items-center py-4">
         <div className="mb-6">
-          <LayoutDashboard size={28} className="text-white" />
+          <Link to="/">
+            <LayoutDashboard size={28} className="text-white" />
+          </Link>
         </div>
         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent w-full flex flex-col items-center gap-4 custom-scrollbar">
           {menuItems.map((item, index) => {
