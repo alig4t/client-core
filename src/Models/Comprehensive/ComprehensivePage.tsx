@@ -13,8 +13,8 @@ import { PageWrapper } from "@/components/Layout/PageWrapper";
 import ComprehensiveTableWrapper from "./ComprehensiveTable";
 
 const breadcrumbItems: BreadcrumbItem[] = [
-  { label: "خانه", href: "/" },
-  { label: "مدیریت دسترسی‌ها" }, // Current page
+  { label: "خانه", href: "/dashboard" },
+  { label: "مدیریت ترکیبی" }, // Current page
 ];
 
 const ComprehensivePage: React.FC = () => {

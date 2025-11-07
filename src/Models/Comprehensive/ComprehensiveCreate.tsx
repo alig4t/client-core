@@ -27,7 +27,6 @@ import { FormUploader } from "@/core/components/form/FormUpload";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import UserService from "../User/UserService";
-import AuthService from "@/services/AuthService";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
@@ -107,9 +106,9 @@ const ComprehensiveCreate: React.FC = () => {
   };
 
   const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "خانه", href: "/" },
-    { label: "پورتال", href: "/portal" },
-    { label: "مدیریت ترکیبی", href: "/portal/comprehensive" },
+    { label: "خانه", href: "/dashboard" },
+    { label: "پورتال", href: "/dashboard/portal" },
+    { label: "مدیریت ترکیبی", href: "/dashboard/portal/comprehensive" },
     { label: isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید" },
   ];
 
@@ -204,7 +203,7 @@ const ComprehensiveCreate: React.FC = () => {
               <FormAutoComplete
                 name="oneToOneUser"
                 label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-                service={AuthService}
+                service={UserService}
                 labelKey="username"
                 valueKey="id"
               />

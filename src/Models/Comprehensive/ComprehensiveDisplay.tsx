@@ -42,10 +42,10 @@ const ComprehensiveDisplayPage: React.FC = () => {
 
   // Breadcrumb برای ناوبری
   const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "خانه", href: "/" },
-    { label: "پورتال", href: "/portal" },
-    { label: "مدیریت ترکیبی", href: "/portal/comprehensive" },
-    { label: comprehensiveRecord?.stringField || "جزئیات رکورد" },
+    { label: "خانه", href: "/dashboard" },
+    { label: "پورتال", href: "/dashboard/portal" },
+    { label: "مدیریت ترکیبی", href: "/dashboard/portal/comprehensive" },
+    { label: "جزئیات رکورد" },
   ];
 
   // هندلر برای دکمه ویرایش

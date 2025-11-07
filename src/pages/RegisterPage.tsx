@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { register as registerService } from "@/services/AuthService";
+
 import { Link, useNavigate } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
@@ -8,6 +8,7 @@ import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو ا
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { useAuth } from "@/stores/AuthContext";
+import UserService from "@/Models/User/UserService";
 
 // --- Schema برای اعتبارسنجی فرم ثبت‌نام ---
 const registerSchema = z
@@ -116,16 +117,18 @@ function RegisterFormFields() {
 export default function RegisterPage({
   inModal,
   switchModal,
+  onClose,
 }: {
   inModal: boolean;
   switchModal: () => void;
+  onClose?: () => void;
 }) {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
   const mutation = useMutation({
     mutationFn: (data: RegisterFormData) =>
-      registerService({
+      UserService.register({
         name: data.name,
         username: data.username,
         password: data.password,
@@ -137,10 +140,14 @@ export default function RegisterPage({
       });
       const token = data.data.token;
       const user = data.data.user;
+      authLogin(token, user);
 
+      if (inModal && onClose) {
+        console.log("onClose");
+        onClose(); // بستن مودال
+      }
       setTimeout(() => {
-        authLogin(token, user);
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true });
       }, 1000);
 
       // setTimeout(() => {

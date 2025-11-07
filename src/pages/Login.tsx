@@ -1,25 +1,23 @@
+// src/pages/Login.tsx
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { login } from "@/services/AuthService";
-import { useNavigate } from "react-router-dom";
+import { replace, useNavigate } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { useAuth } from "@/stores/AuthContext";
-import { SOCIAL_MEDIA_LOGO } from "@/assets/icons";
-import { Link } from "react-router-dom";
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { APP_LOGO_SMALL_BLUE } from "@/constants/images";
+import { Link } from "react-router-dom";
+import UserService from "@/Models/User/UserService";
 
-// --- Schema and Type unchanged ---
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
   password: z.string().nonempty("رمز عبور را وارد نمایید"),
-  // .min(6, "رمز عبور حداقل باید ۶ کاراکتر باشد"),
 });
+
 type LoginFormData = z.infer<typeof loginSchema>;
 
-// --- Form Fields Component with new style ---
 function LoginFormFields() {
   const {
     register,
@@ -61,7 +59,6 @@ function LoginFormFields() {
           {...register("password")}
           className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
         />
-
         {errors.password && (
           <ErrorFormText msg={errors.password.message as string} />
         )}
@@ -70,41 +67,39 @@ function LoginFormFields() {
   );
 }
 
-// --- Main Login Page Component with new style ---
 export default function LoginPage({
   inModal,
   switchModal,
+  onClose, // اضافه کردن prop برای بستن مودال
 }: {
   inModal: boolean;
   switchModal: () => void;
+  onClose?: () => void; // prop جدید برای بستن مودال
 }) {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
-  // const methods = useForm<LoginFormData>({
-  //   resolver: zodResolver(loginSchema),
-  // });
-
   const mutation = useMutation({
-    mutationFn: (data: LoginFormData) => login(data),
+    mutationFn: (data: LoginFormData) => UserService.login(data),
     onSuccess: (data) => {
-      // Your server response should include accessToken and refreshToken
-      // authLogin(data.data.token);
-
-      console.log("Data received on success:", data);
-      // authLogin(data.token);
       const token = data.data.token;
       const user = data.data.user;
 
-      // Pass both to the login function
+      if (!token || !user) {
+        throw new Error("Invalid login response: token or user missing");
+      }
 
+      authLogin(token, user);
       toast.success("ورود موفقیت آمیز بود", {
         description: "خوش آمدید! در حال انتقال به داشبورد...",
         position: "bottom-left",
       });
+
+      if (inModal && onClose) {
+        onClose(); // بستن مودال
+      }
       setTimeout(() => {
-        authLogin(token, user);
-        navigate("/dashboard");
+        navigate("/dashboard", { replace: true }); // هدایت فوری به داشبورد
       }, 1000);
     },
     onError: (error: any) => {
@@ -122,14 +117,12 @@ export default function LoginPage({
 
   if (inModal) {
     return (
-      <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6  rounded-2xl">
+      <div className="w-full max-w-sm sm:max-w-md p-8 space-y-6 rounded-2xl">
         <FormWrapper
           schema={loginSchema}
           onSubmit={onSubmit}
           className="space-y-5"
         >
-          {/* <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
           <LoginFormFields />
           <button
             disabled={mutation.isPending}
@@ -138,10 +131,8 @@ export default function LoginPage({
           >
             {mutation.isPending ? "در حال بررسی..." : "تایید و ادامه"}
           </button>
-          {/* </form> */}
         </FormWrapper>
 
-        {/* Rules section */}
         <p className="text-xs text-center text-gray-400">
           ورود شما به منزله قبول{" "}
           <a href="#" className="font-semibold text-purple-600 hover:underline">
@@ -151,12 +142,10 @@ export default function LoginPage({
         </p>
 
         <div className="pt-4 text-center">
-          <p className=" text-gray-500  text-[11px]">
+          <p className="text-gray-500 text-[11px]">
             هنوز حساب کاربری نساخته‌اید؟{" "}
             <span
-              onClick={() => {
-                switchModal();
-              }}
+              onClick={switchModal}
               className="font-semibold cursor-pointer text-indigo-600 hover:text-indigo-700 hover:underline"
             >
               ایجاد حساب کاربری
@@ -169,7 +158,7 @@ export default function LoginPage({
 
   return (
     <div className="flex items-center justify-center min-h-screen sm:bg-gray-50">
-      <div className="w-full max-w-sm sm:max-w-md  p-8 space-y-6 bg-white sm:shadow-xl rounded-2xl">
+      <div className="w-full max-w-sm sm:max-w-md p-8 space-y-6 bg-white sm:shadow-xl rounded-2xl">
         <a
           href="#"
           className="-m-1.5 p-1.5 mb-2 gap-1 flex items-center justify-center text-2xl font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-500"
@@ -180,22 +169,17 @@ export default function LoginPage({
           />
         </a>
 
-        {/* Title section */}
         <div className="text-center">
           <h1 className="!text-3xl font-bold text-[var(--primary-text)] mb-2">
             ورود به پنل مدیریت
           </h1>
-          {/* <p className="mt-2 text-sm text-gray-500">ایمیل و رمز عبور خود را وارد کنید</p> */}
         </div>
 
-        {/* Form section */}
         <FormWrapper
           schema={loginSchema}
           onSubmit={onSubmit}
           className="space-y-5"
         >
-          {/* <FormProvider {...methods}>
-          <form onSubmit={methods.handleSubmit(onSubmit)} className="space-y-6"> */}
           <LoginFormFields />
           <button
             disabled={mutation.isPending}
@@ -204,10 +188,8 @@ export default function LoginPage({
           >
             {mutation.isPending ? "در حال بررسی..." : "تایید و ادامه"}
           </button>
-          {/* </form> */}
         </FormWrapper>
 
-        {/* Rules section */}
         <p className="text-xs text-center text-gray-400">
           ورود شما به منزله قبول{" "}
           <a href="#" className="font-semibold text-purple-600 hover:underline">
@@ -217,7 +199,7 @@ export default function LoginPage({
         </p>
 
         <div className="pt-4 text-center">
-          <p className=" text-gray-500  text-[11px]">
+          <p className="text-gray-500 text-[11px]">
             هنوز حساب کاربری نساخته‌اید؟{" "}
             <Link
               to="/register"
