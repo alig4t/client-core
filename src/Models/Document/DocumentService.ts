@@ -1,6 +1,6 @@
 // services/DocumentService.ts
-import { api } from '@/lib/axios';
-import type { ApiResponse } from '@/lib/axios';
+import { api } from '@/core/service/Axios';
+import type { ApiResponse } from '@/core/service/Axios';
 import type { DocumentModel } from './DocumentModel';
 
 class DocumentService {

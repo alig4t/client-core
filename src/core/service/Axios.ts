@@ -3,12 +3,6 @@ import { API_BASE_URL } from "@/config/api";
 import NProgress from "nprogress";
 import { toast } from "sonner";
 
-// --- Type Definitions ---
-// interface ApiResponse<T = any> {
-//   type: 'data' | 'error';
-//   status: number;
-//   data: T;
-// }
 export interface ApiResponse<T = any> {
   type: 'data' | 'error';
   status: number;

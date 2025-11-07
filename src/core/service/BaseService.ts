@@ -1,4 +1,4 @@
-import { api, type ApiResponse } from "@/lib/axios";
+import { api, type ApiResponse } from "@/core/service/Axios";
 
 export interface PagedResponse<T> {
   content: T[];

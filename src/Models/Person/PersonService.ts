@@ -1,5 +1,5 @@
 // services/PersonService.ts
-import { BaseService } from '@/Models/BaseService';
+import { BaseService } from '@/core/service/BaseService';
 import type { PersonModel } from '@/Models/Person/PersonModel';
 
 class PersonService extends BaseService<PersonModel> {

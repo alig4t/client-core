@@ -1,6 +1,6 @@
 // services/UserService.ts
-import { api } from '@/lib/axios';
-import { BaseService } from '@/Models/BaseService';
+import { api } from '@/core/service/Axios';
+import { BaseService } from '@/core/service/BaseService';
 import type { UserModel } from '@/Models/User/UserModel';
 
 class UserService extends BaseService<UserModel> {

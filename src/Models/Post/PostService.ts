@@ -1,5 +1,5 @@
 // services/PostService.ts
-import { BaseService } from '@/Models/BaseService';
+import { BaseService } from '@/core/service/BaseService';
 import type { PostModel } from '@/Models/Post/PostModel';
 
 class PostService extends BaseService<PostModel> {
