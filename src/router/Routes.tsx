@@ -174,8 +174,8 @@ export const routeConfig: RouteConfig[] = [
     name: VIEWNAME.COMPREHENSIVE_DISPLAY,
   },
   {
-    path: `${withId("/dashboard/portal/comprehensive")}/edit`,
-    // element: ComprehensiveEdit,
+    path: withId("/dashboard/portal/comprehensive/edit"),
+    element: ComprehensiveCreate,
     permission: Permission.ComprehensiveEntity_Update,
     showInMenu: false,
     name: VIEWNAME.COMPREHENSIVE_EDIT,

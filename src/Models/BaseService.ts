@@ -70,8 +70,9 @@ export class BaseService<T> {
       }
     };
   }
-  getById(id: number): Promise<T> {
-    return api.get(`${this.url}/${id}`);
+  async getById(id: number): Promise<T> {
+    const apiService = await api.get(`${this.url}/${id}`);
+    return apiService.data;
   }
 
   create(data: Partial<T>): Promise<T> {

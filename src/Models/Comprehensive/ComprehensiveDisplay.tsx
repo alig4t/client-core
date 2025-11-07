@@ -1,86 +1,216 @@
-// src/pages/ComprehensiveDisplay.tsx (Example)
+// src/pages/ComprehensiveDisplay.tsx
 import React from "react";
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/components/general/RecordDisplayLayout";
 import { RowContainer } from "@/components/general/RowContainer";
 import LinkView from "@/components/general/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/components/general/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
-
-// Mock data (replace with actual fetch logic)
-const comprehensiveRecord = {
-  id: "comp-123",
-  stringField: "مثال از یک رشته",
-  integerField: 42,
-  doubleField: 12.345,
-  booleanField: true,
-  dateField: "1402/09/20",
-  enumField: "YES",
-  oneToOneUserId: 5,
-  oneToOneUserName: "احمدی",
-};
+import ComprehensiveService from "./ComprehensiveService";
+import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import DateUtil from "@/core/forms/DateUtils";
+import TablePlaceholder from "@/components/Layout/TablePlaceholder";
+import TableErrorState from "@/components/Layout/TableErrorState";
+import { useNavigate } from "react-router-dom";
+import Button from "@/components/Button/Button";
+import Breadcrumb, {
+  type BreadcrumbItem,
+} from "@/core/components/general/BreadCrumb";
+import { PageWrapper } from "@/components/Layout/PageWrapper";
+import { getViewPath } from "@/router/RouteUtils";
 
 const ComprehensiveDisplayPage: React.FC = () => {
-  // Assume you fetch the record and it's not loading (isFetching: false)
+  const { id } = useParams<{ id: string }>(); // گرفتن id از URL
+  const navigate = useNavigate();
+
+  // دریافت داده‌ها با React Query
+  const {
+    data: comprehensiveRecord,
+    isLoading,
+    isError,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["comprehensive", id],
+    queryFn: () => ComprehensiveService.getById(Number(id)),
+    enabled: !!id, // فقط وقتی id وجود داره اجرا بشه
+    retry: 1, // در صورت خطا، یکبار retry کنه
+    staleTime: 5 * 60 * 1000, // 5 دقیقه cache
+  });
+
+  // Breadcrumb برای ناوبری
+  const breadcrumbItems: BreadcrumbItem[] = [
+    { label: "خانه", href: "/" },
+    { label: "پورتال", href: "/portal" },
+    { label: "مدیریت ترکیبی", href: "/portal/comprehensive" },
+    { label: comprehensiveRecord?.stringField || "جزئیات رکورد" },
+  ];
+
+  // هندلر برای دکمه ویرایش
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, id));
+    navigate(getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, id));
+  };
+
+  // نمایش حالت‌های مختلف (Loading, Error, Success)
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <TablePlaceholder rowCount={1} />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!comprehensiveRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message="رکوردی با این شناسه یافت نشد"
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
 
   return (
-    <RecordDisplayLayout
-      title={`جزئیات رکورد: ${comprehensiveRecord.id}`}
-      actions={
-        // Example action button
-        <button className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-          ویرایش
-        </button>
-      }
-    >
-      <RowContainer numberOfColumns={3}>
-        <DisplayField
-          label="فیلد رشته‌ای"
-          value={comprehensiveRecord.stringField}
-        />
-        <DisplayField
-          label="فیلد عددی"
-          value={comprehensiveRecord.integerField}
-        />
-        <DisplayField
-          label="فیلد ممیز شناور"
-          value={comprehensiveRecord.doubleField?.toFixed(2)}
-        />
-
-        <DisplayField
-          label="فیلد تاریخ"
-          value={comprehensiveRecord.dateField}
-        />
-        <DisplayField
-          label="فیلد دودویی"
-          value={comprehensiveRecord.booleanField ? "بله" : "خیر"}
-        />
-        <DisplayField label="فیلد انوم" value={comprehensiveRecord.enumField} />
-
-        <DisplayField
-          label="کاربر مرتبط"
-          value={
-            <LinkView
-              viewName={VIEWNAME.COMPREHENSIVE_DISPLAY}
-              id={comprehensiveRecord.oneToOneUserId}
-              label={comprehensiveRecord.oneToOneUserName}
-            />
+    <PageWrapper>
+      <Breadcrumb items={breadcrumbItems} className="mb-4" />
+      <div className="p-8 min-h-screen font-sans">
+        <RecordDisplayLayout
+          title={`جزئیات رکورد: ${comprehensiveRecord.id}`}
+          actions={
+            <Button variant="primary" onClick={handleEditClick}>
+              ویرایش
+            </Button>
           }
-        />
+        >
+          <RowContainer numberOfColumns={3}>
+            <DisplayField
+              label={comprehensiveModelMeta.fields.stringField.label}
+              value={comprehensiveRecord.stringField}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.integerField.label}
+              value={comprehensiveRecord.integerField}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.doubleField.label}
+              value={comprehensiveRecord.doubleField?.toFixed(2)}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.longField.label}
+              value={comprehensiveRecord.longField}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.bigDecimalField.label}
+              value={comprehensiveRecord.bigDecimalField?.toFixed(4)}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.booleanField.label}
+              value={comprehensiveRecord.booleanField ? "بله" : "خیر"}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.dateField.label}
+              value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveRecord.dateField)}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.localDateField.label}
+              value={DateUtil.GEORGIAN_TO_JALALI(
+                comprehensiveRecord.localDateField
+              )}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.localDateTimeField.label}
+              value={DateUtil.GEORGIAN_TO_JALALI(
+                comprehensiveRecord.localDateTimeField
+              )}
+            />
+            {/* <DisplayField
+              label={comprehensiveModelMeta.fields.enumField.label}
+              value={<>{
 
-        {/* Example of a field spanning all columns */}
-        <DisplayField
-          label="توضیحات طولانی"
-          value="این یک متن طولانی است که می‌تواند فضای بیشتری را اشغال کند و به همین دلیل از colSpan='full' برای آن استفاده شده است."
-          colSpan="full"
-        />
+                comprehensiveModelMeta.fields.enumField.options?.find(
+                  (opt) => opt.value === comprehensiveRecord.enumField
+                )?.label || comprehensiveRecord.enumField
+              }</>
 
-        <DisplayField
-          label="پیوست"
-          value={<FilePreview fileId={35} previewSize="sm" className="mr-2" />}
-        />
-      </RowContainer>
-    </RecordDisplayLayout>
+              }
+            /> */}
+            <DisplayField
+              label={comprehensiveModelMeta.fields.uniqueField.label}
+              value={comprehensiveRecord.uniqueField}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.indexedField.label}
+              value={comprehensiveRecord.indexedField}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.oneToOneUser.label}
+              value={
+                comprehensiveRecord.oneToOneUser ? (
+                  <LinkView
+                    viewName={VIEWNAME.COMPREHENSIVE_DISPLAY}
+                    id={comprehensiveRecord.oneToOneUser.id}
+                    label={comprehensiveRecord.oneToOneUser.username}
+                  />
+                ) : (
+                  "بدون کاربر"
+                )
+              }
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.manyToOneChannel.label}
+              value={
+                comprehensiveRecord.manyToOneChannel?.channelName ||
+                "بدون کانال"
+              }
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.createdAt.label}
+              value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveRecord.createdAt)}
+            />
+            <DisplayField
+              label={comprehensiveModelMeta.fields.updatedAt.label}
+              value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveRecord.updatedAt)}
+            />
+            <DisplayField
+              label="پیوست"
+              value={
+                (comprehensiveRecord as any).file ? (
+                  <FilePreview
+                    fileId={(comprehensiveRecord as any).file.id}
+                    previewSize="sm"
+                    className="mr-2"
+                  />
+                ) : (
+                  "بدون فایل"
+                )
+              }
+            />
+
+            <DisplayField
+              label="پیوست"
+              value={
+                <FilePreview fileId={37} previewSize="sm" className="mr-2" />
+              }
+            />
+          </RowContainer>
+        </RecordDisplayLayout>
+      </div>
+    </PageWrapper>
   );
 };
 

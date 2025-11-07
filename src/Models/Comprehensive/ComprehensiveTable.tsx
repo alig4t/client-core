@@ -1,5 +1,3 @@
-// src/components/permission/PermissionTable.tsx
-
 import React, { useState } from "react";
 import {
   useQuery,

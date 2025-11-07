@@ -1,6 +1,6 @@
 import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
-import { login } from "@/services/authService";
+import { login } from "@/services/AuthService";
 import { useNavigate } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
