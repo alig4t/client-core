@@ -7,6 +7,7 @@ import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
 
 import Button from "../../../components/Button/Button";
 import { Select } from "../form/Select";
+import { Trash2 } from "lucide-react";
 
 export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
   className = "",
@@ -233,8 +234,25 @@ const Table = <T extends { [key: string]: any }>({
       dir="rtl"
       className={`p-6 bg-[var(--white)] rounded-lg border max-w-xs min-w-full sm:max-w-sm sm:min-w-full md:max-w-xl border-[var(--border)] transition-opacity ${isFetching ? "opacity-50" : "opacity-100"}`}
     >
-      {/* 1. Bulk Action Bar (Visible only if selection mode is active AND items are selected) */}
-      {isSelectionMode && selectedIds.length > 0 && (
+      {/* Controls: Sort and Page Size (Unchanged) */}
+
+      <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center mb-4 w-full gap-y-3">
+        <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">
+          {title}
+        </h2>
+        <div className="sm:max-w-2/3 flex  gap-2 items-center sm:items-end">
+          {isSelectionMode && selectedIds.length > 0 && (
+            <Button
+              variant="danger"
+              icon={Trash2}
+              badgeCount={2}
+              onClick={() => setSelectedIds([])}
+            >
+              حذف
+            </Button>
+          )}
+
+          {/* {isSelectionMode && selectedIds.length > 0 && (
         <div className="mb-4 p-3 bg-purple-50 dark:bg-gray-950 rounded-lg flex justify-between items-center">
           <span className="text-sm text-purple-700">
             **{selectedIds.length}** مورد انتخاب شده
@@ -247,18 +265,11 @@ const Table = <T extends { [key: string]: any }>({
             >
               حذف موارد انتخاب شده
             </Button>
-            {/* Add your actual bulk actions here */}
+          
           </div>
         </div>
-      )}
+      )} */}
 
-      {/* Controls: Sort and Page Size (Unchanged) */}
-
-      <div className="flex flex-col sm:flex-row flex-wrap justify-between items-center mb-4 w-full gap-y-3">
-        <h2 className="text-lg text-[var(--primary-text)] font-semibold flex-1">
-          {title}
-        </h2>
-        <div className="sm:max-w-2/3 flex gap-2 items-center sm:items-end">
           <Select
             minilabel="مرتب سازی براساس"
             className="min-w-[180px]"
