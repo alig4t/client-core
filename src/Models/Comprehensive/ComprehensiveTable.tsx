@@ -29,6 +29,7 @@ import { getViewPath } from "@/router/RouteUtils";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { useAuth } from "@/stores/AuthContext";
 import { Permission } from "@/router/Permission";
+import NavLink from "@/components/Button/NavLink";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -166,14 +167,22 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.updatedAt)}</TBODY>
 
       <TBODY className="flex gap-x-2">
-        {hasPermission(Permission.ComprehensiveEntity_Update) && (
+        {/* {hasPermission(Permission.ComprehensiveEntity_Update) && (
           <TableLink
             tooltipText="ویرایش"
             to={getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, comprehensive.id)}
           >
             <Pencil size={20} />
           </TableLink>
-        )}
+        )} */}
+        <NavLink
+          variant="edit"
+          permission={Permission.ComprehensiveEntity_Update}
+          viewName={VIEWNAME.COMPREHENSIVE_EDIT}
+          idParam={comprehensive.id}
+          tooltipSide="top"
+          className="mr-2"
+        />
 
         {hasPermission(Permission.ComprehensiveEntity_Read) && (
           <TableLink
