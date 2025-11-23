@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
@@ -23,6 +23,7 @@ import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { useAuth } from "@/stores/AuthContext";
 import { Permission } from "@/router/Permission";
 import NavLink from "@/components/Button/NavLink";
+import Button from "@/components/Button/Button";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -39,12 +40,20 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
   const queryClient = useQueryClient();
   const { hasPermission } = useAuth();
 
+  // State for Confirmation Modal and selections
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [idsToDelete, setIdsToDelete] = useState<number[]>([]);
+  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+
   const deleteMutation = useMutation({
-    mutationFn: (id: number) => ComprehensiveService.delete(id),
+    mutationFn: async (ids: number[]) => {
+      await Promise.all(ids.map((id) => ComprehensiveService.delete(id)));
+    },
     onSuccess: () => {
       // در صورت موفقیت‌آمیز بودن حذف:
       // لیست داده‌ها را رفرش (Invalidate) می‌کند تا ردیف حذف شده ناپدید شود
       queryClient.invalidateQueries({ queryKey: ["comprehensive"] });
+      setSelectedIds([]);
       // می‌توانید یک پیام موفقیت‌آمیز نیز نمایش دهید
       // مثلاً: toast.success("رکورد با موفقیت حذف شد.");
     },
@@ -54,30 +63,47 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
     },
   });
 
-  // State for Confirmation Modal
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [idToDelete, setIdToDelete] = useState<number | null>(null);
-
   // --- Handlers ---
   // ... (handlePageSizeChange, handleSortChange)
 
   const handleDeleteClick = (id: number) => {
-    setIdToDelete(id);
+    setIdsToDelete([id]);
+    setIsModalOpen(true);
+  };
+
+  const handleBulkDeleteClick = () => {
+    if (selectedIds.length === 0) return;
+    setIdsToDelete(selectedIds);
     setIsModalOpen(true);
   };
 
   const handleConfirmDelete = () => {
-    if (idToDelete !== null) {
-      deleteMutation.mutate(idToDelete);
-      setIsModalOpen(false);
-      setIdToDelete(null);
-    }
+    if (idsToDelete.length === 0) return;
+    deleteMutation.mutate(idsToDelete);
+    setIsModalOpen(false);
+    setIdsToDelete([]);
   };
 
   const handleCancelDelete = () => {
     setIsModalOpen(false);
-    setIdToDelete(null);
+    setIdsToDelete([]);
   };
+
+  const handleSelectionChange = useCallback(
+    (ids: (string | number)[]) => {
+      const numericIds = ids
+        .map((id) => Number(id))
+        .filter((id) => !Number.isNaN(id));
+      setSelectedIds((prev) => {
+        // Avoid state updates when nothing changed to prevent unnecessary rerenders
+        const prevKey = prev.join(",");
+        const nextKey = numericIds.join(",");
+        return prevKey === nextKey ? prev : numericIds;
+      });
+      onSelectionChange?.(numericIds);
+    },
+    [onSelectionChange]
+  );
 
   const fetchComprehensivePage = ({
     page,
@@ -186,6 +212,20 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
 
   return (
     <>
+      {hasPermission(Permission.ComprehensiveEntity_Delete) &&
+        selectedIds.length > 0 && (
+          <div className="flex justify-end mb-3">
+            <Button
+              variant="danger"
+              icon={Trash2}
+              onClick={handleBulkDeleteClick}
+              disabled={deleteMutation.isPending}
+              badgeCount={selectedIds.length}
+            >
+              حذف انتخاب شده ها 
+            </Button>
+          </div>
+        )}
       <PaginatedDataTable<ComprehensiveModel, DynamicFilters>
         dataIdKey="id"
         header={
@@ -222,16 +262,18 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
         filters={filters}
         defaultSort="createdAt,desc"
         defaultPageSize={10}
-        onSelectionChange={
-          onSelectionChange ?? ((ids) => console.log(ids))
-        }
+        onSelectionChange={handleSelectionChange}
       />
       <ConfirmationModal
         isOpen={isModalOpen}
         onClose={handleCancelDelete}
         onConfirm={handleConfirmDelete}
         title="تأیید حذف"
-        message={`آیا مطمئنید که می‌خواهید رکورد با شناسه ${idToDelete} را حذف کنید؟ این عمل غیرقابل بازگشت است.`}
+        message={`آیا مطمئنید که می‌خواهید رکورد با 
+
+         ${idsToDelete.length === 1 ? ` شناسه  ${idsToDelete[0]}` : `شناسه های   ${idsToDelete.join(',')}  `}
+ را حذف کنید؟ این عمل غیرقابل بازگشت است.`}
+
         isDeleting={deleteMutation.isPending}
       />
     </>

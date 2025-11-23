@@ -430,7 +430,7 @@ export interface PaginatedFetchResult<TData> {
   };
 }
 
-type BasePaginatedTableProps<TData> = Pick<
+type BasePaginatedTableProps<TData extends Record<string, any>> = Pick<
   TableProps<TData>,
   | "header"
   | "renderRow"
@@ -440,7 +440,10 @@ type BasePaginatedTableProps<TData> = Pick<
   | "onSelectionChange"
 >;
 
-export interface PaginatedTableProps<TData, TFilters = Record<string, any>>
+export interface PaginatedTableProps<
+  TData extends Record<string, any>,
+  TFilters = Record<string, any>
+>
   extends BasePaginatedTableProps<TData> {
   queryKey: string;
   fetchPage: (
@@ -451,7 +454,10 @@ export interface PaginatedTableProps<TData, TFilters = Record<string, any>>
   defaultSort?: string;
 }
 
-export const PaginatedDataTable = <TData, TFilters = Record<string, any>>({
+export const PaginatedDataTable = <
+  TData extends Record<string, any>,
+  TFilters = Record<string, any>
+>({
   queryKey,
   fetchPage,
   filters,
@@ -461,8 +467,8 @@ export const PaginatedDataTable = <TData, TFilters = Record<string, any>>({
 }: PaginatedTableProps<TData, TFilters>) => {
   const [page, setPage] = useState(0);
   const [pageSize, setPageSize] = useState(defaultPageSize);
-  const [sortValue, setSortValue] = useState(
-    defaultSort ?? tableProps.sortOptions[0]?.value ?? ""
+  const [sortValue, setSortValue] = useState<string>(
+    defaultSort ?? String(tableProps.sortOptions[0]?.value ?? "")
   );
 
   useEffect(() => {
@@ -499,7 +505,7 @@ export const PaginatedDataTable = <TData, TFilters = Record<string, any>>({
   };
 
   const handleSortChange = (newSort: string) => {
-    setSortValue(newSort);
+    setSortValue(String(newSort));
     setPage(0);
   };
 
