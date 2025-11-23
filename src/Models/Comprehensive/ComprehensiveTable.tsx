@@ -1,15 +1,8 @@
 import React, { useState } from "react";
-import {
-  useQuery,
-  keepPreviousData,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
-import TableErrorState from "@/components/Layout/TableErrorState";
 import DateUtil from "@/core/forms/DateUtils";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
@@ -18,7 +11,7 @@ import OptionUtils, {
   buildSortOptions,
   type Option,
 } from "@/core/forms/OptionUtils";
-import Table, { TBODY, THEAD } from "@/core/components/Table/DataTable";
+import { PaginatedDataTable, TBODY, THEAD } from "@/core/components/Table/DataTable";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 
@@ -33,7 +26,7 @@ import NavLink from "@/components/Button/NavLink";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
-  onSelectionChange?: (selectedIds: number[]) => void; // برای ارتباط با والد
+  onSelectionChange?: (selectedIds: (string | number)[]) => void; // برای ارتباط با والد
 }
 
 const sortOptions: Option[] = buildSortOptions(comprehensiveModelMeta);
@@ -42,12 +35,8 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
   filters,
   onSelectionChange,
 }) => {
-  // State for Table control (Managed by the Parent)
-  const queryClient = useQueryClient(); // <-- تعریف QueryClient
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState("createdAt,desc");
-  const [pageSize, setPageSize] = useState<number>(10);
-
+  // Query client for invalidating table data after mutations
+  const queryClient = useQueryClient();
   const { hasPermission } = useAuth();
 
   const deleteMutation = useMutation({
@@ -90,33 +79,23 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
     setIdToDelete(null);
   };
 
-  // --- Data Fetching (tanstack/react-query) ---
-  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ["comprehensive", page, pageSize, sort, filters],
-    queryFn: () =>
-      ComprehensiveService.getAll({ page, size: pageSize, sort, filters }),
-    placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false,
-    retry: false,
-  });
-
-  const pageData: ComprehensiveModel[] = data?.data ?? [];
-  const meta = data?.meta;
-
-  const currentPage = meta?.currentPage ?? 0;
-  const totalItems = meta?.totalItems ?? 0;
-  const totalPages = meta?.totalPages ?? 0;
-
-  // --- Handlers ---
-  const handlePageSizeChange = (newSize: number) => {
-    setPageSize(newSize);
-    setPage(0);
-  };
-
-  const handleSortChange = (newSort: string) => {
-    setSort(newSort);
-    setPage(0);
-  };
+  const fetchComprehensivePage = ({
+    page,
+    size,
+    sort,
+    filters: currentFilters,
+  }: {
+    page: number;
+    size: number;
+    sort: string;
+    filters?: DynamicFilters;
+  }) =>
+    ComprehensiveService.getAll({
+      page,
+      size,
+      sort,
+      filters: currentFilters,
+    });
 
   // --- Row Renderer Function (Type-safe) ---
   const renderPermissionRow = (
@@ -205,17 +184,9 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
     </tr>
   );
 
-  if (isLoading) return <TablePlaceholder rowCount={pageSize} />;
-  if (isError) {
-    return (
-      <TableErrorState message={(error as Error).message} onRetry={refetch} />
-    );
-  }
-
   return (
     <>
-      <Table<ComprehensiveModel>
-        data={pageData}
+      <PaginatedDataTable<ComprehensiveModel, DynamicFilters>
         dataIdKey="id"
         header={
           <>
@@ -245,17 +216,15 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
         }
         renderRow={renderPermissionRow}
         title={comprehensiveModelMeta.messages.list.title}
-        page={currentPage}
-        pageSize={pageSize}
-        totalPages={totalPages}
-        totalItems={totalItems}
-        sortValue={sort}
         sortOptions={sortOptions}
-        onPageChange={setPage}
-        onPageSizeChange={handlePageSizeChange}
-        onSortChange={handleSortChange}
-        onSelectionChange={(ids) => console.log(ids)}
-        isFetching={isFetching}
+        queryKey="comprehensive"
+        fetchPage={fetchComprehensivePage}
+        filters={filters}
+        defaultSort="createdAt,desc"
+        defaultPageSize={10}
+        onSelectionChange={
+          onSelectionChange ?? ((ids) => console.log(ids))
+        }
       />
       <ConfirmationModal
         isOpen={isModalOpen}

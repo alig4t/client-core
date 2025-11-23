@@ -1,16 +1,13 @@
 // src/components/permission/PermissionTableWrapper.tsx
 
-import React, { useState } from "react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import React from "react";
 
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import PermissionService from "./PermissionService";
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
-import TableErrorState from "@/components/Layout/TableErrorState";
-import DateUtil, { GEORGIAN_TO_JALALI } from "@/core/forms/DateUtils";
+import DateUtil from "@/core/forms/DateUtils";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import type { Option } from "@/core/forms/OptionUtils";
-import Table from "@/core/components/Table/DataTable";
+import { PaginatedDataTable } from "@/core/components/Table/DataTable";
 import { Eye, Pencil } from "lucide-react";
 import {
   Tooltip,
@@ -45,38 +42,23 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
   filters,
   // onSelectionChange,
 }) => {
-  // State for Table control (Managed by the Parent)
-  const [page, setPage] = useState(0);
-  const [sort, setSort] = useState(sortOptions[2].value as string);
-  const [pageSize, setPageSize] = useState<number>(10);
-
-  // --- Data Fetching (tanstack/react-query) ---
-  const { data, isLoading, isError, error, refetch, isFetching } = useQuery({
-    queryKey: ["permission", page, pageSize, sort, filters],
-    queryFn: () =>
-      PermissionService.getAll({ page, size: pageSize, sort, filters }),
-    placeholderData: keepPreviousData,
-    refetchOnWindowFocus: false,
-    retry: false,
-  });
-
-  const pageData: Permission[] = data?.data ?? [];
-  const meta = data?.meta;
-
-  const currentPage = meta?.currentPage ?? 0;
-  const totalItems = meta?.totalItems ?? 0;
-  const totalPages = meta?.totalPages ?? 0;
-
-  // --- Handlers ---
-  const handlePageSizeChange = (newSize: number) => {
-    setPageSize(newSize);
-    setPage(0);
-  };
-
-  const handleSortChange = (newSort: string) => {
-    setSort(newSort);
-    setPage(0);
-  };
+  const fetchPermissionPage = ({
+    page,
+    size,
+    sort,
+    filters: currentFilters,
+  }: {
+    page: number;
+    size: number;
+    sort: string;
+    filters?: DynamicFilters;
+  }) =>
+    PermissionService.getAll({
+      page,
+      size,
+      sort,
+      filters: currentFilters,
+    });
 
   // --- Row Renderer Function (Type-safe) ---
   const renderPermissionRow = (
@@ -139,21 +121,9 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
     </tr>
   );
 
-  // --- Loading/Error States ---
-  if (isLoading) return <TablePlaceholder rowCount={pageSize} />;
-  if (isError) {
-    return (
-      <TableErrorState message={(error as Error).message} onRetry={refetch} />
-    );
-  }
-
-  // --- Render ---
   return (
-    <Table<Permission>
-      // Data and Structure Props
-      data={pageData}
+    <PaginatedDataTable<Permission, DynamicFilters>
       dataIdKey="id"
-      // Pass Header THs as a prop (no need for a dummy component)
       header={
         <>
           <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase">
@@ -173,22 +143,15 @@ const PermissionTableWrapper: React.FC<PermissionTableProps> = ({
           </th>
         </>
       }
-      // Pass Row Renderer as a direct, type-safe prop
       renderRow={renderPermissionRow}
-      // State and Handlers (Unchanged)
       title="لیست دسترسی ها"
-      page={currentPage}
-      pageSize={pageSize}
-      totalPages={totalPages}
-      totalItems={totalItems}
-      sortValue={sort}
-      // pageSizeOptions={sizeOptions}
       sortOptions={sortOptions}
-      onPageChange={setPage}
-      onPageSizeChange={handlePageSizeChange}
-      onSortChange={handleSortChange}
+      queryKey="permission"
+      fetchPage={fetchPermissionPage}
+      filters={filters}
+      defaultSort={sortOptions[2].value as string}
+      defaultPageSize={10}
       onSelectionChange={(ids) => console.log(ids)}
-      isFetching={isFetching}
     />
   );
 };
