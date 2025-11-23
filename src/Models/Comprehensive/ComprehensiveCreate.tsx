@@ -154,7 +154,7 @@ const ComprehensiveCreate: React.FC = () => {
               />
               <FormInput
                 name="longField"
-                type="number"
+                type="long"
                 label={comprehensiveModelMeta.fields.longField?.label}
                 placeholder={
                   comprehensiveModelMeta.fields.longField?.placeholder
@@ -162,7 +162,7 @@ const ComprehensiveCreate: React.FC = () => {
               />
               <FormInput
                 name="doubleField"
-                type="number"
+                type="double"
                 label={comprehensiveModelMeta.fields.doubleField?.label}
                 placeholder={
                   comprehensiveModelMeta.fields.doubleField?.placeholder
@@ -175,7 +175,7 @@ const ComprehensiveCreate: React.FC = () => {
             <RowContainer numberOfColumns={3}>
               <FormInput
                 name="bigDecimalField"
-                type="number"
+                type="bigDecimal"
                 label={comprehensiveModelMeta.fields.bigDecimalField?.label}
                 placeholder={
                   comprehensiveModelMeta.fields.bigDecimalField?.placeholder
