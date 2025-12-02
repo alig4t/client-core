@@ -1,5 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { motion } from "framer-motion"; // Import motion
 
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 
@@ -11,7 +12,8 @@ import OptionUtils, {
   buildSortOptions,
   type Option,
 } from "@/core/forms/OptionUtils";
-import { PaginatedDataTable, TBODY, THEAD } from "@/core/components/Table/DataTable";
+import ModernDataTable, { type PaginatedFetchParams } from "@/components/Table/ModernDataTable"; // Import ModernDataTable
+import { TBODY, THEAD } from "@/core/components/Table/DataTable"; // Keep TBODY/THEAD if needed or replace
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Eye, Pencil, Trash2 } from "lucide-react";
 
@@ -27,20 +29,24 @@ import Button from "@/components/Button/Button";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
-  onSelectionChange?: (selectedIds: (string | number)[]) => void; // برای ارتباط با والد
+  onSelectionChange?: (selectedIds: (string | number)[]) => void;
 }
 
 const sortOptions: Option[] = buildSortOptions(comprehensiveModelMeta);
+
+const rowVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0 },
+  exit: { opacity: 0, x: -20 },
+};
 
 const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
   filters,
   onSelectionChange,
 }) => {
-  // Query client for invalidating table data after mutations
   const queryClient = useQueryClient();
   const { hasPermission } = useAuth();
 
-  // State for Confirmation Modal and selections
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [idsToDelete, setIdsToDelete] = useState<number[]>([]);
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
@@ -50,21 +56,13 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       await Promise.all(ids.map((id) => ComprehensiveService.delete(id)));
     },
     onSuccess: () => {
-      // در صورت موفقیت‌آمیز بودن حذف:
-      // لیست داده‌ها را رفرش (Invalidate) می‌کند تا ردیف حذف شده ناپدید شود
       queryClient.invalidateQueries({ queryKey: ["comprehensive"] });
       setSelectedIds([]);
-      // می‌توانید یک پیام موفقیت‌آمیز نیز نمایش دهید
-      // مثلاً: toast.success("رکورد با موفقیت حذف شد.");
     },
     onError: (error) => {
-      // نمایش خطا در صورت عدم موفقیت
-      // مثلاً: toast.error(`خطا در حذف: ${error.message}`);
+      console.error(error);
     },
   });
-
-  // --- Handlers ---
-  // ... (handlePageSizeChange, handleSortChange)
 
   const handleDeleteClick = (id: number) => {
     setIdsToDelete([id]);
@@ -95,7 +93,6 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
         .map((id) => Number(id))
         .filter((id) => !Number.isNaN(id));
       setSelectedIds((prev) => {
-        // Avoid state updates when nothing changed to prevent unnecessary rerenders
         const prevKey = prev.join(",");
         const nextKey = numericIds.join(",");
         return prevKey === nextKey ? prev : numericIds;
@@ -110,12 +107,7 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
     size,
     sort,
     filters: currentFilters,
-  }: {
-    page: number;
-    size: number;
-    sort: string;
-    filters?: DynamicFilters;
-  }) =>
+  }: PaginatedFetchParams<DynamicFilters>) =>
     ComprehensiveService.getAll({
       page,
       size,
@@ -123,18 +115,20 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       filters: currentFilters,
     });
 
-  // --- Row Renderer Function (Type-safe) ---
   const renderPermissionRow = (
     comprehensive: ComprehensiveModel,
-    _: number, // Index is not used here, so we name it '_'
+    _: number,
     isSelected: boolean,
     toggleSelect: () => void
   ) => (
-    <tr
+    <motion.tr
       key={comprehensive.id}
+      variants={rowVariants}
+      initial="hidden"
+      animate="visible"
+      exit="exit"
       className={`hover:bg-gray-50 whitespace-nowrap ${isSelected ? "bg-purple-50" : ""}`}
     >
-      {/* Checkbox Column - Handled by the Table component */}
       <TBODY className="text-center">
         <Checkbox
           name={`row-${comprehensive.id}`}
@@ -144,7 +138,6 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
           onChange={toggleSelect}
         />
       </TBODY>
-      {/* Data Columns */}
       <TBODY>{comprehensive.id}</TBODY>
       <TBODY>{comprehensive.stringField}</TBODY>
       <TBODY>{comprehensive.integerField}</TBODY>
@@ -171,15 +164,7 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
       <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.createdAt)}</TBODY>
       <TBODY>{DateUtil.GEORGIAN_TO_JALALI(comprehensive.updatedAt)}</TBODY>
 
-      <TBODY className="flex gap-x-2">
-        {/* {hasPermission(Permission.ComprehensiveEntity_Update) && (
-          <TableLink
-            tooltipText="ویرایش"
-            to={getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, comprehensive.id)}
-          >
-            <Pencil size={20} />
-          </TableLink>
-        )} */}
+      <TBODY className="flex gap-x-2 justify-center">
         <NavLink
           variant="edit"
           permission={Permission.ComprehensiveEntity_Update}
@@ -200,14 +185,14 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
         {hasPermission(Permission.ComprehensiveEntity_Delete) && (
           <TableLink
             tooltipText="حذف"
-            onClick={() => handleDeleteClick(comprehensive.id)} // فراخوانی هندلر مودال
-            className="text-red-600 hover:text-red-800" // استایل قرمز برای دکمه حذف
+            onClick={() => handleDeleteClick(comprehensive.id)}
+            className="text-red-600 hover:text-red-800"
           >
             <Trash2 size={20} />
           </TableLink>
         )}
       </TBODY>
-    </tr>
+    </motion.tr>
   );
 
   return (
@@ -222,11 +207,11 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
               disabled={deleteMutation.isPending}
               badgeCount={selectedIds.length}
             >
-              حذف انتخاب شده ها 
+              حذف انتخاب شده ها
             </Button>
           </div>
         )}
-      <PaginatedDataTable<ComprehensiveModel, DynamicFilters>
+      <ModernDataTable<ComprehensiveModel, DynamicFilters>
         dataIdKey="id"
         header={
           <>

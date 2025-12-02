@@ -10,6 +10,7 @@ import Breadcrumb, {
 } from "@/core/components/general/BreadCrumb";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
+import PageTransition from "@/components/Layout/PageTransition";
 import ComprehensiveTableWrapper from "./ComprehensiveTable";
 
 const breadcrumbItems: BreadcrumbItem[] = [
@@ -22,23 +23,25 @@ const ComprehensivePage: React.FC = () => {
   const navigate = useNavigate();
   return (
     <PageWrapper>
-      <Breadcrumb items={breadcrumbItems} className="mb-4" />
+      <PageTransition>
+        <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
-      <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-        <PageHeader
-          title={comprehensiveModelMeta.messages.manage.title}
-          actionButton={{
-            label: comprehensiveModelMeta.messages.createButton,
-            onClick: () => navigate("create"),
-            variant: "success",
-          }}
-        />
-        <Accordion title="فیلتر‌ها" startOpen={true}>
-          <ComprehensiveSearch onApplyFilters={setActiveFilters} />
-        </Accordion>
+        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
+          <PageHeader
+            title={comprehensiveModelMeta.messages.manage.title}
+            actionButton={{
+              label: comprehensiveModelMeta.messages.createButton,
+              onClick: () => navigate("create"),
+              variant: "success",
+            }}
+          />
+          <Accordion title="فیلتر‌ها" startOpen={true}>
+            <ComprehensiveSearch onApplyFilters={setActiveFilters} />
+          </Accordion>
 
-        <ComprehensiveTableWrapper filters={activeFilters} />
-      </div>
+          <ComprehensiveTableWrapper filters={activeFilters} />
+        </div>
+      </PageTransition>
     </PageWrapper>
   );
 };

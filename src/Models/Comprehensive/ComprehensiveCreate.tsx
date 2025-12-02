@@ -25,6 +25,7 @@ import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 import Validator from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
+import PageTransition from "@/components/Layout/PageTransition";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import UserService from "../User/UserService";
 
@@ -90,7 +91,7 @@ const ComprehensiveCreate: React.FC = () => {
             (isEditMode
               ? comprehensiveModelMeta.messages.update.error.defaultDescription
               : comprehensiveModelMeta.messages.create.error
-                  .defaultDescription),
+                .defaultDescription),
           position: "bottom-left",
         }
       );
@@ -122,108 +123,110 @@ const ComprehensiveCreate: React.FC = () => {
 
   return (
     <PageWrapper>
-      <Breadcrumb items={breadcrumbItems} className="mb-4" />
-      <div className="sm:p-8 min-h-screen font-sans">
-        <PageHeader
-          title={isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید"}
-        />
+      <PageTransition>
+        <Breadcrumb items={breadcrumbItems} className="mb-4" />
+        <div className="sm:p-8 min-h-screen font-sans">
+          <PageHeader
+            title={isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید"}
+          />
 
-        <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
-          <FormWrapper
-            schema={comprehensiveSchema}
-            onSubmit={onSubmit}
-            className="space-y-6"
-            defaultValues={initialData} // پر کردن فرم با داده‌های موجود در حالت ویرایش
-          >
-            <RowContainer numberOfColumns={2}>
-              <FormInput
-                type="text"
-                name="stringField"
-                label={comprehensiveModelMeta.fields.stringField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.stringField?.placeholder
-                }
-              />
-              <FormInput
-                name="integerField"
-                type="number"
-                label={comprehensiveModelMeta.fields.integerField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.integerField?.placeholder
-                }
-              />
-              <FormInput
-                name="longField"
-                type="long"
-                label={comprehensiveModelMeta.fields.longField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.longField?.placeholder
-                }
-              />
-              <FormInput
-                name="doubleField"
-                type="double"
-                label={comprehensiveModelMeta.fields.doubleField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.doubleField?.placeholder
-                }
-              />
-            </RowContainer>
-            <RowContainer numberOfColumns={1}>
-              <FormUploader name="attachments" label="پیوست‌ها" />
-            </RowContainer>
-            <RowContainer numberOfColumns={3}>
-              <FormInput
-                name="bigDecimalField"
-                type="bigDecimal"
-                label={comprehensiveModelMeta.fields.bigDecimalField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.bigDecimalField?.placeholder
-                }
-              />
-              <Checkbox
-                name="booleanField"
-                label={comprehensiveModelMeta.fields.booleanField?.label}
-              />
-              <DateInput
-                name="dateField"
-                label={comprehensiveModelMeta.fields.dateField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.dateField?.placeholder
-                }
-              />
-              <FormSelect
-                name="enumField"
-                label={comprehensiveModelMeta.fields.enumField?.label}
-                placeholder={
-                  comprehensiveModelMeta.fields.enumField?.placeholder
-                }
-                options={OptionUtils.YES_OR_NO_OPTIONS}
-              />
-              <FormAutoComplete
-                name="oneToOneUser"
-                label={comprehensiveModelMeta.fields.oneToOneUser?.label}
-                service={UserService}
-                labelKey="username"
-                valueKey="id"
-              />
-            </RowContainer>
-            <ButtonPanel align="end">
-              <Button variant="cancel" onClick={handleCancel}>
-                لغو
-              </Button>
-              <Button
-                variant="primary"
-                type="submit"
-                loading={mutation.isPending}
-                disabled={mutation.isPending}
-              >
-                {isEditMode ? "به‌روزرسانی" : "ذخیره"}
-              </Button>
-            </ButtonPanel>
-          </FormWrapper>
+          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
+            <FormWrapper
+              schema={comprehensiveSchema}
+              onSubmit={onSubmit}
+              className="space-y-6"
+              defaultValues={initialData} // پر کردن فرم با داده‌های موجود در حالت ویرایش
+            >
+              <RowContainer numberOfColumns={2}>
+                <FormInput
+                  type="text"
+                  name="stringField"
+                  label={comprehensiveModelMeta.fields.stringField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.stringField?.placeholder
+                  }
+                />
+                <FormInput
+                  name="integerField"
+                  type="number"
+                  label={comprehensiveModelMeta.fields.integerField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.integerField?.placeholder
+                  }
+                />
+                <FormInput
+                  name="longField"
+                  type="long"
+                  label={comprehensiveModelMeta.fields.longField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.longField?.placeholder
+                  }
+                />
+                <FormInput
+                  name="doubleField"
+                  type="double"
+                  label={comprehensiveModelMeta.fields.doubleField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.doubleField?.placeholder
+                  }
+                />
+              </RowContainer>
+              <RowContainer numberOfColumns={1}>
+                <FormUploader name="attachments" label="پیوست‌ها" />
+              </RowContainer>
+              <RowContainer numberOfColumns={3}>
+                <FormInput
+                  name="bigDecimalField"
+                  type="bigDecimal"
+                  label={comprehensiveModelMeta.fields.bigDecimalField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.bigDecimalField?.placeholder
+                  }
+                />
+                <Checkbox
+                  name="booleanField"
+                  label={comprehensiveModelMeta.fields.booleanField?.label}
+                />
+                <DateInput
+                  name="dateField"
+                  label={comprehensiveModelMeta.fields.dateField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.dateField?.placeholder
+                  }
+                />
+                <FormSelect
+                  name="enumField"
+                  label={comprehensiveModelMeta.fields.enumField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.enumField?.placeholder
+                  }
+                  options={OptionUtils.YES_OR_NO_OPTIONS}
+                />
+                <FormAutoComplete
+                  name="oneToOneUser"
+                  label={comprehensiveModelMeta.fields.oneToOneUser?.label}
+                  service={UserService}
+                  labelKey="username"
+                  valueKey="id"
+                />
+              </RowContainer>
+              <ButtonPanel align="end">
+                <Button variant="cancel" onClick={handleCancel}>
+                  لغو
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  loading={mutation.isPending}
+                  disabled={mutation.isPending}
+                >
+                  {isEditMode ? "به‌روزرسانی" : "ذخیره"}
+                </Button>
+              </ButtonPanel>
+            </FormWrapper>
+          </div>
         </div>
-      </div>
+      </PageTransition>
     </PageWrapper>
   );
 };
