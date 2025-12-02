@@ -70,11 +70,11 @@ function LoginFormFields() {
 export default function LoginPage({
   inModal,
   switchModal,
-  onClose, // اضافه کردن prop برای بستن مودال
+  onClose, // Add prop to close modal
 }: {
   inModal: boolean;
   switchModal: () => void;
-  onClose?: () => void; // prop جدید برای بستن مودال
+  onClose?: () => void; // New prop to close modal
 }) {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
@@ -96,10 +96,10 @@ export default function LoginPage({
       });
 
       if (inModal && onClose) {
-        onClose(); // بستن مودال
+        onClose(); // Close modal
       }
       setTimeout(() => {
-        navigate("/dashboard", { replace: true }); // هدایت فوری به داشبورد
+        navigate("/dashboard", { replace: true }); // Immediate redirect to dashboard
       }, 1000);
     },
     onError: (error: any) => {

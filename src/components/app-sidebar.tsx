@@ -14,7 +14,7 @@ const Sidebar = () => {
   const { hasPermission } = useAuth();
   const location = useLocation();
 
-  // استخراج بخش اول مسیر فعلی (مثلاً از "/dashboard/profile" → "dashboard")
+  // Extract first part of current path (e.g. from "/dashboard/profile" -> "dashboard")
   const currentBase = location.pathname.split("/")[2] || "";
 
   const menuItems = getMainMenu().filter((item) => {
@@ -34,7 +34,7 @@ const Sidebar = () => {
         </div>
         <div className="flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700 scrollbar-track-transparent w-full flex flex-col items-center gap-4 custom-scrollbar">
           {menuItems.map((item, index) => {
-            // استخراج بخش اول از مسیر آیتم
+            // Extract first part of item path
             const itemBase = item.path.split("/")[2] || "";
             const isActive = currentBase === itemBase;
 
@@ -44,10 +44,9 @@ const Sidebar = () => {
                   <Link to={item.path}>
                     <div
                       className={`text-white hover:bg-gray-800 p-2 rounded-lg cursor-pointer
-                        ${
-                          isActive
-                            ? "bg-[#9eaecd70] text-white"
-                            : "text-gray-400 hover:bg-gray-800 hover:text-white"
+                        ${isActive
+                          ? "bg-[#9eaecd70] text-white"
+                          : "text-gray-400 hover:bg-gray-800 hover:text-white"
                         }
                       `}
                     >

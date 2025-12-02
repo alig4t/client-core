@@ -2,7 +2,7 @@
 
 import React from "react";
 import Lottie from "lottie-react";
-// مسیر را با توجه به محل فایل JSON خود تنظیم کنید
+// Set path according to your JSON file location
 // import animationData from "./Boy-Under-Social-Tree.json";
 // import animationData from "./email-marketing.json";
 import animationData from "./Boy-Under-Social-Tree-blue.json";
@@ -17,19 +17,19 @@ const SocialMonitoringAnimation: React.FC<SocialMonitoringAnimationProps> = ({
   height = "100%",
 }) => {
   const defaultOptions = {
-    loop: true, // آیا انیمیشن تکرار شود
-    autoplay: true, // آیا انیمیشن بلافاصله شروع شود
-    animationData: animationData, // داده‌های JSON انیمیشن
+    loop: true, // Should animation loop
+    autoplay: true, // Should animation start immediately
+    animationData: animationData, // Animation JSON data
     rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice", // نحوه مقیاس‌بندی
+      preserveAspectRatio: "xMidYMid slice", // Scaling mode
     },
   };
 
   return (
     <div style={{ width: width, height: height }}>
       {/*
-        کامپوننت Lottie داده‌های JSON را می‌گیرد و آن را در یک SVG رندر می‌کند.
-        این کامپوننت به طور خودکار انیمیشن را بر اساس تنظیمات (defaultOptions) مدیریت می‌کند.
+        Lottie component takes JSON data and renders it as an SVG.
+        This component automatically manages animation based on settings (defaultOptions).
       */}
       <Lottie
         animationData={animationData}

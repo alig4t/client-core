@@ -52,7 +52,7 @@ import type { RouteConfig } from "./path.types";
 import { Permission } from "./Permission";
 import { VIEWNAME } from "./ViewName";
 
-// تابع برای مسیرهای پارامتری
+// Function for parameterized routes
 export const withId = (base: string) => `${base}/:id`;
 
 export const routeConfig: RouteConfig[] = [
@@ -115,11 +115,11 @@ export const routeConfig: RouteConfig[] = [
     label: "پورتال",
     icon: <Bolt size={24} />,
     showInMenu: true,
-    // بدون element و name — فقط گروه‌بندی منو
+    // Without element and name — just menu grouping
   },
 
   // ================================
-  // 🔐 صفحات مدیریت مجوزها (Permission)
+  // 🔐 Permission Management Pages
   // ================================
   {
     path: "/dashboard/portal/permissions",
@@ -151,7 +151,7 @@ export const routeConfig: RouteConfig[] = [
   },
 
   // ================================
-  // 🧩 صفحات ComprehensiveEntity
+  // 🧩 ComprehensiveEntity Pages
   // ================================
   {
     path: "/dashboard/portal/comprehensive",

@@ -10,7 +10,7 @@ export const getViewPath = (viewName: ViewName, id?: string | number): string =>
 
   let path = route.path;
 
-  // اگر مسیر شامل ":id" باشد و id داده شده باشد، جایگزین کن
+  // If the path includes ":id" and id is provided, replace it
   if (id !== undefined && path.includes("/:id")) {
     path = path.replace("/:id", `/${id}`);
   }

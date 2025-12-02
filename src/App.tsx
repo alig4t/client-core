@@ -4,10 +4,10 @@ import { useRoutes } from "react-router-dom";
 import "./App.css";
 import { Toaster } from "./components/ui/sonner";
 import GlobalLoaderProvider from "./components/GlobalLoaderProvider";
-import { appRoutes } from "@/router/index"; // ✅ import از src/routes/index.tsx
+import { appRoutes } from "@/router/index"; // ✅ import from src/routes/index.tsx
 
 function App() {
-  // استفاده از هوک useRoutes برای رندر کردن ساختار روت‌ها
+  // Use useRoutes hook to render route structure
   const element = useRoutes(appRoutes);
 
   return (

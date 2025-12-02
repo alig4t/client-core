@@ -5,12 +5,12 @@ const PublicRoute = () => {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 
-  // اگر کاربر لاگین کرده و داره می‌ره به /login یا /register، بفرستش به داشبورد
+  // If user is logged in and going to /login or /register, redirect to dashboard
   if (isAuthenticated && ["/login", "/register"].includes(location.pathname)) {
     return <Navigate to="/dashboard" replace />;
   }
 
-  // در غیر این صورت، اجازه بده صفحه عمومی نمایش داده بشه
+  // Otherwise, allow public page to be shown
   return <Outlet />;
 };
 

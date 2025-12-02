@@ -18,7 +18,7 @@ class DocumentService {
         },
       }
     );
-    return response.data; // ✅ مستقیم data
+    return response.data; // ✅ Direct data
   }
 
   async getToken(id: number): Promise<string> {
@@ -26,7 +26,7 @@ class DocumentService {
     return response.data;
   }
 
-  // ✅ دانلود تصویر با axios + responseType: 'blob'
+  // ✅ Download image with axios + responseType: 'blob'
   async downloadAsBlob(token: string): Promise<Blob> {
     const response = await api.get(`/document/stream/${token}`, {
       responseType: 'blob',
@@ -34,7 +34,7 @@ class DocumentService {
     console.log(response.data instanceof Blob)
     console.log('Download response:', response);
 
-    return response.data; // حالا واقعاً یک Blob است
+    return response.data; // Now it's really a Blob
   }
 
 }

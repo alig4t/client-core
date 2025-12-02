@@ -7,7 +7,7 @@ import DocumentService from "@/Models/Document/DocumentService";
 import { ACCEPT_FILE_STRING, ALLOWED_FILE_EXTENSIONS, ALLOWED_FILE_TYPES } from "./fileUtils";
 
 
-// تشخیص تصویر از روی mimeType
+// Detect image from mimeType
 const isImageMimeType = (mimeType: string): boolean => {
   return mimeType.startsWith('image/');
 };
@@ -53,11 +53,11 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isUploading, setIsUploading] = useState<boolean>(false);
   const [isDocument, setIsDocument] = useState<boolean>(false);
-  const [isImageFile, setIsImageFile] = useState<boolean>(false); // ✅ اضافه شد
+  const [isImageFile, setIsImageFile] = useState<boolean>(false); // ✅ Added
 
   const fileId = useWatch({ name, control });
 
-  // --- برای فایل‌های جدید: mimeType را از آپلود بگیر
+  // --- For new files: get mimeType from upload
   const handleUploadSuccess = useCallback((doc: any) => {
     const mimeType = doc.mimeType || '';
     const isImage = isImageMimeType(mimeType);
@@ -65,7 +65,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setIsDocument(!isImage);
   }, []);
 
-  // --- Fetch preview for existing fileId (فقط سعی کن، اگر لود شد خوبه)
+  // --- Fetch preview for existing fileId (try only, if loaded it's fine)
   useEffect(() => {
     if (typeof fileId !== "number") {
       setPreviewUrl(null);
@@ -87,7 +87,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
 
         objectUrl = URL.createObjectURL(blob);
         setPreviewUrl(objectUrl);
-        setIsImageFile(true); // ✅ فرض می‌کنیم تصویر است تا ثابت شود خلاف آن
+        setIsImageFile(true); // ✅ Assume it's an image until proven otherwise
         setIsDocument(false);
       } catch (err) {
         if (!abortController.signal.aborted) {
@@ -118,7 +118,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
     setIsUploading(true);
     try {
       const doc = await DocumentService.upload(file);
-      handleUploadSuccess(doc); // ✅ mimeType را پردازش کن
+      handleUploadSuccess(doc); // ✅ Process mimeType
       setValue(name, doc.id, { shouldValidate: true, shouldDirty: true });
     } catch (error) {
       console.error("Upload failed", error);
@@ -182,7 +182,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
             alt="Preview"
             className="w-full h-full object-cover"
             onError={() => {
-              // اگر لود نشد، فایل غیرتصویر است
+              // If not loaded, it's a non-image file
               setPreviewUrl(null);
               setIsImageFile(false);
               setIsDocument(true);
@@ -251,10 +251,10 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
         className={`${dropzoneBaseClasses} ${isDragging
-            ? dropzoneDraggingClasses
-            : hasError
-              ? dropzoneErrorClasses
-              : dropzoneDefaultClasses
+          ? dropzoneDraggingClasses
+          : hasError
+            ? dropzoneErrorClasses
+            : dropzoneDefaultClasses
           }`}
       >
         <input

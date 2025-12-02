@@ -41,5 +41,5 @@ export const VIEWNAME = {
   DASHBOARD_DATA: "DASHBOARD_DATA",
 } as const;
 
-// برای استفاده در TypeScript به عنوان نوع
+// For use in TypeScript as a type
 export type ViewName = typeof VIEWNAME[keyof typeof VIEWNAME];

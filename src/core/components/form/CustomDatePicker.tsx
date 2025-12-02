@@ -20,7 +20,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
   return (
     <DatePicker
       containerClassName="w-full"
-      editable={false} // 👈 تغییر به false
+      editable={false} // 👈 Changed to false
       value={value}
       onChange={onChange}
       calendar={persian}
@@ -30,7 +30,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       render={(stringifiedValue, openCalendar) => (
         <div className="relative w-full" onClick={openCalendar}>
           <input
-            readOnly // 👈 مهم: فقط خواندنی باشد
+            readOnly // 👈 Important: must be read-only
             value={stringifiedValue || ""}
             placeholder={placeholder}
             className="w-full p-2 pr-10 border border-[var(--input-border)] placeholder:text-[var(--placeholder-text)] rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"

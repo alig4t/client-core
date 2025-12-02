@@ -1,17 +1,17 @@
 import type { FormFieldMetadata } from "./FieldFormTypes";
 
 export interface Option {
-    value: string | number;
-    label: string;
+  value: string | number;
+  label: string;
 }
 
 export const YES_OR_NO_OPTIONS: Option[] = [
-    { value: 1, label: "بله" },
-    { value: 0, label: "نه" },
+  { value: 1, label: "بله" },
+  { value: 0, label: "نه" },
 ];
 
 export const GET_BOOLEAN_OPTION = (value: boolean): string => {
-    return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
+  return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
 }
 
 
@@ -25,7 +25,7 @@ export const PAGE_SIZE_OPTIONS: Option[] = [
 
 
 /**
- * ساخت خودکار گزینه‌های مرتب‌سازی بر اساس متادیتای مدل
+ * Automatically build sort options based on model metadata
  */
 export function buildSortOptions<
   TModel extends Record<string, any>,
@@ -39,7 +39,7 @@ export function buildSortOptions<
 ): Option[] {
   const options: Option[] = [];
 
-  // Object.keys را به keyof TModel تبدیل می‌کنیم و فیلتر می‌زنیم
+  // Convert Object.keys to keyof TModel and filter
   (Object.keys(modelMeta.fields) as Array<keyof typeof modelMeta.fields>)
     .filter((key): key is keyof TModel => {
       const meta = modelMeta.fields[key];

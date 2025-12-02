@@ -25,12 +25,12 @@ interface ComprehensiveSearchProps {
   onApplyFilters: (filters: searchFilters) => void;
 }
 
-// --- Schema: همه فیلدها اختیاری هستند ---
+// --- Schema: All fields are optional ---
 const searchSchema = z.object({
-  // رشته‌ای
+  // String
   [`stringField_${FilterOperator.LIKE}`]: Validator.optional(),
 
-  // عددی: هر کدام دو فیلد min/max دارند
+  // Numeric: each has two min/max fields
   [`integerField_${FilterOperator.GE}`]: Validator.optional(),
   [`integerField_${FilterOperator.LE}`]: Validator.optional(),
   [`longField_${FilterOperator.GE}`]: Validator.optional(),
@@ -43,13 +43,13 @@ const searchSchema = z.object({
 
   [`booleanField_${FilterOperator.EQ}`]: Validator.optional(),
 
-  // تاریخ‌ها (از/تا)
+  // Dates (from/to)
   [`dateField_${FilterOperator.GE}`]: Validator.optional(),
   [`dateField_${FilterOperator.LE}`]: Validator.optional(),
   [`createdAt_${FilterOperator.GE}`]: Validator.optional(),
   [`createdAt_${FilterOperator.LE}`]: Validator.optional(),
 
-  // enum (جستجوی دقیق)
+  // enum (exact search)
   [`enumField_${FilterOperator.EQ}`]: Validator.optional(),
 });
 
@@ -68,7 +68,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
     onApplyFilters({});
   };
 
-  // کمکی برای ساخت label برای min/max
+  // Helper to build label for min/max
   const makeRangeLabel = (baseLabel: string, suffix: "min" | "max") => {
     return suffix === "min" ? `${baseLabel} از` : `${baseLabel} تا`;
   };
@@ -77,14 +77,14 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
     <PageWrapper>
       <FormWrapper onSubmit={onSubmit} schema={searchSchema}>
         <RowContainer>
-          {/* رشته */}
+          {/* String */}
           <FormInput
             name={`stringField_${FilterOperator.LIKE}`}
             label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
             placeholder="جستجو..."
           />
 
-          {/* عددی: integerField */}
+          {/* Numeric: integerField */}
           <FormInput
             name={`integerField_${FilterOperator.GE}`}
             label={makeRangeLabel(
@@ -105,7 +105,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             placeholder="مثلاً 100"
           />
 
-          {/* عددی: longField */}
+          {/* Numeric: longField */}
           <FormInput
             name={`longField_${FilterOperator.GE}`}
             label={makeRangeLabel(
@@ -125,7 +125,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             placeholder="تا"
           />
 
-          {/* عددی: doubleField */}
+          {/* Numeric: doubleField */}
           <FormInput
             name={`doubleField_${FilterOperator.GE}`}
             label={makeRangeLabel(
@@ -145,7 +145,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             placeholder="تا"
           />
 
-          {/* عددی: bigDecimalField */}
+          {/* Numeric: bigDecimalField */}
           <FormInput
             name={`bigDecimalField_${FilterOperator.GE}`}
             label={makeRangeLabel(
@@ -170,7 +170,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             label={comprehensiveModelMeta.fields.booleanField?.label}
           />
 
-          {/* تاریخ‌ها */}
+          {/* Dates */}
           <DateInput
             name={`dateField_${FilterOperator.GE}`}
             label={`${comprehensiveModelMeta.fields.dateField?.label} از`}

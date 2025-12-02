@@ -21,10 +21,10 @@ import { PageWrapper } from "@/components/Layout/PageWrapper";
 import { getViewPath } from "@/router/RouteUtils";
 
 const ComprehensiveDisplayPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // گرفتن id از URL
+  const { id } = useParams<{ id: string }>(); // Get id from URL
   const navigate = useNavigate();
 
-  // دریافت داده‌ها با React Query
+  // Fetch data with React Query
   const {
     data: comprehensiveRecord,
     isLoading,
@@ -34,23 +34,23 @@ const ComprehensiveDisplayPage: React.FC = () => {
   } = useQuery({
     queryKey: ["comprehensive", id],
     queryFn: () => ComprehensiveService.getById(Number(id)),
-    enabled: !!id, // فقط وقتی id وجود داره اجرا بشه
-    retry: 1, // در صورت خطا، یکبار retry کنه
-    staleTime: 5 * 60 * 1000, // 5 دقیقه cache
+    enabled: !!id, // Execute only when id exists
+    retry: 1, // Retry once on error
+    staleTime: 5 * 60 * 1000, // 5 minutes cache
   });
 
 
 
-  // Breadcrumb برای ناوبری
+  // Breadcrumb for navigation
   const breadcrumbItems = useBreadcrumbs("جزئیات رکورد");
 
-  // هندلر برای دکمه ویرایش
+  // Handler for edit button
   const handleEditClick = () => {
     console.log(getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, id));
     navigate(getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, id));
   };
 
-  // نمایش حالت‌های مختلف (Loading, Error, Success)
+  // Show different states (Loading, Error, Success)
   if (isLoading) {
     return (
       <PageWrapper>

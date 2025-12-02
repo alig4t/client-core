@@ -14,10 +14,10 @@ import ChartContainer, { ChartSkeleton } from "./ChartContainer";
 
 const Skeleton: ReactElement = (
   <div className="col-span-1">
-    <ChartSkeleton  title="توزیع کلیدواژه‌ها بر اساس کانال"
-        icon={Layers}
-        className="h-[20rem]"
-        >
+    <ChartSkeleton title="توزیع کلیدواژه‌ها بر اساس کانال"
+      icon={Layers}
+      className="h-[20rem]"
+    >
       <div className="flex justify-around items-center gap-2">
         <div className="flex justify-center mb-6">
           <div className="w-36 h-36 bg-gray-300 rounded-full animate-pulse"></div>

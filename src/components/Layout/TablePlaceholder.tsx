@@ -5,7 +5,7 @@ import Spinner from '@/components/general/Spinner';
 
 interface TablePlaceholderProps {
   /**
-   * تعداد ردیف‌های اسکلتی که نمایش داده می‌شود.
+   * Number of skeleton rows to display.
    * @default 5
    */
   rowCount?: number;
@@ -14,7 +14,7 @@ interface TablePlaceholderProps {
 const TablePlaceholder: React.FC<TablePlaceholderProps> = ({ rowCount = 5 }) => {
   return (
     <div dir="rtl" className="p-6 bg-[var(--white)] rounded-lg border border-[var(--border)] relative overflow-hidden">
-      {/* این div برای محو کردن و نمایش اسکلت در پس‌زمینه است */}
+      {/* This div is for blurring and showing the skeleton in the background */}
       <div className="opacity-80">
         <div className="flex justify-between items-center mb-4">
           <div className="h-6 w-16 sm:w-32  bg-gray-200 dark:bg-gray-600 rounded animate-pulse"></div>
@@ -44,9 +44,9 @@ const TablePlaceholder: React.FC<TablePlaceholderProps> = ({ rowCount = 5 }) => 
 
         {/* Placeholder for Pagination */}
         <div className="flex items-center justify-between mt-4">
-            <div className="h-8 w-8 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            <div className="h-4 w-14 sm:w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
-            <div className="h-8 w-8 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-8 w-8 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-4 w-14 sm:w-24 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+          <div className="h-8 w-8 sm:w-16 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
         </div>
       </div>
 

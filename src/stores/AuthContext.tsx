@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 // 1. Define type for user object
 // Adjust this type based on the actual structure of your user object
 
-// انواع مربوط به داده‌های permission
+// Types related to permission data
 interface Permission {
   id: number;
   name: string; // e.g., "bot:create"
@@ -22,7 +22,7 @@ export interface User {
   id: number;
   name: string;
   username: string;
-  roles: Role[]; // ✅ تغییر از string[] به Role[]
+  roles: Role[]; // ✅ Changed from string[] to Role[]
 }
 
 // 2. Define type for values that the Context provides
@@ -47,11 +47,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     localStorage.getItem("token")
   );
 
-  // داخل AuthProvider
+  // Inside AuthProvider
   const hasPermission = (permissionName: string): boolean => {
     if (!user?.roles) return false;
 
-    // بررسی تمام نقش‌ها و مجوزهای آن‌ها
+    // Check all roles and their permissions
     return user.roles.some((role) =>
       role.permission.some((p) => p.name === permissionName)
     );

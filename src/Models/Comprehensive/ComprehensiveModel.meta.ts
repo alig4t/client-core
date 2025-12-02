@@ -37,7 +37,7 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
     },
     bigDecimalField: {
       label: "عدد دقیق (BigDecimal)",
-      type: "number", // یا "text" اگر به صورت رشته مدیریت می‌شود
+      type: "number", // or "text" if managed as string
       placeholder: "مثلاً 123.456789",
       sortable: true,
       required: true,
@@ -71,7 +71,7 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
       options: [
         { value: "OPTION_A", label: "گزینه A" },
         { value: "OPTION_B", label: "گزینه B" },
-        // سایر گزینه‌ها را اضافه کن
+        // Add other options
       ],
       sortable: false,
       required: true,
@@ -88,13 +88,13 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
       placeholder: "مقدار ایندکس‌شده",
       sortable: false,
     },
-    // نکته: فیلدهای رابطه‌ای (مثل oneToOneUser) معمولاً در فرم‌های مستقیم به صورت object نمایش داده نمی‌شوند.
-    // بلکه با autocomplete یا select نمایش داده می‌شوند. اما اگر بخواهی metadata براشون بذاری:
+    // Note: Relational fields (like oneToOneUser) are usually not displayed as object in direct forms.
+    // Instead they are displayed with autocomplete or select. But if you want to put metadata for them:
     oneToOneUser: {
       label: "کاربر مرتبط",
       type: "autocomplete",
-      displayField: "username", // فیلدی که در autocomplete نمایش داده می‌شود
-      sortable: false, // معمولاً رابطه‌ها در لیست قابل sort نیستند (مگر با join)
+      displayField: "username", // Field displayed in autocomplete
+      sortable: false, // Usually relations are not sortable in list (unless with join)
     },
     manyToOneChannel: {
       label: "کانال مرتبط",
@@ -108,15 +108,15 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
   GET_PLURAL_DISPLAY_NAME(),
 );
 
-function GET_AUTOCOMPLETE_DISPLAY_FIELD() : keyof ComprehensiveModel{
-    return "stringField"
+function GET_AUTOCOMPLETE_DISPLAY_FIELD(): keyof ComprehensiveModel {
+  return "stringField"
 }
 
-function GET_DISPLAY_NAME() : string{
+function GET_DISPLAY_NAME(): string {
   return "ترکیبی"
 }
 
-function GET_PLURAL_DISPLAY_NAME() : string{
+function GET_PLURAL_DISPLAY_NAME(): string {
   return "ترکیبی ها"
 }
 

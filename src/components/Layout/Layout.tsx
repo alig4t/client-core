@@ -11,11 +11,11 @@ export default function Layout() {
       <AppSidebar />
       <div className="flex-1 flex flex-col">
         <Navbar />
-        {/* حذف پس‌زمینه از main تا از پس‌زمینه والد ارث‌بری کند */}
+        {/* Remove background from main to inherit from parent background */}
         <main className="flex flex-col lg:flex-row min-h-[calc(100dvh-64px)] bg-[var(--background)]">
           <SubSidebar />
-          {/* افزایش padding برای فضای بیشتر */}
-          <div className="flex-1 ">
+          {/* Increase padding for more space */}
+          <div className="flex-1 min-w-0 w-full">
             {/* p-4 sm:p-6 bg-pattern */}
             <Outlet />
           </div>

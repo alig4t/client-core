@@ -1,7 +1,7 @@
 import React from 'react';
 import { Search } from 'lucide-react';
 
-// ترکیب پراپ‌های سفارشی با پراپ‌های استاندارد input
+// Combine custom props with standard input props
 type InputProps = React.InputHTMLAttributes<HTMLInputElement> & {
   placeholder: string;
 };

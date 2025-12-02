@@ -5,17 +5,17 @@ import Navbar from "./HomeNavbar";
 import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 
 const LandingPage: React.FC = () => {
-  // تنظیمات ارتفاع: ارتفاع Navbar تقریباً 5rem است.
+  // Height settings: Navbar height is approximately 5rem.
   const heroContentHeightClass = "min-h-[calc(100vh-5rem)]";
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-y-auto">
       {/* Navbar */}
       <Navbar />
-    
+
       {/* Hero Section */}
       <main className="relative isolate pt-[5rem] min-h-screen">
-        {/* پس‌زمینه با گرادیان و افکت‌های نوری */}
+        {/* Background with gradient and light effects */}
         <div
           className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
           aria-hidden="true"
@@ -29,14 +29,14 @@ const LandingPage: React.FC = () => {
           />
         </div>
 
-        {/* محتوای اصلی Hero با تنظیم ارتفاع کامل */}
+        {/* Main Hero content with full height setting */}
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div
-            // تنظیم ارتفاع دقیقاً به اندازه باقیمانده صفحه و چینش محتوا در مرکز عمودی
+            // Set height exactly to remaining screen space and center content vertically
             className={`flex items-center justify-center ${heroContentHeightClass}`}
           >
             <div className="flex flex-col lg:flex-row items-center gap-16 w-full py-16">
-              {/* بخش متن و CTA (سمت راست) */}
+              {/* Text and CTA section (Right side) */}
               <div className="lg:w-1/2 text-center lg:text-right z-10">
                 <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl leading-tight">
                   <span className="text-indigo-600 dark:text-indigo-400">
@@ -67,7 +67,7 @@ const LandingPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* بخش SVG متحرک (سمت چپ) */}
+              {/* Animated SVG section (Left side) */}
               <div className="lg:w-1/2 flex justify-center z-10">
                 <div className="w-full max-w-lg mx-auto h-96">
                   <SocialMonitoringAnimation width="100%" height="100%" />
@@ -78,7 +78,7 @@ const LandingPage: React.FC = () => {
         </div>
       </main>
 
-      {/* این یک Placeholder برای بخش‌های بعدی است تا مطمئن شوید اسکرول در صورت نیاز فعال می‌شود */}
+      {/* This is a placeholder for next sections to ensure scroll is enabled if needed */}
       <section
         id="features"
         className="py-24 bg-gray-50 dark:bg-gray-800 text-center"

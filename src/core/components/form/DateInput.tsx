@@ -34,7 +34,7 @@ export const DateInput: React.FC<DateInputProps> = ({
     const handleChange = (newValue: Value) => {
       setDateObjectValue(newValue);
       if (newValue instanceof DateObject) {
-        // تبدیل DateObject شمسی به تاریخ میلادی سپس به ISO
+        // Convert Solar DateObject to Gregorian date then to ISO
         const gregorianDate = newValue.convert(gregorian).toDate();
         const isoString = gregorianDate.toISOString().replace("Z", "+00:00");
         onValueChange?.(isoString);
@@ -78,7 +78,7 @@ export const DateInput: React.FC<DateInputProps> = ({
         name={name}
         control={control}
         render={({ field: { onChange, value: isoValueFromRHF } }) => {
-          // تبدیل ISO دریافتی از RHF به DateObject شمسی برای نمایش
+          // Convert ISO received from RHF to Solar DateObject for display
           let dateObjectForPicker: Value = null;
           if (isoValueFromRHF) {
             try {
@@ -87,7 +87,7 @@ export const DateInput: React.FC<DateInputProps> = ({
                 dateObjectForPicker = new DateObject(jsDate).convert(persian);
               }
             } catch (e) {
-              // در صورت خطا، null باقی می‌ماند
+              // In case of error, remains null
             }
           }
 
@@ -96,7 +96,7 @@ export const DateInput: React.FC<DateInputProps> = ({
               value={dateObjectForPicker}
               onChange={(selectedValue: Value) => {
                 if (selectedValue instanceof DateObject) {
-                  // تبدیل DateObject شمسی به ISO
+                  // Convert Solar DateObject to ISO
                   const gregorianDate = selectedValue
                     .convert(gregorian)
                     .toDate();
@@ -106,7 +106,7 @@ export const DateInput: React.FC<DateInputProps> = ({
                   onChange(isoToSend);
                   onValueChange?.(isoToSend);
                 } else {
-                  // کاربر مقدار را پاک کرده
+                  // User cleared the value
                   onChange("");
                   onValueChange?.("");
                 }

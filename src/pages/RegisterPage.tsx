@@ -4,13 +4,13 @@ import { useMutation } from "@tanstack/react-query";
 import { Link, useNavigate } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
-import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // فرض شده لوگو از اینجا وارد می‌شود
+import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // Assumed logo is imported from here
 import { FormWrapper } from "@/components/shared/FormWrapper";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { useAuth } from "@/stores/AuthContext";
 import UserService from "@/Models/User/UserService";
 
-// --- Schema برای اعتبارسنجی فرم ثبت‌نام ---
+// --- Schema for registration form validation ---
 const registerSchema = z
   .object({
     name: z.string().min(3, "نام حداقل باید ۳ کاراکتر باشد"),
@@ -144,7 +144,7 @@ export default function RegisterPage({
 
       if (inModal && onClose) {
         console.log("onClose");
-        onClose(); // بستن مودال
+        onClose(); // Close modal
       }
       setTimeout(() => {
         navigate("/dashboard", { replace: true });

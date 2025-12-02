@@ -3,7 +3,7 @@ import type { RouteMeta } from "./path.types.ts";
 import { routeConfig } from "./Routes";
 
 
-// فقط استخراج خام
+// Just raw extraction
 const allMenuItems = routeConfig.filter((r): r is RouteMeta => {
   return r.showInMenu === true && typeof r.label === "string" && r.icon != null;
 });

@@ -39,18 +39,18 @@ const comprehensiveSchema = z.object({
   dateField: Validator.notNull(),
   // enumField: Validator.notNull(),
   oneToOneUser: Validator.optional(),
-  attachments: Validator.optional(), // تغییر به attachments
+  attachments: Validator.optional(), // Change to attachments
 });
 
 type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
 
 const ComprehensiveCreate: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>(); // گرفتن id از URL
+  const { id } = useParams<{ id: string }>(); // Get id from URL
   const queryClient = useQueryClient();
-  const isEditMode = !!id; // تشخیص حالت ویرایش
+  const isEditMode = !!id; // Detect edit mode
 
-  // لود داده‌ها در حالت ویرایش
+  // Load data in edit mode
   const { data: initialData, isLoading: isLoadingInitial } = useQuery({
     queryKey: ["comprehensive", id],
     queryFn: () => ComprehensiveService.getById(Number(id)),
@@ -137,7 +137,7 @@ const ComprehensiveCreate: React.FC = () => {
               schema={comprehensiveSchema}
               onSubmit={onSubmit}
               className="space-y-6"
-              defaultValues={initialData} // پر کردن فرم با داده‌های موجود در حالت ویرایش
+              defaultValues={initialData} // Fill form with existing data in edit mode
             >
               <RowContainer numberOfColumns={2}>
                 <FormInput

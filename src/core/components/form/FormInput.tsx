@@ -9,11 +9,11 @@ export type FormInputType =
   | "text"
   | "email"
   | "password"
-  | "number" // برای int
-  | "long" // برای long
-  | "float" // برای float
-  | "double" // برای double
-  | "bigDecimal" // برای BigDecimal
+  | "number" // For int
+  | "long" // For long
+  | "float" // For float
+  | "double" // For double
+  | "bigDecimal" // For BigDecimal
   | "date"
   | "datetime-local";
 
@@ -25,7 +25,7 @@ interface BaseFormInputProps {
   onValueChange?: (value: string) => void;
   multiline?: boolean;
   standalone?: boolean;
-  maxLength?: number; // برای رشته‌ها
+  maxLength?: number; // For strings
 }
 
 type FormInputProps = BaseFormInputProps &
@@ -57,7 +57,7 @@ const FormInput: React.FC<FormInputProps> = ({
   maxLength: customMaxLength,
   ...rest
 }) => {
-  // تعیین maxLength بر اساس نوع
+  // Determine maxLength based on type
   const getDefaultMaxLength = () => {
     switch (type) {
       case "number":
@@ -65,11 +65,11 @@ const FormInput: React.FC<FormInputProps> = ({
       case "long":
         return 20; // long: -9223372036854775808 (20 chars)
       case "float":
-        return 15; // float: مثلاً -1.2345678e+38 (15 منطقی)
+        return 15; // float: e.g., -1.2345678e+38 (15 logical)
       case "double":
-        return 25; // double: تا ~17 رقم معنی‌دار + نماد
+        return 25; // double: up to ~17 significant digits + symbol
       case "bigDecimal":
-        return 50; // قابل تنظیم، ولی پیش‌فرض 50
+        return 50; // Configurable, but default 50
       case "text":
       case "email":
       case "password":
@@ -81,10 +81,10 @@ const FormInput: React.FC<FormInputProps> = ({
 
   const maxLength = getDefaultMaxLength();
 
-  // برای password toggle
+  // For password toggle
   const [showPassword, setShowPassword] = useState(false);
 
-  // آیکون چشم برای password
+  // Eye icon for password
   const passwordToggleIcon = type === "password" && (
     <button
       type="button"
@@ -96,14 +96,14 @@ const FormInput: React.FC<FormInputProps> = ({
     </button>
   );
 
-  // آیکون pencil برای غیر-password
+  // Pencil icon for non-password
   const pencilIcon = type !== "password" && (
     <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 z-10">
       {type === "number" ||
-      type === "long" ||
-      type === "float" ||
-      type === "double" ||
-      type === "bigDecimal" ? (
+        type === "long" ||
+        type === "float" ||
+        type === "double" ||
+        type === "bigDecimal" ? (
         <Binary size={20} className="bg-transparent rounded-lg" />
       ) : (
         <Pencil size={20} className="bg-transparent rounded-lg" />
@@ -123,15 +123,15 @@ const FormInput: React.FC<FormInputProps> = ({
     ) => {
       let rawValue = e.target.value;
 
-      // ولیدیشن کاراکترهای مجاز بر اساس نوع
+      // Validate allowed characters based on type
       if (["number", "long", "float", "double", "bigDecimal"].includes(type)) {
         const regex =
           type === "number" || type === "long"
-            ? /^-?\d*$/ // فقط عدد صحیح (مثبت/منفی)
-            : /^-?\d*\.?\d*$/; // اعشاری
+            ? /^-?\d*$/ // Only integer (positive/negative)
+            : /^-?\d*\.?\d*$/; // Decimal
 
         if (rawValue !== "" && !regex.test(rawValue)) {
-          return; // ورودی نامعتبر — نادیده گرفته می‌شود
+          return; // Invalid input — ignored
         }
       }
 
@@ -213,16 +213,16 @@ const FormInput: React.FC<FormInputProps> = ({
   ) => {
     let rawValue = e.target.value;
 
-    // محدودیت کاراکترهای مجاز بر اساس نوع
+    // Restrict allowed characters based on type
     if (["number", "long", "float", "double", "bigDecimal"].includes(type)) {
       const isIntegerType = type === "number" || type === "long";
       const regex = isIntegerType ? /^-?\d*$/ : /^-?\d*\.?\d*$/;
 
       if (rawValue !== "" && !regex.test(rawValue)) {
-        return; // ورودی نامعتبر — تغییری اعمال نمی‌شود
+        return; // Invalid input — no change applied
       }
 
-      // جلوگیری از چندین نقطه (مثلاً 12..34)
+      // Prevent multiple dots (e.g., 12..34)
       if (!isIntegerType && (rawValue.match(/\./g) || []).length > 1) {
         return;
       }

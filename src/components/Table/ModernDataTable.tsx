@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/core/components/form/Checkbox";
@@ -7,13 +7,14 @@ import Button from "../Button/Button";
 import { Select } from "@/core/components/form/Select";
 import { Trash2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import TableErrorState from "@/components/Layout/TableErrorState";
+import ConfirmationModal from "@/components/general/ConfirmationModal";
+import { TBODY } from "@/core/components/Table/DataTable";
 
 // --- Types ---
-type RenderRowFunction<T> = (
+export type RenderRowFunction<T> = (
     item: T,
     index: number,
-    isSelected: boolean,
-    toggleSelect: () => void
+    onDelete: (id: string | number) => void
 ) => React.ReactNode;
 
 export interface PaginatedFetchParams<TFilters> {
@@ -46,6 +47,7 @@ interface ModernDataTableProps<TData, TFilters> {
     sortOptions: Option[];
     dataIdKey: keyof TData;
     onSelectionChange?: (selectedIds: (string | number)[]) => void;
+    onDelete?: (ids: (string | number)[]) => Promise<void>;
 }
 
 // --- Animation Variants ---
@@ -77,6 +79,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     sortOptions,
     dataIdKey,
     onSelectionChange,
+    onDelete,
 }: ModernDataTableProps<TData, TFilters>) => {
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(defaultPageSize);
@@ -85,6 +88,11 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     );
     const [selectedIds, setSelectedIds] = useState<(string | number)[]>([]);
     const isSelectionMode = !!onSelectionChange;
+
+    // Delete Modal State
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+    const [idsToDelete, setIdsToDelete] = useState<(string | number)[]>([]);
+    const [isDeleting, setIsDeleting] = useState(false);
 
     // Reset page when filters change
     useEffect(() => {
@@ -120,17 +128,50 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     const totalPages = meta.totalPages ?? 0;
     const totalItems = meta.totalItems ?? 0;
 
-    const toggleSelect = (id: string | number) => {
+    const toggleSelect = useCallback((id: string | number) => {
         if (!isSelectionMode) return;
         setSelectedIds((prev) =>
             prev.includes(id) ? prev.filter((itemId) => itemId !== id) : [...prev, id]
         );
-    };
+    }, [isSelectionMode]);
 
     const handlePageChange = (newPage: number) => {
         if (newPage >= 0 && newPage < totalPages) {
             setPage(newPage);
         }
+    };
+
+    // --- Delete Handlers ---
+    const handleDeleteClick = useCallback((id: string | number) => {
+        setIdsToDelete([id]);
+        setIsDeleteModalOpen(true);
+    }, []);
+
+    const handleBulkDeleteClick = () => {
+        if (selectedIds.length === 0) return;
+        setIdsToDelete(selectedIds);
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleConfirmDelete = async () => {
+        if (!onDelete || idsToDelete.length === 0) return;
+        setIsDeleting(true);
+        try {
+            await onDelete(idsToDelete);
+            setIsDeleteModalOpen(false);
+            setIdsToDelete([]);
+            setSelectedIds([]); // Clear selection after delete
+            refetch(); // Refetch data
+        } catch (error) {
+            console.error("Delete failed", error);
+        } finally {
+            setIsDeleting(false);
+        }
+    };
+
+    const handleCancelDelete = () => {
+        setIsDeleteModalOpen(false);
+        setIdsToDelete([]);
     };
 
     // --- Skeleton Loading ---
@@ -158,14 +199,14 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                    {isSelectionMode && selectedIds.length > 0 && (
+                    {onDelete && isSelectionMode && selectedIds.length > 0 && (
                         <Button
                             variant="danger"
                             icon={Trash2}
-                            onClick={() => setSelectedIds([])}
-                            className="mr-auto sm:mr-0"
+                            onClick={handleBulkDeleteClick}
+                            className="mr-auto sm:mr-0 min-w-56"
                         >
-                            لغو انتخاب ({selectedIds.length})
+                            حذف انتخاب شده ها  ({selectedIds.length})
                         </Button>
                     )}
 
@@ -213,35 +254,34 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
                                     {pageData.map((item, index) => {
                                         const id = item[dataIdKey] as string | number;
                                         const isSelected = selectedIds.includes(id);
-                                        const rowContent = renderRow(item, index, isSelected, () => toggleSelect(id));
-
-                                        // Extract children to wrap in motion.tr
-                                        // Note: renderRow usually returns a <tr>. We might need to adjust this if renderRow returns <tr> directly.
-                                        // Ideally renderRow should return the *content* of the row (tds), but the current interface implies it returns a Node.
-                                        // If it returns a <tr>, we can't easily wrap it in motion.tr without cloning or changing the interface.
-                                        // However, we can wrap the *content* if we change how renderRow is used, OR we can just use a motion component wrapper if the <tr> is passed.
-                                        // BUT, `framer-motion` needs `motion.tr` to animate the row itself.
-                                        // Let's assume renderRow returns a <tr> and we will try to use it as is, but we lose the stagger effect on the row itself if we don't control the tr.
-                                        // BETTER APPROACH: The user's `renderRow` returns a `<tr>`. We should probably ask the user to change `renderRow` to return `<td>` fragments, OR we just wrap the result.
-                                        // But wrapping a `<tr>` in a `div` or `motion.div` inside `tbody` is invalid HTML.
-                                        // So, for now, I will render it as is, but I'll add a specific class for animation if I can't control the tag.
-                                        // WAIT, I can use `motion.create` or just accept that `renderRow` returns a standard `tr` and I can't easily animate it with `framer-motion`'s `variants` prop unless I clone it.
-
-                                        // Let's try to clone the element and add motion props? No, that's messy.
-                                        // I will wrap the `renderRow` call in a component that renders `motion.tr`.
-                                        // BUT `renderRow` returns the whole `<tr>`.
-                                        // I will MODIFY `ComprehensiveTable.tsx` to return `motion.tr` or just `tr` with classes.
-                                        // For `ModernDataTable`, I will assume `renderRow` returns a valid React Element (the tr).
-                                        // I will wrap it in a Fragment.
-
-                                        // Actually, to get the "staggered element reveal" requested, I really need `motion.tr`.
-                                        // I will update `ComprehensiveTable.tsx` to use `motion.tr` directly in `renderRow`.
-                                        // So here I just render it.
+                                        const rowContent = renderRow(
+                                            item,
+                                            index,
+                                            handleDeleteClick
+                                        );
 
                                         return (
-                                            <React.Fragment key={id}>
+                                            <motion.tr
+                                                key={id}
+                                                variants={rowVariants}
+                                                initial="hidden"
+                                                animate="visible"
+                                                exit="exit"
+                                                className={`hover:bg-gray-50 whitespace-nowrap ${isSelected ? "bg-purple-50" : ""}`}
+                                            >
+                                                {isSelectionMode && (
+                                                    <TBODY className="text-center">
+                                                        <Checkbox
+                                                            name={`row-${id}`}
+                                                            standalone
+                                                            hideLabel
+                                                            checked={isSelected}
+                                                            onChange={() => toggleSelect(id)}
+                                                        />
+                                                    </TBODY>
+                                                )}
                                                 {rowContent}
-                                            </React.Fragment>
+                                            </motion.tr>
                                         );
                                     })}
                                 </AnimatePresence>
@@ -309,6 +349,16 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
                     {/* Optional: Add a spinner here */}
                 </div>
             )}
+
+            {/* Confirmation Modal */}
+            <ConfirmationModal
+                isOpen={isDeleteModalOpen}
+                onClose={handleCancelDelete}
+                onConfirm={handleConfirmDelete}
+                title="تأیید حذف"
+                message={`آیا مطمئنید که می‌خواهید ${idsToDelete.length} مورد را حذف کنید؟ این عمل غیرقابل بازگشت است.`}
+                isDeleting={isDeleting}
+            />
         </div>
     );
 };

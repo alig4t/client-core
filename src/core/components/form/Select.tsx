@@ -10,9 +10,8 @@ export interface Option {
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
   <ChevronDown
     size={14}
-    className={`text-gray-600 dark:text-gray-500 transition-transform duration-200 ${
-      isOpen ? "transform rotate-180" : ""
-    }`}
+    className={`text-gray-600 dark:text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""
+      }`}
   />
 );
 
@@ -35,11 +34,11 @@ const CheckIcon = () => (
 // --- Props ---
 interface SelectProps {
   options: Option[];
-  value?: string | number; // فقط برای حالت single-select
+  value?: string | number; // Only for single-select mode
   onChange: (value: string | number) => void;
   className?: string;
   placeholder?: string;
-  label?: string; // اختیاری
+  label?: string; // Optional
   minilabel?: string;
 }
 
@@ -139,11 +138,10 @@ export const Select: React.FC<SelectProps> = ({
                 role="option"
                 aria-selected={option.value === value}
                 onClick={() => handleSelect(option.value)}
-                className={`flex items-center gap-2 my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
-                  option.value === value
+                className={`flex items-center gap-2 my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${option.value === value
                     ? "bg-purple-100 dark:bg-gray-400 font-semibold"
                     : ""
-                }`}
+                  }`}
               >
                 {option.value === value && <CheckIcon />}
                 <span>{option.label}</span>

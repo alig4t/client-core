@@ -5,12 +5,12 @@ export type FieldType =
   | "email"
   | "password"
   | "number"
-  | "date"               // فقط تاریخ: yyyy-MM-dd
-  | "datetime-local"     // تاریخ + زمان بدون تایم‌زون (برای localDateTime و dateField)
+  | "date"               // Date only: yyyy-MM-dd
+  | "datetime-local"     // Date + Time without timezone (for localDateTime and dateField)
   | "textarea"
   | "select"
-  | "checkbox"           // برای boolean در فرم
-  | "boolean"            // برای نمایش در جدول یا readonly (مثلاً true/false یا بله/خیر)
+  | "checkbox"           // For boolean in form
+  | "boolean"            // For display in table or readonly (e.g., true/false or yes/no)
   | "autocomplete"
   | "hidden";
 
@@ -20,11 +20,11 @@ export interface SelectOption {
   label: string;
 }
 
-// برای فیلدهای autocomplete که به یک مدل دیگر اشاره می‌کنند
+// For autocomplete fields that refer to another model
 export interface AutocompleteFieldConfig {
-  model: string; // نام مدل مقصد (مثلاً "UserModel")
-  displayField: string; // فیلدی که برای نمایش استفاده می‌شود (مثلاً "username")
-  searchFields?: string[]; // فیلدهایی که در جستجو استفاده می‌شوند
+  model: string; // Target model name (e.g., "UserModel")
+  displayField: string; // Field used for display (e.g., "username")
+  searchFields?: string[]; // Fields used in search
 }
 
 // Extended metadata for form fields
@@ -36,21 +36,21 @@ export interface FormFieldMetadata {
   required?: boolean;
   disabled?: boolean;
   displayField?: string;
-  // برای انواع select، radio، autocomplete
+  // For select, radio, autocomplete types
   options?: SelectOption[];
 
-  // برای autocomplete پیشرفته (وقتی به مدل دیگری اشاره می‌کند)
+  // For advanced autocomplete (when referring to another model)
   autocompleteConfig?: AutocompleteFieldConfig;
 
-  // برای number و datetime
+  // For number and datetime
   min?: string | number;
   max?: string | number;
-  step?: string | number; // مثلاً "0.01" برای اعشار
+  step?: string | number; // e.g., "0.01" for decimals
 
-  // برای textarea
+  // For textarea
   rows?: number;
 
-  // برای boolean (نمایش در جدول)
-  trueLabel?: string;  // پیش‌فرض: "بله"
-  falseLabel?: string; // پیش‌فرض: "خیر"
+  // For boolean (display in table)
+  trueLabel?: string;  // Default: "Yes"
+  falseLabel?: string; // Default: "No"
 }
