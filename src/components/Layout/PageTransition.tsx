@@ -1,5 +1,5 @@
 import React from "react";
-import { motion } from "framer-motion";
+import { motion, type Transition } from "framer-motion";
 
 interface PageTransitionProps {
     children: React.ReactNode;
@@ -9,7 +9,7 @@ interface PageTransitionProps {
 const pageVariants = {
     initial: {
         opacity: 0,
-        x: -20, // Slide from right (RTL friendly-ish, or just generic slide)
+        x: -20,
     },
     in: {
         opacity: 1,
@@ -17,11 +17,12 @@ const pageVariants = {
     },
     out: {
         opacity: 0,
-        x: 20, // Slide to left
+        x: 20,
     },
 };
 
-const pageTransition = {
+// ✅ Use proper literal types or annotate with Transition
+const pageTransition: Transition = {
     type: "tween",
     ease: "anticipate",
     duration: 0.5,
