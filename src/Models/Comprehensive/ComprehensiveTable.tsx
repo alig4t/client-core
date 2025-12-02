@@ -1,15 +1,9 @@
 import React, { useCallback } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";
-import {
-  buildSortOptions,
-  type Option,
-} from "@/core/forms/OptionUtils";
-import ModernDataTable, { type PaginatedFetchParams } from "@/components/Table/ModernDataTable";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import ModernDataTable from "@/components/Table/ModernDataTable";
 import ComprehensiveTableColumns, { ComprehensiveTableHeaders } from "./ComprehensiveTableColumns";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 
@@ -18,28 +12,10 @@ interface ComprehensiveTableProps {
   onSelectionChange?: (selectedIds: (string | number)[]) => void;
 }
 
-const sortOptions: Option[] = buildSortOptions(comprehensiveModelMeta);
-
-const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
+const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
   filters,
   onSelectionChange,
 }) => {
-  const queryClient = useQueryClient();
-
-  const deleteMutation = useMutation({
-    mutationFn: async (ids: (string | number)[]) => {
-      // Ensure ids are numbers if your service expects numbers
-      const numericIds = ids.map(Number).filter(n => !isNaN(n));
-      await Promise.all(numericIds.map((id) => ComprehensiveService.delete(id)));
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["comprehensive"] });
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
-
   const handleSelectionChange = useCallback(
     (ids: (string | number)[]) => {
       const numericIds = ids
@@ -50,25 +26,10 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
     [onSelectionChange]
   );
 
-  const fetchComprehensivePage = ({
-    page,
-    size,
-    sort,
-    filters: currentFilters,
-  }: PaginatedFetchParams<DynamicFilters>) =>
-    ComprehensiveService.getAll({
-      page,
-      size,
-      sort,
-      filters: currentFilters,
-    });
-
-  const handleDelete = async (ids: (string | number)[]) => {
-    await deleteMutation.mutateAsync(ids);
-  };
-
   return (
     <ModernDataTable<ComprehensiveModel, DynamicFilters>
+      queryKey="comprehensive"
+      service={ComprehensiveService}
       dataIdKey="id"
       header={<ComprehensiveTableHeaders />}
       renderRow={(item, index, onDelete) => (
@@ -79,16 +40,14 @@ const ComprehensiveTableWrapper: React.FC<ComprehensiveTableProps> = ({
         />
       )}
       title={comprehensiveModelMeta.messages.list.title}
-      sortOptions={sortOptions}
-      queryKey="comprehensive"
-      fetchPage={fetchComprehensivePage}
+      sortOptions={buildSortOptions(comprehensiveModelMeta)}
       filters={filters}
       defaultSort="createdAt,desc"
       defaultPageSize={10}
       onSelectionChange={handleSelectionChange}
-      onDelete={handleDelete}
+      enableDelete={true}
     />
   );
 };
 
-export default ComprehensiveTableWrapper;
+export default ComprehensiveTable;

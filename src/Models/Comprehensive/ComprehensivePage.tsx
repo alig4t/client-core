@@ -9,7 +9,7 @@ import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
 import PageTransition from "@/components/Layout/PageTransition";
-import ComprehensiveTableWrapper from "./ComprehensiveTable";
+import ComprehensiveTable from "./ComprehensiveTable";
 
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
@@ -39,7 +39,7 @@ const ComprehensivePage: React.FC = () => {
             <ComprehensiveSearch onApplyFilters={setActiveFilters} />
           </Accordion>
 
-          <ComprehensiveTableWrapper filters={activeFilters} />
+          <ComprehensiveTable filters={activeFilters} />
         </div>
       </PageTransition>
     </PageWrapper>

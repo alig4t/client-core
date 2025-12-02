@@ -86,4 +86,8 @@ export class BaseService<T> {
   delete(id: number): Promise<void> {
     return api.delete(`${this.url}/${id}`);
   }
+
+  async deleteMany(ids: number[]): Promise<void> {
+    await Promise.all(ids.map((id) => this.delete(id)));
+  }
 }

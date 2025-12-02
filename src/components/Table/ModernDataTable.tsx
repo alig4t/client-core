@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
@@ -10,6 +10,7 @@ import TableErrorState from "@/components/Layout/TableErrorState";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { TBODY } from "@/core/components/Table/DataTable";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import type { BaseService } from "@/core/service/BaseService";
 
 // --- Types ---
 export type RenderRowFunction<T> = (
@@ -18,27 +19,9 @@ export type RenderRowFunction<T> = (
     onDelete: (id: string | number) => void
 ) => React.ReactNode;
 
-export interface PaginatedFetchParams<TFilters> {
-    page: number;
-    size: number;
-    sort: string;
-    filters?: TFilters;
-}
-
-export interface PaginatedFetchResult<TData> {
-    data: TData[];
-    meta?: {
-        totalItems?: number;
-        totalPages?: number;
-        currentPage?: number;
-        pageSize?: number;
-        isLastPage?: boolean;
-    };
-}
-
-interface ModernDataTableProps<TData, TFilters> {
+interface ModernDataTableProps<TData, TFilters extends Record<string, any> = Record<string, any>> {
     queryKey: string;
-    fetchPage: (params: PaginatedFetchParams<TFilters>) => Promise<PaginatedFetchResult<TData>>;
+    service: BaseService<TData>;
     filters?: TFilters;
     defaultPageSize?: number;
     defaultSort?: string;
@@ -48,7 +31,7 @@ interface ModernDataTableProps<TData, TFilters> {
     sortOptions: Option[];
     dataIdKey: keyof TData;
     onSelectionChange?: (selectedIds: (string | number)[]) => void;
-    onDelete?: (ids: (string | number)[]) => Promise<void>;
+    enableDelete?: boolean;
 }
 
 // --- Animation Variants ---
@@ -68,9 +51,9 @@ const rowVariants = {
     exit: { opacity: 0, x: -20 },
 };
 
-const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<string, any>>({
+const ModernDataTable = <TData extends Record<string, any>, TFilters extends Record<string, any> = Record<string, any>>({
     queryKey,
-    fetchPage,
+    service,
     filters,
     defaultPageSize = 10,
     defaultSort,
@@ -80,8 +63,9 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     sortOptions,
     dataIdKey,
     onSelectionChange,
-    onDelete,
+    enableDelete = true,
 }: ModernDataTableProps<TData, TFilters>) => {
+    const queryClient = useQueryClient();
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(defaultPageSize);
     const [sortValue, setSortValue] = useState<string>(
@@ -93,7 +77,6 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     // Delete Modal State
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
     const [idsToDelete, setIdsToDelete] = useState<(string | number)[]>([]);
-    const [isDeleting, setIsDeleting] = useState(false);
 
     // Reset page when filters change
     useEffect(() => {
@@ -110,6 +93,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
         if (isSelectionMode) onSelectionChange(selectedIds);
     }, [selectedIds, onSelectionChange, isSelectionMode]);
 
+    // Data fetching
     const {
         data,
         isLoading,
@@ -119,14 +103,33 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
         isFetching,
     } = useQuery({
         queryKey: [queryKey, page, pageSize, sortValue, filters],
-        queryFn: () => fetchPage({ page, size: pageSize, sort: sortValue, filters }),
+        queryFn: () => service.getAll({ page, size: pageSize, sort: sortValue, filters }),
         ...ReactQueryOptions.tableOptions,
     });
 
+    // Delete mutation
+    const deleteMutation = useMutation({
+        mutationFn: async (ids: (string | number)[]) => {
+            const numericIds = ids.map(Number).filter(n => !isNaN(n));
+            if (numericIds.length === 1) {
+                await service.delete(numericIds[0]);
+            } else {
+                await service.deleteMany(numericIds);
+            }
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: [queryKey] });
+            setSelectedIds([]);
+        },
+        onError: (error) => {
+            console.error("Delete failed:", error);
+        },
+    });
+
     const pageData = data?.data ?? [];
-    const meta = data?.meta ?? {};
-    const totalPages = meta.totalPages ?? 0;
-    const totalItems = meta.totalItems ?? 0;
+    const meta = data?.meta;
+    const totalPages = meta?.totalPages ?? 0;
+    const totalItems = meta?.totalItems ?? 0;
 
     const toggleSelect = useCallback((id: string | number) => {
         if (!isSelectionMode) return;
@@ -154,18 +157,13 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     };
 
     const handleConfirmDelete = async () => {
-        if (!onDelete || idsToDelete.length === 0) return;
-        setIsDeleting(true);
+        if (idsToDelete.length === 0) return;
         try {
-            await onDelete(idsToDelete);
+            await deleteMutation.mutateAsync(idsToDelete);
             setIsDeleteModalOpen(false);
             setIdsToDelete([]);
-            setSelectedIds([]); // Clear selection after delete
-            refetch(); // Refetch data
         } catch (error) {
-            console.error("Delete failed", error);
-        } finally {
-            setIsDeleting(false);
+            console.error("Delete failed:", error);
         }
     };
 
@@ -199,7 +197,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
-                    {onDelete && isSelectionMode && selectedIds.length > 0 && (
+                    {enableDelete && isSelectionMode && selectedIds.length > 0 && (
                         <Button
                             variant="danger"
                             icon={Trash2}
@@ -357,7 +355,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
                 onConfirm={handleConfirmDelete}
                 title="تأیید حذف"
                 message={`آیا مطمئنید که می‌خواهید ${idsToDelete.length} مورد را حذف کنید؟ این عمل غیرقابل بازگشت است.`}
-                isDeleting={isDeleting}
+                isDeleting={deleteMutation.isPending}
             />
         </div>
     );
