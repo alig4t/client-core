@@ -9,7 +9,7 @@ import TableLink from "@/core/components/general/TableLink";
 import { getViewPath } from "@/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
-import { useAuth } from "@/stores/AuthContext";
+
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
@@ -23,7 +23,7 @@ const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo
     item,
     onDelete,
 }) => {
-    const { hasPermission } = useAuth();
+
 
     return (
         <>
@@ -47,7 +47,14 @@ const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo
                     label={item.oneToOneUser?.username}
                 />
             </TBODY>
-            <TBODY>{item.manyToOneChannel.channelName}</TBODY>
+            <TBODY>
+                {/* {item.manyToOneChannel.channelName} */}
+                <LinkView
+                    viewName={VIEWNAME.COMPREHENSIVE_DISPLAY}
+                    id={item.manyToOneChannel?.id}
+                    label={item.manyToOneChannel?.channelName}
+                />
+            </TBODY>
             <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.createdAt)}</TBODY>
             <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.updatedAt)}</TBODY>
 
@@ -61,23 +68,21 @@ const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo
                     className="mr-2"
                 />
 
-                {hasPermission(Permission.ComprehensiveEntity_Read) && (
-                    <TableLink
-                        to={getViewPath(VIEWNAME.COMPREHENSIVE_DISPLAY, item.id)}
-                    >
-                        <Eye size={20} />
-                    </TableLink>
-                )}
+                <TableLink
+                    to={getViewPath(VIEWNAME.COMPREHENSIVE_DISPLAY, item.id)}
+                    permission={Permission.ComprehensiveEntity_Read}
+                >
+                    <Eye size={20} />
+                </TableLink>
 
-                {hasPermission(Permission.ComprehensiveEntity_Delete) && (
-                    <TableLink
-                        tooltipText="حذف"
-                        onClick={() => onDelete(item.id)}
-                        className="text-red-600 hover:text-red-800"
-                    >
-                        <Trash2 size={20} />
-                    </TableLink>
-                )}
+                <TableLink
+                    tooltipText="حذف"
+                    onClick={() => onDelete(item.id)}
+                    className="text-red-600 hover:text-red-800"
+                    permission={Permission.ComprehensiveEntity_Delete}
+                >
+                    <Trash2 size={20} />
+                </TableLink>
             </TBODY>
         </>
     );

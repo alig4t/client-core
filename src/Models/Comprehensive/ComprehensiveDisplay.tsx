@@ -21,6 +21,7 @@ import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
 import { getViewPath } from "@/router/RouteUtils";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -37,8 +38,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
     queryKey: ["comprehensive", id],
     queryFn: () => ComprehensiveService.getById(Number(id)),
     enabled: !!id, // Execute only when id exists
-    retry: 1, // Retry once on error
-    staleTime: 5 * 60 * 1000, // 5 minutes cache
+    ...ReactQueryOptions.displayOptions,
   });
 
 

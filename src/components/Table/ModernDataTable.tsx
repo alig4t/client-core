@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
@@ -9,6 +9,7 @@ import { Trash2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "
 import TableErrorState from "@/components/Layout/TableErrorState";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { TBODY } from "@/core/components/Table/DataTable";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 
 // --- Types ---
 export type RenderRowFunction<T> = (
@@ -119,8 +120,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters = Record<st
     } = useQuery({
         queryKey: [queryKey, page, pageSize, sortValue, filters],
         queryFn: () => fetchPage({ page, size: pageSize, sort: sortValue, filters }),
-        placeholderData: keepPreviousData,
-        refetchOnWindowFocus: false,
+        ...ReactQueryOptions.tableOptions,
     });
 
     const pageData = data?.data ?? [];

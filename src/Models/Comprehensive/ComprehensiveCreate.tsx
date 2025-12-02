@@ -29,6 +29,7 @@ import PageTransition from "@/components/Layout/PageTransition";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import UserService from "../User/UserService";
 import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
@@ -56,7 +57,7 @@ const ComprehensiveCreate: React.FC = () => {
     queryKey: ["comprehensive", id],
     queryFn: () => ComprehensiveService.getById(Number(id)),
     enabled: isEditMode,
-    retry: 1,
+    ...ReactQueryOptions.editOptions,
   });
 
   const mutation = useMutation({
