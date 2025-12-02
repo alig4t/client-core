@@ -12,7 +12,7 @@ export default function Layout() {
       <div className="flex-1 flex flex-col">
         <Navbar />
         {/* حذف پس‌زمینه از main تا از پس‌زمینه والد ارث‌بری کند */}
-        <main className="flex flex-col md:flex-row flex-wrap min-h-[calc(100dvh-64px)] bg-[var(--background)]">
+        <main className="flex flex-col lg:flex-row min-h-[calc(100dvh-64px)] bg-[var(--background)]">
           <SubSidebar />
           {/* افزایش padding برای فضای بیشتر */}
           <div className="flex-1 ">
