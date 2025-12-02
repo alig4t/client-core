@@ -16,21 +16,21 @@ import {
 import type { ViewName } from "@/router/ViewName";
 import { getViewPath } from "@/router/RouteUtils";
 
-// تایپ‌های مورد نیاز
-type Permission = string; // یا تایپ دقیق‌تری که برای دسترسی‌ها تعریف کرده‌اید
+
+type Permission = string;
 
 type NavLinkVariant = "display" | "edit" | "accept" | "delete";
 
 type NavLinkProps = {
   variant: NavLinkVariant;
-  permission: Permission; // دسترسی مورد نیاز
-  viewName: ViewName; // نام ویو برای تولید مسیر
-  idParam: number | string; // پارامتر شناسه
-  icon?: LucideIcon; // آیکون اختیاری
-  label?: string; // لیبل اختیاری
-  tooltipSide?: "left" | "right" | "top" | "bottom"; // جهت نمایش توولتیپ
-  className?: string; // کلاس اختیاری برای سفارشی‌سازی
-  onClick?: () => void; // اکشن اختیاری در صورت نیاز
+  permission: Permission;
+  viewName: ViewName;
+  idParam: number | string;
+  icon?: LucideIcon;
+  label?: string;
+  tooltipSide?: "left" | "right" | "top" | "bottom";
+  className?: string;
+  onClick?: () => void;
 };
 
 const iconButtonStyle =
@@ -79,11 +79,11 @@ const NavLink: React.FC<NavLinkProps> = ({
   className = "",
   onClick,
 }) => {
-  // فرض بر این است که تابع چک دسترسی شما این‌جا فراخوانی می‌شود
-  const hasPermission = true; // جایگزین کنید با: hasPermission(permission)
+
+  const hasPermission = true;
 
   if (!hasPermission) {
-    return null; // یا می‌توانید یک پیام نمایش دهید
+    return null;
   }
 
   const { icon: defaultIcon, label: defaultLabel } = getVariantConfig(variant);
