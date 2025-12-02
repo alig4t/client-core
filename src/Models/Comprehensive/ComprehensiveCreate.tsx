@@ -1,5 +1,6 @@
 // src/pages/ComprehensiveCreate.tsx
 import React from "react";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -17,9 +18,7 @@ import ButtonPanel from "@/components/Button/ButtonPanel";
 import Button from "@/components/Button/Button";
 import PageHeader from "@/core/components/general/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
-import Breadcrumb, {
-  type BreadcrumbItem,
-} from "@/core/components/general/BreadCrumb";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
 
 import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 import Validator from "@/core/forms/validation";
@@ -102,16 +101,15 @@ const ComprehensiveCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
+
+
   const handleCancel = () => {
     navigate(-1);
   };
 
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "خانه", href: "/dashboard" },
-    { label: "پورتال", href: "/dashboard/portal" },
-    { label: "مدیریت ترکیبی", href: "/dashboard/portal/comprehensive" },
-    { label: isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید" },
-  ];
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید"
+  );
 
   if (isLoadingInitial && isEditMode) {
     return (

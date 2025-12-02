@@ -1,5 +1,6 @@
 // src/pages/ComprehensiveDisplay.tsx
 import React from "react";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/components/general/RecordDisplayLayout";
@@ -15,9 +16,7 @@ import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button/Button";
-import Breadcrumb, {
-  type BreadcrumbItem,
-} from "@/core/components/general/BreadCrumb";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
 import { getViewPath } from "@/router/RouteUtils";
 
@@ -40,13 +39,10 @@ const ComprehensiveDisplayPage: React.FC = () => {
     staleTime: 5 * 60 * 1000, // 5 دقیقه cache
   });
 
+
+
   // Breadcrumb برای ناوبری
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "خانه", href: "/dashboard" },
-    { label: "پورتال", href: "/dashboard/portal" },
-    { label: "مدیریت ترکیبی", href: "/dashboard/portal/comprehensive" },
-    { label: "جزئیات رکورد" },
-  ];
+  const breadcrumbItems = useBreadcrumbs("جزئیات رکورد");
 
   // هندلر برای دکمه ویرایش
   const handleEditClick = () => {

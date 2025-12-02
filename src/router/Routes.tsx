@@ -137,6 +137,8 @@ export const routeConfig: RouteConfig[] = [
     permission: Permission.Permission_Create,
     showInMenu: false,
     name: VIEWNAME.PERMISSION_CREATE,
+    label: "ایجاد مجوز",
+    parent: "/dashboard/portal/permissions",
   },
   {
     path: withId("/dashboard/portal/permissions"),
@@ -144,6 +146,8 @@ export const routeConfig: RouteConfig[] = [
     permission: Permission.Permission_Update,
     showInMenu: false,
     name: VIEWNAME.PERMISSION_EDIT,
+    label: "ویرایش مجوز",
+    parent: "/dashboard/portal/permissions",
   },
 
   // ================================
@@ -165,6 +169,8 @@ export const routeConfig: RouteConfig[] = [
     permission: Permission.ComprehensiveEntity_Create,
     showInMenu: false,
     name: VIEWNAME.COMPREHENSIVE_CREATE,
+    label: "ایجاد ترکیبی",
+    parent: "/dashboard/portal/comprehensive",
   },
   {
     path: withId("/dashboard/portal/comprehensive"),
@@ -172,6 +178,8 @@ export const routeConfig: RouteConfig[] = [
     permission: Permission.ComprehensiveEntity_Read,
     showInMenu: false,
     name: VIEWNAME.COMPREHENSIVE_DISPLAY,
+    label: "جزئیات ترکیبی",
+    parent: "/dashboard/portal/comprehensive",
   },
   {
     path: withId("/dashboard/portal/comprehensive/edit"),
@@ -179,6 +187,8 @@ export const routeConfig: RouteConfig[] = [
     permission: Permission.ComprehensiveEntity_Update,
     showInMenu: false,
     name: VIEWNAME.COMPREHENSIVE_EDIT,
+    label: "ویرایش ترکیبی",
+    parent: "/dashboard/portal/comprehensive",
   },
 
   // ================================
