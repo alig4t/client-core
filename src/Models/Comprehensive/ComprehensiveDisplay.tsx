@@ -11,6 +11,7 @@ import { DisplayField } from "@/components/general/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
@@ -19,6 +20,7 @@ import Button from "@/components/Button/Button";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
 import { getViewPath } from "@/router/RouteUtils";
+import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -130,21 +132,17 @@ const ComprehensiveDisplayPage: React.FC = () => {
             />
             <DisplayField
               label={comprehensiveModelMeta.fields.localDateTimeField.label}
-              value={DateUtil.GEORGIAN_TO_JALALI(
+              value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
                 comprehensiveRecord.localDateTimeField
               )}
             />
-            {/* <DisplayField
+            <DisplayField
               label={comprehensiveModelMeta.fields.enumField.label}
-              value={<>{
-
-                comprehensiveModelMeta.fields.enumField.options?.find(
-                  (opt) => opt.value === comprehensiveRecord.enumField
-                )?.label || comprehensiveRecord.enumField
-              }</>
-
-              }
-            /> */}
+              value={OptionUtils.getLabel(
+                comprehensiveRecord.enumField,
+                ComprehensiveEnumFieldOptionLabels
+              )}
+            />
             <DisplayField
               label={comprehensiveModelMeta.fields.uniqueField.label}
               value={comprehensiveRecord.uniqueField}

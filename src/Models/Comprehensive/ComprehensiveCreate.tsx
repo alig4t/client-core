@@ -28,6 +28,7 @@ import { PageWrapper } from "@/components/Layout/PageWrapper";
 import PageTransition from "@/components/Layout/PageTransition";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import UserService from "../User/UserService";
+import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
@@ -37,7 +38,7 @@ const comprehensiveSchema = z.object({
   bigDecimalField: Validator.notNull(),
   booleanField: Validator.notNull(),
   dateField: Validator.notNull(),
-  // enumField: Validator.notNull(),
+  enumField: Validator.notNull(),
   oneToOneUser: Validator.optional(),
   attachments: Validator.optional(), // Change to attachments
 });
@@ -202,7 +203,7 @@ const ComprehensiveCreate: React.FC = () => {
                   placeholder={
                     comprehensiveModelMeta.fields.enumField?.placeholder
                   }
-                  options={OptionUtils.YES_OR_NO_OPTIONS}
+                  options={OptionUtils.getOptions(ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels)}
                 />
                 <FormAutoComplete
                   name="oneToOneUser"

@@ -12,6 +12,7 @@ import { Permission } from "@/router/Permission";
 import { useAuth } from "@/stores/AuthContext";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 
 interface ComprehensiveTableColumnsProps {
     item: ComprehensiveModel;
@@ -29,13 +30,13 @@ const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo
             <TBODY>{item.id}</TBODY>
             <TBODY>{item.stringField}</TBODY>
             <TBODY>{item.integerField}</TBODY>
+            <TBODY>{OptionUtils.getLabel(item.enumField, ComprehensiveEnumFieldOptionLabels)}</TBODY>
             <TBODY>{item.longField}</TBODY>
             <TBODY>{item.doubleField}</TBODY>
             <TBODY>{item.bigDecimalField}</TBODY>
-            <TBODY>{item.booleanField ? "بله" : "خیر"}</TBODY>
-            <TBODY>{item.dateField}</TBODY>
-            <TBODY>{item.localDateField}</TBODY>
-            <TBODY>{item.localDateTimeField}</TBODY>
+            <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.dateField)}</TBODY>
+            <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.localDateField)}</TBODY>
+            <TBODY>{DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(item.localDateTimeField)}</TBODY>
             <TBODY>{OptionUtils.GET_BOOLEAN_OPTION(item.booleanField)}</TBODY>
             <TBODY>{item.uniqueField}</TBODY>
             <TBODY>{item.indexedField}</TBODY>
@@ -87,6 +88,7 @@ export const ComprehensiveTableHeaders: React.FC = () => (
         <THEAD>{comprehensiveModelMeta.fields.id.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.stringField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.integerField.label}</THEAD>
+        <THEAD>{comprehensiveModelMeta.fields.enumField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.longField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.doubleField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.bigDecimalField.label}</THEAD>
@@ -94,7 +96,6 @@ export const ComprehensiveTableHeaders: React.FC = () => (
         <THEAD>{comprehensiveModelMeta.fields.dateField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.localDateField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.localDateTimeField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.enumField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.uniqueField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.indexedField.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.oneToOneUser.label}</THEAD>

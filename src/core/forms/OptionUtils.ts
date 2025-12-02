@@ -59,11 +59,40 @@ export function buildSortOptions<
   return options;
 }
 
+/**
+ * Convert an enum and a label mapping into an array of Options.
+ * @param enumObj The enum object (e.g., EnumFieldOption)
+ * @param labels The mapping of enum values to labels
+ */
+export function getOptions(
+  enumObj: Record<string, string | number>,
+  labels: Record<string | number, string>
+): Option[] {
+  return Object.values(enumObj).map((value) => ({
+    value,
+    label: labels[value] || String(value),
+  }));
+}
+
+/**
+ * Get the label for a specific enum value.
+ * @param value The enum value
+ * @param labels The mapping of enum values to labels
+ */
+export function getLabel(
+  value: string | number,
+  labels: Record<string | number, string>
+): string {
+  return labels[value] || String(value);
+}
+
 const OptionUtils = {
   YES_OR_NO_OPTIONS,
   GET_BOOLEAN_OPTION,
   PAGE_SIZE_OPTIONS,
-  buildSortOptions
+  buildSortOptions,
+  getOptions,
+  getLabel,
 }
 
 export default OptionUtils;

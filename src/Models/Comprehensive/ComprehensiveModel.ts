@@ -1,17 +1,7 @@
-
 import type { BaseModel } from "../../core/models/BaseModel";
 import type { ChannelModel } from "../Channel/ChannelModel";
 import type { UserModel } from "../User/UserModel";
-
-
-// If you have enum, you can define it like this:
-export type EnumFieldOption = {
-    OPTION_A: "OPTION_A",
-    OPTION_B: "OPTION_B",
-    // Other options...
-};
-
-// export type EnumFieldOption = "OPTION_A" | "OPTION_B";
+import type { ComprehensiveEnumFieldOption } from "./ComprehensiveEnumField";
 
 export interface ComprehensiveModel extends BaseModel {
     stringField: string;
@@ -23,7 +13,7 @@ export interface ComprehensiveModel extends BaseModel {
     dateField: string; // ISO 8601
     localDateField: string; // yyyy-MM-dd
     localDateTimeField: string; // ISO without offset
-    enumField: EnumFieldOption;
+    enumField: ComprehensiveEnumFieldOption;
     uniqueField: string;
     indexedField: string;
     oneToOneUser: UserModel;
