@@ -1,5 +1,6 @@
 // src/pages/ComprehensiveCreate.tsx
 import React from "react";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -107,9 +108,12 @@ const ComprehensiveCreate: React.FC = () => {
     navigate(-1);
   };
 
+
+
   const breadcrumbItems = useBreadcrumbs(
     isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید"
   );
+  const routeMeta = useRouteMetadata();
 
   if (isLoadingInitial && isEditMode) {
     return (
@@ -125,7 +129,7 @@ const ComprehensiveCreate: React.FC = () => {
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
         <div className="sm:p-8 min-h-screen font-sans">
           <PageHeader
-            title={isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید"}
+            title={routeMeta?.label || (isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید")}
           />
 
           <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">

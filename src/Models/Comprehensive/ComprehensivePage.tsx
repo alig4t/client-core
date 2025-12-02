@@ -13,10 +13,14 @@ import ComprehensiveTableWrapper from "./ComprehensiveTable";
 
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+
 const ComprehensivePage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
   const breadcrumbItems = useBreadcrumbs();
+  const routeMeta = useRouteMetadata();
+
   return (
     <PageWrapper>
       <PageTransition>
@@ -24,7 +28,7 @@ const ComprehensivePage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={comprehensiveModelMeta.messages.manage.title}
+            title={routeMeta?.label || comprehensiveModelMeta.messages.manage.title}
             actionButton={{
               label: comprehensiveModelMeta.messages.createButton,
               onClick: () => navigate("create"),
