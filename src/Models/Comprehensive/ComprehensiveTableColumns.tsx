@@ -88,7 +88,7 @@ const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo
     );
 });
 
-export const ComprehensiveTableHeaders: React.FC = () => (
+export const ComprehensiveTableHeaders = (
     <>
         <THEAD>{comprehensiveModelMeta.fields.id.label}</THEAD>
         <THEAD>{comprehensiveModelMeta.fields.stringField.label}</THEAD>

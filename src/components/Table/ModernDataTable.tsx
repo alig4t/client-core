@@ -174,14 +174,24 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
 
     // --- Skeleton Loading ---
     const renderSkeleton = () => {
+
+        const headerArray = React.Children.toArray(
+            (header as React.ReactElement)?.props?.children ?? []
+        );
+
+        const childrenCount = headerArray.length;
+        console.log(childrenCount)
         return Array.from({ length: pageSize }).map((_, index) => (
             <tr key={`skeleton-${index}`} className="animate-pulse border-b border-gray-100 dark:border-gray-800">
                 {isSelectionMode && <td className="p-4"><div className="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded"></div></td>}
-                {React.Children.map(header, () => (
+
+                {Array.from({ length: childrenCount }).map((_, index2) => (
                     <td className="p-4">
                         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto"></div>
                     </td>
                 ))}
+
+
             </tr>
         ));
     };

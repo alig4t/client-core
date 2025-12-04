@@ -31,7 +31,7 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
       queryKey="comprehensive"
       service={ComprehensiveService}
       dataIdKey="id"
-      header={<ComprehensiveTableHeaders />}
+      header={ComprehensiveTableHeaders}
       renderRow={(item, index, onDelete) => (
         <ComprehensiveTableColumns
           key={item.id}
