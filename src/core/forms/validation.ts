@@ -1,65 +1,65 @@
 // src/lib/validation.ts
 import { z } from "zod";
 
-// ولیدیشن پایه برای رشته‌های عددی (اجباری + رشته)
+// Base validation for numeric strings (required + string)
 const numberAsString = () =>
   z.string().min(1, "این فیلد اجباری است");
 
-// ولیدیشن عدد صحیح (int)
+// Integer validation (int)
 export const integer = () =>
   numberAsString()
     .regex(/^-?\d+$/, "باید یک عدد صحیح معتبر باشد")
     .max(11, "عدد وارد شده بیش از حد مجاز است (حداکثر 11 رقم)");
 
-// ولیدیشن عدد بلند (long)
+// Long validation (long)
 export const long = () =>
   numberAsString()
     .regex(/^-?\d+$/, "باید یک عدد صحیح معتبر باشد")
     .max(20, "عدد وارد شده بیش از حد مجاز است (حداکثر 20 رقم)");
 
-// ولیدیشن عدد اعشاری (float)
+// Float validation (float)
 export const float = () =>
   numberAsString()
     .regex(/^-?\d+(\.\d+)?$/, "فرمت عدد اعشاری نامعتبر است")
     .max(15, "عدد وارد شده بیش از حد مجاز است (حداکثر 15 رقم)");
 
-// ولیدیشن عدد اعشاری دقت بالا (double)
+// Double validation (double)
 export const double = () =>
   numberAsString()
     .regex(/^-?\d+(\.\d+)?$/, "فرمت عدد اعشاری نامعتبر است")
     .max(25, "عدد وارد شده بیش از حد مجاز است (حداکثر 25 رقم)");
 
-// ولیدیشن BigDecimal (رشته‌ای با دقت بالا)
+// BigDecimal validation (high precision string)
 export const bigDecimal = () =>
   numberAsString()
     .regex(/^-?\d+(\.\d+)?$/, "فرمت عدد اعشاری نامعتبر است")
     .max(50, "عدد وارد شده بیش از حد مجاز است (حداکثر 50 رقم)");
 
-// ولیدیشن رشته عمومی (با امکان تنظیم maxLength)
+// General string validation (with maxLength option)
 export const text = (maxLength: number = 255) =>
   z.string()
     .min(1, "این فیلد اجباری است")
     .max(maxLength, `حداکثر تعداد کاراکتر مجاز: ${maxLength}`);
 
-// ولیدیشن رشته اختیاری (برای فیلدهای غیر اجباری)
+// Optional string validation (for non-required fields)
 export const optionalText = (maxLength: number = 255) =>
   z.string().max(maxLength, `حداکثر تعداد کاراکتر مجاز: ${maxLength}`).optional();
 
-// ولیدیشن boolean (اجباری)
+// Boolean validation (required)
 export const boolean = () =>
   z.boolean({ required_error: "این فیلد اجباری است" });
 
-// ولیدیشن تاریخ (به صورت رشته، مثلاً 'YYYY-MM-DD')
+// Date validation (as string, e.g., 'YYYY-MM-DD')
 
 export const dateTime = () =>
-    z.string().min(1, "تاریخ و زمان را انتخاب کنید");
-  
-  // اگر فقط تاریخ (بدون زمان) می‌خواهی، ولی با فرمت ISO کامل:
-  export const date = () =>
-    z.string().min(1, "تاریخ را انتخاب کنید");
+  z.string().min(1, "تاریخ و زمان را انتخاب کنید");
+
+// If you want only date (without time), but with full ISO format:
+export const date = () =>
+  z.string().min(1, "تاریخ را انتخاب کنید");
 
 
-  // برای select تک‌انتخاب
+// For single select
 export const select = () =>
   z.union([z.string(), z.number()])
     .refine((val) => val !== "" && val !== null && val !== undefined, {
@@ -75,17 +75,17 @@ export const multiSelect = () =>
       message: "گزینه‌های انتخابی نامعتبر هستند",
     });
 
-  // src/lib/validation.ts
+// src/lib/validation.ts
 
-// ولیدیشن برای یک آبجکت با id و label (تک‌انتخاب)
+// Validation for an object with id and label (single select)
 export const autoComplete = () =>
   z.object({});
-  
 
-// ولیدیشن برای autocomplete چند‌انتخابی
+
+// Validation for multi-select autocomplete
 export const multiAutoComplete = () =>
-   z.array(z.any()).min(1, "حداقل یک مورد باید انتخاب شود.");
-      
+  z.array(z.any()).min(1, "حداقل یک مورد باید انتخاب شود.");
+
 export const notNull = (message: string = "این فیلد اجباری است") =>
   z
     .any()
@@ -96,19 +96,19 @@ export const notNull = (message: string = "این فیلد اجباری است")
         if (typeof val === "string") return val.trim().length > 0;
         if (Array.isArray(val)) return val.length > 0;
         if (typeof val === "object") return Object.keys(val).length > 0;
-        if (typeof val === "boolean") return true; // برای checkbox
-        if (typeof val === "number") return true;  // برای مقادیر عددی
+        if (typeof val === "boolean") return true; // For checkbox
+        if (typeof val === "number") return true;  // For numeric values
 
         return false;
       },
       { message }
     );
 
-    export const optional = () =>
-      z.any().optional();
-// اگر خواستی ولیدیشن‌های بیشتری اضافه کنی، اینجا جای مناسبی‌ست
+export const optional = () =>
+  z.any().optional();
+// If you want to add more validations, this is the right place
 
-// صادر کردن همه ولیدیشن‌ها تحت یک نام (مثل MyValidation)
+// Export all validations under one name (like MyValidation)
 const Validator = {
   integer,
   long,

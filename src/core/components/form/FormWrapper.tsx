@@ -15,16 +15,16 @@ export interface searchFilters {
   [key: string]: any;
 }
 
-// --- Props با تایپ‌های دقیق ---
+// --- Props with precise types ---
 interface FormWrapperProps<T extends FieldValues> {
   children: React.ReactNode;
   onSubmit: SubmitHandler<T>;
-  schema?: ZodSchema<T>; // ZodSchema دقیقاً برای همان نوع T
-  defaultValues?: DefaultValues<T>; // نوع صحیح برای مقادیر اولیه
+  schema?: ZodSchema<T>; // ZodSchema exactly for type T
+  defaultValues?: DefaultValues<T>; // Correct type for default values
   className?: string;
 }
 
-// --- کامپوننت اصلی ---
+// --- Main Component ---
 export function FormWrapper<T extends FieldValues>({
   children,
   onSubmit,
@@ -39,7 +39,7 @@ export function FormWrapper<T extends FieldValues>({
   });
 
   const handleSubmit = methods.handleSubmit((data: T) => {
-    onSubmit(data); // حالا data دقیقاً از نوع T است
+    onSubmit(data); // Now data is exactly of type T
   });
 
   return (

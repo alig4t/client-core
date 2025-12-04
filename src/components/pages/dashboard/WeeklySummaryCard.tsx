@@ -51,13 +51,12 @@ const Skeleton: ReactElement = (
           <div className="flex  items-center space-x-1">
             {/* مقدار اصلی (با رنگ متفاوت) */}
             <div
-              className={`h-4 w-16 rounded animate-pulse ${
-                index === 0 || index === 1
+              className={`h-4 w-16 rounded animate-pulse ${index === 0 || index === 1
                   ? "bg-green-500/45"
                   : index === 2
                     ? "bg-red-500/45"
                     : "bg-gray-300/45"
-              }`}
+                }`}
             ></div>
             {/* عدد/توضیح کوچک (در صورت وجود) */}
           </div>

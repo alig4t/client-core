@@ -3,25 +3,25 @@ import React, { useState, useEffect, useRef } from "react";
 import { Loader2, X, Eye, FileText, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
 
-// 🚨 فرض می‌کنیم این سرویس در دسترس است.
+// 🚨 Assuming this service is available.
 import DocumentService from "@/Models/Document/DocumentService";
 
 interface FilePreviewProps {
   fileId: number;
   className?: string;
-  // ⬅️ سایز 'full' اضافه شده است
+  // ⬅️ 'full' size added
   previewSize?: "sm" | "md" | "lg" | "full";
   isDocument?: boolean;
 }
 
-// --- Variants برای انیمیشن Framer Motion ---
+// --- Variants for Framer Motion animation ---
 const backdropVariants: Variants = {
   hidden: { opacity: 0 },
   visible: { opacity: 1, transition: { duration: 0.2 } },
 };
 
 const modalContentVariants: Variants = {
-  // ⬅️ انیمیشن ورود از پایین به بالا
+  // ⬅️ Entry animation from bottom to top
   hidden: { opacity: 0, scale: 0.9, y: 30 },
   visible: {
     opacity: 1,
@@ -29,7 +29,7 @@ const modalContentVariants: Variants = {
     y: 0,
     transition: { type: "spring", damping: 25, stiffness: 200 },
   },
-  // ⬅️ انیمیشن خروج به سمت بالا
+  // ⬅️ Exit animation upwards
   exit: { opacity: 0, scale: 0.95, y: -20, transition: { duration: 0.2 } },
 };
 
@@ -45,15 +45,15 @@ const FilePreview: React.FC<FilePreviewProps> = ({
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const objectUrlRef = useRef<string | null>(null);
 
-  // ⬅️ تعریف سایزها، شامل حالت full
+  // ⬅️ Define sizes, including full mode
   const sizeClasses = {
     sm: "w-16 h-16",
     md: "w-28 h-28",
     lg: "w-40 h-40",
-    full: "w-full h-96", // عرض کامل و ارتفاع ثابت
+    full: "w-full h-96", // Full width and fixed height
   };
 
-  // --- مدیریت واکشی و لودینگ (با تضمین خروج از لودینگ) ---
+  // --- Manage fetching and loading (guaranteeing exit from loading) ---
   useEffect(() => {
     if (!fileId) {
       setIsLoading(false);
@@ -97,11 +97,11 @@ const FilePreview: React.FC<FilePreviewProps> = ({
     };
   }, [fileId]);
 
-  // --- توابع مدیریت مودال ---
+  // --- Modal management functions ---
   const openModal = () => {
     if ((previewUrl || isDocument) && !isModalOpen) {
       setIsModalOpen(true);
-      // اضافه کردن یک state جدید به تاریخچه
+      // Add a new state to history
       window.history.pushState({ modalOpen: true }, "");
     }
   };
@@ -109,14 +109,14 @@ const FilePreview: React.FC<FilePreviewProps> = ({
   const closeModal = () => {
     if (isModalOpen) {
       setIsModalOpen(false);
-      // اگر آخرین state ما بود، آن را pop می‌کنیم (اختیاری)
+      // If it was our last state, pop it (optional)
       if (window.history.state?.modalOpen) {
-        window.history.back(); // یا history.go(-1)
+        window.history.back(); // or history.go(-1)
       }
     }
   };
 
-  // مدیریت back button
+  // Handle back button
   useEffect(() => {
     const handlePopState = () => {
       if (isModalOpen) {
@@ -160,7 +160,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
     <>
       {/* 🖼️ Thumbnail Preview */}
       <div
-        // ⬅️ شرط w-full برای کانتینر والد
+        // ⬅️ w-full condition for parent container
         className={`${className} ${previewSize === "full" ? "w-full" : "inline-block"} cursor-pointer group relative 
                     transition-transform duration-300 hover:scale-[1.02] ${previewSize !== "full" ? "p-0.5" : "p-0"}`}
         onClick={openModal}
@@ -195,7 +195,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
                 <img
                   src={previewUrl}
                   alt="پیش‌نمایش فایل"
-                  // ⬅️ استفاده از object-cover برای پر کردن Thumbnail
+                  // ⬅️ Use object-cover to fill Thumbnail
                   className={`${sizeClasses[previewSize]} object-cover 
                               rounded-xl border border-gray-200 dark:border-gray-700 
                               transition-opacity duration-300 group-hover:opacity-80`}
@@ -223,7 +223,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
         ) : null}
       </div>
 
-      {/* 🖥️ Fullscreen Modal با انیمیشن Framer Motion */}
+      {/* 🖥️ Fullscreen Modal with Framer Motion animation */}
       <AnimatePresence>
         {isModalOpen && (
           <motion.div
@@ -239,7 +239,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
             aria-label="مشاهده فایل کامل"
             tabIndex={-1}
           >
-            {/* ⬅️ کانتینر محتوا متحرک */}
+            {/* ⬅️ Animated content container */}
             <motion.div
               onClick={(e) => e.stopPropagation()}
               variants={modalContentVariants}
@@ -248,7 +248,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
               exit="exit"
               className="relative max-w-full max-h-full"
             >
-              {/* ⬅️ دکمه بستن در گوشه بالا-چپ (داخل کادر تصویر) */}
+              {/* ⬅️ Close button in top-left corner (inside image frame) */}
               <button
                 onClick={closeModal}
                 className="absolute top-4 left-4 z-10 p-2 
@@ -274,7 +274,7 @@ const FilePreview: React.FC<FilePreviewProps> = ({
                 <img
                   src={previewUrl!}
                   alt="پیش‌نمایش کامل"
-                  // ⬅️ حفظ object-contain و محدودیت max-h/w برای نمایش کامل تصویر در اندازه واقعی (بدون سرریز)
+                  // ⬅️ Keep object-contain and max-h/w limits to display full image in actual size (no overflow)
                   className="max-h-[90vh] max-w-[90vw] object-contain rounded-2xl shadow-2xl border-4 border-gray-700/50"
                   onError={(e) => {
                     console.error("Full image failed to load", e);

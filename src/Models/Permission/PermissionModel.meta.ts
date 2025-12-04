@@ -23,15 +23,15 @@ export const PermissionModelMeta = createModelMeta<PermissionModel, FormFieldMet
   GET_PLURAL_DISPLAY_NAME()
 );
 
-function GET_AUTOCOMPLETE_DISPLAY_FIELD() : keyof PermissionModel{
-    return "showName"
+function GET_AUTOCOMPLETE_DISPLAY_FIELD(): keyof PermissionModel {
+  return "showName"
 }
 
-function GET_DISPLAY_NAME() : string{
+function GET_DISPLAY_NAME(): string {
   return "دسترسی"
 }
 
-function GET_PLURAL_DISPLAY_NAME() : string{
+function GET_PLURAL_DISPLAY_NAME(): string {
   return "دسترسی ها"
 }
 
@@ -39,7 +39,7 @@ function GET_PLURAL_DISPLAY_NAME() : string{
 // import type { PermissionModel } from "./PermissionModel";
 
 
-// const DISPLAY_FIELD_AUTOCOMPLETE = "showName" as const; 
+// const DISPLAY_FIELD_AUTOCOMPLETE = "showName" as const;
 
 
 // export const permissionModelMeta = createModelMeta<PermissionModel>(
@@ -53,7 +53,7 @@ function GET_PLURAL_DISPLAY_NAME() : string{
 //             sortable: true,
 //         },
 //     },
-//     DISPLAY_FIELD_AUTOCOMPLETE 
+//     DISPLAY_FIELD_AUTOCOMPLETE
 // );
 
 

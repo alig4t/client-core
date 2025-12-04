@@ -4,6 +4,6 @@ import type { PlatformModel } from "../Platform/PlatformModel";
 export interface ChannelModel extends BaseModel {
     channelName: string;
     channelIdentifier: string;
-    status: string; // یا می‌توانی یک enum برای وضعیت تعریف کنی
+    status: string; // or you can define an enum for status
     platform: PlatformModel;
 }

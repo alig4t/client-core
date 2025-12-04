@@ -11,7 +11,7 @@ const ProgressBar = () => {
   useEffect(() => {
     console.log("ProgressBar");
     NProgress.start();
-    // در زمان کم پایان بده تا سریع دیده بشه
+    // Finish in a short time to be seen quickly
     const timer = setTimeout(() => {
       NProgress.done();
     }, 1000);

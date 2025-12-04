@@ -10,7 +10,7 @@ import {
 } from "recharts";
 import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 
-// --- نمودار افقی کوچک برای ستون کناری ---
+// --- Small horizontal chart for sidebar ---
 const TopKeywordMiniChart: FC<{
   topKeywordPerformance: any;
   isLoading: boolean;
@@ -80,12 +80,12 @@ export default TopKeywordMiniChart;
 
 const Skeleton: ReactElement = (
   <div className="bg-white p-4 rounded-lg shadow-md">
-    {/* عنوان */}
+    {/* Title */}
     <div className="flex items-center justify-between mb-6">
       <div className="h-5 w-40 bg-gray-300 rounded animate-pulse"></div>
     </div>
 
-    {/* لیست میله‌ها */}
+    {/* Bar list */}
     <div className="space-y-4 pt-8">
       {[
         { value: 95, color: "bg-indigo-600/45" },
@@ -96,16 +96,16 @@ const Skeleton: ReactElement = (
           key={index}
           className="flex gap-2 items-center space-x-4 rtl:space-x-reverse"
         >
-          {/* عدد سمت چپ */}
+          {/* Left number */}
           <div className="h-5 w-8 bg-gray-300 rounded animate-pulse"></div>
 
-          {/* میله افقی */}
+          {/* Horizontal bar */}
           <div
             className={`h-6 rounded-full ${item.color} animate-pulse`}
             style={{ width: `${item.value}%` }}
           ></div>
 
-          {/* برچسب سمت راست */}
+          {/* Right label */}
           {/* <div className="h-4 w-16 bg-gray-300 rounded animate-pulse"></div> */}
         </div>
       ))}

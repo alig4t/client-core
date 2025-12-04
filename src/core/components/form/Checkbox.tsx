@@ -11,9 +11,9 @@ interface BaseCheckboxProps {
   className?: string;
   onChange?: (checked: boolean) => void;
   disabled?: boolean;
-  // حالت ساده (بدون react-hook-form)
+  // Simple mode (without react-hook-form)
   standalone?: boolean;
-  // برای جدول: فقط چک‌باکس خام
+  // For table: raw checkbox only
   hideLabel?: boolean;
 }
 
@@ -30,7 +30,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   hideLabel = false,
   ...rest
 }) => {
-  // --- حالت ساده (بدون React Hook Form) ---
+  // --- Simple mode (without React Hook Form) ---
   if (standalone) {
     const [checked, setChecked] = React.useState(false);
 
@@ -58,11 +58,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
             {...rest}
           />
           <div
-            className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-colors duration-200 ${
-              checked
+            className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-colors duration-200 ${checked
                 ? "bg-purple-600 border-purple-600"
                 : "border-gray-300 hover:border-purple-500"
-            } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+              } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {checked && (
               <svg
@@ -85,7 +84,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     );
   }
 
-  // --- حالت عادی (با React Hook Form) ---
+  // --- Normal mode (with React Hook Form) ---
   const formContext = useFormContext();
 
   if (!formContext) {
@@ -102,7 +101,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   const { onChange: registerOnChange, ...registerRest } = register(name);
   const currentValue = useWatch({ name, control: formContext.control });
 
-  const checkboxRef = React.useRef<HTMLInputElement>(null); // 👈 اضافه شد
+  const checkboxRef = React.useRef<HTMLInputElement>(null); // 👈 Added
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     registerOnChange(e);
@@ -111,11 +110,11 @@ export const Checkbox: React.FC<CheckboxProps> = ({
 
   const handleDivClick = () => {
     if (checkboxRef.current && !disabled) {
-      checkboxRef.current.click(); // شبیه‌سازی کلیک روی چک‌باکس
+      checkboxRef.current.click(); // Simulate click on checkbox
     }
   };
 
-  // --- رندر UI ---
+  // --- Render UI ---
   const renderCheckbox = () => (
     <label className="relative flex items-center cursor-pointer min-h-10 ">
       <input
@@ -128,11 +127,10 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         {...rest}
       />
       <div
-        className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-colors duration-200 ${
-          currentValue
-            ? "bg-purple-600 border-purple-600"
-            : "border-gray-300 hover:border-purple-500"
-        } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
+        className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-colors duration-200 ${currentValue
+          ? "bg-purple-600 border-purple-600"
+          : "border-gray-300 hover:border-purple-500"
+          } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         {currentValue && (
           <svg
@@ -153,12 +151,12 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     </label>
   );
 
-  // --- حالت جدول (بدون لیبل و خطا) ---
+  // --- Table mode (without label and error) ---
   if (hideLabel) {
     return renderCheckbox();
   }
 
-  // --- حالت فرم (با لیبل و خطا) ---
+  // --- Form mode (with label and error) ---
   return (
     <div className="">
       <Label> </Label>

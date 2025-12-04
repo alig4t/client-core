@@ -1,6 +1,7 @@
 // src/components/Table/Table.tsx
 
 import React, { useState, useEffect, useMemo, type FC } from "react";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { Checkbox } from "@/core/components/form/Checkbox";
 
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
@@ -8,6 +9,8 @@ import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
 import Button from "../../../components/Button/Button";
 import { Select } from "../form/Select";
 import { Trash2 } from "lucide-react";
+import TablePlaceholder from "@/components/Layout/TablePlaceholder";
+import TableErrorState from "@/components/Layout/TableErrorState";
 
 export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
   className = "",
@@ -405,6 +408,132 @@ const Table = <T extends { [key: string]: any }>({
         </span>
       </div>
     </div>
+  );
+};
+
+// --- Data Fetching Wrapper with Internal Pagination State ---
+export interface PaginatedFetchParams<TFilters> {
+  page: number;
+  size: number;
+  sort: string;
+  filters?: TFilters;
+}
+
+export interface PaginatedFetchResult<TData> {
+  data: TData[];
+  meta?: {
+    totalItems?: number;
+    totalPages?: number;
+    currentPage?: number;
+    pageSize?: number;
+    isLastPage?: boolean;
+  };
+}
+
+type BasePaginatedTableProps<TData extends Record<string, any>> = Pick<
+  TableProps<TData>,
+  | "header"
+  | "renderRow"
+  | "title"
+  | "sortOptions"
+  | "dataIdKey"
+  | "onSelectionChange"
+>;
+
+export interface PaginatedTableProps<
+  TData extends Record<string, any>,
+  TFilters = Record<string, any>
+>
+  extends BasePaginatedTableProps<TData> {
+  queryKey: string;
+  fetchPage: (
+    params: PaginatedFetchParams<TFilters>
+  ) => Promise<PaginatedFetchResult<TData>>;
+  filters?: TFilters;
+  defaultPageSize?: number;
+  defaultSort?: string;
+}
+
+export const PaginatedDataTable = <
+  TData extends Record<string, any>,
+  TFilters = Record<string, any>
+>({
+  queryKey,
+  fetchPage,
+  filters,
+  defaultPageSize = 10,
+  defaultSort,
+  ...tableProps
+}: PaginatedTableProps<TData, TFilters>) => {
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(defaultPageSize);
+  const [sortValue, setSortValue] = useState<string>(
+    defaultSort ?? String(tableProps.sortOptions[0]?.value ?? "")
+  );
+
+  useEffect(() => {
+    setPage(0);
+  }, [filters]);
+
+  const {
+    data,
+    isLoading,
+    isError,
+    error,
+    refetch,
+    isFetching,
+  } = useQuery({
+    queryKey: [queryKey, page, pageSize, sortValue, filters],
+    queryFn: () =>
+      fetchPage({ page, size: pageSize, sort: sortValue, filters }),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+
+  const pageData = data?.data ?? [];
+  const meta = data?.meta ?? {};
+  const currentPage =
+    typeof meta.currentPage === "number" ? meta.currentPage : page;
+  const totalPages = meta.totalPages ?? 0;
+  const totalItems = meta.totalItems ?? 0;
+  const resolvedPageSize = meta.pageSize ?? pageSize;
+
+  const handlePageSizeChange = (newSize: number) => {
+    setPageSize(newSize);
+    setPage(0);
+  };
+
+  const handleSortChange = (newSort: string) => {
+    setSortValue(String(newSort));
+    setPage(0);
+  };
+
+  if (isLoading) {
+    return <TablePlaceholder rowCount={resolvedPageSize} />;
+  }
+
+  if (isError) {
+    return (
+      <TableErrorState message={(error as Error).message} onRetry={refetch} />
+    );
+  }
+
+  return (
+    <Table<TData>
+      {...tableProps}
+      data={pageData}
+      dataIdKey={tableProps.dataIdKey}
+      page={currentPage}
+      pageSize={resolvedPageSize}
+      totalPages={totalPages}
+      totalItems={totalItems}
+      sortValue={sortValue}
+      onPageChange={setPage}
+      onPageSizeChange={handlePageSizeChange}
+      onSortChange={handleSortChange}
+      isFetching={isFetching}
+    />
   );
 };
 

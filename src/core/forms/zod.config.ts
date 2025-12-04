@@ -61,21 +61,19 @@ const errorMap: z.ZodErrorMap = (issue, _ctx) => {
       else if (issue.type === "string")
         message = `رشته باید شامل ${issue.exact ? "دقیقاً" : issue.inclusive ? `حداقل` : `بیشتر از`} ${issue.minimum} کاراکتر باشد`;
       else if (issue.type === "number")
-        message = `عدد باید ${
-          issue.exact
+        message = `عدد باید ${issue.exact
             ? `دقیقاً برابر با `
             : issue.inclusive
               ? `بیشتر یا مساوی با `
               : `بیشتر از `
-        }${issue.minimum} باشد`;
+          }${issue.minimum} باشد`;
       else if (issue.type === "date")
-        message = `تاریخ باید ${
-          issue.exact
+        message = `تاریخ باید ${issue.exact
             ? `دقیقاً برابر با `
             : issue.inclusive
               ? `بیشتر یا مساوی با `
               : `بیشتر از `
-        }${new Date(Number(issue.minimum))} باشد`;
+          }${new Date(Number(issue.minimum))} باشد`;
       else message = "ورودی نامعتبر است";
       break;
     case z.ZodIssueCode.too_big:
@@ -84,29 +82,26 @@ const errorMap: z.ZodErrorMap = (issue, _ctx) => {
       else if (issue.type === "string")
         message = `رشته باید شامل ${issue.exact ? `دقیقاً` : issue.inclusive ? `حداکثر` : `کمتر از`} ${issue.maximum} کاراکتر باشد`;
       else if (issue.type === "number")
-        message = `عدد باید ${
-          issue.exact
+        message = `عدد باید ${issue.exact
             ? `دقیقاً`
             : issue.inclusive
               ? `کمتر یا مساوی با`
               : `کمتر از`
-        } ${issue.maximum} باشد`;
+          } ${issue.maximum} باشد`;
       else if (issue.type === "bigint")
-        message = `BigInt باید ${
-          issue.exact
+        message = `BigInt باید ${issue.exact
             ? `دقیقاً`
             : issue.inclusive
               ? `کمتر یا مساوی با`
               : `کمتر از`
-        } ${issue.maximum} باشد`;
+          } ${issue.maximum} باشد`;
       else if (issue.type === "date")
-        message = `تاریخ باید ${
-          issue.exact
+        message = `تاریخ باید ${issue.exact
             ? `دقیقاً`
             : issue.inclusive
               ? `کوچکتر یا مساوی با`
               : `کوچکتر از`
-        } ${new Date(Number(issue.maximum))} باشد`;
+          } ${new Date(Number(issue.maximum))} باشد`;
       else message = "ورودی نامعتبر است";
       break;
     case z.ZodIssueCode.custom:

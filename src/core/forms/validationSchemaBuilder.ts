@@ -1,6 +1,6 @@
 // src/utils/schemaBuilder.ts
 import { z } from "zod";
-import type{ ZodTypeAny,ZodRawShape } from "zod";
+import type { ZodTypeAny, ZodRawShape } from "zod";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
 export function buildZodSchemaFromMeta<

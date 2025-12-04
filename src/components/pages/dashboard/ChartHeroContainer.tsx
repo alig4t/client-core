@@ -114,9 +114,9 @@ const Skeleton: ReactElement = (
       icon={Layers}
       className="h-[40rem]"
     >
-      {/* بخش نمودار */}
+      {/* Chart section */}
       <div className="relative h-42 border-b border-gray-200 pt-0 pb-6">
-        {/* محور Y - خطوط افقی خیالی */}
+        {/* Y axis - Imaginary horizontal lines */}
         {Array.from({ length: 5 }).map((_, i) => (
           <div
             key={i}
@@ -125,14 +125,14 @@ const Skeleton: ReactElement = (
           ></div>
         ))}
 
-        {/* خط خیالی */}
+        {/* Imaginary line */}
         {/* <div className="absolute bottom-8 left-0 right-0 h-px bg-purple-500 animate-pulse"></div>
         <div
           className="absolute bottom-0 left-0 right-0 h-px bg-green-500 animate-pulse"
           style={{ top: "10%" }}
         ></div> */}
 
-        {/* نقاط خیالی روی خطوط */}
+        {/* Imaginary points on lines */}
         {Array.from({ length: 7 }).map((_, i) => (
           <div
             key={i}
@@ -155,7 +155,7 @@ const Skeleton: ReactElement = (
           ></div>
         ))}
 
-        {/* محور X - برچسب‌های خیالی */}
+        {/* X axis - Imaginary labels */}
         <div className="absolute bottom-0 left-0 right-0 flex justify-between px-4 text-xs text-gray-500">
           {[
             "۱ تیر",

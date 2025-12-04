@@ -66,8 +66,8 @@ api.interceptors.response.use(
   // Cast to any to allow returning ApiResponse instead of AxiosResponse
   ((response: AxiosResponse<ApiResponse>) => {
     stopProgress();
-     if (response.config.responseType === 'blob') {
-      return response; // کل response را برگردان
+    if (response.config.responseType === 'blob') {
+      return response; // Return the full response
     }
     const responseData = response.data;
     if (responseData && responseData.type === 'error' && responseData.status >= 400) {
@@ -91,7 +91,7 @@ api.interceptors.response.use(
       });
       return Promise.reject(error);
     }
-    
+
     const responseData = error.response.data;
     let errorMessage = "یک خطای پیش‌بینی نشده رخ داده است.";
 
@@ -99,20 +99,20 @@ api.interceptors.response.use(
       if (typeof responseData.data === 'string') errorMessage = responseData.data;
       else if (typeof responseData.message === 'string') errorMessage = responseData.message;
     }
-    
+
     error.message = errorMessage;
-    
+
     if (error.response.status === 401) {
-        localStorage.removeItem("token");
-        if (window.location.pathname !== '/login') {
-            toast.error("نشست شما منقضی شده", {
-                description: "لطفاً دوباره وارد شوید.",
-                position: "bottom-left",
-            });
-            setTimeout(() => {
-                window.location.href = '/login';
-            }, 1500);
-        }
+      localStorage.removeItem("token");
+      if (window.location.pathname !== '/login') {
+        toast.error("نشست شما منقضی شده", {
+          description: "لطفاً دوباره وارد شوید.",
+          position: "bottom-left",
+        });
+        setTimeout(() => {
+          window.location.href = '/login';
+        }, 1500);
+      }
     }
 
     return Promise.reject(error);

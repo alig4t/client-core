@@ -42,7 +42,7 @@ const Navbar: React.FC = () => {
         className="flex items-center justify-between p-6 lg:px-8 max-w-7xl mx-auto"
         aria-label="Global"
       >
-        {/* لوگو */}
+        {/* Logo */}
         <div className="flex lg:flex-1">
           <a
             href="#"
@@ -56,7 +56,7 @@ const Navbar: React.FC = () => {
           </a>
         </div>
 
-        {/* آیتم‌های ناوبری */}
+        {/* Navigation items */}
         <div className="hidden lg:flex lg:gap-x-12">
           {navItems.map((item) => (
             <a
@@ -69,7 +69,7 @@ const Navbar: React.FC = () => {
           ))}
         </div>
 
-        {/* ✅ بخش سمت راست: اگر لاگین نکرده */}
+        {/* ✅ Right section: if not logged in */}
         {!user ? (
           <div className="lg:flex lg:flex-1 lg:justify-end space-x-4">
             <a
@@ -92,7 +92,7 @@ const Navbar: React.FC = () => {
             </a>
           </div>
         ) : (
-          // ✅ اگر کاربر لاگین کرده
+          // ✅ If user is logged in
           <div className="lg:flex lg:flex-1 lg:justify-end space-x-4">
             <button
               onClick={() => navigate("/dashboard")}
@@ -110,7 +110,7 @@ const Navbar: React.FC = () => {
         )}
       </nav>
 
-      {/* مودال ورود / ثبت نام */}
+      {/* Login / Register Modal */}
       <ModalAnimation
         title={login ? "ورود" : "ثبت نام"}
         isOpen={login || signUp}

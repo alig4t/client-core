@@ -4,7 +4,7 @@ import { Suspense } from "react";
 
 import Layout from "@/components/Layout/Layout";
 import NotFoundPage from "@/components/NotFoundPage";
-import { routeConfig } from "./Routes"; // ✅ بدون 'type'
+import { routeConfig } from "./Routes"; // ✅ Without 'type'
 import PublicRoute from "./PublicRoute";
 import ProtectedRoute from "./ProtectedRoute";
 import LazyFallbackElement from "./LazyFallbackElement";

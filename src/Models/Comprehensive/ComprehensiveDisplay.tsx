@@ -1,5 +1,6 @@
 // src/pages/ComprehensiveDisplay.tsx
 import React from "react";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/components/general/RecordDisplayLayout";
@@ -10,22 +11,23 @@ import { DisplayField } from "@/components/general/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import { useNavigate } from "react-router-dom";
 import Button from "@/components/Button/Button";
-import Breadcrumb, {
-  type BreadcrumbItem,
-} from "@/core/components/general/BreadCrumb";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
 import { getViewPath } from "@/router/RouteUtils";
+import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 
 const ComprehensiveDisplayPage: React.FC = () => {
-  const { id } = useParams<{ id: string }>(); // گرفتن id از URL
+  const { id } = useParams<{ id: string }>(); // Get id from URL
   const navigate = useNavigate();
 
-  // دریافت داده‌ها با React Query
+  // Fetch data with React Query
   const {
     data: comprehensiveRecord,
     isLoading,
@@ -35,26 +37,22 @@ const ComprehensiveDisplayPage: React.FC = () => {
   } = useQuery({
     queryKey: ["comprehensive", id],
     queryFn: () => ComprehensiveService.getById(Number(id)),
-    enabled: !!id, // فقط وقتی id وجود داره اجرا بشه
-    retry: 1, // در صورت خطا، یکبار retry کنه
-    staleTime: 5 * 60 * 1000, // 5 دقیقه cache
+    enabled: !!id, // Execute only when id exists
+    ...ReactQueryOptions.displayOptions,
   });
 
-  // Breadcrumb برای ناوبری
-  const breadcrumbItems: BreadcrumbItem[] = [
-    { label: "خانه", href: "/dashboard" },
-    { label: "پورتال", href: "/dashboard/portal" },
-    { label: "مدیریت ترکیبی", href: "/dashboard/portal/comprehensive" },
-    { label: "جزئیات رکورد" },
-  ];
 
-  // هندلر برای دکمه ویرایش
+
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs("جزئیات رکورد");
+
+  // Handler for edit button
   const handleEditClick = () => {
     console.log(getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, id));
     navigate(getViewPath(VIEWNAME.COMPREHENSIVE_EDIT, id));
   };
 
-  // نمایش حالت‌های مختلف (Loading, Error, Success)
+  // Show different states (Loading, Error, Success)
   if (isLoading) {
     return (
       <PageWrapper>
@@ -134,21 +132,17 @@ const ComprehensiveDisplayPage: React.FC = () => {
             />
             <DisplayField
               label={comprehensiveModelMeta.fields.localDateTimeField.label}
-              value={DateUtil.GEORGIAN_TO_JALALI(
+              value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
                 comprehensiveRecord.localDateTimeField
               )}
             />
-            {/* <DisplayField
+            <DisplayField
               label={comprehensiveModelMeta.fields.enumField.label}
-              value={<>{
-
-                comprehensiveModelMeta.fields.enumField.options?.find(
-                  (opt) => opt.value === comprehensiveRecord.enumField
-                )?.label || comprehensiveRecord.enumField
-              }</>
-
-              }
-            /> */}
+              value={OptionUtils.getLabel(
+                comprehensiveRecord.enumField,
+                ComprehensiveEnumFieldOptionLabels
+              )}
+            />
             <DisplayField
               label={comprehensiveModelMeta.fields.uniqueField.label}
               value={comprehensiveRecord.uniqueField}

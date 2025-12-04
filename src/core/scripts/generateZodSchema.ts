@@ -11,10 +11,10 @@ export function generateZodSchemaCode(meta: typeof comprehensiveModelMeta): stri
 
     const label = fieldMeta.label || key;
 
-    // همه فیلدهای required غیر از boolean به صورت string + nonempty
-    // (چون فرم‌ها string می‌فرستند)
+    // All required fields except boolean as string + nonempty
+    // (Because forms send strings)
     if (fieldMeta.type === "boolean") {
-      // اگر boolean required باشد (کمتر رایج)
+      // If boolean is required (less common)
       lines.push(`  ${key}: z.boolean(), // ${label}`);
     } else {
       lines.push(`  ${key}: z.string().nonempty("${label} را وارد نمایید"),`);

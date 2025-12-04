@@ -1,17 +1,17 @@
 import type { FormFieldMetadata } from "./FieldFormTypes";
 
 export interface Option {
-    value: string | number;
-    label: string;
+  value: string | number;
+  label: string;
 }
 
 export const YES_OR_NO_OPTIONS: Option[] = [
-    { value: 1, label: "بله" },
-    { value: 0, label: "نه" },
+  { value: 1, label: "بله" },
+  { value: 0, label: "نه" },
 ];
 
 export const GET_BOOLEAN_OPTION = (value: boolean): string => {
-    return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
+  return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
 }
 
 
@@ -25,7 +25,7 @@ export const PAGE_SIZE_OPTIONS: Option[] = [
 
 
 /**
- * ساخت خودکار گزینه‌های مرتب‌سازی بر اساس متادیتای مدل
+ * Automatically build sort options based on model metadata
  */
 export function buildSortOptions<
   TModel extends Record<string, any>,
@@ -39,7 +39,7 @@ export function buildSortOptions<
 ): Option[] {
   const options: Option[] = [];
 
-  // Object.keys را به keyof TModel تبدیل می‌کنیم و فیلتر می‌زنیم
+  // Convert Object.keys to keyof TModel and filter
   (Object.keys(modelMeta.fields) as Array<keyof typeof modelMeta.fields>)
     .filter((key): key is keyof TModel => {
       const meta = modelMeta.fields[key];
@@ -59,11 +59,40 @@ export function buildSortOptions<
   return options;
 }
 
+/**
+ * Convert an enum and a label mapping into an array of Options.
+ * @param enumObj The enum object (e.g., EnumFieldOption)
+ * @param labels The mapping of enum values to labels
+ */
+export function getOptions(
+  enumObj: Record<string, string | number>,
+  labels: Record<string | number, string>
+): Option[] {
+  return Object.values(enumObj).map((value) => ({
+    value,
+    label: labels[value] || String(value),
+  }));
+}
+
+/**
+ * Get the label for a specific enum value.
+ * @param value The enum value
+ * @param labels The mapping of enum values to labels
+ */
+export function getLabel(
+  value: string | number,
+  labels: Record<string | number, string>
+): string {
+  return labels[value] || String(value);
+}
+
 const OptionUtils = {
   YES_OR_NO_OPTIONS,
   GET_BOOLEAN_OPTION,
   PAGE_SIZE_OPTIONS,
-  buildSortOptions
+  buildSortOptions,
+  getOptions,
+  getLabel,
 }
 
 export default OptionUtils;

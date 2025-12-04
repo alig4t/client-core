@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 const iconButtonStyle =
   "!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200";
 
+import { useAuth } from "@/stores/AuthContext";
+
 const TableLink: React.FC<{
   to?: string;
   onClick?: () => void;
@@ -15,6 +17,7 @@ const TableLink: React.FC<{
   className?: string;
   tooltipText?: string;
   tooltipSide?: "left" | "right" | "top" | "bottom";
+  permission?: string;
 }> = ({
   to,
   onClick,
@@ -22,29 +25,36 @@ const TableLink: React.FC<{
   className = "",
   tooltipText = "مشاهده",
   tooltipSide = "bottom",
+  permission,
 }) => {
-  return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        {to ? (
-          <Link className={`${iconButtonStyle} ${className}`} to={to}>
-            {children}
-          </Link>
-        ) : (
-          <button
-            className={`${iconButtonStyle}  ${className}`}
-            onClick={onClick}
-          >
-            {children}
-          </button>
-        )}
-      </TooltipTrigger>
+    const { hasPermission } = useAuth();
 
-      <TooltipContent side={tooltipSide} sideOffset={10}>
-        <p>{tooltipText}</p>
-      </TooltipContent>
-    </Tooltip>
-  );
-};
+    if (permission && !hasPermission(permission)) {
+      return null;
+    }
+
+    return (
+      <Tooltip>
+        <TooltipTrigger asChild>
+          {to ? (
+            <Link className={`${iconButtonStyle} ${className}`} to={to}>
+              {children}
+            </Link>
+          ) : (
+            <button
+              className={`${iconButtonStyle}  ${className}`}
+              onClick={onClick}
+            >
+              {children}
+            </button>
+          )}
+        </TooltipTrigger>
+
+        <TooltipContent side={tooltipSide} sideOffset={10}>
+          <p>{tooltipText}</p>
+        </TooltipContent>
+      </Tooltip>
+    );
+  };
 
 export default TableLink;

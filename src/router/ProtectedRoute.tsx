@@ -9,7 +9,7 @@ const ProtectedRoute = () => {
   const { isAuthenticated, hasPermission, user } = useAuth();
   const location = useLocation();
 
-  // اگر لاگین نیست
+  // If not logged in
   if (!isAuthenticated || !user) {
     return <Navigate to="/login" state={{ from: location }} replace />;
   }
@@ -18,7 +18,7 @@ const ProtectedRoute = () => {
     (route) => route.path === location.pathname
   );
 
-  // اگر مسیر نیاز به مجوز دارد و کاربر ندارد
+  // If route requires permission and user doesn't have it
   if (currentRoute?.permission && !hasPermission(currentRoute.permission)) {
     // return <Navigate to="/dashboard" replace />;
     return <ForbiddenPage />;

@@ -1,19 +1,19 @@
 // src/core/filters/filterOperators.ts
 
 /**
- * عملگرهای فیلترینگ پشتیبانی‌شده توسط سرور (Spring Data JPA Specification)
+ * Supported filtering operators by server (Spring Data JPA Specification)
  * 
- * الگوی URL: ?field_operation=value
- * مثال:
- *   - name_like=bot        → جستجوی متنی
- *   - createdAt_ge=2025-01-01 → تاریخ از
- *   - price_le=100         → قیمت تا
+ * URL Pattern: ?field_operation=value
+ * Example:
+ *   - name_like=bot        → Text search
+ *   - createdAt_ge=2025-01-01 → Date from
+ *   - price_le=100         → Price to
  */
 
-// --- انواع عملگرها (type-safe) ---
+// --- Operator types (type-safe) ---
 export type FilterOperator = 'like' | 'eq' | 'ne' | 'gt' | 'lt' | 'ge' | 'le';
 
-// --- شیء ثابت برای دسترسی راحت ---
+// --- Constant object for easy access ---
 export const FilterOperator = {
   LIKE: 'like' as const,
   EQ: 'eq' as const,
@@ -25,11 +25,11 @@ export const FilterOperator = {
 } as const;
 
 
-// --- تابع ساخت کلید فیلتر (field_operation) ---
+// --- Function to build filter key (field_operation) ---
 export const buildFilterKey = (fieldName: string, operator: FilterOperator): string => {
   return `${fieldName}_${operator}`;
 };
 
-// --- مثال استفاده:
+// --- Usage example:
 // buildFilterKey("createdAt", FilterOperator.GE) → "createdAt_ge"
 // buildFilterKey("name", FilterOperator.LIKE) → "name_like"

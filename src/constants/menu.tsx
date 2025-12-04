@@ -36,7 +36,7 @@ const mainMenu = [
   { icon: <Settings size={24} />, label: "امنیت", href: "/dashboard/security" },
 ];
 
-// لیست زیرمنوها
+// Submenu list
 export const subMenus: Record<
   string,
   { label: string; href: string; icon: JSX.Element }[]

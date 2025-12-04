@@ -24,7 +24,7 @@ export const baseModelMeta = {
 } as const;
 
 /**
- * ساخت متادیتای کامل یک مدل شامل فیلدها، نام نمایشی و پیام‌های استاندارد
+ * Build full metadata for a model including fields, display name, and standard messages
  */
 export function createModelMeta<
   T extends Record<string, any>,
@@ -35,18 +35,18 @@ export function createModelMeta<
   displayName: string,
   pluralDisplayName: string
 ) {
-  // ✅ پیام‌ها را یک‌بار در اینجا می‌سازیم
+  // ✅ We create messages once here
   const messages = createMessages(displayName, pluralDisplayName);
 
   return {
     fields: {
-      // Type assertion برای ادغام base fields
+      // Type assertion to merge base fields
       ...(baseModelMeta.fields as unknown as Record<keyof T, M>),
       ...specificFields,
     },
     displayField,
     displayName,
     pluralDisplayName,
-    messages, // ✅ خروجی نهایی شامل پیام‌هاست
+    messages, // ✅ Final output includes messages
   };
 }

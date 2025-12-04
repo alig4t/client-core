@@ -22,5 +22,5 @@ export const ALLOWED_FILE_EXTENSIONS = ALLOWED_FILE_TYPES
   })
   .filter(Boolean) as string[];
 
-// برای accept attribute
+// For accept attribute
 export const ACCEPT_FILE_STRING = ALLOWED_FILE_TYPES.join(',');
