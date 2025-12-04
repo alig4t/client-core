@@ -1,4 +1,5 @@
 import type { BaseModel } from "../../core/models/BaseModel";
+import type { AttachmentModel } from "../Attachment/AttachmentModel";
 import type { ChannelModel } from "../Channel/ChannelModel";
 import type { UserModel } from "../User/UserModel";
 import type { ComprehensiveEnumFieldOption } from "./ComprehensiveEnumField";
@@ -18,4 +19,5 @@ export interface ComprehensiveModel extends BaseModel {
     indexedField: string;
     oneToOneUser: UserModel;
     manyToOneChannel: ChannelModel;
+    attachments: AttachmentModel[];
 }
