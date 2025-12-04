@@ -34,6 +34,7 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
   integerField: Validator.notNull(),
+  indexedField: Validator.notNull(),
   longField: Validator.notNull(),
   doubleField: Validator.notNull(),
   bigDecimalField: Validator.notNull(),
@@ -65,7 +66,9 @@ const ComprehensiveCreate: React.FC = () => {
       if (isEditMode) {
         return ComprehensiveService.update(Number(id), data);
       }
-      return ComprehensiveService.create(data);
+      return ComprehensiveService.create(
+        {...data,oneToOneUser: { id: 2 } as any}
+      );
     },
     onSuccess: (data) => {
       toast.success(
@@ -172,6 +175,15 @@ const ComprehensiveCreate: React.FC = () => {
                   label={comprehensiveModelMeta.fields.doubleField?.label}
                   placeholder={
                     comprehensiveModelMeta.fields.doubleField?.placeholder
+                  }
+                />
+                
+                <FormInput
+                  name="indexedField"
+                  type="number"
+                  label={comprehensiveModelMeta.fields.indexedField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.indexedField?.placeholder
                   }
                 />
               </RowContainer>
