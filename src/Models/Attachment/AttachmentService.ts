@@ -1,15 +1,15 @@
 // services/DocumentService.ts
 import { api } from '@/core/service/Axios';
 import type { ApiResponse } from '@/core/service/Axios';
-import type { DocumentModel } from './DocumentModel';
+import type { AttachmentModel } from './AttachmentModel';
 
-class DocumentService {
-  async upload(file: File): Promise<DocumentModel> {
+class AttachmentService {
+  async upload(file: File): Promise<AttachmentModel> {
     const formData = new FormData();
     formData.append('file', file);
 
 
-    const response = await api.post<DocumentModel>(
+    const response = await api.post<AttachmentModel>(
       '/document/upload',
       formData,
       {
@@ -39,4 +39,4 @@ class DocumentService {
 
 }
 
-export default new DocumentService();
+export default new AttachmentService();

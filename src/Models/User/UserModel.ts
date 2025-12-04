@@ -6,3 +6,5 @@ export interface UserModel extends BaseModel {
     username: string;
     roles: RoleModel[];
 }
+
+export type UserIdentifier = Pick<UserModel, 'id'>;

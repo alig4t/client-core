@@ -3,8 +3,9 @@ import React, { useRef, useState, useEffect, useCallback } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
 import { UploadCloud, X, Loader2, FileText } from "lucide-react";
 import type { FieldError } from "react-hook-form";
-import DocumentService from "@/Models/Document/DocumentService";
+
 import { ACCEPT_FILE_STRING, ALLOWED_FILE_EXTENSIONS, ALLOWED_FILE_TYPES } from "./fileUtils";
+import AttachmentService from "@/Models/Attachment/AttachmentService";
 
 
 // Detect image from mimeType
@@ -79,10 +80,10 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
 
     const fetchPreview = async () => {
       try {
-        const token = await DocumentService.getToken(fileId);
+        const token = await AttachmentService.getToken(fileId);
         if (abortController.signal.aborted) return;
 
-        const blob = await DocumentService.downloadAsBlob(token);
+        const blob = await AttachmentService.downloadAsBlob(token);
         if (abortController.signal.aborted) return;
 
         objectUrl = URL.createObjectURL(blob);
@@ -117,7 +118,7 @@ export const FormUploader: React.FC<FormUploaderProps> = ({
 
     setIsUploading(true);
     try {
-      const doc = await DocumentService.upload(file);
+      const doc = await AttachmentService.upload(file);
       handleUploadSuccess(doc); // ✅ Process mimeType
       setValue(name, doc.id, { shouldValidate: true, shouldDirty: true });
     } catch (error) {

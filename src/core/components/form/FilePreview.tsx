@@ -2,9 +2,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Loader2, X, Eye, FileText, AlertTriangle } from "lucide-react";
 import { motion, AnimatePresence, type Variants } from "framer-motion";
+import AttachmentService from "@/Models/Attachment/AttachmentService";
 
 // 🚨 Assuming this service is available.
-import DocumentService from "@/Models/Document/DocumentService";
 
 interface FilePreviewProps {
   fileId: number;
@@ -65,9 +65,9 @@ const FilePreview: React.FC<FilePreviewProps> = ({
       setIsLoading(true);
       setError(null);
       try {
-        const token = await DocumentService.getToken(fileId);
+        const token = await AttachmentService.getToken(fileId);
         if (abortController.signal.aborted) return;
-        const blob = await DocumentService.downloadAsBlob(token);
+        const blob = await AttachmentService.downloadAsBlob(token);
         if (abortController.signal.aborted) return;
         if (objectUrlRef.current) {
           URL.revokeObjectURL(objectUrlRef.current);
