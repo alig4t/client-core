@@ -261,7 +261,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
             </div>
 
             {/* Table */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 max-w-[380px] sm:max-w-[496px] md:max-w-[894px] lg:max-w-full">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-right">
                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium border-b border-gray-100 dark:border-gray-700">

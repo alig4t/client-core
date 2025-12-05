@@ -180,25 +180,11 @@ const ComprehensiveDisplayPage: React.FC = () => {
               label={comprehensiveModelMeta.fields.updatedAt.label}
               value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveRecord.updatedAt)}
             />
+            
             <DisplayField
               label="پیوست"
               value={
-                (comprehensiveRecord as any).file ? (
-                  <FilePreview
-                    fileId={(comprehensiveRecord as any).file.id}
-                    previewSize="sm"
-                    className="mr-2"
-                  />
-                ) : (
-                  "بدون فایل"
-                )
-              }
-            />
-
-            <DisplayField
-              label="پیوست"
-              value={
-                <FilePreview fileId={37} previewSize="sm" className="mr-2" />
+                <FilePreview fileId={(comprehensiveRecord as any).attachments?.[0]?.id} previewSize="sm" className="mr-2" />
               }
             />
           </RowContainer>

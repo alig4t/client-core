@@ -35,15 +35,15 @@ import { getViewPath } from "@/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 
 const comprehensiveSchema = z.object({
-  stringField: Validator.notNull(),
-  integerField: Validator.notNull(),
-  indexedField: Validator.notNull(),
-  longField: Validator.notNull(),
-  doubleField: Validator.notNull(),
-  bigDecimalField: Validator.notNull(),
-  booleanField: Validator.notNull(),
-  dateField: Validator.notNull(),
-  enumField: Validator.notNull(),
+  stringField: Validator.optional(),
+  integerField: Validator.optional(),
+  indexedField: Validator.optional(),
+  longField: Validator.optional(),
+  doubleField: Validator.optional(),
+  bigDecimalField: Validator.optional(),
+  booleanField: Validator.optional(),
+  dateField: Validator.optional(),
+  enumField: Validator.optional(),
   oneToOneUser: Validator.optional(),
   manyToOneChannel: Validator.optional(),
   uniqueField: Validator.optional(),
@@ -71,7 +71,41 @@ const ComprehensiveCreate: React.FC = () => {
       if (isEditMode) {
         return ComprehensiveService.update(Number(id), data);
       }
-      return ComprehensiveService.create({...data,attachmentIds:[data.attachmentIds]});
+      return ComprehensiveService.create(
+        {
+          ...data,
+
+          // oneToOneUser: {id:data.oneToOneUser.id} as any ,
+          // manyToOneChannel: {id:data.manyToOneChannel.id} as any,
+          // attachmentIds: [
+          //   data.attachmentIds
+          // ] as any
+
+          // "stringField": "eizgKgAbdlvvnetZjUy4Rn8jvRvwxwzWgHdqymIH",
+          // "integerField": "1000" as any,
+          // "longField": "9007199254740991" as any,
+          // "doubleField": "0.1" as any,
+          // "bigDecimalField": "0" as any,
+          // "booleanField": true,
+          // "dateField": "2025-12-05T16:56:44.510Z",
+          // "localDateField": "2025-12-05",
+          // "localDateTimeField": "2025-12-05T16:56:44.510Z",
+          // "enumField": "OPTION_A",
+          // "uniqueField": "string",
+          // "indexedField": "string",
+          // "oneToOneUser": {
+          //   "id": 1
+          // } as any,
+          // "manyToOneChannel": {
+          //   "id": 1
+          // } as any,
+          // "attachmentIds": [
+          //   2
+          // ] as any
+          attachmentIds:[data.attachmentIds] as any
+        }
+
+      );
     },
     onSuccess: (data) => {
       toast.success(
@@ -188,10 +222,10 @@ const ComprehensiveCreate: React.FC = () => {
                     comprehensiveModelMeta.fields.doubleField?.placeholder
                   }
                 />
-                
+
                 <FormInput
                   name="indexedField"
-                  type="number"
+                  type="text"
                   label={comprehensiveModelMeta.fields.indexedField?.label}
                   placeholder={
                     comprehensiveModelMeta.fields.indexedField?.placeholder
@@ -236,7 +270,7 @@ const ComprehensiveCreate: React.FC = () => {
                   labelKey="username"
                   valueKey="id"
                 />
-                
+
                 <FormAutoComplete
                   name="manyToOneChannel"
                   label={comprehensiveModelMeta.fields.manyToOneChannel?.label}
