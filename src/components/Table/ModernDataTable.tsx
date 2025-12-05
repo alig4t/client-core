@@ -8,7 +8,7 @@ import { Select } from "@/core/components/form/Select";
 import { Trash2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
 import TableErrorState from "@/components/Layout/TableErrorState";
 import ConfirmationModal from "@/components/general/ConfirmationModal";
-import { TBODY } from "@/core/components/Table/DataTable";
+import { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import type { BaseService } from "@/core/service/BaseService";
 import { publicMessages } from "@/core/forms/MessageUtils";
@@ -221,13 +221,13 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
     return (
         <div className="w-full space-y-4">
             {/* Header Controls */}
-            <div className="flex flex-col sm:flex-row justify-between
+            <div className="flex flex-col md:flex-row justify-between
              items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700
              max-w-full
              ">
                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
 
-                <div className="flex items-center gap-2 w-full sm:w-auto">
+                <div className="flex flex-wrap-reverse md:flex-nowrap items-center gap-2 w-full sm:w-auto">
                     {enableDelete && isSelectionMode && selectedIds.length > 0 && (
                         <Button
                             variant="danger"
@@ -261,12 +261,12 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
             </div>
 
             {/* Table */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 max-w-[380px] sm:max-w-[496px] md:max-w-[894px] lg:max-w-full">
-                <div className="overflow-x-auto">
-                    <table className="w-full text-sm text-right">
+            <div className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+                <div className="relative w-full overflow-x-auto">
+                    <table className="min-w-full text-sm text-right">
                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium border-b border-gray-100 dark:border-gray-700">
                             <tr>
-                                {isSelectionMode && <th className="p-4 w-12 text-center">#</th>}
+                                {isSelectionMode && <THEAD className="">#</THEAD>}
                                 {header}
                             </tr>
                         </thead>

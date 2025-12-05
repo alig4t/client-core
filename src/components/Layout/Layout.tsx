@@ -9,7 +9,9 @@ export default function Layout() {
   return (
     <div className="flex bg-muted/40 dark:bg-background w-full mx-auto">
       <AppSidebar />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col responsive-max"
+        // style={{ maxWidth: 'calc(100% - 64px)' }}
+      >
         <Navbar />
         {/* Remove background from main to inherit from parent background */}
         <main className="flex flex-col lg:flex-row min-h-[calc(100dvh-64px)] bg-[var(--background)]">

@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      maxWidth: {
+        'sm-calc-64': 'calc(100% - 64px)',
+      },
       // This section connects your CSS variables to Tailwind classes.
       // It's the most crucial part.
       colors: {

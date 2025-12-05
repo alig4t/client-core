@@ -87,6 +87,15 @@ button:focus-visible {
   }
 } */
 
+.responsive-max {
+  max-width: 100%;
+}
+
+@media (min-width: 640px) {
+  .responsive-max {
+    max-width: calc(100% - 64px);
+  }
+}
 
 .custom-scrollbar {
   overflow-y: auto;
