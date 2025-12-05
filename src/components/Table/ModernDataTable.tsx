@@ -11,6 +11,8 @@ import ConfirmationModal from "@/components/general/ConfirmationModal";
 import { TBODY } from "@/core/components/Table/DataTable";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import type { BaseService } from "@/core/service/BaseService";
+import { publicMessages } from "@/core/forms/MessageUtils";
+import { toast } from "sonner";
 
 // --- Types ---
 export type RenderRowFunction<T> = (
@@ -120,9 +122,21 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: [queryKey] });
             setSelectedIds([]);
+            toast.success(publicMessages.delete.success.title,
+                {
+                    description: publicMessages.delete.success.description,
+                    position: "bottom-left",
+                }
+            );
         },
         onError: (error) => {
             console.error("Delete failed:", error);
+            toast.success(publicMessages.delete.error.title,
+                {
+                    description: error?.message || publicMessages.delete.success.description,
+                    position: "bottom-left",
+                }
+            );
         },
     });
 
@@ -175,11 +189,15 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
     // --- Skeleton Loading ---
     const renderSkeleton = () => {
 
-        const headerArray = React.Children.toArray(
-            (header as React.ReactElement)?.props?.children ?? []
-        );
+        let childrenCount = 0;
 
-        const childrenCount = headerArray.length;
+        if (React.isValidElement(header)) {
+
+            const props = header.props as { children?: React.ReactNode };
+            childrenCount = React.Children.toArray(props.children).length;
+        } else {
+            childrenCount = React.Children.toArray(header).length;
+        }
         console.log(childrenCount)
         return Array.from({ length: pageSize }).map((_, index) => (
             <tr key={`skeleton-${index}`} className="animate-pulse border-b border-gray-100 dark:border-gray-800">
@@ -203,7 +221,10 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
     return (
         <div className="w-full space-y-4">
             {/* Header Controls */}
-            <div className="flex flex-col sm:flex-row justify-between items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
+            <div className="flex flex-col sm:flex-row justify-between
+             items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700
+             max-w-full
+             ">
                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
 
                 <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -240,7 +261,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
             </div>
 
             {/* Table */}
-            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div className="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700">
                 <div className="overflow-x-auto">
                     <table className="w-full text-sm text-right">
                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium border-b border-gray-100 dark:border-gray-700">

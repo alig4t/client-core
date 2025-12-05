@@ -1,4 +1,4 @@
-import React, { memo } from "react";
+import React, { memo, type ReactNode } from "react";
 import { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import DateUtil from "@/core/forms/DateUtils";
 import OptionUtils from "@/core/forms/OptionUtils";
@@ -88,27 +88,27 @@ const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo
     );
 });
 
-export const ComprehensiveTableHeaders = (
-    <>
-        <THEAD>{comprehensiveModelMeta.fields.id.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.stringField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.integerField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.enumField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.longField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.doubleField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.bigDecimalField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.booleanField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.dateField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.localDateField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.localDateTimeField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.uniqueField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.indexedField.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.oneToOneUser.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.manyToOneChannel.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.createdAt.label}</THEAD>
-        <THEAD>{comprehensiveModelMeta.fields.updatedAt.label}</THEAD>
-        <THEAD>عملیات</THEAD>
-    </>
+export const ComprehensiveTableHeaders: ReactNode = (
+  <>
+    <THEAD>{comprehensiveModelMeta.fields.id.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.stringField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.integerField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.enumField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.longField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.doubleField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.bigDecimalField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.booleanField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.dateField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.localDateField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.localDateTimeField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.uniqueField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.indexedField.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.oneToOneUser.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.manyToOneChannel.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.createdAt.label}</THEAD>
+    <THEAD>{comprehensiveModelMeta.fields.updatedAt.label}</THEAD>
+    <THEAD>عملیات</THEAD>
+  </>
 );
 
 export default ComprehensiveTableColumns;

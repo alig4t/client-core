@@ -1,8 +1,8 @@
 // src/pages/PermissionCreate.tsx
 
 import React from "react";
-import { useNavigate } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 import permissionService from "@/Models/Permission/PermissionService";
@@ -11,145 +11,167 @@ import Spinner from "@/components/general/Spinner";
 import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import FormInput from "@/core/components/form/FormInput";
+import Validator from "@/core/forms/validation";
+import PermissionService from "@/Models/Permission/PermissionService";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { VIEWNAME } from "@/router/ViewName";
+import { getViewPath } from "@/router/RouteUtils";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { PageWrapper } from "@/components/Layout/PageWrapper";
+import TablePlaceholder from "@/components/Layout/TablePlaceholder";
+import PageTransition from "@/components/Layout/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import PageHeader from "@/core/components/general/PageHeader";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { RowContainer } from "@/components/general/RowContainer";
+import ButtonPanel from "@/components/Button/ButtonPanel";
+import Button from "@/components/Button/Button";
 
-// --- Schema and Type for validation ---
+
 const permissionSchema = z.object({
-  showName: z.string().nonempty("نام نمایشی را وارد نمایید"),
-  name: z.string().nonempty("نام سیستمی را وارد نمایید"),
+  showName: Validator.notNull(),
+  name: Validator.notNull(),
+
 });
 type PermissionFormData = z.infer<typeof permissionSchema>;
 
-// // --- Form Fields Component ---
-// function PermissionFormFields() {
-//   const {
-//     register,
-//     formState: { errors },
-//   } = useFormContext<PermissionFormData>();
-
-//   return (
-//     <>
-//       <div className="w-full">
-//         <label
-//           htmlFor="showName"
-//           className="block text-sm font-medium text-gray-700 text-right mb-1"
-//         >
-//           {permissionModelMeta.fields.showName?.label}
-//         </label>
-//         <input
-//           id="showName"
-//           type="text"
-//           placeholder="مثلا مدیریت کاربران"
-//           {...register("showName")}
-//           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
-//         />
-//         {errors.showName && <ErrorFormText msg={errors.showName.message} />}
-//       </div>
-
-//       <div className="w-full">
-//         <label
-//           htmlFor="name"
-//           className="block text-sm font-medium text-gray-700 text-right mb-1"
-//         >
-//           {permissionModelMeta.fields.name?.label}
-//         </label>
-//         <input
-//           id="name"
-//           type="text"
-//           placeholder="مثلا manage-users"
-//           {...register("name")}
-//           className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-purple-500"
-//         />
-//         {errors.name && <ErrorFormText msg={errors.name.message} />}
-//       </div>
-//     </>
-//   );
-// }
 
 // --- Main Component for Create Permission Page ---
 const PermissionCreate: React.FC = () => {
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>(); // Get id from URL
   const queryClient = useQueryClient();
+  const isEditMode = !!id; // Detect edit mode
+
+  // Load data in edit mode
+  const { data: initialData, isLoading: isLoadingInitial } = useQuery({
+    queryKey: ["permission", id],
+    queryFn: () => PermissionService.getById(Number(id)),
+    enabled: isEditMode,
+    ...ReactQueryOptions.editOptions,
+  });
 
   const mutation = useMutation({
-    mutationFn: (newPermission: PermissionFormData) => {
-      return permissionService.create(newPermission);
+    mutationFn: (data: PermissionFormData) => {
+      if (isEditMode) {
+        return PermissionService.update(Number(id), data);
+      }
+      return PermissionService.create(data);
     },
     onSuccess: (data) => {
-      toast.success("ایجاد دسترسی موفقیت‌آمیز بود", {
-        description: "دسترسی جدید با موفقیت ایجاد شد.",
-        position: "bottom-left",
-      });
+      toast.success(
+        isEditMode
+          ? PermissionModelMeta.messages.update.success.title
+          : PermissionModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? PermissionModelMeta.messages.update.success.description
+            : PermissionModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
+      );
       queryClient.invalidateQueries({ queryKey: ["permission"] });
-      // You can navigate to the permissions list page here
-      // navigate('/permissions');
+      navigate(getViewPath(VIEWNAME.PERMISSION_LIST));
     },
     onError: (error: any) => {
-      toast.error("خطا در ایجاد دسترسی", {
-        description: error?.message || "مشکلی در اتصال به سرور رخ داده است.",
-        position: "bottom-left",
-      });
+      toast.error(
+        isEditMode
+          ? PermissionModelMeta.messages.update.error.title
+          : PermissionModelMeta.messages.create.error.title,
+        {
+          description:
+            error?.message ||
+            (isEditMode
+              ? PermissionModelMeta.messages.update.error.defaultDescription
+              : PermissionModelMeta.messages.create.error
+                .defaultDescription),
+          position: "bottom-left",
+        }
+      );
     },
   });
 
   const onSubmit = (data: PermissionFormData) => {
     console.log(data);
-    // mutation.mutate(data);
+    mutation.mutate(data);
   };
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate(getViewPath(VIEWNAME.PERMISSION_LIST));
   };
 
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode ? "ویرایش دسترسی" : "ایجاد دسترسی جدید"
+  );
+
+  const routeMeta = useRouteMetadata();
+  if (isLoadingInitial && isEditMode) {
+    return (
+      <PageWrapper>
+        <TablePlaceholder rowCount={1} />
+      </PageWrapper>
+    );
+  }
+
   return (
-    <div dir="rtl" className="p-8 bg-gray-50 min-h-screen font-sans">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">ایجاد دسترسی جدید</h1>
-      </div>
 
-      <div className="bg-white p-6 rounded-lg border border-gray-200 shadow-md max-w-2xl mx-auto">
-        <FormWrapper
-          schema={permissionSchema}
-          onSubmit={onSubmit}
-          className="space-y-6"
-        >
-          <FormInput
-            name="showName"
-            label={PermissionModelMeta.fields.showName?.label || "نام نمایشی"}
-            placeholder="مثلاً مدیریت کاربران"
-          />
-          <FormInput
-            name="name"
-            label={PermissionModelMeta.fields.name?.label || "نام سیستمی"}
-            placeholder="مثلاً manage-users"
-          />
-          {/* <PermissionFormFields /> */}
+    <PageWrapper>
+      <PageTransition>
+        <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
-          <div className="flex items-center justify-end gap-4 mt-6">
-            <button
-              type="button"
-              onClick={handleCancel}
-              className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 font-medium hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 transition-colors"
+        <div className="sm:p-8 min-h-screen font-sans">
+          <PageHeader
+            title={routeMeta?.label || (isEditMode ? "ویرایش دسترسی" : "ایجاد دسترسی جدید")}
+          />
+
+          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
+            <FormWrapper
+              schema={permissionSchema}
+              onSubmit={onSubmit}
+              className="space-y-6"
+              defaultValues={initialData}
             >
-              لغو
-            </button>
-            <button
-              type="submit"
-              disabled={mutation.isPending}
-              className={`inline-flex items-center px-4 py-3 font-semibold text-white bg-purple-600 rounded-lg shadow-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 disabled:bg-purple-300 transition-colors duration-300`}
-            >
-              {mutation.isPending ? (
-                <>
-                  <Spinner className="w-4 h-4 ml-2" />
-                  در حال ذخیره...
-                </>
-              ) : (
-                "ذخیره"
-              )}
-            </button>
+
+              <RowContainer numberOfColumns={2}>
+                <FormInput
+                  type="text"
+                  name="showName"
+                  label={PermissionModelMeta.fields.showName?.label}
+                  placeholder={
+                    PermissionModelMeta.fields.showName?.placeholder
+                  }
+                />
+                <FormInput
+                  type="text"
+                  name="name"
+                  label={PermissionModelMeta.fields.name?.label}
+                  placeholder={
+                    PermissionModelMeta.fields.name?.placeholder
+                  }
+                />
+              </RowContainer>
+
+              {/* <PermissionFormFields /> */}
+
+              <ButtonPanel align="end">
+                <Button variant="cancel" onClick={handleCancel}>
+                  لغو
+                </Button>
+                <Button
+                  variant="primary"
+                  type="submit"
+                  loading={mutation.isPending}
+                  disabled={mutation.isPending}
+                >
+                  {isEditMode ? "به‌روزرسانی" : "ذخیره"}
+                </Button>
+              </ButtonPanel>
+            </FormWrapper>
           </div>
-        </FormWrapper>
-      </div>
-    </div>
+        </div>
+
+      </PageTransition>
+    </PageWrapper>
   );
 };
 

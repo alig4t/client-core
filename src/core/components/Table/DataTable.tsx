@@ -18,7 +18,7 @@ export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
 }) => {
   return (
     <th
-      className={`px-6 py-3 text-xs font-medium text-gray-500 uppercase text-center ${className}`}
+      className={`px-6 py-3 text-xs whitespace-nowrap font-medium text-gray-500 uppercase text-center ${className}`}
     >
       {children}
     </th>

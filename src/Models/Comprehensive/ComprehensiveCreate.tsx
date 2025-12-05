@@ -30,6 +30,9 @@ import TablePlaceholder from "@/components/Layout/TablePlaceholder";
 import UserService from "../User/UserService";
 import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { VIEWNAME } from "@/router/ViewName";
+import { getViewPath } from "@/router/RouteUtils";
+import ChannelService from "../Channel/ChannelService";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.notNull(),
@@ -42,7 +45,9 @@ const comprehensiveSchema = z.object({
   dateField: Validator.notNull(),
   enumField: Validator.notNull(),
   oneToOneUser: Validator.optional(),
-  attachments: Validator.optional(), // Change to attachments
+  manyToOneChannel: Validator.optional(),
+  uniqueField: Validator.optional(),
+  attachmentIds: Validator.optional(), // Change to attachments
 });
 
 type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
@@ -66,9 +71,7 @@ const ComprehensiveCreate: React.FC = () => {
       if (isEditMode) {
         return ComprehensiveService.update(Number(id), data);
       }
-      return ComprehensiveService.create(
-        {...data,oneToOneUser: { id: 2 } as any}
-      );
+      return ComprehensiveService.create({...data,attachmentIds:[data.attachmentIds]});
     },
     onSuccess: (data) => {
       toast.success(
@@ -83,7 +86,7 @@ const ComprehensiveCreate: React.FC = () => {
         }
       );
       queryClient.invalidateQueries({ queryKey: ["comprehensive"] });
-      navigate("/dashboard/portal/comprehensive");
+      navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
     },
     onError: (error: any) => {
       toast.error(
@@ -110,7 +113,7 @@ const ComprehensiveCreate: React.FC = () => {
 
 
   const handleCancel = () => {
-    navigate(-1);
+    navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
   };
 
 
@@ -154,6 +157,14 @@ const ComprehensiveCreate: React.FC = () => {
                   }
                 />
                 <FormInput
+                  type="text"
+                  name="uniqueField"
+                  label={comprehensiveModelMeta.fields.uniqueField?.label}
+                  placeholder={
+                    comprehensiveModelMeta.fields.uniqueField?.placeholder
+                  }
+                />
+                <FormInput
                   name="integerField"
                   type="number"
                   label={comprehensiveModelMeta.fields.integerField?.label}
@@ -188,7 +199,7 @@ const ComprehensiveCreate: React.FC = () => {
                 />
               </RowContainer>
               <RowContainer numberOfColumns={1}>
-                <FormUploader name="attachments" label="پیوست‌ها" />
+                <FormUploader name="attachmentIds" label="پیوست‌ها" />
               </RowContainer>
               <RowContainer numberOfColumns={3}>
                 <FormInput
@@ -223,6 +234,14 @@ const ComprehensiveCreate: React.FC = () => {
                   label={comprehensiveModelMeta.fields.oneToOneUser?.label}
                   service={UserService}
                   labelKey="username"
+                  valueKey="id"
+                />
+                
+                <FormAutoComplete
+                  name="manyToOneChannel"
+                  label={comprehensiveModelMeta.fields.manyToOneChannel?.label}
+                  service={ChannelService}
+                  labelKey="channelName"
                   valueKey="id"
                 />
               </RowContainer>

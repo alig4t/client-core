@@ -49,6 +49,8 @@ const searchSchema = z.object({
   [`createdAt_${FilterOperator.GE}`]: Validator.optional(),
   [`createdAt_${FilterOperator.LE}`]: Validator.optional(),
 
+   [`updatedAt_${FilterOperator.GE}`]: Validator.optional(),
+  [`updatedAt_${FilterOperator.LE}`]: Validator.optional(),
   // enum (exact search)
   [`enumField_${FilterOperator.EQ}`]: Validator.optional(),
 });
@@ -60,7 +62,6 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
 }) => {
   const onSubmit: SubmitHandler<SearchFormData> = (data) => {
     console.log(data);
-    // const filters: ComprehensiveFilters = {};
     onApplyFilters(data);
   };
 

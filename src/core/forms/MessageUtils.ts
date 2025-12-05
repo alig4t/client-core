@@ -3,8 +3,50 @@
 /**
  * ساخت پیام‌های استاندارد برای هر مدل با نام فارسی
  */
-export const createMessages = (modelName: string, pluralName?: string) => {
-  const capitalized = modelName.charAt(0).toUpperCase() + modelName.slice(1);
+
+// src/utils/message.types.ts
+
+export type MessageStatus = "success" | "error";
+
+export interface MessageBlock {
+  title: string;
+  description?: string;
+  defaultDescription?: string;
+}
+
+export interface ModelMessages {
+  create: {
+    success: MessageBlock;
+    error: MessageBlock;
+  };
+  update: {
+    success: MessageBlock;
+    error: MessageBlock;
+  };
+  delete: {
+    success: MessageBlock;
+    error: MessageBlock;
+  };
+  list: {
+    title: string;
+  };
+  manage: {
+    title: string;
+  };
+  createButton: string;
+}
+
+
+/**
+ * ساخت پیام‌های استاندارد برای هر مدل با نام فارسی
+ */
+export const createMessages = (
+  modelName: string,
+  pluralName?: string
+): ModelMessages => {
+  const capitalized =
+    modelName.charAt(0).toUpperCase() + modelName.slice(1);
+
   const plural = pluralName || `${capitalized}‌ها`;
 
   return {
@@ -18,6 +60,7 @@ export const createMessages = (modelName: string, pluralName?: string) => {
         defaultDescription: "مشکلی در اتصال به سرور رخ داده است.",
       },
     },
+
     update: {
       success: {
         title: `ویرایش ${capitalized} موفقیت‌آمیز بود`,
@@ -28,6 +71,7 @@ export const createMessages = (modelName: string, pluralName?: string) => {
         defaultDescription: "مشکلی در اتصال به سرور رخ داده است.",
       },
     },
+
     delete: {
       success: {
         title: `حذف ${capitalized} موفقیت‌آمیز بود`,
@@ -38,12 +82,45 @@ export const createMessages = (modelName: string, pluralName?: string) => {
         defaultDescription: "مشکلی در اتصال به سرور رخ داده است.",
       },
     },
+
     list: {
       title: `لیست ${plural}`,
     },
+
     manage: {
       title: `مدیریت ${modelName}`,
     },
+
     createButton: `افزودن ${modelName} جدید`,
   };
 };
+
+
+// src/utils/publicMessages.ts
+
+export const publicMessages = {
+  delete: {
+    success: {
+      title: "حذف موفق",
+      description: "عملیات حذف با موفقیت انجام شد.",
+    },
+    error: {
+      title: "خطا در حذف",
+      description: "امکان حذف وجود ندارد.",
+    },
+  },
+
+  network: {
+    error: {
+      title: "خطای شبکه",
+      description: "اتصال به سرور برقرار نشد.",
+    },
+  },
+
+  auth: {
+    sessionExpired: {
+      title: "نشست منقضی شد",
+      description: "لطفاً دوباره وارد شوید.",
+    },
+  },
+} as const;
