@@ -289,17 +289,19 @@ export const FormAutoComplete = <T extends BaseModel>({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex relative gap-1 justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-sm cursor-pointer hover:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex relative gap-1 justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-800 border border-[var(--input-border)] dark:border-gray-600 rounded-lg shadow-sm cursor-pointer hover:border-purple-500 dark:hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
         aria-expanded={isOpen}
       >
         {minilabel && (
-          <span className="absolute right-2 px-1 w-fit bg-white dark:bg-gray-200 dark:text-gray-950 text-gray-400 top-0 -translate-y-1/2 text-[9px]  rounded-sm">
+          <span className="absolute right-2 px-1 w-fit bg-white dark:bg-gray-800 dark:text-gray-300 text-gray-400 top-0 -translate-y-1/2 text-[9px] rounded-sm">
             {minilabel}
           </span>
         )}
         <span
           className={`flex-1 truncate ${
-            count > 0 ? "text-gray-900" : "text-gray-500"
+            count > 0
+              ? "text-gray-900 dark:text-gray-100"
+              : "text-gray-500 dark:text-gray-400"
           }`}
         >
           {displayText}
@@ -314,28 +316,28 @@ export const FormAutoComplete = <T extends BaseModel>({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl ${dropdownPositionClasses}`}
+            className={`absolute z-50 w-full bg-white dark:bg-gray-800 border border-[var(--input-border)] dark:border-gray-600 rounded-lg shadow-xl ${dropdownPositionClasses}`}
             onMouseDown={(e) => e.stopPropagation()}
           >
-            <div className="p-2 border-b border-gray-100 sticky top-0 bg-white dark:bg-gray-400 z-10">
+            <div className="p-2 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
               <input
                 type="text"
                 placeholder="جستجو..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-2 text-right placeholder:text-[var(--placeholder-text)] border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
+                className="w-full p-2 text-right placeholder:text-[var(--placeholder-text)] dark:placeholder:text-gray-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
                 autoFocus
               />
             </div>
             <div className="max-h-60 overflow-y-auto">
               {loading && (
-                <div className="flex justify-center items-center p-4 text-purple-600">
+                <div className="flex justify-center items-center p-4 text-purple-600 dark:text-purple-400">
                   <LoadingSpinner />
                   <span className="mr-2">درحال بارگذاری...</span>
                 </div>
               )}
               {!loading && fetchedOptions.length === 0 && (
-                <div className="p-4 text-sm text-gray-500 text-center">
+                <div className="p-4 text-sm text-gray-500 dark:text-gray-400 text-center">
                   موردی یافت نشد.
                 </div>
               )}
@@ -345,18 +347,18 @@ export const FormAutoComplete = <T extends BaseModel>({
                     <li
                       key={item[valueKey] as string | number}
                       onClick={() => handleToggle(item)}
-                      className={`flex items-center gap-2 p-2 my-0.5 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
+                      className={`flex items-center gap-2 p-2 my-0.5 text-sm rounded-md cursor-pointer transition duration-150 ${
                         isSelected(item)
-                          ? "bg-purple-100 dark:bg-gray-400 font-semibold"
-                          : ""
+                          ? "bg-purple-100 dark:bg-purple-900/40 font-semibold text-gray-900 dark:text-gray-100"
+                          : "text-gray-900 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700"
                       }`}
                     >
                       {multi ? (
                         <div
                           className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
                             isSelected(item)
-                              ? "bg-purple-600 border-purple-600"
-                              : "bg-gray-200 border-gray-300"
+                              ? "bg-purple-600 dark:bg-purple-500 border-purple-600 dark:border-purple-500"
+                              : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
                           }`}
                         >
                           {isSelected(item) && <CheckIcon />}

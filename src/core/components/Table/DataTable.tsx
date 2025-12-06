@@ -18,7 +18,7 @@ export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
 }) => {
   return (
     <th
-      className={`px-6 py-3 text-xs whitespace-nowrap font-medium text-gray-500 uppercase text-center ${className}`}
+      className={`px-6 py-3 text-xs whitespace-nowrap font-medium text-gray-500 dark:text-gray-400 uppercase text-center ${className}`}
     >
       {children}
     </th>
@@ -30,7 +30,7 @@ export const TBODY: FC<{ className?: string; children: React.ReactNode }> = ({
   children,
 }) => {
   return (
-    <td className={`px-6 py-4 whitespace-nowrap text-center ${className}`}>
+    <td className={`px-6 py-4 whitespace-nowrap text-center text-gray-900 dark:text-gray-100 ${className}`}>
       {children}
     </td>
   );

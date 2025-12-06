@@ -306,7 +306,11 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                                 initial="hidden"
                                                 animate="visible"
                                                 exit="exit"
-                                                className={`hover:bg-gray-50 whitespace-nowrap ${isSelected ? "bg-purple-50" : ""}`}
+                                                className={`whitespace-nowrap transition-colors duration-150 ${
+                                                    isSelected
+                                                        ? "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30"
+                                                        : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                                                }`}
                                             >
                                                 {isSelectionMode && (
                                                     <TBODY className="text-center">
@@ -326,7 +330,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                 </AnimatePresence>
                             ) : (
                                 <tr>
-                                    <td colSpan={100} className="p-8 text-center text-gray-500">
+                                    <td colSpan={100} className="p-8 text-center text-gray-500 dark:text-gray-400">
                                         داده‌ای یافت نشد.
                                     </td>
                                 </tr>
@@ -337,7 +341,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
 
                 {/* Pagination */}
                 <div className="p-4 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <span className="text-sm text-gray-500">
+                    <span className="text-sm text-gray-500 dark:text-gray-400">
                         نمایش {page * pageSize + 1} تا {Math.min((page + 1) * pageSize, totalItems)} از {totalItems} رکورد
                     </span>
 
