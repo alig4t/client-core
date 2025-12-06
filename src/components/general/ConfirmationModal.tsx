@@ -26,7 +26,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
 }) => {
   return (
     // استفاده از ModalAnimation به عنوان شل اصلی
-    <ModalAnimation isOpen={isOpen} onDismiss={onClose} title={title}>
+    <ModalAnimation isOpen={isOpen} onDismiss={onClose} title={title} mobileBottomSheet={true}>
       {/* محتوای Confirmation */}
       <div dir="rtl" className="flex flex-col gap-4">
         <div className="flex items-center gap-3">

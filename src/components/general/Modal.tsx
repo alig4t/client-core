@@ -11,6 +11,7 @@ interface ModalProps {
   onDismiss: () => void;
   children: React.ReactNode;
   title: string;
+  mobileBottomSheet?: boolean; // Enable bottom sheet on mobile
 }
 
 // Variants بدون تغییر باقی می‌مانند
@@ -29,7 +30,17 @@ const modalVariants: Variants = {
   exit: { opacity: 0, y: 30 },
 };
 
-const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
+const mobileBottomSheetVariants: Variants = {
+  hidden: { opacity: 0, y: "100%" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: "spring", damping: 30, stiffness: 300 },
+  },
+  exit: { opacity: 0, y: "100%" },
+};
+
+const ModalAnimation = ({ isOpen, onDismiss, children, title, mobileBottomSheet = false }: ModalProps) => {
   // ⭐️ مدیریت وضعیت تاریخچه برای جلوگیری از برگشت به صفحه قبل
   useEffect(() => {
     let historyPushed = false;
@@ -74,7 +85,11 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
         <div
           role="dialog"
           aria-modal="true"
-          className="fixed inset-0 z-[1000] flex items-center justify-center p-4 sm:p-6"
+          className={`fixed inset-0 z-[1000] flex ${
+            mobileBottomSheet
+              ? "items-end sm:items-center justify-center sm:p-6"
+              : "items-center justify-center p-4 sm:p-6"
+          }`}
         >
           {/* Backdrop (پس زمینه روشن‌تر: bg-black/40) */}
           <motion.div
@@ -89,14 +104,22 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title }: ModalProps) => {
           {/* Modal Panel */}
           <motion.div
             dir="rtl"
-            className="relative mx-auto w-full max-w-lg bg-white dark:bg-gray-800 rounded-3xl shadow-2xl flex flex-col max-h-[95vh] transform transition-all overflow-hidden"
-            variants={modalVariants}
+            className={`relative mx-auto bg-white dark:bg-gray-800 shadow-2xl flex flex-col transform transition-all overflow-hidden ${
+              mobileBottomSheet
+                ? "w-full sm:w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[95vh] sm:max-h-[85vh]"
+                : "w-full max-w-lg rounded-3xl max-h-[95vh]"
+            }`}
+            variants={mobileBottomSheet ? mobileBottomSheetVariants : modalVariants}
             initial="hidden"
             animate="visible"
             exit="exit" // 💡 تغییر 'hidden' به 'exit' برای استفاده از انیمیشن خروج
           >
             {/* Header */}
             <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+              {/* Grip Bar (Mobile Only) */}
+              {mobileBottomSheet && (
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full sm:hidden" />
+              )}
               <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">
                 {title}
               </h2>
