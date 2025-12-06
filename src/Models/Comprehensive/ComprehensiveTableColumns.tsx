@@ -19,7 +19,7 @@ interface ComprehensiveTableColumnsProps {
     onDelete: (id: string | number) => void;
 }
 
-const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo(({
+export const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps> = memo(({
     item,
     onDelete,
 }) => {
@@ -110,5 +110,3 @@ export const ComprehensiveTableHeaders: ReactNode = (
     <THEAD>عملیات</THEAD>
   </>
 );
-
-export default ComprehensiveTableColumns;

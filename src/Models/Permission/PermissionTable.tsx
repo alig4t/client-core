@@ -6,9 +6,9 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import PermissionService from "./PermissionService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
 import { PermissionModelMeta } from "./PermissionModel.meta";
-import ModernDataTable from "@/components/Table/ModernDataTable";
 import type { PermissionModel } from "./PermissionModel";
 import PermissionTableColumns, { PermissionTableHeaders } from "./PermissionTableColumns";
+import BaseDataTable from "@/components/Table/BaseDataTable";
 
 
 interface PermissionTableProps {
@@ -32,7 +32,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
   );
 
   return (
-    <ModernDataTable<PermissionModel, DynamicFilters>
+    <BaseDataTable<PermissionModel, DynamicFilters>
       dataIdKey="id"
       queryKey="permission"
       service={PermissionService}

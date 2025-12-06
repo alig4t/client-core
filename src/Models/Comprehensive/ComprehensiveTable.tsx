@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
+import React, { memo, useCallback, type ReactNode } from "react";
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import ModernDataTable from "@/components/Table/ModernDataTable";
-import ComprehensiveTableColumns, { ComprehensiveTableHeaders } from "./ComprehensiveTableColumns";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import BaseDataTable from "@/components/Table/BaseDataTable";
+import { ComprehensiveTableColumns, ComprehensiveTableHeaders } from "./ComprehensiveTableColumns";
 
 interface ComprehensiveTableProps {
   filters: DynamicFilters;
@@ -27,7 +27,7 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
   );
 
   return (
-    <ModernDataTable<ComprehensiveModel, DynamicFilters>
+    <BaseDataTable<ComprehensiveModel, DynamicFilters>
       queryKey="comprehensive"
       service={ComprehensiveService}
       dataIdKey="id"

@@ -21,7 +21,7 @@ export type RenderRowFunction<T> = (
     onDelete: (id: string | number) => void
 ) => React.ReactNode;
 
-interface ModernDataTableProps<TData, TFilters extends Record<string, any> = Record<string, any>> {
+interface BaseDataTableProps<TData, TFilters extends Record<string, any> = Record<string, any>> {
     queryKey: string;
     service: BaseService<TData>;
     filters?: TFilters;
@@ -53,7 +53,7 @@ const rowVariants = {
     exit: { opacity: 0, x: -20 },
 };
 
-const ModernDataTable = <TData extends Record<string, any>, TFilters extends Record<string, any> = Record<string, any>>({
+const BaseDataTable = <TData extends Record<string, any>, TFilters extends Record<string, any> = Record<string, any>>({
     queryKey,
     service,
     filters,
@@ -66,7 +66,7 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
     dataIdKey,
     onSelectionChange,
     enableDelete = true,
-}: ModernDataTableProps<TData, TFilters>) => {
+}: BaseDataTableProps<TData, TFilters>) => {
     const queryClient = useQueryClient();
     const [page, setPage] = useState(0);
     const [pageSize, setPageSize] = useState(defaultPageSize);
@@ -392,4 +392,4 @@ const ModernDataTable = <TData extends Record<string, any>, TFilters extends Rec
     );
 };
 
-export default ModernDataTable;
+export default BaseDataTable;
