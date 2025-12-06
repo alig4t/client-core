@@ -18,6 +18,7 @@ import { FormSelect } from "@/core/components/form/FormSelect";
 import OptionUtils from "@/core/forms/OptionUtils";
 import RowContainer from "@/components/RowContainer";
 import { PageWrapper } from "@/components/Layout/PageWrapper";
+import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
 
 // --- Filter output interface ---
 
@@ -74,11 +75,6 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
     onApplyFilters({});
   };
 
-  // Helper to build label for min/max
-  const makeRangeLabel = (baseLabel: string, suffix: "min" | "max") => {
-    return suffix === "min" ? `${baseLabel} از` : `${baseLabel} تا`;
-  };
-
   return (
     <PageWrapper>
       <FormWrapper onSubmit={onSubmit} schema={searchSchema} onFormReady={setFormMethods}>
@@ -95,7 +91,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             name={`integerField_${FilterOperator.GE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.integerField?.label,
-              "min"
+              "from"
             )}
             type="number"
             placeholder="مثلاً 10"
@@ -105,7 +101,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             name={`integerField_${FilterOperator.LE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.integerField?.label,
-              "max"
+              "to"
             )}
             type="number"
             placeholder="مثلاً 100"
@@ -116,19 +112,19 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             name={`longField_${FilterOperator.GE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.longField?.label,
-              "min"
+              "from"
             )}
             type="long"
-            placeholder="از"
+            placeholder={publicMessages.form.range.from}
           />
           <FormInput
             name={`longField_${FilterOperator.LE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.longField?.label,
-              "max"
+              "to"
             )}
             type="long"
-            placeholder="تا"
+            placeholder={publicMessages.form.range.to}
           />
 
           {/* Numeric: doubleField */}
@@ -136,19 +132,19 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             name={`doubleField_${FilterOperator.GE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.doubleField?.label,
-              "min"
+              "from"
             )}
             type="double"
-            placeholder="از"
+            placeholder={publicMessages.form.range.from}
           />
           <FormInput
             name={`doubleField_${FilterOperator.LE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.doubleField?.label,
-              "max"
+              "to"
             )}
             type="double"
-            placeholder="تا"
+            placeholder={publicMessages.form.range.to}
           />
 
           {/* Numeric: bigDecimalField */}
@@ -156,19 +152,19 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             name={`bigDecimalField_${FilterOperator.GE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.bigDecimalField?.label,
-              "min"
+              "from"
             )}
             type="bigDecimal"
-            placeholder="از"
+            placeholder={publicMessages.form.range.from}
           />
           <FormInput
             name={`bigDecimalField_${FilterOperator.LE}`}
             label={makeRangeLabel(
               comprehensiveModelMeta.fields.bigDecimalField?.label,
-              "max"
+              "to"
             )}
             type="bigDecimal"
-            placeholder="تا"
+            placeholder={publicMessages.form.range.to}
           />
 
           <Checkbox
@@ -179,11 +175,11 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           {/* Dates */}
           <DateInput
             name={`dateField_${FilterOperator.GE}`}
-            label={`${comprehensiveModelMeta.fields.dateField?.label} از`}
+            label={makeRangeLabel(comprehensiveModelMeta.fields.dateField?.label, "from")}
           />
           <DateInput
             name={`dateField_${FilterOperator.LE}`}
-            label={`${comprehensiveModelMeta.fields.dateField?.label} تا`}
+            label={makeRangeLabel(comprehensiveModelMeta.fields.dateField?.label, "to")}
           />
 
           {/* enum */}
@@ -196,20 +192,20 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
 
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={`تاریخ ایجاد از`}
+            label={makeRangeLabel("تاریخ ایجاد", "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={`تاریخ ایجاد تا`}
+            label={makeRangeLabel("تاریخ ایجاد", "to")}
           />
         </RowContainer>
 
         <ButtonPanel align="start" className="mt-4">
           <Button variant="success" type="submit">
-            اعمال فیلتر
+            {publicMessages.form.filters.apply}
           </Button>
           <Button variant="secondary" type="button" onClick={handleClear}>
-            حذف فیلتر
+            {publicMessages.form.filters.reset}
           </Button>
         </ButtonPanel>
       </FormWrapper>

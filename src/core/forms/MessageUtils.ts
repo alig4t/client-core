@@ -145,8 +145,30 @@ export const publicMessages = {
     },
     filters: {
       title: "فیلتر‌ها",
-      apply: "اعمال فیلترها",
-      reset: "بازنشانی فیلترها",
+      apply: "اعمال فیلتر",
+      reset: "حذف فیلتر",
+    },
+    range: {
+      from: "(از)",
+      to: "(تا)",
     },
   },
 } as const;
+
+/**
+ * ساخت برچسب برای فیلدهای بازه‌ای (min/max)
+ * @param baseLabel - نام فیلد پایه
+ * @param type - نوع بازه (from یا to)
+ * @returns برچسب کامل
+ *
+ * @example
+ * makeRangeLabel("قیمت", "from") // "قیمت از"
+ * makeRangeLabel("قیمت", "to") // "قیمت تا"
+ */
+export const makeRangeLabel = (
+  baseLabel: string | undefined,
+  type: "from" | "to"
+): string => {
+  if (!baseLabel) return type === "from" ? publicMessages.form.range.from : publicMessages.form.range.to;
+  return type === "from" ? `${baseLabel} ${publicMessages.form.range.from}` : `${baseLabel} ${publicMessages.form.range.to}`;
+};
