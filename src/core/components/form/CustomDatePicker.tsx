@@ -27,21 +27,22 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
       locale={persian_fa}
       calendarPosition="bottom-right"
       placeholder={placeholder}
+      onOpenPickNewDate={false} // 👈 Prevent auto-selecting today's date
       render={(stringifiedValue, openCalendar) => (
         <div className="relative w-full" onClick={openCalendar}>
           <input
             readOnly // 👈 Important: must be read-only
             value={stringifiedValue || ""}
             placeholder={placeholder}
-            className="w-full p-2 pr-10 border border-[var(--input-border)] placeholder:text-[var(--placeholder-text)] rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer"
+            className="w-full p-2 pr-10 border border-[var(--input-border)] dark:border-gray-600 placeholder:text-[var(--placeholder-text)] dark:placeholder:text-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer hover:border-purple-500 dark:hover:border-purple-400 transition duration-150"
           />
-          <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 pointer-events-none">
+          <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none">
             <Calendar size={20} />
           </div>
           {stringifiedValue && (
             <button
               type="button"
-              className="absolute top-1/2 left-1 !px-2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+              className="absolute top-1/2 left-1 !px-2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
               onClick={(e) => {
                 e.stopPropagation();
                 onChange(null);
