@@ -1,5 +1,5 @@
 // src/pages/ComprehensiveCreate.tsx
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
@@ -58,6 +58,13 @@ const ComprehensiveCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
   const queryClient = useQueryClient();
   const isEditMode = !!id; // Detect edit mode
+
+
+
+
+
+
+
 
   // Load data in edit mode
   const { data: initialData, isLoading: isLoadingInitial } = useQuery({
@@ -124,6 +131,25 @@ const ComprehensiveCreate: React.FC = () => {
   };
 
 
+  // const userMutation = useMutation({
+  //   mutationFn: async (channelId: number) => {
+
+  //     const users = await UserService.getAll();
+
+
+  //     let params = {
+  //       page: 0,
+  //       filters: { channelName_like: "امنیتی" }
+  //     }
+
+  //     const channel = await ChannelService.getAll(params);
+  //     return { users, channel };
+  //   },
+  //   onSuccess: (data) => {
+  //     console.log( data.channel);
+  //   }
+  // });
+
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
@@ -152,6 +178,12 @@ const ComprehensiveCreate: React.FC = () => {
                 : comprehensiveModelMeta.messages.pageTitle.create
             )}
           />
+
+          {/* <Button variant="danger"
+            disabled={userMutation.isPending}
+            onClick={() => userMutation.mutate(1)}>
+            {userMutation.isPending ? "در حال دریافت..." : "دریافت اطلاعات"}
+          </Button> */}
 
           <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
             <FormWrapper
