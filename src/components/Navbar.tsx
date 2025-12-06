@@ -96,49 +96,23 @@ const Navbar: FC = () => {
   // Mock user details for a placeholder
   const initials = user?.name
     ? user.name
-        .split(" ")
-        .map((n) => n[0])
-        .join("")
-        .toUpperCase()
-        .slice(0, 2)
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2)
     : "AU"; // AU for Anonymous User
 
   const toggleDarkMode = () => {
     const newDarkMode = !darkMode;
     setDarkMode(newDarkMode);
-
-    // Add transition class for smooth color changes
-    document.documentElement.classList.add('theme-transitioning');
     document.documentElement.classList.toggle("dark");
-
-    // Remove transition class after animation completes
-    setTimeout(() => {
-      document.documentElement.classList.remove('theme-transitioning');
-    }, 300);
   };
 
   const handleLogout = useCallback(() => {
     logout();
     navigate("/");
   }, [logout]);
-
-  // Add global theme transition styles
-  useEffect(() => {
-    const styleId = 'theme-transition-styles';
-    if (!document.getElementById(styleId)) {
-      const style = document.createElement('style');
-      style.id = styleId;
-      style.textContent = `
-        .theme-transitioning,
-        .theme-transitioning *,
-        .theme-transitioning *::before,
-        .theme-transitioning *::after {
-          transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
-        }
-      `;
-      document.head.appendChild(style);
-    }
-  }, []);
 
   return (
     <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-6">
@@ -196,7 +170,7 @@ const Navbar: FC = () => {
                 initial={{ rotate: -90, scale: 0, opacity: 0 }}
                 animate={{ rotate: 0, scale: 1, opacity: 1 }}
                 exit={{ rotate: 90, scale: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <SunIcon className="h-6 w-6 text-yellow-500" />
               </motion.div>
@@ -206,7 +180,7 @@ const Navbar: FC = () => {
                 initial={{ rotate: 90, scale: 0, opacity: 0 }}
                 animate={{ rotate: 0, scale: 1, opacity: 1 }}
                 exit={{ rotate: -90, scale: 0, opacity: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
+                transition={{ duration: 0.2, ease: "easeInOut" }}
               >
                 <MoonIcon className="h-6 w-6 text-indigo-500" />
               </motion.div>

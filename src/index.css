@@ -160,6 +160,11 @@ button:focus-visible {
   background: rgb(107 114 128);
 }
 
+/* Theme transition for dark mode toggle */
+/* * {
+  transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+} */
+
 /* nprogress custom style */
 #nprogress {
   pointer-events: none;
