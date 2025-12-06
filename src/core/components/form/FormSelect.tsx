@@ -4,6 +4,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
 import { ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // Icon components for clean UI
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
@@ -203,48 +204,54 @@ export const FormSelect: React.FC<FormSelectProps> = ({
       </button>
 
       {/* Dropdown Options List */}
-      {isOpen && (
-        <div
-          className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
-        >
-          <ul role="listbox" aria-labelledby={name} className="p-1">
-            {options.map((option) => (
-              <li
-                key={option.value}
-                role={multi ? "option" : "listitem"}
-                aria-selected={isSelected(option.value)}
-                onClick={() => handleToggle(option.value)}
-                className={`flex justify-right gap-2 items-center my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
-                  isSelected(option.value)
-                    ? "bg-purple-100 dark:bg-gray-400 font-semibold"
-                    : ""
-                }`}
-              >
-                {multi ? (
-                  // Checkbox style for multi-select
-                  <div
-                    className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
-                      isSelected(option.value)
-                        ? "bg-purple-600 border-purple-600"
-                        : "bg-gray-200 border-gray-300"
-                    }`}
-                  >
-                    {isSelected(option.value) && (
-                      <span className="!text-white">
-                        <CheckIcon />
-                      </span>
-                    )}
-                  </div>
-                ) : (
-                  // Checkmark style for single select
-                  isSelected(option.value) && <CheckIcon />
-                )}
-                <span>{option.label}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
+          >
+            <ul role="listbox" aria-labelledby={name} className="p-1">
+              {options.map((option) => (
+                <li
+                  key={option.value}
+                  role={multi ? "option" : "listitem"}
+                  aria-selected={isSelected(option.value)}
+                  onClick={() => handleToggle(option.value)}
+                  className={`flex justify-right gap-2 items-center my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
+                    isSelected(option.value)
+                      ? "bg-purple-100 dark:bg-gray-400 font-semibold"
+                      : ""
+                  }`}
+                >
+                  {multi ? (
+                    // Checkbox style for multi-select
+                    <div
+                      className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
+                        isSelected(option.value)
+                          ? "bg-purple-600 border-purple-600"
+                          : "bg-gray-200 border-gray-300"
+                      }`}
+                    >
+                      {isSelected(option.value) && (
+                        <span className="!text-white">
+                          <CheckIcon />
+                        </span>
+                      )}
+                    </div>
+                  ) : (
+                    // Checkmark style for single select
+                    isSelected(option.value) && <CheckIcon />
+                  )}
+                  <span>{option.label}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Hidden input to ensure r-h-f tracks the field, especially important for validation */}
       <input type="hidden" {...formContext.register(name)} />
