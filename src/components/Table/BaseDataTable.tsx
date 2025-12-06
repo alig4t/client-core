@@ -272,7 +272,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
 
             {/* Table */}
             <div className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
-                <div className="relative w-full overflow-x-auto">
+                <div className="relative w-full overflow-x-auto scrollbar-thin">
                     <table className="min-w-full text-sm text-right">
                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium border-b border-gray-100 dark:border-gray-700">
                             <tr>
