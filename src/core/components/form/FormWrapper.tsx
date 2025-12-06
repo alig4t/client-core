@@ -22,6 +22,7 @@ interface FormWrapperProps<T extends FieldValues> {
   schema?: ZodSchema<T>; // ZodSchema exactly for type T
   defaultValues?: DefaultValues<T>; // Correct type for default values
   className?: string;
+  onFormReady?: (methods: ReturnType<typeof useForm<T>>) => void;
 }
 
 // --- Main Component ---
@@ -31,12 +32,19 @@ export function FormWrapper<T extends FieldValues>({
   schema,
   defaultValues,
   className = "",
+  onFormReady,
 }: FormWrapperProps<T>) {
   const methods = useForm<T>({
     resolver: schema ? zodResolver(schema as any) : undefined,
     defaultValues,
     mode: "onTouched",
   });
+
+  React.useEffect(() => {
+    if (onFormReady) {
+      onFormReady(methods);
+    }
+  }, [onFormReady, methods]);
 
   const handleSubmit = methods.handleSubmit((data: T) => {
     onSubmit(data); // Now data is exactly of type T

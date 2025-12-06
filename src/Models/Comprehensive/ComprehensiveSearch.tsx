@@ -60,12 +60,17 @@ type SearchFormData = z.infer<typeof searchSchema>;
 const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
   onApplyFilters,
 }) => {
+  const [formMethods, setFormMethods] = React.useState<any>(null);
+
   const onSubmit: SubmitHandler<SearchFormData> = (data) => {
     console.log(data);
     onApplyFilters(data);
   };
 
   const handleClear = () => {
+    if (formMethods) {
+      formMethods.reset();
+    }
     onApplyFilters({});
   };
 
@@ -76,7 +81,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
 
   return (
     <PageWrapper>
-      <FormWrapper onSubmit={onSubmit} schema={searchSchema}>
+      <FormWrapper onSubmit={onSubmit} schema={searchSchema} onFormReady={setFormMethods}>
         <RowContainer>
           {/* String */}
           <FormInput
