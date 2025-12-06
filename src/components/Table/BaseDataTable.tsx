@@ -31,7 +31,7 @@ interface BaseDataTableProps<TData, TFilters extends Record<string, any> = Recor
     renderRow: RenderRowFunction<TData>;
     title?: string;
     sortOptions: Option[];
-    dataIdKey: keyof TData;
+    dataIdKey?: keyof TData;
     onSelectionChange?: (selectedIds: (string | number)[]) => void;
     enableDelete?: boolean;
 }
@@ -58,12 +58,12 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
     service,
     filters,
     defaultPageSize = 10,
-    defaultSort,
+    defaultSort = "createdAt,desc",
     header,
     renderRow,
     title,
     sortOptions,
-    dataIdKey,
+    dataIdKey = "id",
     onSelectionChange,
     enableDelete = true,
 }: BaseDataTableProps<TData, TFilters>) => {

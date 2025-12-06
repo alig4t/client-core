@@ -30,7 +30,7 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
     <BaseDataTable<ComprehensiveModel, DynamicFilters>
       queryKey="comprehensive"
       service={ComprehensiveService}
-      dataIdKey="id"
+    
       header={ComprehensiveTableHeaders}
       renderRow={(item, index, onDelete) => (
         <ComprehensiveTableColumns
@@ -42,10 +42,11 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
       title={comprehensiveModelMeta.messages.list.title}
       sortOptions={buildSortOptions(comprehensiveModelMeta)}
       filters={filters}
-      defaultSort="createdAt,desc"
-      defaultPageSize={10}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };
