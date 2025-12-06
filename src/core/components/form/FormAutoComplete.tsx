@@ -10,6 +10,7 @@ import { useFormContext, useWatch } from "react-hook-form";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
 import { ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 // ----------------------------------------------------------------------
 // Interfaces
@@ -306,66 +307,72 @@ export const FormAutoComplete = <T extends BaseModel>({
         <ChevronIcon isOpen={isOpen} />
       </button>
 
-      {isOpen && (
-        <div
-          className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl ${dropdownPositionClasses}`}
-          onMouseDown={(e) => e.stopPropagation()}
-        >
-          <div className="p-2 border-b border-gray-100 sticky top-0 bg-white dark:bg-gray-400 z-10">
-            <input
-              type="text"
-              placeholder="جستجو..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full p-2 text-right placeholder:text-[var(--placeholder-text)] border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
-              autoFocus
-            />
-          </div>
-          <div className="max-h-60 overflow-y-auto">
-            {loading && (
-              <div className="flex justify-center items-center p-4 text-purple-600">
-                <LoadingSpinner />
-                <span className="mr-2">درحال بارگذاری...</span>
-              </div>
-            )}
-            {!loading && fetchedOptions.length === 0 && (
-              <div className="p-4 text-sm text-gray-500 text-center">
-                موردی یافت نشد.
-              </div>
-            )}
-            {!loading && fetchedOptions.length > 0 && (
-              <ul className="p-1">
-                {fetchedOptions.map((item) => (
-                  <li
-                    key={item[valueKey] as string | number}
-                    onClick={() => handleToggle(item)}
-                    className={`flex items-center gap-2 p-2 my-0.5 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
-                      isSelected(item)
-                        ? "bg-purple-100 dark:bg-gray-400 font-semibold"
-                        : ""
-                    }`}
-                  >
-                    {multi ? (
-                      <div
-                        className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
-                          isSelected(item)
-                            ? "bg-purple-600 border-purple-600"
-                            : "bg-gray-200 border-gray-300"
-                        }`}
-                      >
-                        {isSelected(item) && <CheckIcon />}
-                      </div>
-                    ) : isSelected(item) ? (
-                      <CheckIcon />
-                    ) : null}
-                    <span>{item[labelKey] as string}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl ${dropdownPositionClasses}`}
+            onMouseDown={(e) => e.stopPropagation()}
+          >
+            <div className="p-2 border-b border-gray-100 sticky top-0 bg-white dark:bg-gray-400 z-10">
+              <input
+                type="text"
+                placeholder="جستجو..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="w-full p-2 text-right placeholder:text-[var(--placeholder-text)] border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
+                autoFocus
+              />
+            </div>
+            <div className="max-h-60 overflow-y-auto">
+              {loading && (
+                <div className="flex justify-center items-center p-4 text-purple-600">
+                  <LoadingSpinner />
+                  <span className="mr-2">درحال بارگذاری...</span>
+                </div>
+              )}
+              {!loading && fetchedOptions.length === 0 && (
+                <div className="p-4 text-sm text-gray-500 text-center">
+                  موردی یافت نشد.
+                </div>
+              )}
+              {!loading && fetchedOptions.length > 0 && (
+                <ul className="p-1">
+                  {fetchedOptions.map((item) => (
+                    <li
+                      key={item[valueKey] as string | number}
+                      onClick={() => handleToggle(item)}
+                      className={`flex items-center gap-2 p-2 my-0.5 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${
+                        isSelected(item)
+                          ? "bg-purple-100 dark:bg-gray-400 font-semibold"
+                          : ""
+                      }`}
+                    >
+                      {multi ? (
+                        <div
+                          className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
+                            isSelected(item)
+                              ? "bg-purple-600 border-purple-600"
+                              : "bg-gray-200 border-gray-300"
+                          }`}
+                        >
+                          {isSelected(item) && <CheckIcon />}
+                        </div>
+                      ) : isSelected(item) ? (
+                        <CheckIcon />
+                      ) : null}
+                      <span>{item[labelKey] as string}</span>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}
     </div>

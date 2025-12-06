@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronDown } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export interface Option {
   value: string | number;
@@ -127,29 +128,35 @@ export const Select: React.FC<SelectProps> = ({
         <ChevronIcon isOpen={isOpen} />
       </button>
 
-      {isOpen && (
-        <div
-          className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
-        >
-          <ul role="listbox" className="p-1">
-            {options.map((option) => (
-              <li
-                key={option.value}
-                role="option"
-                aria-selected={option.value === value}
-                onClick={() => handleSelect(option.value)}
-                className={`flex items-center gap-2 my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${option.value === value
-                    ? "bg-purple-100 dark:bg-gray-400 font-semibold"
-                    : ""
-                  }`}
-              >
-                {option.value === value && <CheckIcon />}
-                <span>{option.label}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
+            transition={{ duration: 0.15, ease: "easeOut" }}
+            className={`absolute z-50 w-full bg-white dark:bg-gray-300 border border-[var(--input-border)] rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
+          >
+            <ul role="listbox" className="p-1">
+              {options.map((option) => (
+                <li
+                  key={option.value}
+                  role="option"
+                  aria-selected={option.value === value}
+                  onClick={() => handleSelect(option.value)}
+                  className={`flex items-center gap-2 my-0.5 p-2 text-sm text-gray-900 rounded-md cursor-pointer transition duration-150 hover:bg-purple-50 dark:hover:bg-zinc-400/45 ${option.value === value
+                      ? "bg-purple-100 dark:bg-gray-400 font-semibold"
+                      : ""
+                    }`}
+                >
+                  {option.value === value && <CheckIcon />}
+                  <span>{option.label}</span>
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 };
