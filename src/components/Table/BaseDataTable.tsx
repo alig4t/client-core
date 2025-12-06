@@ -241,7 +241,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                     variant="danger"
                                     icon={Trash2}
                                     onClick={handleBulkDeleteClick}
-                                    className="min-w-56"
+                                    className="min-w-60"
                                 >
                                     حذف انتخاب شده ها  ({selectedIds.length})
                                 </Button>
@@ -306,11 +306,10 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                                 initial="hidden"
                                                 animate="visible"
                                                 exit="exit"
-                                                className={`whitespace-nowrap transition-colors duration-150 ${
-                                                    isSelected
+                                                className={`whitespace-nowrap transition-colors duration-150 ${isSelected
                                                         ? "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30"
                                                         : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
-                                                }`}
+                                                    }`}
                                             >
                                                 {isSelectionMode && (
                                                     <TBODY className="text-center">
