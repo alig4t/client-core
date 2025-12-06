@@ -14,6 +14,7 @@ import ComprehensiveTable from "./ComprehensiveTable";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { publicMessages } from "@/core/forms/MessageUtils";
 
 const ComprehensivePage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
@@ -35,7 +36,7 @@ const ComprehensivePage: React.FC = () => {
               variant: "success",
             }}
           />
-          <Accordion title="فیلتر‌ها" startOpen={true}>
+          <Accordion title={publicMessages.form.filters.title} startOpen={true}>
             <ComprehensiveSearch onApplyFilters={setActiveFilters} />
           </Accordion>
 

@@ -34,6 +34,10 @@ export interface ModelMessages {
     title: string;
   };
   createButton: string;
+  pageTitle: {
+    create: string;
+    edit: string;
+  };
 }
 
 
@@ -92,6 +96,11 @@ export const createMessages = (
     },
 
     createButton: `افزودن ${modelName} جدید`,
+
+    pageTitle: {
+      create: `ایجاد ${capitalized} جدید`,
+      edit: `ویرایش ${capitalized}`,
+    },
   };
 };
 
@@ -121,6 +130,23 @@ export const publicMessages = {
     sessionExpired: {
       title: "نشست منقضی شد",
       description: "لطفاً دوباره وارد شوید.",
+    },
+  },
+
+  form: {
+    buttons: {
+      save: "ذخیره",
+      update: "به‌روزرسانی",
+      cancel: "لغو",
+      submit: "ثبت",
+      reset: "بازنشانی",
+      search: "جستجو",
+      clear: "پاک کردن",
+    },
+    filters: {
+      title: "فیلتر‌ها",
+      apply: "اعمال فیلترها",
+      reset: "بازنشانی فیلترها",
     },
   },
 } as const;

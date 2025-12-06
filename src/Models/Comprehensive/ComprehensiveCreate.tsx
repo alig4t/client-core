@@ -33,6 +33,7 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
+import { publicMessages } from "@/core/forms/MessageUtils";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.optional(),
@@ -74,35 +75,7 @@ const ComprehensiveCreate: React.FC = () => {
       return ComprehensiveService.create(
         {
           ...data,
-
-          // oneToOneUser: {id:data.oneToOneUser.id} as any ,
-          // manyToOneChannel: {id:data.manyToOneChannel.id} as any,
-          // attachmentIds: [
-          //   data.attachmentIds
-          // ] as any
-
-          // "stringField": "eizgKgAbdlvvnetZjUy4Rn8jvRvwxwzWgHdqymIH",
-          // "integerField": "1000" as any,
-          // "longField": "9007199254740991" as any,
-          // "doubleField": "0.1" as any,
-          // "bigDecimalField": "0" as any,
-          // "booleanField": true,
-          // "dateField": "2025-12-05T16:56:44.510Z",
-          // "localDateField": "2025-12-05",
-          // "localDateTimeField": "2025-12-05T16:56:44.510Z",
-          // "enumField": "OPTION_A",
-          // "uniqueField": "string",
-          // "indexedField": "string",
-          // "oneToOneUser": {
-          //   "id": 1
-          // } as any,
-          // "manyToOneChannel": {
-          //   "id": 1
-          // } as any,
-          // "attachmentIds": [
-          //   2
-          // ] as any
-          attachmentIds:[data.attachmentIds] as any
+          attachmentIds: [data.attachmentIds] as any
         }
 
       );
@@ -153,7 +126,9 @@ const ComprehensiveCreate: React.FC = () => {
 
 
   const breadcrumbItems = useBreadcrumbs(
-    isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید"
+    isEditMode
+      ? comprehensiveModelMeta.messages.pageTitle.edit
+      : comprehensiveModelMeta.messages.pageTitle.create
   );
   const routeMeta = useRouteMetadata();
 
@@ -171,7 +146,11 @@ const ComprehensiveCreate: React.FC = () => {
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
         <div className="sm:p-8 min-h-screen font-sans">
           <PageHeader
-            title={routeMeta?.label || (isEditMode ? "ویرایش ترکیبی" : "ایجاد ترکیبی جدید")}
+            title={routeMeta?.label || (
+              isEditMode
+                ? comprehensiveModelMeta.messages.pageTitle.edit
+                : comprehensiveModelMeta.messages.pageTitle.create
+            )}
           />
 
           <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
@@ -281,7 +260,7 @@ const ComprehensiveCreate: React.FC = () => {
               </RowContainer>
               <ButtonPanel align="end">
                 <Button variant="cancel" onClick={handleCancel}>
-                  لغو
+                  {publicMessages.form.buttons.cancel}
                 </Button>
                 <Button
                   variant="primary"
@@ -289,7 +268,9 @@ const ComprehensiveCreate: React.FC = () => {
                   loading={mutation.isPending}
                   disabled={mutation.isPending}
                 >
-                  {isEditMode ? "به‌روزرسانی" : "ذخیره"}
+                  {isEditMode
+                    ? publicMessages.form.buttons.update
+                    : publicMessages.form.buttons.save}
                 </Button>
               </ButtonPanel>
             </FormWrapper>
