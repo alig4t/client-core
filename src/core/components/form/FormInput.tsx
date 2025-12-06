@@ -40,6 +40,7 @@ const ClearButton = ({ onClick }: { onClick: () => void }) => (
     className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
     onClick={onClick}
     aria-label="پاک کردن"
+    tabIndex={-1}
   >
     <CircleX size={18} />
   </button>
@@ -91,6 +92,7 @@ const FormInput: React.FC<FormInputProps> = ({
       className="absolute !p-0 top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
       onClick={() => setShowPassword(!showPassword)}
       aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
+      tabIndex={-1}
     >
       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
     </button>

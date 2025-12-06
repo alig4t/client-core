@@ -46,6 +46,7 @@ const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
                 e.stopPropagation();
                 onChange(null);
               }}
+              tabIndex={-1}
             >
               <CircleX size={18} />
             </button>
