@@ -228,16 +228,26 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                 <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
 
                 <div className="flex flex-wrap-reverse md:flex-nowrap items-center gap-2 w-full sm:w-auto">
-                    {enableDelete && isSelectionMode && selectedIds.length > 0 && (
-                        <Button
-                            variant="danger"
-                            icon={Trash2}
-                            onClick={handleBulkDeleteClick}
-                            className="mr-auto sm:mr-0 min-w-56"
-                        >
-                            حذف انتخاب شده ها  ({selectedIds.length})
-                        </Button>
-                    )}
+                    <AnimatePresence mode="wait">
+                        {enableDelete && isSelectionMode && selectedIds.length > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, scale: 0.8, x: -20 }}
+                                animate={{ opacity: 1, scale: 1, x: 0 }}
+                                exit={{ opacity: 0, scale: 0.8, x: -20 }}
+                                transition={{ duration: 0.2 }}
+                                className="mr-auto sm:mr-0"
+                            >
+                                <Button
+                                    variant="danger"
+                                    icon={Trash2}
+                                    onClick={handleBulkDeleteClick}
+                                    className="min-w-56"
+                                >
+                                    حذف انتخاب شده ها  ({selectedIds.length})
+                                </Button>
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
 
                     <Select
                         options={sortOptions}
