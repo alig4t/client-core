@@ -9,6 +9,7 @@ import { Bell, MoonIcon, SunIcon, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/stores/AuthContext";
 import Dropdown from "./general/DropDown";
 import { useNavigate } from "react-router-dom";
+import { motion, AnimatePresence } from "framer-motion";
 
 // --- TypeScript Interfaces ---
 
@@ -103,14 +104,41 @@ const Navbar: FC = () => {
     : "AU"; // AU for Anonymous User
 
   const toggleDarkMode = () => {
-    setDarkMode(!darkMode);
+    const newDarkMode = !darkMode;
+    setDarkMode(newDarkMode);
+
+    // Add transition class for smooth color changes
+    document.documentElement.classList.add('theme-transitioning');
     document.documentElement.classList.toggle("dark");
+
+    // Remove transition class after animation completes
+    setTimeout(() => {
+      document.documentElement.classList.remove('theme-transitioning');
+    }, 300);
   };
 
   const handleLogout = useCallback(() => {
     logout();
     navigate("/");
   }, [logout]);
+
+  // Add global theme transition styles
+  useEffect(() => {
+    const styleId = 'theme-transition-styles';
+    if (!document.getElementById(styleId)) {
+      const style = document.createElement('style');
+      style.id = styleId;
+      style.textContent = `
+        .theme-transitioning,
+        .theme-transitioning *,
+        .theme-transitioning *::before,
+        .theme-transitioning *::after {
+          transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease !important;
+        }
+      `;
+      document.head.appendChild(style);
+    }
+  }, []);
 
   return (
     <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-6">
@@ -158,14 +186,32 @@ const Navbar: FC = () => {
         {/* 2. Dark Mode Toggle */}
         <div
           className="flex items-center w-8 h-8 text-gray-700 dark:text-gray-100 justify-center cursor-pointer
-            transition-all duration-300 hover:rotate-12 hover:scale-110"
+            transition-all duration-300 hover:scale-110"
           onClick={toggleDarkMode}
         >
-          {darkMode ? (
-            <SunIcon className="h-6 w-6 text-yellow-500" />
-          ) : (
-            <MoonIcon className="h-6 w-6 text-indigo-500" />
-          )}
+          <AnimatePresence mode="wait" initial={false}>
+            {darkMode ? (
+              <motion.div
+                key="sun"
+                initial={{ rotate: -90, scale: 0, opacity: 0 }}
+                animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                exit={{ rotate: 90, scale: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <SunIcon className="h-6 w-6 text-yellow-500" />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="moon"
+                initial={{ rotate: 90, scale: 0, opacity: 0 }}
+                animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                exit={{ rotate: -90, scale: 0, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+              >
+                <MoonIcon className="h-6 w-6 text-indigo-500" />
+              </motion.div>
+            )}
+          </AnimatePresence>
         </div>
 
         <CustomSeparator orientation="vertical" className="!h-6 mx-2" />
