@@ -27,12 +27,12 @@ import { FormUploader } from "@/core/components/form/FormUpload";
 import { PageWrapper } from "@/core/components/general/PageWrapper";
 import PageTransition from "@/core/components/general/PageTransition";
 import TablePlaceholder from "@/core/components/general/TablePlaceholder";
-import { useLoading } from "@/contexts/LoadingContext";
+import { useLoading } from "@/stores/LoadingContext";
 import UserService from "../User/UserService";
 import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
 

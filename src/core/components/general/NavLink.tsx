@@ -14,7 +14,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import type { ViewName } from "@/router/ViewName";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 
 
 type Permission = string;

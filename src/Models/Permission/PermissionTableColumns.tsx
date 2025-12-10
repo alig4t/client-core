@@ -4,7 +4,7 @@ import DateUtil from "@/core/forms/DateUtils";
 import { VIEWNAME } from "@/router/ViewName";
 import NavLink from "@/core/components/general/NavLink";
 import TableLink from "@/core/components/general/TableLink";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { PermissionModel } from "./PermissionModel";

@@ -1,17 +1,21 @@
 // src/components/ProtectedRoute.tsx
 
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../stores/AuthContext"; // Correct path to AuthContext
-import { routeConfig } from "./Routes";
+import { useAuth } from "../../stores/AuthContext"; // Correct path to AuthContext
+import { routeConfig } from "../../router/Routes";
 import ForbiddenPage from "@/pages/ForbiddenPage";
+import { VIEWNAME } from "../../router/ViewName";
+import { getViewPath } from "@/core/router/RouteUtils";
 
 const ProtectedRoute = () => {
   const { isAuthenticated, hasPermission, user } = useAuth();
   const location = useLocation();
 
+  const LOGIN_PAGE = getViewPath(VIEWNAME.LOGIN);
+
   // If not logged in
   if (!isAuthenticated || !user) {
-    return <Navigate to="/login" state={{ from: location }} replace />;
+    return <Navigate to={LOGIN_PAGE} state={{ from: location }} replace />;
   }
 
   const currentRoute = routeConfig.find(

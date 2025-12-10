@@ -1,5 +1,5 @@
 // components/LoadingOverlay.tsx
-import { useLoading } from "@/contexts/LoadingContext";
+import { useLoading } from "@/stores/LoadingContext";
 import LoadingSpinner from "./LoadingSpinner";
 
 export default function LoadingOverlay() {

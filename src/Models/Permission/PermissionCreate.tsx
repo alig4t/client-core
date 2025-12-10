@@ -15,7 +15,7 @@ import Validator from "@/core/forms/validation";
 import PermissionService from "@/Models/Permission/PermissionService";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import PageHeader from "@/core/components/general/PageHeader";

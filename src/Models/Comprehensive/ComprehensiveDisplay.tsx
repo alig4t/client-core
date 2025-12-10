@@ -19,7 +19,7 @@ import { useNavigate } from "react-router-dom";
 import Button from "@/core/components/general/Button";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/core/components/general/PageWrapper";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 
