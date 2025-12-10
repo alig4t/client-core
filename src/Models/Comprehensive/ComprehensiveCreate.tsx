@@ -74,13 +74,7 @@ const ComprehensiveCreate: React.FC = () => {
       if (isEditMode) {
         return ComprehensiveService.update(Number(id), data);
       }
-      return ComprehensiveService.create(
-        {
-          ...data,
-          attachmentIds: [data.attachmentIds] as any
-        }
-
-      );
+      return ComprehensiveService.create(data);
     },
     onSuccess: (data) => {
       toast.success(
@@ -133,7 +127,7 @@ const ComprehensiveCreate: React.FC = () => {
   if (isLoadingInitial && isEditMode) {
     return (
       <PageWrapper>
-         <CreatePagePlaceholder rowCount={3} />
+        <CreatePagePlaceholder rowCount={3} />
       </PageWrapper>
     );
   }
