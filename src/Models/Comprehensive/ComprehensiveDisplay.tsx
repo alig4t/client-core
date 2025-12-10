@@ -13,7 +13,6 @@ import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
-import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
 import TableErrorState from "@/core/components/general/TableErrorState";
 import { useNavigate } from "react-router-dom";
 import Button from "@/core/components/general/button/Button";
@@ -119,7 +118,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
             />
             <DisplayField
               label={comprehensiveModelMeta.fields.booleanField.label}
-              value={comprehensiveRecord.booleanField ? "بله" : "خیر"}
+              value={OptionUtils.GET_BOOLEAN_OPTION(comprehensiveRecord.booleanField)}
             />
             <DisplayField
               label={comprehensiveModelMeta.fields.dateField.label}
@@ -162,7 +161,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
                     label={comprehensiveRecord.oneToOneUser.username}
                   />
                 ) : (
-                  "بدون کاربر"
+                  "---"
                 )
               }
             />
@@ -170,7 +169,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
               label={comprehensiveModelMeta.fields.manyToOneChannel.label}
               value={
                 comprehensiveRecord.manyToOneChannel?.channelName ||
-                "بدون کانال"
+                "---"
               }
             />
             <DisplayField
@@ -181,9 +180,9 @@ const ComprehensiveDisplayPage: React.FC = () => {
               label={comprehensiveModelMeta.fields.updatedAt.label}
               value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveRecord.updatedAt)}
             />
-            
+
             <DisplayField
-              label="پیوست"
+              label={comprehensiveModelMeta.fields.attachmentIds.label}
               value={
                 <FilePreview fileId={(comprehensiveRecord as any).attachments?.[0]?.id} previewSize="sm" className="mr-2" />
               }
