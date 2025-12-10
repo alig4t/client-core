@@ -34,6 +34,7 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
+import CreatePagePlaceholder from "@/core/components/general/CreatePagePlaceholder";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.optional(),
@@ -132,7 +133,7 @@ const ComprehensiveCreate: React.FC = () => {
   if (isLoadingInitial && isEditMode) {
     return (
       <PageWrapper>
-        <TablePlaceholder rowCount={1} />
+         <CreatePagePlaceholder rowCount={3} />
       </PageWrapper>
     );
   }
