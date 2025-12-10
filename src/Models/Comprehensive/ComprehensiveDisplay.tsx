@@ -22,6 +22,7 @@ import { PageWrapper } from "@/core/components/general/PageWrapper";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import ViewPagePlaceholder from "@/core/components/general/ViewPagePlaceholder";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -56,7 +57,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
   if (isLoading) {
     return (
       <PageWrapper>
-        <TablePlaceholder rowCount={1} />
+        <ViewPagePlaceholder />
       </PageWrapper>
     );
   }
