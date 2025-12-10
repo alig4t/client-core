@@ -5,12 +5,12 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { Checkbox } from "@/core/components/form/Checkbox";
 
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
-
-import Button from "../../../components/Button/Button";
 import { Select } from "../form/Select";
 import { Trash2 } from "lucide-react";
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
-import TableErrorState from "@/components/Layout/TableErrorState";
+import Button from "../general/button/Button";
+import TablePlaceholder from "../general/placeHolder/TablePlaceholder";
+import TableErrorState from "../general/TableErrorState";
+
 
 export const THEAD: FC<{ className?: string; children: React.ReactNode }> = ({
   className = "",

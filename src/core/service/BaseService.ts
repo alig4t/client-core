@@ -1,4 +1,5 @@
 import { api, type ApiResponse } from "@/core/service/Axios";
+import type { FilterOperator } from "@/core/forms/FilterOperators";
 
 export interface PagedResponse<T> {
   content: T[];
@@ -8,11 +9,19 @@ export interface PagedResponse<T> {
   size: number;
 }
 
-export interface ServerSideParams {
+// Type-safe filter keys: fieldName_operator (e.g., "createdAt_ge", "name_like")
+type FilterKeys<T> = {
+  [K in keyof T]: `${string & K}_${FilterOperator}`
+}[keyof T];
+
+// Type-safe filters object
+export type Filters<T> = Partial<Record<FilterKeys<T>, any>>;
+
+export interface ServerSideParams<T = any> {
   page?: number;
   size?: number;
   sort?: string;
-  filters?: Record<string, any>;
+  filters?: Filters<T>;
 }
 
 interface ApiResponsePayload<T> {
@@ -34,7 +43,7 @@ export class BaseService<T> {
     this.url = url;
   }
 
-  async getAll(params: ServerSideParams = {}): Promise<ApiResponsePayload<T>> {
+  async getAll(params: ServerSideParams<T> = {}): Promise<ApiResponsePayload<T>> {
     const queryParams = new URLSearchParams();
     queryParams.append('page', String(params.page ?? 0));
     queryParams.append('size', String(params.size ?? 10));

@@ -14,26 +14,27 @@ import OptionUtils from "@/core/forms/OptionUtils";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import z from "@/core/forms/zod.config";
-import { RowContainer } from "@/components/general/RowContainer";
-import ButtonPanel from "@/components/Button/ButtonPanel";
-import Button from "@/components/Button/Button";
-import PageHeader from "@/core/components/general/PageHeader";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import Button from "@/core/components/general/button/Button";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 
-import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 import Validator from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
-import PageTransition from "@/components/Layout/PageTransition";
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
+import { useLoading } from "@/stores/LoadingContext";
 import UserService from "../User/UserService";
 import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.optional(),
@@ -58,6 +59,7 @@ const ComprehensiveCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
   const queryClient = useQueryClient();
   const isEditMode = !!id; // Detect edit mode
+  const { openWaitDialog, closeWaitDialog } = useLoading();
 
   // Load data in edit mode
   const { data: initialData, isLoading: isLoadingInitial } = useQuery({
@@ -72,13 +74,7 @@ const ComprehensiveCreate: React.FC = () => {
       if (isEditMode) {
         return ComprehensiveService.update(Number(id), data);
       }
-      return ComprehensiveService.create(
-        {
-          ...data,
-          attachmentIds: [data.attachmentIds] as any
-        }
-
-      );
+      return ComprehensiveService.create(data);
     },
     onSuccess: (data) => {
       toast.success(
@@ -117,13 +113,9 @@ const ComprehensiveCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-
-
   const handleCancel = () => {
     navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
   };
-
-
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
@@ -135,7 +127,7 @@ const ComprehensiveCreate: React.FC = () => {
   if (isLoadingInitial && isEditMode) {
     return (
       <PageWrapper>
-        <TablePlaceholder rowCount={1} />
+        <CreatePagePlaceholder rowCount={3} />
       </PageWrapper>
     );
   }

@@ -8,7 +8,7 @@ import { buildSortOptions } from "@/core/forms/OptionUtils";
 import { PermissionModelMeta } from "./PermissionModel.meta";
 import type { PermissionModel } from "./PermissionModel";
 import PermissionTableColumns, { PermissionTableHeaders } from "./PermissionTableColumns";
-import BaseDataTable from "@/components/Table/BaseDataTable";
+import BaseDataTable from "@/core/components/Table/BaseDataTable";
 
 
 interface PermissionTableProps {

@@ -1,10 +1,10 @@
-import React, { memo, useCallback, type ReactNode } from "react";
+import React, { useCallback } from "react";
 import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import BaseDataTable from "@/components/Table/BaseDataTable";
+import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { ComprehensiveTableColumns, ComprehensiveTableHeaders } from "./ComprehensiveTableColumns";
 
 interface ComprehensiveTableProps {
@@ -30,7 +30,7 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
     <BaseDataTable<ComprehensiveModel, DynamicFilters>
       queryKey="comprehensive"
       service={ComprehensiveService}
-    
+
       header={ComprehensiveTableHeaders}
       renderRow={(item, index, onDelete) => (
         <ComprehensiveTableColumns
@@ -44,9 +44,9 @@ const ComprehensiveTable: React.FC<ComprehensiveTableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
-      // defaultSort="createdAt,desc"
-      // defaultPageSize={10}
-      // dataIdKey="id"
+    // defaultSort="createdAt,desc"
+    // defaultPageSize={10}
+    // dataIdKey="id"
     />
   );
 };

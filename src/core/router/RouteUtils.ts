@@ -1,5 +1,5 @@
-import { routeConfig } from "./Routes";
-import type { ViewName } from "./ViewName";
+import { routeConfig } from "../../router/Routes";
+import type { ViewName } from "../../router/ViewName";
 
 export const getViewPath = (viewName: ViewName, id?: string | number): string => {
   const route = routeConfig.find((r) => r.name === viewName);

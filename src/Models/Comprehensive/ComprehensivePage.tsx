@@ -1,14 +1,14 @@
 import React, { useState } from "react";
-import Accordion from "@/components/general/Accordion";
+import Accordion from "@/core/components/general/Accordion";
 import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 
 import { useNavigate } from "react-router-dom";
 import ComprehensiveSearch from "./ComprehensiveSearch";
-import PageHeader from "@/core/components/general/PageHeader";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
-import PageTransition from "@/components/Layout/PageTransition";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
 import ComprehensiveTable from "./ComprehensiveTable";
 
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";

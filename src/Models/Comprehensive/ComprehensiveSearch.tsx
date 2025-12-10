@@ -6,18 +6,17 @@ import {
   type searchFilters,
 } from "@/core/components/form/FormWrapper";
 import { DateInput } from "@/core/components/form/DateInput";
-import ButtonPanel from "@/components/Button/ButtonPanel";
-import Button from "@/components/Button/Button";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import Button from "@/core/components/general/button/Button";
 import FormInput from "@/core/components/form/FormInput";
 import { z } from "zod";
 import { FilterOperator } from "@/core/forms/FilterOperators";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import Validator from "@/core/forms/validation";
-import { Checkbox } from "@/core/components/form/Checkbox";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import OptionUtils from "@/core/forms/OptionUtils";
-import RowContainer from "@/components/RowContainer";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
 
 // --- Filter output interface ---
@@ -50,7 +49,7 @@ const searchSchema = z.object({
   [`createdAt_${FilterOperator.GE}`]: Validator.optional(),
   [`createdAt_${FilterOperator.LE}`]: Validator.optional(),
 
-   [`updatedAt_${FilterOperator.GE}`]: Validator.optional(),
+  [`updatedAt_${FilterOperator.GE}`]: Validator.optional(),
   [`updatedAt_${FilterOperator.LE}`]: Validator.optional(),
   // enum (exact search)
   [`enumField_${FilterOperator.EQ}`]: Validator.optional(),
@@ -82,7 +81,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           {/* String */}
           <FormInput
             name={`stringField_${FilterOperator.LIKE}`}
-            label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
+            label={comprehensiveModelMeta.fields.stringField?.label}
             placeholder="جستجو..."
           />
 
@@ -166,10 +165,11 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             type="bigDecimal"
             placeholder={publicMessages.form.range.to}
           />
-
-          <Checkbox
+          <FormSelect
             name={`booleanField_${FilterOperator.EQ}`}
             label={comprehensiveModelMeta.fields.booleanField?.label}
+            placeholder="انتخاب کنید"
+            options={OptionUtils.YES_OR_NO_OPTIONS}
           />
 
           {/* Dates */}
@@ -192,11 +192,11 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
 
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel("تاریخ ایجاد", "from")}
+            label={makeRangeLabel(comprehensiveModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel("تاریخ ایجاد", "to")}
+            label={makeRangeLabel(comprehensiveModelMeta.fields.createdAt.label, "to")}
           />
         </RowContainer>
 

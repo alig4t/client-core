@@ -1,5 +1,5 @@
+import Button from "@/core/components/general/button/Button";
 import { FolderSearch } from "lucide-react";
-import Button from "./Button/Button";
 
 export default function ServiceErrorDisplay({
   refetch,

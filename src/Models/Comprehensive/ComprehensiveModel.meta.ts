@@ -102,6 +102,11 @@ export const comprehensiveModelMeta = createModelMeta<ComprehensiveModel, FormFi
       displayField: "channelName",
       sortable: false,
     },
+    attachmentIds:{
+      label:"بیوست ها",
+      type:"File",
+      sortable: false,
+    }
   },
   GET_AUTOCOMPLETE_DISPLAY_FIELD(),
   GET_DISPLAY_NAME(),

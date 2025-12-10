@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 import permissionService from "@/Models/Permission/PermissionService";
-import Spinner from "@/components/general/Spinner";
+import Spinner from "@/core/components/general/loading/Spinner";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
 import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
@@ -15,17 +15,17 @@ import Validator from "@/core/forms/validation";
 import PermissionService from "@/Models/Permission/PermissionService";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/router/RouteUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
-import PageTransition from "@/components/Layout/PageTransition";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-import PageHeader from "@/core/components/general/PageHeader";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { RowContainer } from "@/components/general/RowContainer";
-import ButtonPanel from "@/components/Button/ButtonPanel";
-import Button from "@/components/Button/Button";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import Button from "@/core/components/general/button/Button";
 
 
 const permissionSchema = z.object({

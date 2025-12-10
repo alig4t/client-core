@@ -3,7 +3,7 @@
 import { useRoutes } from "react-router-dom";
 import "./App.css";
 import { Toaster } from "./components/ui/sonner";
-import GlobalLoaderProvider from "./components/GlobalLoaderProvider";
+import GlobalLoaderProvider from "./core/components/layout/GlobalLoaderProvider";
 import { appRoutes } from "@/router/index"; // ✅ import from src/routes/index.tsx
 
 function App() {

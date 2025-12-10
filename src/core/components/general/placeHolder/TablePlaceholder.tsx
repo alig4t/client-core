@@ -1,7 +1,7 @@
 // src/components/permissions/TablePlaceholder.tsx
 
 import React from 'react';
-import Spinner from '@/components/general/Spinner';
+import Spinner from '@/core/components/general/loading/Spinner';
 
 interface TablePlaceholderProps {
   /**

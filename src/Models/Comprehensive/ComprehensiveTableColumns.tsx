@@ -2,17 +2,17 @@ import React, { memo, type ReactNode } from "react";
 import { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import DateUtil from "@/core/forms/DateUtils";
 import OptionUtils from "@/core/forms/OptionUtils";
-import LinkView from "@/components/general/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
-import NavLink from "@/components/Button/NavLink";
-import TableLink from "@/core/components/general/TableLink";
-import { getViewPath } from "@/router/RouteUtils";
+import NavLink from "@/core/components/general/link/NavLink";
+import TableLink from "@/core/components/general/link/TableLink";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
+import LinkView from "@/core/components/general/link/LinkView";
 
 interface ComprehensiveTableColumnsProps {
     item: ComprehensiveModel;

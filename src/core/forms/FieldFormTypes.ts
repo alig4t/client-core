@@ -12,7 +12,8 @@ export type FieldType =
   | "checkbox"           // For boolean in form
   | "boolean"            // For display in table or readonly (e.g., true/false or yes/no)
   | "autocomplete"
-  | "hidden";
+  | "hidden"
+  | "File";
 
 // Select or autocomplete options
 export interface SelectOption {

@@ -3,25 +3,26 @@ import React from "react";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { RecordDisplayLayout } from "@/components/general/RecordDisplayLayout";
-import { RowContainer } from "@/components/general/RowContainer";
-import LinkView from "@/components/general/LinkView";
+import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
-import { DisplayField } from "@/components/general/DisplayField";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
-import TableErrorState from "@/components/Layout/TableErrorState";
+import TableErrorState from "@/core/components/general/TableErrorState";
 import { useNavigate } from "react-router-dom";
-import Button from "@/components/Button/Button";
+import Button from "@/core/components/general/button/Button";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
-import { getViewPath } from "@/router/RouteUtils";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
+import { publicMessages } from "@/core/forms/MessageUtils";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -44,7 +45,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
 
 
   // Breadcrumb for navigation
-  const breadcrumbItems = useBreadcrumbs("جزئیات رکورد");
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
 
   // Handler for edit button
   const handleEditClick = () => {
@@ -56,7 +57,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
   if (isLoading) {
     return (
       <PageWrapper>
-        <TablePlaceholder rowCount={1} />
+        <ViewPagePlaceholder />
       </PageWrapper>
     );
   }
@@ -76,7 +77,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
     return (
       <PageWrapper>
         <TableErrorState
-          message="رکوردی با این شناسه یافت نشد"
+          message={publicMessages.record.notfound}
           onRetry={refetch}
         />
       </PageWrapper>
@@ -88,7 +89,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <div className="p-8 min-h-screen font-sans">
         <RecordDisplayLayout
-          title={`جزئیات رکورد: ${comprehensiveRecord.id}`}
+          title={publicMessages.record.displayTitle + " : " + comprehensiveRecord.id}
           actions={
             <Button variant="primary" onClick={handleEditClick}>
               ویرایش
@@ -118,7 +119,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
             />
             <DisplayField
               label={comprehensiveModelMeta.fields.booleanField.label}
-              value={comprehensiveRecord.booleanField ? "بله" : "خیر"}
+              value={OptionUtils.GET_BOOLEAN_OPTION(comprehensiveRecord.booleanField)}
             />
             <DisplayField
               label={comprehensiveModelMeta.fields.dateField.label}
@@ -161,7 +162,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
                     label={comprehensiveRecord.oneToOneUser.username}
                   />
                 ) : (
-                  "بدون کاربر"
+                  "---"
                 )
               }
             />
@@ -169,7 +170,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
               label={comprehensiveModelMeta.fields.manyToOneChannel.label}
               value={
                 comprehensiveRecord.manyToOneChannel?.channelName ||
-                "بدون کانال"
+                "---"
               }
             />
             <DisplayField
@@ -180,9 +181,9 @@ const ComprehensiveDisplayPage: React.FC = () => {
               label={comprehensiveModelMeta.fields.updatedAt.label}
               value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveRecord.updatedAt)}
             />
-            
+
             <DisplayField
-              label="پیوست"
+              label={comprehensiveModelMeta.fields.attachmentIds.label}
               value={
                 <FilePreview fileId={(comprehensiveRecord as any).attachments?.[0]?.id} previewSize="sm" className="mr-2" />
               }

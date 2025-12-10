@@ -133,6 +133,11 @@ export const publicMessages = {
     },
   },
 
+  record: {
+    notfound: "رکوردی با این شناسه یافت نشد",
+    displayTitle: "جزئیات رکورد",
+  },
+
   form: {
     buttons: {
       save: "ذخیره",
