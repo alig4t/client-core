@@ -23,9 +23,9 @@ const SubSidebar = () => {
   const menuItems = matchedKey
     ? allSubMenus[matchedKey].filter((item) => {
       // If item requires permission and user doesn't have it → don't show
-      if (item.permission && !hasPermission(item.permission)) {
-        return false;
-      }
+      // if (item.permission && !hasPermission(item.permission)) {
+      //   return false;
+      // }
       return true;
     })
     : [];

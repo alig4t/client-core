@@ -1,6 +1,6 @@
 // components/GlobalLoaderProvider.tsx
 import { useEffect, useState } from "react";
-import LoadingOverlay from "./LoadingOverlay";
+import LoadingOverlay from "../general/LoadingOverlay";
 import { loadingStore } from "@/stores/loadingStore";
 
 export default function GlobalLoaderProvider() {

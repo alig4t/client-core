@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import ModalAnimation from "@/components/general/Modal";
+import ModalAnimation from "@/core/components/general/Modal";
 
 import { APP_LOGO_SMALL_BLUE } from "@/constants/images";
 import LoginPage from "../Login";

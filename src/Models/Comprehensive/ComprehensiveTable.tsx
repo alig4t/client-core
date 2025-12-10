@@ -4,7 +4,7 @@ import type { ComprehensiveModel } from "./ComprehensiveModel";
 import ComprehensiveService from "./ComprehensiveService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import BaseDataTable from "@/components/Table/BaseDataTable";
+import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { ComprehensiveTableColumns, ComprehensiveTableHeaders } from "./ComprehensiveTableColumns";
 
 interface ComprehensiveTableProps {

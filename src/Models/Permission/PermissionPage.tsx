@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Accordion from "@/components/general/Accordion";
 import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import PermissionTable from "./PermissionTable";
 import { Navigate, useNavigate } from "react-router-dom";
@@ -7,13 +6,14 @@ import PermissionSearch from "./PermissionSearch";
 import { useAuth } from "@/stores/AuthContext";
 import { Permission } from "@/router/Permission";
 import ForbiddenPage from "@/pages/ForbiddenPage";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
-import PageTransition from "@/components/Layout/PageTransition";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import PageHeader from "@/core/components/general/PageHeader";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { PermissionModelMeta } from "./PermissionModel.meta";
+import { PageWrapper } from "@/core/components/general/PageWrapper";
+import PageTransition from "@/core/components/general/PageTransition";
+import Accordion from "@/core/components/general/Accordion";
 
 const PermissionPage: React.FC = () => {
   const { hasPermission } = useAuth();

@@ -14,9 +14,9 @@ import OptionUtils from "@/core/forms/OptionUtils";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import z from "@/core/forms/zod.config";
-import { RowContainer } from "@/components/general/RowContainer";
-import ButtonPanel from "@/components/Button/ButtonPanel";
-import Button from "@/components/Button/Button";
+import { RowContainer } from "@/core/components/general/RowContainer";
+import ButtonPanel from "@/core/components/general/ButtonPanel";
+import Button from "@/core/components/general/Button";
 import PageHeader from "@/core/components/general/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
@@ -24,9 +24,10 @@ import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PermissionModelMeta } from "../Permission/PermissionModel.meta";
 import Validator from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
-import { PageWrapper } from "@/components/Layout/PageWrapper";
-import PageTransition from "@/components/Layout/PageTransition";
-import TablePlaceholder from "@/components/Layout/TablePlaceholder";
+import { PageWrapper } from "@/core/components/general/PageWrapper";
+import PageTransition from "@/core/components/general/PageTransition";
+import TablePlaceholder from "@/core/components/general/TablePlaceholder";
+import { useLoading } from "@/contexts/LoadingContext";
 import UserService from "../User/UserService";
 import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
@@ -58,13 +59,7 @@ const ComprehensiveCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
   const queryClient = useQueryClient();
   const isEditMode = !!id; // Detect edit mode
-
-
-
-
-
-
-
+  const { openWaitDialog, closeWaitDialog } = useLoading();
 
   // Load data in edit mode
   const { data: initialData, isLoading: isLoadingInitial } = useQuery({
@@ -130,25 +125,37 @@ const ComprehensiveCreate: React.FC = () => {
     navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
   };
 
+  // Example: Fetch multiple services with global loading dialog
+  const userMutation = useMutation({
+    mutationFn: async (channelId: number) => {
+      openWaitDialog("در حال دریافت اطلاعات کاربران و کانال‌ها...");
 
-  // const userMutation = useMutation({
-  //   mutationFn: async (channelId: number) => {
+      const users = await UserService.getAll();
 
-  //     const users = await UserService.getAll();
+      let params = {
+        page: 0,
+        filters: { channelName_like: "امنیتی" } as any
+      }
 
-
-  //     let params = {
-  //       page: 0,
-  //       filters: { channelName_like: "امنیتی" }
-  //     }
-
-  //     const channel = await ChannelService.getAll(params);
-  //     return { users, channel };
-  //   },
-  //   onSuccess: (data) => {
-  //     console.log( data.channel);
-  //   }
-  // });
+      const channel = await ChannelService.getAll(params);
+      return { users, channel };
+    },
+    onSuccess: (data) => {
+      closeWaitDialog();
+      console.log("Users:", data.users);
+      console.log("Channels:", data.channel);
+      toast.success("اطلاعات با موفقیت دریافت شد", {
+        position: "bottom-left",
+      });
+    },
+    onError: (error: any) => {
+      closeWaitDialog();
+      toast.error("خطا در دریافت اطلاعات", {
+        description: error?.message || "مشکلی در دریافت اطلاعات به وجود آمد",
+        position: "bottom-left",
+      });
+    }
+  });
 
 
   const breadcrumbItems = useBreadcrumbs(
@@ -179,11 +186,15 @@ const ComprehensiveCreate: React.FC = () => {
             )}
           />
 
-          {/* <Button variant="danger"
+          {/* Example: Button to test global loading dialog with multiple service calls */}
+          <Button
+            variant="secondary"
             disabled={userMutation.isPending}
-            onClick={() => userMutation.mutate(1)}>
-            {userMutation.isPending ? "در حال دریافت..." : "دریافت اطلاعات"}
-          </Button> */}
+            onClick={() => userMutation.mutate(1)}
+            className="mb-4"
+          >
+            دریافت اطلاعات از چند سرویس (Global Loading)
+          </Button>
 
           <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
             <FormWrapper

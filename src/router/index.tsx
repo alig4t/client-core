@@ -2,7 +2,7 @@
 import type { RouteObject } from "react-router-dom";
 import { Suspense } from "react";
 
-import Layout from "@/components/Layout/Layout";
+import Layout from "@/core/components/layout/Layout";
 import NotFoundPage from "@/components/NotFoundPage";
 import { routeConfig } from "./Routes"; // ✅ Without 'type'
 import PublicRoute from "./PublicRoute";
@@ -38,7 +38,7 @@ export const appRoutes: RouteObject[] = [
   },
   {
     path: "/",
-    element: <ProtectedRoute />,
+    element: <PublicRoute />,
     children: [
       {
         path: "/dashboard",

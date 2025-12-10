@@ -3,16 +3,16 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { motion, AnimatePresence } from "framer-motion";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
-import Button from "../Button/Button";
 import { Select } from "@/core/components/form/Select";
 import { Trash2, ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
-import TableErrorState from "@/components/Layout/TableErrorState";
-import ConfirmationModal from "@/components/general/ConfirmationModal";
+import ConfirmationModal from "@/core/components/general/ConfirmationModal";
 import { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import type { BaseService } from "@/core/service/BaseService";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { toast } from "sonner";
+import TableErrorState from "../general/TableErrorState";
+import Button from "../general/Button";
 
 // --- Types ---
 export type RenderRowFunction<T> = (

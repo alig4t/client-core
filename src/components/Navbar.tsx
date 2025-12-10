@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { Bell, MoonIcon, SunIcon, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/stores/AuthContext";
-import Dropdown from "./general/DropDown";
+import Dropdown from "../core/components/general/DropDown";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 

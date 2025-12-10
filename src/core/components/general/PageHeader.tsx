@@ -1,7 +1,8 @@
 // components/PageHeader.tsx
 import React from 'react';
-import Button from '../../../components/Button/Button';
-import type{ ButtonVariant } from '../../../components/Button/Button';
+import type { ButtonVariant } from './Button';
+import Button from './Button';
+
 
 type PageHeaderProps = {
   title: string;

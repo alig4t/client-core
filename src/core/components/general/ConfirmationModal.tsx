@@ -3,9 +3,9 @@
 import React from "react";
 // فرض می‌کنیم ModalAnimation در یک مسیر قابل دسترسی است
 
-import Button from "../Button/Button";
 import { AlertTriangle } from "lucide-react";
 import ModalAnimation from "./Modal";
+import Button from "@/core/components/general/Button";
 
 interface ConfirmationModalProps {
   isOpen: boolean;

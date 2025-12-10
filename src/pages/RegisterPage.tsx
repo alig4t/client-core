@@ -5,10 +5,10 @@ import { Link, useNavigate } from "react-router-dom";
 import { useFormContext } from "react-hook-form";
 import { toast } from "sonner";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // Assumed logo is imported from here
-import { FormWrapper } from "@/components/shared/FormWrapper";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { useAuth } from "@/stores/AuthContext";
 import UserService from "@/Models/User/UserService";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
 
 // --- Schema for registration form validation ---
 const registerSchema = z
