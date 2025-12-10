@@ -13,7 +13,6 @@ import { z } from "zod";
 import { FilterOperator } from "@/core/forms/FilterOperators";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import Validator from "@/core/forms/validation";
-import { Checkbox } from "@/core/components/form/Checkbox";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import OptionUtils from "@/core/forms/OptionUtils";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
@@ -50,7 +49,7 @@ const searchSchema = z.object({
   [`createdAt_${FilterOperator.GE}`]: Validator.optional(),
   [`createdAt_${FilterOperator.LE}`]: Validator.optional(),
 
-   [`updatedAt_${FilterOperator.GE}`]: Validator.optional(),
+  [`updatedAt_${FilterOperator.GE}`]: Validator.optional(),
   [`updatedAt_${FilterOperator.LE}`]: Validator.optional(),
   // enum (exact search)
   [`enumField_${FilterOperator.EQ}`]: Validator.optional(),
