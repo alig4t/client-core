@@ -81,7 +81,7 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
           {/* String */}
           <FormInput
             name={`stringField_${FilterOperator.LIKE}`}
-            label={comprehensiveModelMeta.fields.stringField?.label || "رشته"}
+            label={comprehensiveModelMeta.fields.stringField?.label}
             placeholder="جستجو..."
           />
 
@@ -192,11 +192,11 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
 
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel("تاریخ ایجاد", "from")}
+            label={makeRangeLabel(comprehensiveModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel("تاریخ ایجاد", "to")}
+            label={makeRangeLabel(comprehensiveModelMeta.fields.createdAt.label, "to")}
           />
         </RowContainer>
 

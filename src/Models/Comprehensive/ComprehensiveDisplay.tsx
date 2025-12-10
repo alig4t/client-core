@@ -22,6 +22,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
+import { publicMessages } from "@/core/forms/MessageUtils";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -44,7 +45,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
 
 
   // Breadcrumb for navigation
-  const breadcrumbItems = useBreadcrumbs("جزئیات رکورد");
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
 
   // Handler for edit button
   const handleEditClick = () => {
@@ -76,7 +77,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
     return (
       <PageWrapper>
         <TableErrorState
-          message="رکوردی با این شناسه یافت نشد"
+          message={publicMessages.record.notfound}
           onRetry={refetch}
         />
       </PageWrapper>
@@ -88,7 +89,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <div className="p-8 min-h-screen font-sans">
         <RecordDisplayLayout
-          title={`جزئیات رکورد: ${comprehensiveRecord.id}`}
+          title={publicMessages.record.displayTitle + " : " + comprehensiveRecord.id}
           actions={
             <Button variant="primary" onClick={handleEditClick}>
               ویرایش
