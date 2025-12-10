@@ -166,10 +166,11 @@ const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
             type="bigDecimal"
             placeholder={publicMessages.form.range.to}
           />
-
-          <Checkbox
+          <FormSelect
             name={`booleanField_${FilterOperator.EQ}`}
             label={comprehensiveModelMeta.fields.booleanField?.label}
+            placeholder="انتخاب کنید"
+            options={OptionUtils.YES_OR_NO_OPTIONS}
           />
 
           {/* Dates */}
