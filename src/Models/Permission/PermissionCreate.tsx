@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 import permissionService from "@/Models/Permission/PermissionService";
-import Spinner from "@/core/components/general/Spinner";
+import Spinner from "@/core/components/general/loading/Spinner";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
 import { PermissionModelMeta } from "./PermissionModel.meta";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
@@ -18,14 +18,14 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-import PageHeader from "@/core/components/general/PageHeader";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { PageWrapper } from "@/core/components/general/PageWrapper";
-import TablePlaceholder from "@/core/components/general/TablePlaceholder";
-import PageTransition from "@/core/components/general/PageTransition";
-import { RowContainer } from "@/core/components/general/RowContainer";
-import ButtonPanel from "@/core/components/general/ButtonPanel";
-import Button from "@/core/components/general/Button";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import Button from "@/core/components/general/button/Button";
 
 
 const permissionSchema = z.object({

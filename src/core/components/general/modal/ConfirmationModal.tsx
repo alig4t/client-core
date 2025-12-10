@@ -5,7 +5,7 @@ import React from "react";
 
 import { AlertTriangle } from "lucide-react";
 import ModalAnimation from "./Modal";
-import Button from "@/core/components/general/Button";
+import Button from "@/core/components/general/button/Button";
 
 interface ConfirmationModalProps {
   isOpen: boolean;

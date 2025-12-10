@@ -1,4 +1,4 @@
-import Button from "@/core/components/general/Button";
+import Button from "@/core/components/general/button/Button";
 import { type LucideIcon } from "lucide-react";
 
 interface NoContentProps {

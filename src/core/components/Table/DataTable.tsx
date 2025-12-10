@@ -7,8 +7,8 @@ import { Checkbox } from "@/core/components/form/Checkbox";
 import { PAGE_SIZE_OPTIONS, type Option } from "@/core/forms/OptionUtils";
 import { Select } from "../form/Select";
 import { Trash2 } from "lucide-react";
-import Button from "../general/Button";
-import TablePlaceholder from "../general/TablePlaceholder";
+import Button from "../general/button/Button";
+import TablePlaceholder from "../general/placeHolder/TablePlaceholder";
 import TableErrorState from "../general/TableErrorState";
 
 

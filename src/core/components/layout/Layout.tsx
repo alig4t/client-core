@@ -5,7 +5,7 @@ import Navbar from "../../../components/Navbar";
 import { Outlet } from "react-router-dom";
 import SubSidebar from "../../../components/SubSidebar";
 import { LoadingProvider } from "@/stores/LoadingContext";
-import LoadingOverlay from "@/core/components/general/LoadingOverlay";
+import LoadingOverlay from "@/core/components/general/loading/LoadingOverlay";
 
 export default function Layout() {
   return (

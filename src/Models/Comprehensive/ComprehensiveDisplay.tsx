@@ -3,26 +3,26 @@ import React from "react";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { RecordDisplayLayout } from "@/core/components/general/RecordDisplayLayout";
-import { RowContainer } from "@/core/components/general/RowContainer";
-import LinkView from "@/core/components/general/LinkView";
+import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
-import { DisplayField } from "@/core/components/general/DisplayField";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
 import ComprehensiveService from "./ComprehensiveService";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
-import TablePlaceholder from "@/core/components/general/TablePlaceholder";
+import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
 import TableErrorState from "@/core/components/general/TableErrorState";
 import { useNavigate } from "react-router-dom";
-import Button from "@/core/components/general/Button";
+import Button from "@/core/components/general/button/Button";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/PageWrapper";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import ViewPagePlaceholder from "@/core/components/general/ViewPagePlaceholder";
+import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL

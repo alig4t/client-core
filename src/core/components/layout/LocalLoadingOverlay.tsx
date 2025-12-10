@@ -1,6 +1,6 @@
 // src/components/Layout/LocalLoadingOverlay.tsx
 import React from "react";
-import LoadingSpinner from "@/core/components/general/LoadingSpinner";
+import LoadingSpinner from "@/core/components/general/loading/LoadingSpinner";
 
 interface LocalLoadingOverlayProps {
   isLoading: boolean;

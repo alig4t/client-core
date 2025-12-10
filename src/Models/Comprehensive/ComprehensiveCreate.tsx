@@ -14,18 +14,18 @@ import OptionUtils from "@/core/forms/OptionUtils";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import z from "@/core/forms/zod.config";
-import { RowContainer } from "@/core/components/general/RowContainer";
-import ButtonPanel from "@/core/components/general/ButtonPanel";
-import Button from "@/core/components/general/Button";
-import PageHeader from "@/core/components/general/PageHeader";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import Button from "@/core/components/general/button/Button";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 
 import Validator from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
-import { PageWrapper } from "@/core/components/general/PageWrapper";
-import PageTransition from "@/core/components/general/PageTransition";
-import TablePlaceholder from "@/core/components/general/TablePlaceholder";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
 import { useLoading } from "@/stores/LoadingContext";
 import UserService from "../User/UserService";
 import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
@@ -34,7 +34,7 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
-import CreatePagePlaceholder from "@/core/components/general/CreatePagePlaceholder";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.optional(),

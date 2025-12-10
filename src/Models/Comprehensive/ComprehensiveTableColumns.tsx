@@ -3,8 +3,8 @@ import { TBODY, THEAD } from "@/core/components/Table/DataTable";
 import DateUtil from "@/core/forms/DateUtils";
 import OptionUtils from "@/core/forms/OptionUtils";
 import { VIEWNAME } from "@/router/ViewName";
-import NavLink from "@/core/components/general/NavLink";
-import TableLink from "@/core/components/general/TableLink";
+import NavLink from "@/core/components/general/link/NavLink";
+import TableLink from "@/core/components/general/link/TableLink";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
@@ -12,7 +12,7 @@ import { Permission } from "@/router/Permission";
 import type { ComprehensiveModel } from "./ComprehensiveModel";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
-import LinkView from "@/core/components/general/LinkView";
+import LinkView from "@/core/components/general/link/LinkView";
 
 interface ComprehensiveTableColumnsProps {
     item: ComprehensiveModel;

@@ -1,7 +1,7 @@
 // src/components/permissions/ViewPagePlaceholder.tsx
 
 import React from 'react';
-import Spinner from '@/core/components/general/Spinner';
+import Spinner from '@/core/components/general/loading/Spinner';
 
 interface ViewPagePlaceholderProps {
   /**

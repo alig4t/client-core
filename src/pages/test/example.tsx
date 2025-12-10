@@ -6,13 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import z from "@/core/forms/zod.config";
-import Button from "@/core/components/general/Button";
-import PageHeader from "@/core/components/general/PageHeader";
+import Button from "@/core/components/general/button/Button";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 
 import Validator from "@/core/forms/validation";
-import { PageWrapper } from "@/core/components/general/PageWrapper";
-import PageTransition from "@/core/components/general/PageTransition";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
 import { useLoading } from "@/stores/LoadingContext";
 import UserService from "@/Models/User/UserService";
 import ChannelService from "@/Models/Channel/ChannelService";

@@ -13,10 +13,10 @@ import { FilterOperator } from "@/core/forms/FilterOperators";
 import Validator from "@/core/forms/validation";
 
 import { DateInput } from "@/core/components/form/DateInput";
-import { PageWrapper } from "@/core/components/general/PageWrapper";
-import ButtonPanel from "@/core/components/general/ButtonPanel";
-import Button from "@/core/components/general/Button";
-import { RowContainer } from "@/core/components/general/RowContainer";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import Button from "@/core/components/general/button/Button";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
 
 
 interface PermissionSearchProps {

@@ -1,4 +1,4 @@
-import Button from "@/core/components/general/Button";
+import Button from "@/core/components/general/button/Button";
 import { FolderSearch } from "lucide-react";
 
 export default function ServiceErrorDisplay({

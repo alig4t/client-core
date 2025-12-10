@@ -1,6 +1,6 @@
 // src/components/LazyFallback.tsx
 import React from "react";
-import LoadingSpinner from "@/core/components/general/LoadingSpinner";
+import LoadingSpinner from "@/core/components/general/loading/LoadingSpinner";
 
 const LazyFallbackElement: React.FC = () => {
   return (

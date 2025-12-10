@@ -8,11 +8,11 @@ import { Permission } from "@/router/Permission";
 import ForbiddenPage from "@/pages/ForbiddenPage";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import PageHeader from "@/core/components/general/PageHeader";
+import PageHeader from "@/core/components/general/container/PageHeader";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { PermissionModelMeta } from "./PermissionModel.meta";
-import { PageWrapper } from "@/core/components/general/PageWrapper";
-import PageTransition from "@/core/components/general/PageTransition";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
 import Accordion from "@/core/components/general/Accordion";
 
 const PermissionPage: React.FC = () => {
