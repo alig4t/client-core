@@ -131,9 +131,27 @@ const LandingPage: React.FC = () => {
         {/* Main Hero content with login form */}
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div
-            className={`flex items-center justify-center ${heroContentHeightClass}`}
+            className={`flex flex-col items-center justify-center ${heroContentHeightClass}`}
           >
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 w-full py-16">
+            {/* Title and Description Section */}
+            <div className="text-center z-10 mb-8 lg:mb-12 max-w-4xl">
+              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl leading-tight">
+                <span className="text-indigo-600 dark:text-indigo-400">
+                  {import.meta.env.VITE_APP_TITLE}:
+                </span>{" "}
+                مدیریت پیام‌رسان‌ها،{" "}
+                <span className="block text-gray-900 dark:text-white mt-2">
+                  تحلیل و پایش فوری.
+                </span>
+              </h1>
+              <p className="mt-6 text-lg lg:text-xl leading-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+                پلتفرم جامع پایش شبکه‌های اجتماعی. تمام پیام‌ها، کانال‌ها و
+                کلیدواژه‌ها را در یک داشبورد زیبا مدیریت و تحلیل کنید.
+              </p>
+            </div>
+
+            {/* Two Column Section: Animation + Login Form */}
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 w-full">
               {/* Animated SVG section (Left side) */}
               <div className="lg:w-1/2 flex justify-center z-10 order-2 lg:order-1">
                 <div className="w-full max-w-lg mx-auto h-96">
@@ -144,16 +162,16 @@ const LandingPage: React.FC = () => {
               {/* Login Form Card (Right side) */}
               <div className="lg:w-1/2 flex justify-center z-10 order-1 lg:order-2">
                 <div className="w-full max-w-md p-8 lg:p-10 space-y-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-gray-200 dark:border-gray-700">
-                  {/* Title Section */}
+                  {/* Login Title Section */}
                   <div className="text-center space-y-2">
-                    <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white">
+                    <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
                       ورود به{" "}
                       <span className="text-indigo-600 dark:text-indigo-400">
                         داشبورد
                       </span>
-                    </h1>
+                    </h2>
                     <p className="text-sm text-gray-600 dark:text-gray-400">
-                      به پلتفرم مدیریت شبکه‌های اجتماعی خوش آمدید
+                      لطفاً اطلاعات خود را وارد کنید
                     </p>
                   </div>
 
