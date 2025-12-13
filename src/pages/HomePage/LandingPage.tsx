@@ -131,46 +131,46 @@ const LandingPage: React.FC = () => {
         {/* Main Hero content with login form */}
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div
-            className={`flex flex-col items-center justify-center ${heroContentHeightClass}`}
+            className={`flex flex-col items-center justify-center ${heroContentHeightClass} py-8 lg:py-12`}
           >
             {/* Title and Description Section */}
-            <div className="text-center z-10 mb-8 lg:mb-12 max-w-4xl">
-              <h1 className="text-4xl font-extrabold tracking-tight sm:text-5xl lg:text-6xl leading-tight">
+            <div className="text-center z-10 mb-6 lg:mb-10 max-w-3xl px-4">
+              <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl leading-tight">
                 <span className="text-indigo-600 dark:text-indigo-400">
                   {import.meta.env.VITE_APP_TITLE}:
                 </span>{" "}
                 مدیریت پیام‌رسان‌ها،{" "}
-                <span className="block text-gray-900 dark:text-white mt-2">
+                <span className="block text-gray-900 dark:text-white mt-1">
                   تحلیل و پایش فوری.
                 </span>
               </h1>
-              <p className="mt-6 text-lg lg:text-xl leading-8 text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
+              <p className="mt-4 text-sm lg:text-base leading-7 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
                 پلتفرم جامع پایش شبکه‌های اجتماعی. تمام پیام‌ها، کانال‌ها و
                 کلیدواژه‌ها را در یک داشبورد زیبا مدیریت و تحلیل کنید.
               </p>
             </div>
 
             {/* Two Column Section: Animation + Login Form */}
-            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 w-full">
+            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 w-full">
               {/* Animated SVG section (Left side) */}
               <div className="lg:w-1/2 flex justify-center z-10 order-2 lg:order-1">
-                <div className="w-full max-w-lg mx-auto h-96">
+                <div className="w-full max-w-md mx-auto h-80">
                   <SocialMonitoringAnimation width="100%" height="100%" />
                 </div>
               </div>
 
               {/* Login Form Card (Right side) */}
               <div className="lg:w-1/2 flex justify-center z-10 order-1 lg:order-2">
-                <div className="w-full max-w-md p-8 lg:p-10 space-y-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-gray-200 dark:border-gray-700">
+                <div className="w-full max-w-md p-6 lg:p-8 space-y-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-gray-200 dark:border-gray-700">
                   {/* Login Title Section */}
-                  <div className="text-center space-y-2">
-                    <h2 className="text-2xl lg:text-3xl font-bold text-gray-900 dark:text-white">
+                  <div className="text-center space-y-1">
+                    <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
                       ورود به{" "}
                       <span className="text-indigo-600 dark:text-indigo-400">
                         داشبورد
                       </span>
                     </h2>
-                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                    <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
                       لطفاً اطلاعات خود را وارد کنید
                     </p>
                   </div>
@@ -179,14 +179,14 @@ const LandingPage: React.FC = () => {
                   <FormWrapper
                     schema={loginSchema}
                     onSubmit={onSubmit}
-                    className="space-y-5"
+                    className="space-y-4"
                   >
                     <LoginFormFields />
 
                     <button
                       disabled={mutation.isPending}
                       type="submit"
-                      className="w-full px-4 py-3 font-bold text-white mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:from-indigo-400 disabled:to-purple-400 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] duration-300"
+                      className="w-full px-4 py-3 font-bold text-white mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:from-indigo-400 disabled:to-purple-400 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] duration-300"
                     >
                       {mutation.isPending ? (
                         <span className="flex items-center justify-center gap-2">
@@ -219,7 +219,7 @@ const LandingPage: React.FC = () => {
                   </FormWrapper>
 
                   {/* Terms text */}
-                  <p className="text-xs text-center text-gray-500 dark:text-gray-400 pt-4">
+                  <p className="text-xs text-center text-gray-500 dark:text-gray-400 pt-2">
                     ورود شما به منزله قبول{" "}
                     <a
                       href="#"
