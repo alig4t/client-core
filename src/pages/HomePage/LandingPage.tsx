@@ -1,12 +1,111 @@
 // src/pages/LandingPage.tsx
 
 import React from "react";
+import { z } from "zod";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { useFormContext } from "react-hook-form";
+import { toast } from "sonner";
+import { useAuth } from "@/stores/AuthContext";
+import ErrorFormText from "@/core/components/form/ErrorFormText";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
+import UserService from "@/Models/User/UserService";
 import Navbar from "./HomeNavbar";
 import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 
+const loginSchema = z.object({
+  username: z.string().nonempty("نام کاربری را وارد نمایید"),
+  password: z.string().nonempty("رمز عبور را وارد نمایید"),
+});
+
+type LoginFormData = z.infer<typeof loginSchema>;
+
+function LoginFormFields() {
+  const {
+    register,
+    formState: { errors },
+  } = useFormContext<LoginFormData>();
+
+  return (
+    <>
+      <div className="w-full">
+        <label
+          htmlFor="username"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right mb-1"
+        >
+          نام کاربری
+        </label>
+        <input
+          id="username"
+          type="text"
+          placeholder="مثلا aligh75"
+          {...register("username")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+        />
+        {errors.username && (
+          <ErrorFormText msg={errors.username.message as string} />
+        )}
+      </div>
+
+      <div className="w-full">
+        <label
+          htmlFor="password"
+          className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right mb-1"
+        >
+          رمز عبور
+        </label>
+        <input
+          id="password"
+          type="password"
+          placeholder="رمز عبور خود را وارد کنید"
+          {...register("password")}
+          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+        />
+        {errors.password && (
+          <ErrorFormText msg={errors.password.message as string} />
+        )}
+      </div>
+    </>
+  );
+}
+
 const LandingPage: React.FC = () => {
-  // Height settings: Navbar height is approximately 5rem.
+  const navigate = useNavigate();
+  const { login: authLogin } = useAuth();
   const heroContentHeightClass = "min-h-[calc(100vh-5rem)]";
+
+  const mutation = useMutation({
+    mutationFn: (data: LoginFormData) => UserService.login(data),
+    onSuccess: (data) => {
+      const token = data.data.token;
+      const user = data.data.user;
+
+      if (!token || !user) {
+        throw new Error("Invalid login response: token or user missing");
+      }
+
+      authLogin(token, user);
+      toast.success("ورود موفقیت آمیز بود", {
+        description: "خوش آمدید! در حال انتقال به داشبورد...",
+        position: "bottom-left",
+      });
+
+      setTimeout(() => {
+        navigate("/dashboard", { replace: true });
+      }, 1000);
+    },
+    onError: (error: any) => {
+      toast.error("ورود ناموفق بود", {
+        description:
+          error?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",
+        position: "bottom-left",
+      });
+    },
+  });
+
+  const onSubmit = (data: LoginFormData) => {
+    mutation.mutate(data);
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-y-auto">
@@ -29,67 +128,95 @@ const LandingPage: React.FC = () => {
           />
         </div>
 
-        {/* Main Hero content with full height setting */}
+        {/* Main Hero content with login form */}
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div
-            // Set height exactly to remaining screen space and center content vertically
             className={`flex items-center justify-center ${heroContentHeightClass}`}
           >
-            <div className="flex flex-col lg:flex-row items-center gap-16 w-full py-16">
-              {/* Text and CTA section (Right side) */}
-              <div className="lg:w-1/2 text-center lg:text-right z-10">
-                <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl leading-tight">
-                  <span className="text-indigo-600 dark:text-indigo-400">
-                    {import.meta.env.VITE_APP_TITLE}:
-                  </span>{" "}
-                  مدیریت پیام‌رسان‌ها،{" "}
-                  <span className="block text-gray-900 dark:text-white mt-2">
-                    تحلیل و پایش فوری.
-                  </span>
-                </h1>
-                <p className="mt-6 text-lg leading-8 text-gray-600 dark:text-gray-300">
-                  پلتفرم جامع پایش شبکه‌های اجتماعی. تمام پیام‌ها، کانال‌ها و
-                  کلیدواژه‌ها را در یک داشبورد زیبا مدیریت و تحلیل کنید.
-                </p>
-                <div className="mt-10 flex items-center justify-center lg:justify-start gap-x-6">
-                  <a
-                    href="/signup"
-                    className="rounded-full bg-indigo-600 px-6 py-3 text-lg font-semibold text-white shadow-lg hover:bg-indigo-500 transition-all transform hover:scale-105"
-                  >
-                    شروع کنید
-                  </a>
-                  <a
-                    href="#features"
-                    className="text-lg font-semibold leading-6 text-gray-900 dark:text-gray-200 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors"
-                  >
-                    بیشتر بدانید <span aria-hidden="true">→</span>
-                  </a>
+            <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 w-full py-16">
+              {/* Animated SVG section (Left side) */}
+              <div className="lg:w-1/2 flex justify-center z-10 order-2 lg:order-1">
+                <div className="w-full max-w-lg mx-auto h-96">
+                  <SocialMonitoringAnimation width="100%" height="100%" />
                 </div>
               </div>
 
-              {/* Animated SVG section (Left side) */}
-              <div className="lg:w-1/2 flex justify-center z-10">
-                <div className="w-full max-w-lg mx-auto h-96">
-                  <SocialMonitoringAnimation width="100%" height="100%" />
+              {/* Login Form Card (Right side) */}
+              <div className="lg:w-1/2 flex justify-center z-10 order-1 lg:order-2">
+                <div className="w-full max-w-md p-8 lg:p-10 space-y-6 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-gray-200 dark:border-gray-700">
+                  {/* Title Section */}
+                  <div className="text-center space-y-2">
+                    <h1 className="text-3xl lg:text-4xl font-extrabold text-gray-900 dark:text-white">
+                      ورود به{" "}
+                      <span className="text-indigo-600 dark:text-indigo-400">
+                        داشبورد
+                      </span>
+                    </h1>
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      به پلتفرم مدیریت شبکه‌های اجتماعی خوش آمدید
+                    </p>
+                  </div>
+
+                  {/* Login Form */}
+                  <FormWrapper
+                    schema={loginSchema}
+                    onSubmit={onSubmit}
+                    className="space-y-5"
+                  >
+                    <LoginFormFields />
+
+                    <button
+                      disabled={mutation.isPending}
+                      type="submit"
+                      className="w-full px-4 py-3 font-bold text-white mt-6 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:from-indigo-400 disabled:to-purple-400 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] duration-300"
+                    >
+                      {mutation.isPending ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
+                          </svg>
+                          در حال بررسی...
+                        </span>
+                      ) : (
+                        "ورود به داشبورد"
+                      )}
+                    </button>
+                  </FormWrapper>
+
+                  {/* Terms text */}
+                  <p className="text-xs text-center text-gray-500 dark:text-gray-400 pt-4">
+                    ورود شما به منزله قبول{" "}
+                    <a
+                      href="#"
+                      className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+                    >
+                      قوانین و مقررات
+                    </a>{" "}
+                    است.
+                  </p>
                 </div>
               </div>
             </div>
           </div>
         </div>
       </main>
-
-      {/* This is a placeholder for next sections to ensure scroll is enabled if needed */}
-      <section
-        id="features"
-        className="py-24 bg-gray-50 dark:bg-gray-800 text-center"
-      >
-        <h2 className="text-3xl font-bold text-gray-900 dark:text-white">
-          ویژگی‌ها و امکانات پلتفرم
-        </h2>
-        <p className="mt-4 text-gray-600 dark:text-gray-400">
-          اینجا محتوای بخش‌های بعدی قرار می‌گیرد.
-        </p>
-      </section>
     </div>
   );
 };
