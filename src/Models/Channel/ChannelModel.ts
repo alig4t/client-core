@@ -1,9 +1,13 @@
 import type { BaseModel } from "@/core/models/BaseModel";
-import type { PlatformModel } from "../Platform/PlatformModel";
+import type { MessagingPlatformModel } from "@/Models/MessagingPlatform/MessagingPlatformModel";
+import type { BotModel } from "@/Models/Bot/BotModel";
+
+import type { ChannelStatusEnum } from "./ChannelStatusEnum";
 
 export interface ChannelModel extends BaseModel {
-    channelName: string;
-    channelIdentifier: string;
-    status: string; // or you can define an enum for status
-    platform: PlatformModel;
+  channelName: string;
+  channelIdentifier: string;
+  status: ChannelStatusEnum;
+  platform: MessagingPlatformModel;
+  bots?: BotModel[];
 }

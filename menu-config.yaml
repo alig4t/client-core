@@ -1,0 +1,24 @@
+# Centralized Menu Configuration
+# This file is auto-updated by the generator when routing.showInMenu = true
+
+entities:
+  # Auto-generated entries from entity meta files
+  # Manual entries can be added here and will be preserved
+
+  # Example manual entry:
+  Dashboard:
+    basePath: /dashboard
+    menuLabel: خانه
+    menuIcon: Home
+    showInMenu: true
+    menuOrder: 0
+
+  Portal:
+    basePath: /dashboard/portal
+    menuLabel: پورتال
+    menuIcon: Bolt
+    showInMenu: true
+    menuOrder: 5
+    # Note: No element, just menu grouping
+
+  # Generated entities will be appended below

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+    <name>DashboardData</name>
+    <generate>true</generate>
+    <fields>
+        <field>
+            <name>frequencyCount</name>
+            <type>INTEGER</type>
+            <required>true</required>
+        </field>
+        <field>
+            <name>lastMatchedAt</name>
+            <type>LOCAL_DATE_TIME</type>
+            <required>true</required>
+        </field>
+    </fields>
+    <relationships>
+        <relationship>
+            <name>coreUser</name>
+            <relationshipType>MANY_TO_ONE</relationshipType>
+            <relatedEntityName>User</relatedEntityName>
+            <coreUser>true</coreUser>
+            <joinColumnName>core_user_id</joinColumnName>
+            <required>true</required>
+            <fetch>LAZY</fetch>
+        </relationship>
+        <relationship>
+            <name>keyword</name>
+            <relationshipType>MANY_TO_ONE</relationshipType>
+            <relatedEntityName>Keyword</relatedEntityName>
+            <joinColumnName>keyword_id</joinColumnName>
+            <required>true</required>
+            <fetch>LAZY</fetch>
+        </relationship>
+        <relationship>
+            <name>channel</name>
+            <relationshipType>MANY_TO_ONE</relationshipType>
+            <relatedEntityName>Channel</relatedEntityName>
+            <joinColumnName>channel_id</joinColumnName>
+            <required>true</required>
+            <fetch>LAZY</fetch>
+        </relationship>
+    </relationships>
+</entity>

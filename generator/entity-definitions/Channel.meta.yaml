@@ -1,0 +1,44 @@
+# Frontend Metadata for Channel Entity
+
+displayName: کانال
+displayNamePlural: کانال‌ها
+autocompleteField: channelName
+
+routing:
+  basePath: /dashboard/portal/channels
+  menuLabel: کانال‌ها
+  menuIcon: MessageSquare
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 10
+
+fields:
+  channelName:
+    label: نام کانال
+    placeholder: نام کانال را وارد کنید
+    sortable: true
+
+  channelIdentifier:
+    label: شناسه کانال
+    placeholder: شناسه یکتا کانال
+    sortable: true
+
+  status:
+    label: وضعیت
+    sortable: true
+    enums:
+      ACTIVE: فعال
+      INACTIVE: غیرفعال
+
+relationships:
+  platform:
+    label: پلتفرم
+    type: autocomplete
+    displayField: platformName
+    sortable: false
+
+  bots:
+    label: ربات‌ها
+    type: multiAutoComplete
+    displayField: token
+    sortable: false

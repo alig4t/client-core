@@ -1,0 +1,102 @@
+# Frontend Metadata for ComprehensiveEntity
+
+displayName: ترکیبی
+displayNamePlural: ترکیبی‌ها
+autocompleteField: stringField
+
+routing:
+  basePath: /dashboard/portal/comprehensive
+  menuLabel: ترکیبی‌ها
+  menuIcon: Code
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 99
+
+fields:
+  stringField:
+    label: رشته
+    placeholder: مقدار رشته‌ای را وارد کنید
+    sortable: true
+
+  integerField:
+    label: عدد صحیح
+    placeholder: مثلاً 42
+    sortable: true
+
+  longField:
+    label: عدد بلند
+    placeholder: مثلاً 9007199254740991
+    sortable: true
+
+  doubleField:
+    label: عدد اعشاری
+    placeholder: مثلاً 3.14
+    sortable: true
+
+  bigDecimalField:
+    label: عدد دقیق (BigDecimal)
+    placeholder: مثلاً 123.456789
+    sortable: true
+
+  booleanField:
+    label: بولین
+    sortable: true
+
+  dateField:
+    label: تاریخ و زمان (UTC)
+    sortable: true
+
+  localDateField:
+    label: تاریخ (بدون زمان)
+    sortable: false
+
+  localDateTimeField:
+    label: تاریخ و زمان محلی
+    sortable: false
+
+  enumField:
+    label: گزینه‌ها
+    sortable: false
+    enums:
+      OPTION_A: گزینه A
+      OPTION_B: گزینه B
+
+  uniqueField:
+    label: فیلد یکتا
+    placeholder: مقدار یکتا
+    sortable: false
+
+  indexedField:
+    label: فیلد ایندکس‌شده
+    placeholder: مقدار ایندکس‌شده
+    sortable: false
+
+relationships:
+  oneToOneUser:
+    label: کاربر مرتبط
+    type: autocomplete
+    displayField: username
+    sortable: false
+
+  manyToOneChannel:
+    label: کانال مرتبط
+    type: autocomplete
+    displayField: channelName
+    sortable: false
+
+  oneToManyKeywords:
+    label: کلمات کلیدی
+    type: multiAutoComplete
+    displayField: keyword
+    sortable: false
+
+  manyToManyMessages:
+    label: پیام‌ها
+    type: multiAutoComplete
+    displayField: content
+    sortable: false
+
+  attachments:
+    label: پیوست‌ها
+    type: File
+    sortable: false

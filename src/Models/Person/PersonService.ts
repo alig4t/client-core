@@ -1,11 +1,13 @@
-// services/PersonService.ts
-import { BaseService } from '@/core/service/BaseService';
-import type { PersonModel } from '@/Models/Person/PersonModel';
+import { BaseService } from "@/core/service/BaseService";
+import type { PersonModel } from "./PersonModel";
 
-class PersonService extends BaseService<PersonModel> {
+class PersonServiceClass extends BaseService<PersonModel> {
   constructor() {
-    super('/persons');
+    super("/person");
   }
 }
 
-export default new PersonService();
+const PersonService = new PersonServiceClass();
+
+export default PersonService;
+export { PersonService };

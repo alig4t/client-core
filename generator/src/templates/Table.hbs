@@ -1,0 +1,46 @@
+import React, { useCallback } from "react";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import type { {{entityName}}Model } from "./{{entityName}}Model";
+import {{entityName}}Service from "./{{entityName}}Service";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import { {{entityName}}TableColumns, {{entityName}}TableHeaders } from "./{{entityName}}TableColumns";
+
+interface {{entityName}}TableProps {
+  filters: DynamicFilters;
+  onSelectionChange?: (selectedIds: (string | number)[]) => void;
+}
+
+const {{entityName}}Table: React.FC<{{entityName}}TableProps> = ({
+  filters,
+  onSelectionChange,
+}) => {
+  const handleSelectionChange = useCallback(
+    (ids: (string | number)[]) => {
+      const numericIds = ids
+        .map((id) => Number(id))
+        .filter((id) => !Number.isNaN(id));
+      onSelectionChange?.(numericIds);
+    },
+    [onSelectionChange]
+  );
+
+  return (
+    <BaseDataTable<{{entityName}}Model, DynamicFilters>
+      queryKey="{{camelCase entityName}}"
+      service={ {{entityName}}Service}
+      header={ {{entityName}}TableHeaders}
+      renderRow={(item, onDelete) => (
+        <{{entityName}}TableColumns key={item.id} item={item} onDelete={onDelete} />
+      )}
+      title={ {{camelCase entityName}}ModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions({{camelCase entityName}}ModelMeta)}
+      filters={filters}
+      onSelectionChange={handleSelectionChange}
+      enableDelete={true}
+    />
+  );
+};
+
+export default {{entityName}}Table;

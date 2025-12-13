@@ -1,0 +1,37 @@
+
+displayName: کلمه کلیدی
+displayNamePlural: کلمات کلیدی
+autocompleteField: keywordText
+
+routing:
+  basePath: /dashboard/portal/keywords
+  menuLabel: کلمات کلیدی
+  menuIcon: Hash
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 40
+
+fields:
+  keywordText:
+    label: متن کلمه کلیدی
+    placeholder: کلمه کلیدی را وارد کنید
+    sortable: true
+
+relationships:
+  coreUser:
+    label: کاربر
+    type: autocomplete
+    displayField: username
+    sortable: false
+
+  channel:
+    label: کانال
+    type: autocomplete
+    displayField: channelName
+    sortable: false
+
+  messages:
+    label: پیام‌ها
+    type: multiAutoComplete
+    displayField: content
+    sortable: false

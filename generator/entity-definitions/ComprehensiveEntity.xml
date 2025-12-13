@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+    <name>ComprehensiveEntity</name>
+    <tableName>comprehensive_entities</tableName>
+    <generate>true</generate>
+    <fields>
+        <!-- All field types -->
+        <field>
+            <name>stringField</name>
+            <type>STRING</type>
+            <required>true</required>
+            <searchable>true</searchable>
+            <minLength>5</minLength>
+            <maxLength>100</maxLength>
+            <pattern>^[a-zA-Z0-9 ]*$</pattern>
+        </field>
+        <field>
+            <name>integerField</name>
+            <type>INTEGER</type>
+            <min>0</min>
+            <max>1000</max>
+        </field>
+        <field>
+            <name>longField</name>
+            <type>LONG</type>
+        </field>
+        <field>
+            <name>doubleField</name>
+            <type>DOUBLE</type>
+        </field>
+        <field>
+            <name>bigDecimalField</name>
+            <type>BIG_DECIMAL</type>
+        </field>
+        <field>
+            <name>booleanField</name>
+            <type>BOOLEAN</type>
+        </field>
+        <field>
+            <name>dateField</name>
+            <type>DATE</type>
+        </field>
+        <field>
+            <name>localDateField</name>
+            <type>LOCAL_DATE</type>
+        </field>
+        <field>
+            <name>localDateTimeField</name>
+            <type>LOCAL_DATE_TIME</type>
+        </field>
+        <field>
+            <name>enumField</name>
+            <type>ENUM</type>
+            <enums>
+                <enum>
+                    <name>OPTION_A</name>
+                    <value>Option A</value>
+                </enum>
+                <enum>
+                    <name>OPTION_B</name>
+                    <value>Option B</value>
+                </enum>
+            </enums>
+        </field>
+
+        <!-- Fields with special constraints -->
+        <field>
+            <name>uniqueField</name>
+            <type>STRING</type>
+            <unique>true</unique>
+            <required>true</required>
+        </field>
+        <field>
+            <name>indexedField</name>
+            <type>STRING</type>
+            <indexed>true</indexed>
+        </field>
+    </fields>
+    <relationships>
+        <!-- OneToOne to core User -->
+        <relationship>
+            <name>oneToOneUser</name>
+            <relationshipType>ONE_TO_ONE</relationshipType>
+            <relatedEntityName>User</relatedEntityName>
+            <coreUser>true</coreUser>
+            <joinColumnName>user_id</joinColumnName>
+            <required>true</required>
+            <unique>true</unique>
+        </relationship>
+
+        <!-- ManyToOne to existing Channel entity -->
+        <relationship>
+            <name>manyToOneChannel</name>
+            <relationshipType>MANY_TO_ONE</relationshipType>
+            <relatedEntityName>Channel</relatedEntityName>
+            <joinColumnName>channel_id</joinColumnName>
+            <required>true</required>
+        </relationship>
+
+        <!-- Unidirectional OneToMany to existing Keyword entity -->
+        <relationship>
+            <name>oneToManyKeywords</name>
+            <relationshipType>ONE_TO_MANY</relationshipType>
+            <relatedEntityName>Keyword</relatedEntityName>
+            <joinColumnName>comprehensive_entity_id</joinColumnName>
+        </relationship>
+
+        <!-- ManyToMany to existing Message entity -->
+        <relationship>
+            <name>manyToManyMessages</name>
+            <relationshipType>MANY_TO_MANY</relationshipType>
+            <relatedEntityName>Message</relatedEntityName>
+            <joinTableName>comprehensive_message</joinTableName>
+        </relationship>
+        
+        <!-- OneToMany to core Document -->
+        <relationship>
+            <name>attachments</name>
+            <relationshipType>ONE_TO_MANY</relationshipType>
+            <relatedEntityName>Document</relatedEntityName>
+            <document>true</document>
+            <joinColumnName>comprehensive_entity_id</joinColumnName>
+        </relationship>
+    </relationships>
+</entity>

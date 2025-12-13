@@ -1,0 +1,32 @@
+displayName: پلتفرم پیام‌رسانی
+displayNamePlural: پلتفرم‌های پیام‌رسانی
+autocompleteField: platformName
+
+routing:
+  basePath: /dashboard/portal/platforms
+  menuLabel: پلتفرم‌ها
+  menuIcon: Globe
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 5
+
+fields:
+  platformName:
+    label: نام پلتفرم
+    placeholder: نام پلتفرم را وارد کنید
+    sortable: true
+
+  platformKey:
+    label: کلید پلتفرم
+    placeholder: کلید یکتا پلتفرم
+    sortable: true
+
+  apiEndpoint:
+    label: آدرس API
+    placeholder: https://api.example.com
+    sortable: false
+
+  authMethod:
+    label: روش احراز هویت
+    placeholder: مثلاً Bearer Token
+    sortable: false

@@ -1,0 +1,40 @@
+displayName: داده داشبورد
+displayNamePlural: داده‌های داشبورد
+autocompleteField: frequencyCount
+
+routing:
+  basePath: /dashboard/portal/dashboard-data
+  menuLabel: داده‌های داشبورد
+  menuIcon: NotebookPen
+  menuParent: /dashboard/portal
+  showInMenu: false
+  menuOrder: 80
+
+fields:
+  frequencyCount:
+    label: تعداد تکرار
+    placeholder: تعداد
+    sortable: true
+
+  lastMatchedAt:
+    label: آخرین تطابق
+    sortable: true
+
+relationships:
+  coreUser:
+    label: کاربر
+    type: autocomplete
+    displayField: username
+    sortable: false
+
+  keyword:
+    label: کلمه کلیدی
+    type: autocomplete
+    displayField: keywordText
+    sortable: false
+
+  channel:
+    label: کانال
+    type: autocomplete
+    displayField: channelName
+    sortable: false

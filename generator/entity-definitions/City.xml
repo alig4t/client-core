@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+    <name>City</name>
+    <generate>true</generate>
+    <fields>
+        <field>
+            <name>cityName</name>
+            <type>STRING</type>
+            <required>true</required>
+            <unique>true</unique>
+            <maxLength>100</maxLength>
+            <searchable>true</searchable>
+        </field>
+        <field>
+            <name>country</name>
+            <type>STRING</type>
+            <required>true</required>
+            <maxLength>100</maxLength>
+        </field>
+    </fields>
+    <relationships>
+    </relationships>
+</entity>

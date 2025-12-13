@@ -1,0 +1,84 @@
+import React from "react";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useParams, useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import { VIEWNAME } from "@/router/ViewName";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
+import {{entityName}}Service from "./{{entityName}}Service";
+import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import OptionUtils from "@/core/forms/OptionUtils";
+import DateUtil from "@/core/forms/DateUtils";
+import TableErrorState from "@/core/components/general/TableErrorState";
+import Button from "@/core/components/general/button/Button";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
+import { publicMessages } from "@/core/forms/MessageUtils";
+
+const {{entityName}}Display: React.FC = () => {
+  const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const breadcrumbItems = useBreadcrumbs();
+
+  const {
+    data: {{camelCase entityName}}Record,
+    isLoading,
+    isError,
+  } = useQuery({
+    queryKey: ["{{camelCase entityName}}", id],
+    queryFn: () => {{entityName}}Service.getById(Number(id!)),
+    enabled: !!id,
+    ...ReactQueryOptions.displayOptions,
+  });
+
+  if (isLoading) return <ViewPagePlaceholder />;
+  if (isError) return <TableErrorState />;
+
+  return (
+    <PageWrapper>
+      <Breadcrumb items={breadcrumbItems} className="mb-4" />
+      <RecordDisplayLayout
+        title={ {{camelCase entityName}}ModelMeta.displayName}
+        onEdit={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}_EDIT, id))}
+        onBack={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}S))}
+      >
+        <RowContainer>
+{{#each displayFields}}
+{{#if this.isDate}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ DateUtil.GREGORIAN_TO_JALALI({{camelCase ../entityName}}Record?.{{this.name}}) }
+          />
+{{else if this.isBoolean}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ OptionUtils.getLabel({{camelCase ../entityName}}Record?.{{this.name}} ? "true" : "false", OptionUtils.YES_OR_NO_OPTIONS) }
+          />
+{{else if this.isEnum}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ OptionUtils.getLabel({{camelCase ../entityName}}Record?.{{this.name}}, {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.options) }
+          />
+{{else if this.isRelationship}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ {{camelCase ../entityName}}Record?.{{this.name}}?.{{this.displayField}} || "-" }
+          />
+{{else}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ {{camelCase ../entityName}}Record?.{{this.name}} }
+          />
+{{/if}}
+{{/each}}
+        </RowContainer>
+      </RecordDisplayLayout>
+    </PageWrapper>
+  );
+};
+
+export default {{entityName}}Display;

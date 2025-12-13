@@ -1,0 +1,75 @@
+{
+  "paths": {
+    "entityDefinitions": "./entity-definitions",
+    "outputBase": "../src/Models",
+    "coreComponents": "../src/core",
+    "menuConfig": "../menu-config.yaml"
+  },
+  "generation": {
+    "formatWithPrettier": true,
+    "generateRoutes": true,
+    "generatePermissions": true,
+    "overwriteExisting": true
+  },
+  "coreEntities": {
+    "User": {
+      "isCore": true,
+      "importPath": "@/core/models/User",
+      "servicePath": "@/core/services/UserService"
+    },
+    "Document": {
+      "isCore": true,
+      "importPath": "@/core/models/Document",
+      "servicePath": "@/core/services/DocumentService"
+    },
+    "Role": {
+      "isCore": true,
+      "importPath": "@/core/models/Role",
+      "servicePath": "@/core/services/RoleService"
+    },
+    "Permission": {
+      "isCore": true,
+      "importPath": "@/core/models/Permission",
+      "servicePath": "@/core/services/PermissionService"
+    },
+    "Message": {
+      "isCore": true,
+      "skipImport": true
+    }
+  },
+  "templates": {
+    "Model": "./src/templates/Model.hbs",
+    "ModelMeta": "./src/templates/ModelMeta.hbs",
+    "Service": "./src/templates/Service.hbs",
+    "Page": "./src/templates/Page.hbs",
+    "Table": "./src/templates/Table.hbs",
+    "TableColumns": "./src/templates/TableColumns.hbs",
+    "Create": "./src/templates/Create.hbs",
+    "Display": "./src/templates/Display.hbs",
+    "Search": "./src/templates/Search.hbs"
+  },
+  "fieldTypeMapping": {
+    "STRING": "string",
+    "INTEGER": "number",
+    "LONG": "number",
+    "DOUBLE": "number",
+    "BIG_DECIMAL": "string",
+    "BOOLEAN": "boolean",
+    "DATE": "string",
+    "LOCAL_DATE": "string",
+    "LOCAL_DATE_TIME": "string",
+    "ENUM": "string"
+  },
+  "formTypeMapping": {
+    "STRING": "text",
+    "INTEGER": "number",
+    "LONG": "number",
+    "DOUBLE": "number",
+    "BIG_DECIMAL": "number",
+    "BOOLEAN": "boolean",
+    "DATE": "datetime-local",
+    "LOCAL_DATE": "date",
+    "LOCAL_DATE_TIME": "datetime-local",
+    "ENUM": "select"
+  }
+}

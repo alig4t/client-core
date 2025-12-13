@@ -1,0 +1,193 @@
+import React from "react";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useNavigate, useParams } from "react-router-dom";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
+import {{entityName}}Service from "./{{entityName}}Service";
+import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import FormInput from "@/core/components/form/FormInput";
+{{#if hasSelectFields}}
+import { FormSelect } from "@/core/components/form/FormSelect";
+{{/if}}
+{{#if hasAutocompleteFields}}
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
+{{/if}}
+{{#if hasDateFields}}
+import { DateInput } from "@/core/components/form/DateInput";
+{{/if}}
+{{#if hasBooleanFields}}
+import { Checkbox } from "@/core/components/form/Checkbox";
+{{/if}}
+import z from "@/core/forms/zod.config";
+import Validator from "@/core/forms/validation";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import Button from "@/core/components/general/button/Button";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
+import { VIEWNAME } from "@/router/ViewName";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { publicMessages } from "@/core/forms/MessageUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+{{#each relationshipServices}}
+{{#unless this.isCore}}
+import {{this.serviceName}} from "@/Models/{{this.entityName}}/{{this.serviceName}}";
+{{/unless}}
+{{/each}}
+{{#if hasCoreUserRelationship}}
+import UserService from "@/Models/User/UserService";
+{{/if}}
+
+const {{camelCase entityName}}Schema = z.object({
+{{#each fields}}
+{{#if this.required}}
+  {{this.name}}: Validator.{{this.validatorType}}(),
+{{else}}
+  {{this.name}}: Validator.optional(),
+{{/if}}
+{{/each}}
+{{#each relationships}}
+{{#if this.required}}
+  {{this.name}}: Validator.notNull(),
+{{else}}
+  {{this.name}}: Validator.optional(),
+{{/if}}
+{{/each}}
+});
+
+type {{entityName}}FormData = z.infer<typeof {{camelCase entityName}}Schema>;
+
+const {{entityName}}Create: React.FC = () => {
+  const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
+  const breadcrumbItems = useBreadcrumbs();
+  const routeMeta = useRouteMetadata();
+
+  const { data: existingData, isLoading } = useQuery({
+    queryKey: ["{{camelCase entityName}}", id],
+    queryFn: () => {{entityName}}Service.getById(Number(id!)),
+    enabled: isEditMode,
+    ...ReactQueryOptions.editOptions,
+  });
+
+  const mutation = useMutation({
+    mutationFn: (data: {{entityName}}FormData) => {
+      if (isEditMode) {
+        return {{entityName}}Service.update(Number(id), data);
+      }
+      return {{entityName}}Service.create(data);
+    },
+    onSuccess: () => {
+      toast.success(isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess);
+      navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}S));
+    },
+    onError: () => {
+      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+    },
+  });
+
+  const onSubmit = (data: {{entityName}}FormData) => {
+    mutation.mutate(data);
+  };
+
+  if (isEditMode && isLoading) {
+    return <CreatePagePlaceholder />;
+  }
+
+  return (
+    <PageWrapper>
+      <PageTransition>
+        <Breadcrumb items={breadcrumbItems} className="mb-4" />
+        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
+          <PageHeader
+            title={
+              isEditMode
+                ? `ویرایش ${ {{camelCase entityName}}ModelMeta.displayName}`
+                : `ایجاد ${ {{camelCase entityName}}ModelMeta.displayName}`
+            }
+          />
+
+          <FormWrapper
+            schema={ {{camelCase entityName}}Schema}
+            onSubmit={onSubmit}
+            defaultValues={existingData}
+          >
+            <RowContainer>
+{{#each fields}}
+{{#if (eq this.meta.type "text")}}
+              <FormInput
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                placeholder={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.placeholder}
+{{#if this.maxLength}}
+                maxLength={ {{this.maxLength}} }
+{{/if}}
+              />
+{{else if (eq this.meta.type "number")}}
+              <FormInput
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                type="number"
+              />
+{{else if (eq this.meta.type "select")}}
+              <FormSelect
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                options={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.options || []}
+              />
+{{else if (eq this.meta.type "boolean")}}
+              <Checkbox
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+              />
+{{else if (or (eq this.meta.type "date") (eq this.meta.type "datetime-local"))}}
+              <DateInput
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+              />
+{{/if}}
+{{/each}}
+{{#each relationships}}
+{{#if (isToOne this.relationshipType)}}
+              <FormAutoComplete
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                service={ {{this.relatedEntityName}}Service}
+              />
+{{/if}}
+{{#if (isToMany this.relationshipType)}}
+              <FormAutoComplete
+                name="{{this.name}}"
+                label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                service={ {{this.relatedEntityName}}Service}
+                multiple
+              />
+{{/if}}
+{{/each}}
+            </RowContainer>
+
+            <div className="flex gap-4 mt-6 justify-end">
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}S))}
+              >
+                {publicMessages.cancel}
+              </Button>
+              <Button type="submit" loading={mutation.isPending}>
+                {isEditMode ? publicMessages.update : publicMessages.create}
+              </Button>
+            </div>
+          </FormWrapper>
+        </div>
+      </PageTransition>
+    </PageWrapper>
+  );
+};
+
+export default {{entityName}}Create;

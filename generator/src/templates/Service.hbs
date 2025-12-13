@@ -1,0 +1,13 @@
+import { BaseService } from "@/core/service/BaseService";
+import type { {{entityName}}Model } from "./{{entityName}}Model";
+
+class {{entityName}}ServiceClass extends BaseService<{{entityName}}Model> {
+  constructor() {
+    super("/{{lowercase entityName}}");
+  }
+}
+
+const {{entityName}}Service = new {{entityName}}ServiceClass();
+
+export default {{entityName}}Service;
+export { {{entityName}}Service };

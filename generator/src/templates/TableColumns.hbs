@@ -1,0 +1,96 @@
+import React, { memo } from "react";
+import { TBODY, THEAD } from "@/core/components/Table/DataTable";
+import DateUtil from "@/core/forms/DateUtils";
+import OptionUtils from "@/core/forms/OptionUtils";
+import { VIEWNAME } from "@/router/ViewName";
+import NavLink from "@/core/components/general/link/NavLink";
+import TableLink from "@/core/components/general/link/TableLink";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { Eye, Trash2 } from "lucide-react";
+import { Permission } from "@/router/Permission";
+import type { {{entityName}}Model } from "./{{entityName}}Model";
+import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+{{#if hasEnumFields}}
+{{#each fields}}
+{{#if this.enums}}
+import { {{../entityName}}{{pascalCase this.name}}EnumLabels } from "./{{../entityName}}{{pascalCase this.name}}Enum";
+{{/if}}
+{{/each}}
+{{/if}}
+import LinkView from "@/core/components/general/link/LinkView";
+
+interface {{entityName}}TableColumnsProps {
+  item: {{entityName}}Model;
+  onDelete: (id: string | number) => void;
+}
+
+export const {{entityName}}TableColumns: React.FC<{{entityName}}TableColumnsProps> = memo(({
+  item,
+  onDelete,
+}) => {
+  return (
+    <>
+      <TBODY>{item.id}</TBODY>
+{{#each displayFields}}
+{{#if this.isDate}}
+      <TBODY>{ DateUtil.GEORGIAN_TO_JALALI(item.{{this.name}}) }</TBODY>
+{{else if this.isBoolean}}
+      <TBODY>{ OptionUtils.GET_BOOLEAN_OPTION(item.{{this.name}}) }</TBODY>
+{{else if this.isEnum}}
+      <TBODY>{ OptionUtils.getLabel(item.{{this.name}}, {{../entityName}}{{pascalCase this.name}}EnumLabels) }</TBODY>
+{{else if this.isRelationship}}
+      <TBODY>
+        <LinkView
+          viewName={VIEWNAME.{{snakeCase this.relatedEntityName}}_DISPLAY}
+          id={ item.{{this.name}}?.id}
+          label={ item.{{this.name}}?.{{this.displayField}} }
+        />
+      </TBODY>
+{{else}}
+      <TBODY>{ item.{{this.name}} || "-" }</TBODY>
+{{/if}}
+{{/each}}
+      <TBODY>{ DateUtil.GEORGIAN_TO_JALALI(item.createdAt) }</TBODY>
+      <TBODY>{ DateUtil.GEORGIAN_TO_JALALI(item.updatedAt) }</TBODY>
+
+      <TBODY className="flex gap-x-2 justify-center">
+        <NavLink
+          variant="edit"
+          permission={Permission.{{entityName}}_Update}
+          viewName={VIEWNAME.{{snakeCase entityName}}_EDIT}
+          idParam={item.id}
+          tooltipSide="top"
+          className="mr-2"
+        />
+
+        <TableLink
+          to={getViewPath(VIEWNAME.{{snakeCase entityName}}_DISPLAY, item.id)}
+          permission={Permission.{{entityName}}_Read}
+        >
+          <Eye size={20} />
+        </TableLink>
+
+        <TableLink
+          tooltipText="حذف"
+          onClick={() => onDelete(item.id)}
+          permission={Permission.{{entityName}}_Delete}
+          variant="danger"
+        >
+          <Trash2 size={20} />
+        </TableLink>
+      </TBODY>
+    </>
+  );
+});
+
+export const {{entityName}}TableHeaders = (
+  <>
+    <THEAD>شناسه</THEAD>
+{{#each displayFields}}
+    <THEAD>{ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}</THEAD>
+{{/each}}
+    <THEAD>تاریخ ایجاد</THEAD>
+    <THEAD>تاریخ ویرایش</THEAD>
+    <THEAD>عملیات</THEAD>
+  </>
+);

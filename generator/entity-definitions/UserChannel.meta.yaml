@@ -1,0 +1,32 @@
+displayName: کاربر-کانال
+displayNamePlural: کاربران-کانال
+autocompleteField: role
+
+routing:
+  basePath: /dashboard/portal/user-channels
+  menuLabel: کاربران کانال
+  menuIcon: UserCheck
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 70
+
+fields:
+  role:
+    label: نقش
+    sortable: true
+    enums:
+      OWNER: مالک
+      MEMBER: عضو
+
+relationships:
+  coreUser:
+    label: کاربر
+    type: autocomplete
+    displayField: username
+    sortable: false
+
+  channel:
+    label: کانال
+    type: autocomplete
+    displayField: channelName
+    sortable: false

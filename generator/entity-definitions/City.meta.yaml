@@ -1,0 +1,22 @@
+displayName: شهر
+displayNamePlural: شهرها
+autocompleteField: cityName
+
+routing:
+  basePath: /dashboard/portal/cities
+  menuLabel: شهرها
+  menuIcon: MapPin
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 30
+
+fields:
+  cityName:
+    label: نام شهر
+    placeholder: نام شهر را وارد کنید
+    sortable: true
+
+  country:
+    label: کشور
+    placeholder: نام کشور را وارد کنید
+    sortable: true

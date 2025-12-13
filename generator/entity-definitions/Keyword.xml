@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+    <name>Keyword</name>
+    <tableName>keywords</tableName>
+    <generate>true</generate>
+    <fields>
+        <field>
+            <name>keywordText</name>
+            <type>STRING</type>
+            <required>true</required>
+            <maxLength>100</maxLength>
+            <searchable>true</searchable>
+        </field>
+    </fields>
+    <relationships>
+        <relationship>
+            <name>coreUser</name>
+            <relationshipType>MANY_TO_ONE</relationshipType>
+            <relatedEntityName>User</relatedEntityName>
+            <coreUser>true</coreUser>
+            <joinColumnName>core_user_id</joinColumnName>
+            <required>true</required>
+            <fetch>LAZY</fetch>
+        </relationship>
+        <relationship>
+            <name>channel</name>
+            <relationshipType>MANY_TO_ONE</relationshipType>
+            <relatedEntityName>Channel</relatedEntityName>
+            <joinColumnName>channel_id</joinColumnName>
+            <required>true</required>
+            <fetch>LAZY</fetch>
+        </relationship>
+        <relationship>
+            <name>messages</name>
+            <relationshipType>MANY_TO_MANY</relationshipType>
+            <relatedEntityName>Message</relatedEntityName>
+            <joinTableName>keyword_message</joinTableName>
+        </relationship>
+    </relationships>
+</entity>

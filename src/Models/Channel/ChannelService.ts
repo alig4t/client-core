@@ -1,11 +1,13 @@
-// services/ComprehensiveService.ts
-import { BaseService } from '@/core/service/BaseService';
-import type { ChannelModel } from './ChannelModel';
+import { BaseService } from "@/core/service/BaseService";
+import type { ChannelModel } from "./ChannelModel";
 
-class ChannelService extends BaseService<ChannelModel> {
+class ChannelServiceClass extends BaseService<ChannelModel> {
   constructor() {
-    super('/channel');
+    super("/channel");
   }
 }
 
-export default new ChannelService();
+const ChannelService = new ChannelServiceClass();
+
+export default ChannelService;
+export { ChannelService };
