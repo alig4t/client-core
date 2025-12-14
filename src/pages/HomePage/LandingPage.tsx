@@ -11,8 +11,7 @@ import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import UserService from "@/Models/User/UserService";
 import Navbar from "./HomeNavbar";
-import { MoonIcon, SunIcon } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
+import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
@@ -148,54 +147,22 @@ const LandingPage: React.FC = () => {
       {/* Navbar */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
-      {/* Dark Mode Toggle Button */}
-      <div className="fixed top-20 left-6 z-50">
-        <div
-          className="flex items-center justify-center w-12 h-12 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-cyan-500/30 dark:border-cyan-500/20 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 hover:bg-white dark:hover:bg-slate-800/90 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 shadow-lg shadow-cyan-500/20 dark:shadow-cyan-500/10"
-          onClick={toggleDarkMode}
-        >
-          <AnimatePresence mode="wait" initial={false}>
-            {darkMode ? (
-              <motion.div
-                key="sun"
-                initial={{ rotate: -90, scale: 0, opacity: 0 }}
-                animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                exit={{ rotate: 90, scale: 0, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-              >
-                <SunIcon className="h-5 w-5 text-yellow-500" />
-              </motion.div>
-            ) : (
-              <motion.div
-                key="moon"
-                initial={{ rotate: 90, scale: 0, opacity: 0 }}
-                animate={{ rotate: 0, scale: 1, opacity: 1 }}
-                exit={{ rotate: -90, scale: 0, opacity: 0 }}
-                transition={{ duration: 0.2, ease: "easeInOut" }}
-              >
-                <MoonIcon className="h-5 w-5 text-slate-700" />
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </div>
-
       {/* Main Content */}
       <main className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
         <div className="max-w-7xl mx-auto w-full">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
             {/* Left Side - Content */}
-            <div className="space-y-8 text-right order-2 lg:order-1">
+            <div className="space-y-6 text-right order-2 lg:order-1 flex flex-col justify-center">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/20 dark:bg-cyan-500/10 border border-cyan-500/40 dark:border-cyan-500/20 backdrop-blur-sm">
+              {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/20 dark:bg-cyan-500/10 border border-cyan-500/40 dark:border-cyan-500/20 backdrop-blur-sm w-fit">
                 <span className="w-2 h-2 bg-cyan-500 dark:bg-cyan-400 rounded-full animate-pulse"></span>
                 <span className="text-sm text-cyan-700 dark:text-cyan-300 font-medium">پلتفرم پایش و تحلیل</span>
-              </div>
+              </div> */}
 
               {/* Main Heading */}
-              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
-                <span className="block text-slate-900 dark:text-white mb-3">
+              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
+                <span className="block text-slate-900 dark:text-white mb-2">
                   مدیریت هوشمند
                 </span>
                 <span className="block bg-gradient-to-l from-cyan-500 via-blue-600 to-purple-600 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 bg-clip-text text-transparent">
@@ -204,32 +171,28 @@ const LandingPage: React.FC = () => {
               </h1>
 
               {/* Description */}
-              <p className="text-lg lg:text-xl text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+              <p className="text-base lg:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
                 تمام پیام‌رسان‌ها، کانال‌ها و کلیدواژه‌های خود را در یک داشبورد
-                قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی.
+                قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی و آمار دقیق.
               </p>
 
-              {/* Features List */}
-              <div className="space-y-4 pt-4">
-                {[
-                  { icon: "📊", text: "تحلیل داده‌های لحظه‌ای" },
-                  { icon: "🔍", text: "جستجوی پیشرفته در محتوا" },
-                  { icon: "⚡", text: "رابط کاربری سریع و کارآمد" },
-                  { icon: "🛡️", text: "امنیت و حریم خصوصی" },
-                ].map((feature, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center gap-4 text-slate-700 dark:text-slate-300 group hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300"
-                    style={{ animationDelay: `${index * 100}ms` }}
-                  >
-                    <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{feature.icon}</span>
-                    <span className="text-base font-medium">{feature.text}</span>
+              {/* Animation Section - Moved Here */}
+              <div className="hidden lg:block py-8">
+                <div className="relative group">
+                  {/* Subtle glow effect behind animation */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-blue-400/10 dark:from-cyan-500/5 dark:to-blue-500/5 rounded-2xl blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
+
+                  {/* Animation container - No border, no background */}
+                  <div className="relative transition-all duration-700">
+                    <div className="w-full h-80">
+                      <SocialMonitoringAnimation width="100%" height="100%" />
+                    </div>
                   </div>
-                ))}
+                </div>
               </div>
 
               {/* Stats */}
-              <div className="grid grid-cols-3 gap-6 pt-8">
+              {/* <div className="grid grid-cols-3 gap-8 pt-4">
                 {[
                   { value: "99.9%", label: "آپتایم" },
                   { value: "24/7", label: "پشتیبانی" },
@@ -242,7 +205,7 @@ const LandingPage: React.FC = () => {
                     <div className="text-sm text-slate-500 dark:text-slate-500 mt-1">{stat.label}</div>
                   </div>
                 ))}
-              </div>
+              </div> */}
             </div>
 
             {/* Right Side - Login Card */}

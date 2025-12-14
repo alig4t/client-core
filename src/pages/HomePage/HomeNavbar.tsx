@@ -3,6 +3,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/stores/AuthContext";
 import { APP_LOGO_SMALL_BLUE } from "@/constants/images";
+import { MoonIcon, SunIcon } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NavbarProps {
   darkMode: boolean;
@@ -45,24 +47,55 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleDarkMode }) => {
         </div>
 
         {/* Right section */}
-        {user ? (
-          <div className="flex lg:flex-1 lg:justify-end gap-3">
-            <button
-              onClick={() => navigate("/dashboard")}
-              className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-sm font-semibold hover:from-cyan-500 hover:to-blue-500 transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40"
-            >
-              پنل کاربری
-            </button>
-            <button
-              onClick={handleLogout}
-              className="px-5 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300"
-            >
-              خروج
-            </button>
+        <div className="flex items-center gap-4">
+          {/* Dark Mode Toggle Button */}
+          <div
+            className="flex items-center justify-center w-10 h-10 bg-white/90 dark:bg-slate-900/90 backdrop-blur-xl border border-cyan-500/30 dark:border-cyan-500/20 rounded-full cursor-pointer transition-all duration-300 hover:scale-110 hover:bg-white dark:hover:bg-slate-800/90 hover:border-cyan-500/50 dark:hover:border-cyan-500/40 shadow-lg shadow-cyan-500/20 dark:shadow-cyan-500/10"
+            onClick={toggleDarkMode}
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {darkMode ? (
+                <motion.div
+                  key="sun"
+                  initial={{ rotate: -90, scale: 0, opacity: 0 }}
+                  animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                  exit={{ rotate: 90, scale: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <SunIcon className="h-5 w-5 text-yellow-500" />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="moon"
+                  initial={{ rotate: 90, scale: 0, opacity: 0 }}
+                  animate={{ rotate: 0, scale: 1, opacity: 1 }}
+                  exit={{ rotate: -90, scale: 0, opacity: 0 }}
+                  transition={{ duration: 0.2, ease: "easeInOut" }}
+                >
+                  <MoonIcon className="h-5 w-5 text-slate-700" />
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
-        ) : (
-          <div className="lg:flex-1"></div>
-        )}
+
+          {/* User Actions */}
+          {user ? (
+            <div className="flex gap-3">
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="px-5 py-2 rounded-lg bg-gradient-to-r from-cyan-600 to-blue-600 text-white text-sm font-semibold hover:from-cyan-500 hover:to-blue-500 transition-all duration-300 shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40"
+              >
+                پنل کاربری
+              </button>
+              <button
+                onClick={handleLogout}
+                className="px-5 py-2 text-sm font-medium text-slate-700 dark:text-slate-300 hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300"
+              >
+                خروج
+              </button>
+            </div>
+          ) : null}
+        </div>
       </nav>
     </header>
   );
