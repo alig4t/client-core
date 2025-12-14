@@ -176,6 +176,25 @@ const LandingPage: React.FC = () => {
                 قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی و آمار دقیق.
               </p>
 
+               {/* Features List */}
+              {/* <div className="space-y-4 pt-4">
+                {[
+                  { icon: "📊", text: "تحلیل داده‌های لحظه‌ای" },
+                  { icon: "🔍", text: "جستجوی پیشرفته در محتوا" },
+                  { icon: "⚡", text: "رابط کاربری سریع و کارآمد" },
+                  { icon: "🛡️", text: "امنیت و حریم خصوصی" },
+                ].map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-4 text-slate-700 dark:text-slate-300 group hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300"
+                    style={{ animationDelay: `${index * 100}ms` }}
+                  >
+                    <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{feature.icon}</span>
+                    <span className="text-base font-medium">{feature.text}</span>
+                    </div>
+                ))}
+                </div> */}
+
               {/* Animation Section - Moved Here */}
               <div className="hidden lg:block py-8">
                 <div className="relative group">
