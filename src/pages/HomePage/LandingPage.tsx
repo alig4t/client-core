@@ -11,7 +11,6 @@ import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import UserService from "@/Models/User/UserService";
 import Navbar from "./HomeNavbar";
-import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
@@ -27,30 +26,30 @@ function LoginFormFields() {
   } = useFormContext<LoginFormData>();
 
   return (
-    <>
-      <div className="w-full">
+    <div className="space-y-5">
+      <div className="w-full group">
         <label
           htmlFor="username"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right mb-1"
+          className="block text-sm font-medium text-slate-300 text-right mb-2"
         >
           نام کاربری
         </label>
         <input
           id="username"
           type="text"
-          placeholder="مثلا aligh75"
+          placeholder="نام کاربری خود را وارد کنید"
           {...register("username")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+          className="w-full px-4 py-3.5 bg-slate-900/50 border border-cyan-500/20 rounded-lg text-white placeholder-slate-500 text-right focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-cyan-500/30"
         />
         {errors.username && (
           <ErrorFormText msg={errors.username.message as string} />
         )}
       </div>
 
-      <div className="w-full">
+      <div className="w-full group">
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-gray-700 dark:text-gray-300 text-right mb-1"
+          className="block text-sm font-medium text-slate-300 text-right mb-2"
         >
           رمز عبور
         </label>
@@ -59,20 +58,19 @@ function LoginFormFields() {
           type="password"
           placeholder="رمز عبور خود را وارد کنید"
           {...register("password")}
-          className="w-full px-4 py-3 border border-gray-300 rounded-xl bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-gray-900 dark:text-white shadow-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all duration-200"
+          className="w-full px-4 py-3.5 bg-slate-900/50 border border-cyan-500/20 rounded-lg text-white placeholder-slate-500 text-right focus:outline-none focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/20 transition-all duration-300 hover:border-cyan-500/30"
         />
         {errors.password && (
           <ErrorFormText msg={errors.password.message as string} />
         )}
       </div>
-    </>
+    </div>
   );
 }
 
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
-  const heroContentHeightClass = "min-h-[calc(100vh-5rem)]";
 
   const mutation = useMutation({
     mutationFn: (data: LoginFormData) => UserService.login(data),
@@ -108,133 +106,217 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white dark:bg-gray-900 text-gray-900 dark:text-white overflow-y-auto">
+    <div className="min-h-screen bg-slate-950 text-white overflow-hidden relative">
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden">
+        {/* Gradient Orbs */}
+        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-cyan-500/20 rounded-full blur-[120px] animate-pulse"></div>
+        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-blue-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+
+        {/* Grid Pattern */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:100px_100px]"></div>
+
+        {/* Noise Texture */}
+        <div className="absolute inset-0 opacity-[0.015] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]"></div>
+      </div>
+
       {/* Navbar */}
       <Navbar />
 
-      {/* Hero Section */}
-      <main className="relative isolate pt-[5rem] min-h-screen">
-        {/* Background with gradient and light effects */}
-        <div
-          className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80"
-          aria-hidden="true"
-        >
-          <div
-            className="relative left-[calc(50%-11rem)] aspect-[1155/678] w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#ff80b5] to-[#9089fc] opacity-30 sm:left-[calc(50%-30rem)] sm:w-[72.1875rem]"
-            style={{
-              clipPath:
-                "polygon(74.1% 44.1%, 100% 61.6%, 97.5% 26.9%, 85.5% 0.1%, 80.7% 2%, 72.5% 32.5%, 60.2% 62.4%, 52.4% 68.1%, 47.5% 58.3%, 45.2% 34.5%, 27.5% 76.7%, 0.1% 64.1%, 28.1% 25.1%, 50.9% 10.9%, 60% 4.7%, 66.5% 35.8%, 74.1% 44.1%)",
-            }}
-          />
-        </div>
+      {/* Main Content */}
+      <main className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
 
-        {/* Main Hero content with login form */}
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div
-            className={`flex flex-col items-center justify-center ${heroContentHeightClass} py-8 lg:py-12`}
-          >
-            {/* Title and Description Section */}
-            <div className="text-center z-10 mb-6 lg:mb-10 max-w-3xl px-4">
-              <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl leading-tight">
-                <span className="text-indigo-600 dark:text-indigo-400">
-                  {import.meta.env.VITE_APP_TITLE}:
-                </span>{" "}
-                مدیریت پیام‌رسان‌ها،{" "}
-                <span className="block text-gray-900 dark:text-white mt-1">
-                  تحلیل و پایش فوری.
+            {/* Left Side - Content */}
+            <div className="space-y-8 text-right order-2 lg:order-1">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/10 border border-cyan-500/20 backdrop-blur-sm">
+                <span className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></span>
+                <span className="text-sm text-cyan-300">پلتفرم پایش و تحلیل</span>
+              </div>
+
+              {/* Main Heading */}
+              <h1 className="text-5xl lg:text-7xl font-bold leading-tight">
+                <span className="block text-white mb-3">
+                  مدیریت هوشمند
+                </span>
+                <span className="block bg-gradient-to-l from-cyan-400 via-blue-500 to-purple-500 bg-clip-text text-transparent">
+                  شبکه‌های اجتماعی
                 </span>
               </h1>
-              <p className="mt-4 text-sm lg:text-base leading-7 text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
-                پلتفرم جامع پایش شبکه‌های اجتماعی. تمام پیام‌ها، کانال‌ها و
-                کلیدواژه‌ها را در یک داشبورد زیبا مدیریت و تحلیل کنید.
+
+              {/* Description */}
+              <p className="text-lg lg:text-xl text-slate-400 leading-relaxed max-w-xl">
+                تمام پیام‌رسان‌ها، کانال‌ها و کلیدواژه‌های خود را در یک داشبورد
+                قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی.
               </p>
-            </div>
 
-            {/* Two Column Section: Animation + Login Form */}
-            <div className="flex flex-col lg:flex-row items-center gap-8 lg:gap-12 w-full">
-              {/* Animated SVG section (Left side) */}
-              <div className="lg:w-1/2 flex justify-center z-10 order-2 lg:order-1">
-                <div className="w-full max-w-md mx-auto h-80">
-                  <SocialMonitoringAnimation width="100%" height="100%" />
-                </div>
-              </div>
-
-              {/* Login Form Card (Right side) */}
-              <div className="lg:w-1/2 flex justify-center z-10 order-1 lg:order-2">
-                <div className="w-full max-w-md p-6 lg:p-8 space-y-5 bg-white/80 dark:bg-gray-800/80 backdrop-blur-xl shadow-2xl rounded-3xl border border-gray-200 dark:border-gray-700">
-                  {/* Login Title Section */}
-                  <div className="text-center space-y-1">
-                    <h2 className="text-xl lg:text-2xl font-bold text-gray-900 dark:text-white">
-                      ورود به{" "}
-                      <span className="text-indigo-600 dark:text-indigo-400">
-                        داشبورد
-                      </span>
-                    </h2>
-                    <p className="text-xs lg:text-sm text-gray-600 dark:text-gray-400">
-                      لطفاً اطلاعات خود را وارد کنید
-                    </p>
-                  </div>
-
-                  {/* Login Form */}
-                  <FormWrapper
-                    schema={loginSchema}
-                    onSubmit={onSubmit}
-                    className="space-y-4"
+              {/* Features List */}
+              <div className="space-y-4 pt-4">
+                {[
+                  { icon: "📊", text: "تحلیل داده‌های لحظه‌ای" },
+                  { icon: "🔍", text: "جستجوی پیشرفته در محتوا" },
+                  { icon: "⚡", text: "رابط کاربری سریع و کارآمد" },
+                  { icon: "🛡️", text: "امنیت و حریم خصوصی" },
+                ].map((feature, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-4 text-slate-300 group hover:text-cyan-400 transition-colors duration-300"
+                    style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <LoginFormFields />
+                    <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{feature.icon}</span>
+                    <span className="text-base">{feature.text}</span>
+                  </div>
+                ))}
+              </div>
 
-                    <button
-                      disabled={mutation.isPending}
-                      type="submit"
-                      className="w-full px-4 py-3 font-bold text-white mt-4 bg-gradient-to-r from-indigo-600 to-purple-600 rounded-xl shadow-lg hover:from-indigo-700 hover:to-purple-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 focus:ring-opacity-50 disabled:from-indigo-400 disabled:to-purple-400 disabled:cursor-not-allowed transition-all transform hover:scale-[1.02] duration-300"
-                    >
-                      {mutation.isPending ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <svg
-                            className="animate-spin h-5 w-5 text-white"
-                            xmlns="http://www.w3.org/2000/svg"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                          >
-                            <circle
-                              className="opacity-25"
-                              cx="12"
-                              cy="12"
-                              r="10"
-                              stroke="currentColor"
-                              strokeWidth="4"
-                            ></circle>
-                            <path
-                              className="opacity-75"
-                              fill="currentColor"
-                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                            ></path>
-                          </svg>
-                          در حال بررسی...
-                        </span>
-                      ) : (
-                        "ورود به داشبورد"
-                      )}
-                    </button>
-                  </FormWrapper>
+              {/* Stats */}
+              <div className="grid grid-cols-3 gap-6 pt-8">
+                {[
+                  { value: "99.9%", label: "آپتایم" },
+                  { value: "24/7", label: "پشتیبانی" },
+                  { value: "1M+", label: "پیام روزانه" },
+                ].map((stat, index) => (
+                  <div key={index} className="text-center lg:text-right">
+                    <div className="text-2xl lg:text-3xl font-bold bg-gradient-to-l from-cyan-400 to-blue-500 bg-clip-text text-transparent">
+                      {stat.value}
+                    </div>
+                    <div className="text-sm text-slate-500 mt-1">{stat.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
 
-                  {/* Terms text */}
-                  <p className="text-xs text-center text-gray-500 dark:text-gray-400 pt-2">
-                    ورود شما به منزله قبول{" "}
-                    <a
-                      href="#"
-                      className="font-semibold text-indigo-600 dark:text-indigo-400 hover:underline"
+            {/* Right Side - Login Card */}
+            <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+              <div className="w-full max-w-md">
+                {/* Glowing effect container */}
+                <div className="relative group">
+                  {/* Glow */}
+                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity duration-500"></div>
+
+                  {/* Card */}
+                  <div className="relative bg-slate-900/90 backdrop-blur-xl border border-cyan-500/20 rounded-2xl p-8 shadow-2xl">
+                    {/* Login Header */}
+                    <div className="text-center mb-8">
+                      <h2 className="text-2xl font-bold text-white mb-2">
+                        ورود به پنل مدیریت
+                      </h2>
+                      <p className="text-slate-400 text-sm">
+                        اطلاعات خود را وارد نمایید
+                      </p>
+                    </div>
+
+                    {/* Login Form */}
+                    <FormWrapper
+                      schema={loginSchema}
+                      onSubmit={onSubmit}
+                      className="space-y-6"
                     >
-                      قوانین و مقررات
-                    </a>{" "}
-                    است.
-                  </p>
+                      <LoginFormFields />
+
+                      <button
+                        disabled={mutation.isPending}
+                        type="submit"
+                        className="w-full px-6 py-4 font-bold text-white mt-6 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:from-cyan-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 disabled:from-slate-600 disabled:to-slate-700 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+                      >
+                        {mutation.isPending ? (
+                          <span className="flex items-center justify-center gap-3">
+                            <svg
+                              className="animate-spin h-5 w-5 text-white"
+                              xmlns="http://www.w3.org/2000/svg"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                            >
+                              <circle
+                                className="opacity-25"
+                                cx="12"
+                                cy="12"
+                                r="10"
+                                stroke="currentColor"
+                                strokeWidth="4"
+                              ></circle>
+                              <path
+                                className="opacity-75"
+                                fill="currentColor"
+                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                              ></path>
+                            </svg>
+                            در حال احراز هویت...
+                          </span>
+                        ) : (
+                          "ورود به داشبورد"
+                        )}
+                      </button>
+                    </FormWrapper>
+
+                    {/* Footer */}
+                    <div className="mt-8 pt-6 border-t border-slate-800">
+                      <p className="text-xs text-center text-slate-500">
+                        با ورود به سیستم،{" "}
+                        <a
+                          href="#"
+                          className="text-cyan-400 hover:text-cyan-300 transition-colors"
+                        >
+                          شرایط و قوانین
+                        </a>{" "}
+                        استفاده را می‌پذیرید
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Security Badge */}
+                <div className="mt-6 flex items-center justify-center gap-2 text-slate-500 text-sm">
+                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
+                  </svg>
+                  <span>اتصال امن و رمزگذاری شده</span>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
       </main>
+
+      {/* Floating Particles */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute w-1 h-1 bg-cyan-400/30 rounded-full"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animation: `float ${5 + Math.random() * 10}s linear infinite`,
+              animationDelay: `${Math.random() * 5}s`,
+            }}
+          ></div>
+        ))}
+      </div>
+
+      {/* Animation Keyframes */}
+      <style>{`
+        @keyframes float {
+          0%, 100% {
+            transform: translateY(0) translateX(0);
+            opacity: 0;
+          }
+          10% {
+            opacity: 0.3;
+          }
+          50% {
+            transform: translateY(-100px) translateX(50px);
+            opacity: 0.6;
+          }
+          90% {
+            opacity: 0.3;
+          }
+        }
+      `}</style>
     </div>
   );
 };
