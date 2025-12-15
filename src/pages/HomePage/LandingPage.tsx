@@ -28,10 +28,10 @@ function LoginFormFields() {
 
   return (
     <div className="space-y-5">
-      <div className="w-full group">
+      <div className="w-full">
         <label
           htmlFor="username"
-          className="block text-sm font-medium text-slate-700 dark:text-slate-300 text-right mb-2 transition-colors duration-700"
+          className="block text-sm font-medium text-slate-700 dark:text-slate-300 text-right mb-2"
         >
           نام کاربری
         </label>
@@ -40,17 +40,17 @@ function LoginFormFields() {
           type="text"
           placeholder="نام کاربری خود را وارد کنید"
           {...register("username")}
-          className="w-full px-4 py-3.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-cyan-500/20 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-cyan-500 dark:focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/30 dark:focus:ring-cyan-500/20 transition-all duration-700 hover:border-cyan-400 dark:hover:border-cyan-500/30"
+          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
         />
         {errors.username && (
           <ErrorFormText msg={errors.username.message as string} />
         )}
       </div>
 
-      <div className="w-full group">
+      <div className="w-full">
         <label
           htmlFor="password"
-          className="block text-sm font-medium text-slate-700 dark:text-slate-300 text-right mb-2 transition-colors duration-700"
+          className="block text-sm font-medium text-slate-700 dark:text-slate-300 text-right mb-2"
         >
           رمز عبور
         </label>
@@ -59,7 +59,7 @@ function LoginFormFields() {
           type="password"
           placeholder="رمز عبور خود را وارد کنید"
           {...register("password")}
-          className="w-full px-4 py-3.5 bg-slate-50 dark:bg-slate-900/50 border border-slate-300 dark:border-cyan-500/20 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-cyan-500 dark:focus:border-cyan-500/50 focus:ring-2 focus:ring-cyan-500/30 dark:focus:ring-cyan-500/20 transition-all duration-700 hover:border-cyan-400 dark:hover:border-cyan-500/30"
+          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
         />
         {errors.password && (
           <ErrorFormText msg={errors.password.message as string} />
@@ -129,120 +129,191 @@ const LandingPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 dark:from-slate-950 dark:to-slate-950 text-slate-900 dark:text-white overflow-hidden relative transition-colors duration-500">
-      {/* Animated Background */}
-      <div className="absolute inset-0 overflow-hidden">
-        {/* Gradient Orbs */}
-        <div className="absolute top-0 right-1/4 w-[500px] h-[500px] bg-cyan-400/30 dark:bg-cyan-500/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-0 left-1/4 w-[600px] h-[600px] bg-blue-400/30 dark:bg-blue-500/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 w-[400px] h-[400px] bg-purple-400/20 dark:bg-purple-500/10 rounded-full blur-[100px] animate-pulse" style={{ animationDelay: '2s' }}></div>
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 dark:from-slate-950 dark:via-slate-900 dark:to-slate-950 text-slate-900 dark:text-white relative overflow-hidden">
+      {/* Animated Background Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        {/* Floating Gradient Orbs */}
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-indigo-400/20 dark:from-blue-500/10 dark:to-indigo-500/10 rounded-full blur-3xl animate-blob"></div>
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-indigo-400/20 to-purple-400/20 dark:from-indigo-500/10 dark:to-purple-500/10 rounded-full blur-3xl animate-blob animation-delay-2000"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-gradient-to-br from-blue-300/20 to-cyan-300/20 dark:from-blue-600/10 dark:to-cyan-600/10 rounded-full blur-3xl animate-blob animation-delay-4000"></div>
 
-        {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(6,182,212,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.05)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(6,182,212,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(6,182,212,0.03)_1px,transparent_1px)] bg-[size:100px_100px]"></div>
+        {/* Subtle Grid */}
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] dark:bg-[linear-gradient(rgba(59,130,246,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.02)_1px,transparent_1px)] bg-[size:64px_64px] [mask-image:radial-gradient(ellipse_80%_50%_at_50%_50%,#000,transparent)]"></div>
 
-        {/* Noise Texture */}
-        <div className="absolute inset-0 opacity-[0.025] dark:opacity-[0.015] bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIj48ZmlsdGVyIGlkPSJhIiB4PSIwIiB5PSIwIj48ZmVUdXJidWxlbmNlIGJhc2VGcmVxdWVuY3k9Ii43NSIgc3RpdGNoVGlsZXM9InN0aXRjaCIgdHlwZT0iZnJhY3RhbE5vaXNlIi8+PGZlQ29sb3JNYXRyaXggdHlwZT0ic2F0dXJhdGUiIHZhbHVlcz0iMCIvPjwvZmlsdGVyPjxwYXRoIGQ9Ik0wIDBoMzAwdjMwMEgweiIgZmlsdGVyPSJ1cmwoI2EpIiBvcGFjaXR5PSIuMDUiLz48L3N2Zz4=')]"></div>
+        {/* Floating Geometric Elements - Large */}
+        {[...Array(40)].map((_, i) => (
+          <div
+            key={i}
+            className="absolute animate-float-slow opacity-40 dark:opacity-25"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 8}s`,
+              animationDuration: `${15 + Math.random() * 15}s`,
+            }}
+          >
+            {i % 5 === 0 ? (
+              <div className="w-10 h-10 border-2 border-blue-400/40 dark:border-blue-500/25 rounded-lg rotate-45"></div>
+            ) : i % 5 === 1 ? (
+              <div className="w-8 h-8 bg-gradient-to-br from-indigo-400/30 to-purple-400/30 dark:from-indigo-500/15 dark:to-purple-500/15 rounded-full"></div>
+            ) : i % 5 === 2 ? (
+              <div className="w-6 h-6 bg-blue-400/50 dark:bg-blue-500/25 rounded-sm rotate-12"></div>
+            ) : i % 5 === 3 ? (
+              <div className="w-12 h-12 border-2 border-indigo-400/30 dark:border-indigo-500/20 rounded-full"></div>
+            ) : (
+              <div className="w-7 h-7 bg-gradient-to-br from-cyan-400/25 to-blue-400/25 dark:from-cyan-500/12 dark:to-blue-500/12 rounded-lg rotate-45"></div>
+            )}
+          </div>
+        ))}
+
+        {/* Floating Medium Shapes */}
+        {[...Array(30)].map((_, i) => (
+          <div
+            key={`med-${i}`}
+            className="absolute animate-float-medium opacity-35 dark:opacity-20"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 6}s`,
+              animationDuration: `${12 + Math.random() * 10}s`,
+            }}
+          >
+            {i % 4 === 0 ? (
+              <div className="w-5 h-5 border border-purple-400/40 dark:border-purple-500/25 rounded rotate-45"></div>
+            ) : i % 4 === 1 ? (
+              <div className="w-4 h-4 bg-gradient-to-br from-blue-300/30 to-indigo-300/30 dark:from-blue-600/15 dark:to-indigo-600/15 rounded-full"></div>
+            ) : i % 4 === 2 ? (
+              <div className="w-6 h-6 border-2 border-cyan-400/35 dark:border-cyan-500/20 rounded-full"></div>
+            ) : (
+              <div className="w-3 h-3 bg-indigo-400/45 dark:bg-indigo-500/25 rounded-sm rotate-12"></div>
+            )}
+          </div>
+        ))}
+
+        {/* Floating Dots - More */}
+        {[...Array(50)].map((_, i) => (
+          <div
+            key={`dot-${i}`}
+            className="absolute bg-blue-500/50 dark:bg-blue-400/35 rounded-full animate-float-drift"
+            style={{
+              width: `${2 + Math.random() * 3}px`,
+              height: `${2 + Math.random() * 3}px`,
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 10}s`,
+              animationDuration: `${10 + Math.random() * 20}s`,
+            }}
+          ></div>
+        ))}
+
+        {/* Floating Lines */}
+        {[...Array(20)].map((_, i) => (
+          <div
+            key={`line-${i}`}
+            className="absolute animate-float-slow opacity-25 dark:opacity-15"
+            style={{
+              left: `${Math.random() * 100}%`,
+              top: `${Math.random() * 100}%`,
+              animationDelay: `${Math.random() * 7}s`,
+              animationDuration: `${18 + Math.random() * 12}s`,
+              transform: `rotate(${Math.random() * 360}deg)`,
+            }}
+          >
+            <div className="w-16 h-0.5 bg-gradient-to-r from-transparent via-blue-400/40 to-transparent dark:from-transparent dark:via-blue-500/25 dark:to-transparent"></div>
+          </div>
+        ))}
       </div>
 
       {/* Navbar */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
       {/* Main Content */}
-      <main className="relative z-10 min-h-screen flex items-center justify-center px-4 pt-20">
+      <main className="relative z-10 min-h-screen flex items-center justify-center px-4 py-20">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
 
             {/* Left Side - Content */}
-            <div className="space-y-6 text-right order-2 lg:order-1 flex flex-col justify-center">
+            <div className="space-y-8 text-right order-2 lg:order-1 animate-fade-in-up">
               {/* Badge */}
-              {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-cyan-500/20 dark:bg-cyan-500/10 border border-cyan-500/40 dark:border-cyan-500/20 backdrop-blur-sm w-fit">
-                <span className="w-2 h-2 bg-cyan-500 dark:bg-cyan-400 rounded-full animate-pulse"></span>
-                <span className="text-sm text-cyan-700 dark:text-cyan-300 font-medium">پلتفرم پایش و تحلیل</span>
+              {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 border border-blue-200/50 dark:border-blue-500/20 backdrop-blur-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-500 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-600 dark:bg-blue-500"></span>
+                </span>
+                <span className="text-sm text-blue-700 dark:text-blue-300 font-medium">پلتفرم پایش و تحلیل</span>
               </div> */}
 
               {/* Main Heading */}
-              <h1 className="text-4xl lg:text-5xl font-bold leading-tight">
-                <span className="block text-slate-900 dark:text-white mb-2">
+              <div className="space-y-4">
+                <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-slate-900 dark:text-white">
                   مدیریت هوشمند
-                </span>
-                <span className="block bg-gradient-to-l from-cyan-500 via-blue-600 to-purple-600 dark:from-cyan-400 dark:via-blue-500 dark:to-purple-500 bg-clip-text text-transparent">
-                  شبکه‌های اجتماعی
-                </span>
-              </h1>
+                  <span className="block bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-500 dark:via-indigo-500 dark:to-purple-500 bg-clip-text text-transparent mt-2 animate-gradient">
+                    شبکه‌های اجتماعی
+                  </span>
+                </h1>
 
-              {/* Description */}
-              <p className="text-base lg:text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
-                تمام پیام‌رسان‌ها، کانال‌ها و کلیدواژه‌های خود را در یک داشبورد
-                قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی و آمار دقیق.
-              </p>
+                {/* Description */}
+                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+                  تمام پیام‌رسان‌ها، کانال‌ها و کلیدواژه‌های خود را در یک داشبورد
+                  قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی و آمار دقیق.
+                </p>
+              </div>
 
-               {/* Features List */}
-              {/* <div className="space-y-4 pt-4">
+              {/* Features List */}
+              {/* <div className="space-y-4">
                 {[
-                  { icon: "📊", text: "تحلیل داده‌های لحظه‌ای" },
-                  { icon: "🔍", text: "جستجوی پیشرفته در محتوا" },
-                  { icon: "⚡", text: "رابط کاربری سریع و کارآمد" },
-                  { icon: "🛡️", text: "امنیت و حریم خصوصی" },
+                  { icon: "📊", text: "تحلیل داده‌های لحظه‌ای", gradient: "from-blue-500 to-cyan-500" },
+                  { icon: "🔍", text: "جستجوی پیشرفته در محتوا", gradient: "from-indigo-500 to-blue-500" },
+                  { icon: "⚡", text: "رابط کاربری سریع و کارآمد", gradient: "from-violet-500 to-indigo-500" },
+                  { icon: "🛡️", text: "امنیت و حریم خصوصی", gradient: "from-purple-500 to-pink-500" },
                 ].map((feature, index) => (
                   <div
                     key={index}
-                    className="flex items-center gap-4 text-slate-700 dark:text-slate-300 group hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors duration-300"
+                    className="flex items-center gap-4 text-slate-700 dark:text-slate-300 group animate-fade-in-right"
                     style={{ animationDelay: `${index * 100}ms` }}
                   >
-                    <span className="text-2xl group-hover:scale-110 transition-transform duration-300">{feature.icon}</span>
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.gradient} p-[2px] transform group-hover:scale-110 transition-transform duration-300`}>
+                      <div className="w-full h-full rounded-xl bg-white dark:bg-slate-900 flex items-center justify-center">
+                        <span className="text-xl">{feature.icon}</span>
+                      </div>
+                    </div>
                     <span className="text-base font-medium">{feature.text}</span>
-                    </div>
-                ))}
-                </div> */}
-
-              {/* Animation Section - Moved Here */}
-              <div className="hidden lg:block py-8">
-                <div className="relative group">
-                  {/* Subtle glow effect behind animation */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-cyan-400/10 to-blue-400/10 dark:from-cyan-500/5 dark:to-blue-500/5 rounded-2xl blur-3xl opacity-50 group-hover:opacity-70 transition-opacity duration-500"></div>
-
-                  {/* Animation container - No border, no background */}
-                  <div className="relative transition-all duration-700">
-                    <div className="w-full h-80">
-                      <SocialMonitoringAnimation width="100%" height="100%" />
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Stats */}
-              {/* <div className="grid grid-cols-3 gap-8 pt-4">
-                {[
-                  { value: "99.9%", label: "آپتایم" },
-                  { value: "24/7", label: "پشتیبانی" },
-                  { value: "1M+", label: "پیام روزانه" },
-                ].map((stat, index) => (
-                  <div key={index} className="text-center lg:text-right">
-                    <div className="text-2xl lg:text-3xl font-bold bg-gradient-to-l from-cyan-600 to-blue-600 dark:from-cyan-400 dark:to-blue-500 bg-clip-text text-transparent">
-                      {stat.value}
-                    </div>
-                    <div className="text-sm text-slate-500 dark:text-slate-500 mt-1">{stat.label}</div>
                   </div>
                 ))}
               </div> */}
+
+              {/* Animation Section */}
+              <div className="hidden lg:block pt-8">
+                <div className="w-full relative group">
+                  {/* Glow effect */}
+                  <div className="absolute -inset-4 bg-gradient-to-r from-blue-500/10 via-indigo-500/10 to-purple-500/10 dark:from-blue-500/5 dark:via-indigo-500/5 dark:to-purple-500/5 rounded-2xl blur-2xl group-hover:blur-3xl transition-all duration-500"></div>
+                  <div className="relative h-96">
+                    <SocialMonitoringAnimation width="100%" height="100%" />
+                  </div>
+                </div>
+              </div>
             </div>
 
             {/* Right Side - Login Card */}
-            <div className="order-1 lg:order-2 flex justify-center lg:justify-end">
+            <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-in-up animation-delay-200">
               <div className="w-full max-w-md">
-                {/* Glowing effect container */}
+                {/* Card with gradient border */}
                 <div className="relative group">
-                  {/* Glow */}
-                  <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-2xl blur-xl opacity-25 dark:opacity-20 group-hover:opacity-35 dark:group-hover:opacity-30 transition-all duration-700"></div>
+                  {/* Static gradient glow */}
+                  <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-2xl opacity-20 dark:opacity-30 group-hover:opacity-30 dark:group-hover:opacity-40 blur transition-all duration-500"></div>
 
-                  {/* Card */}
-                  <div className="relative bg-white/95 dark:bg-slate-900/90 backdrop-blur-xl border border-cyan-500/30 dark:border-cyan-500/20 rounded-2xl p-8 shadow-2xl transition-all duration-700">
+                  <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-8 shadow-xl">
                     {/* Login Header */}
                     <div className="text-center mb-8">
-                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2 transition-colors duration-700">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 transform group-hover:scale-110 transition-transform duration-300">
+                        <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                        </svg>
+                      </div>
+                      <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
                         ورود به پنل مدیریت
                       </h2>
-                      <p className="text-slate-600 dark:text-slate-400 text-sm transition-colors duration-700">
+                      <p className="text-slate-600 dark:text-slate-400 text-sm">
                         اطلاعات خود را وارد نمایید
                       </p>
                     </div>
@@ -258,7 +329,7 @@ const LandingPage: React.FC = () => {
                       <button
                         disabled={mutation.isPending}
                         type="submit"
-                        className="w-full px-6 py-4 font-bold text-white mt-6 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-lg shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/40 hover:from-cyan-500 hover:to-blue-500 focus:outline-none focus:ring-2 focus:ring-cyan-500/50 disabled:from-slate-500 disabled:to-slate-600 dark:disabled:from-slate-600 dark:disabled:to-slate-700 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-700 transform hover:scale-[1.02] active:scale-[0.98]"
+                        className="w-full px-6 py-3.5 font-semibold text-white mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:from-slate-400 disabled:to-slate-500 dark:disabled:from-slate-700 dark:disabled:to-slate-800 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                       >
                         {mutation.isPending ? (
                           <span className="flex items-center justify-center gap-3">
@@ -291,12 +362,12 @@ const LandingPage: React.FC = () => {
                     </FormWrapper>
 
                     {/* Footer */}
-                    <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800 transition-colors duration-700">
-                      <p className="text-xs text-center text-slate-500 dark:text-slate-500 transition-colors duration-700">
+                    <div className="mt-8 pt-6 border-t border-slate-200 dark:border-slate-800">
+                      <p className="text-xs text-center text-slate-500 dark:text-slate-400">
                         با ورود به سیستم،{" "}
                         <a
                           href="#"
-                          className="text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 transition-colors duration-700 font-medium"
+                          className="text-blue-600 dark:text-blue-500 hover:text-blue-700 dark:hover:text-blue-400 transition-colors font-medium underline-offset-2 hover:underline"
                         >
                           شرایط و قوانین
                         </a>{" "}
@@ -307,8 +378,8 @@ const LandingPage: React.FC = () => {
                 </div>
 
                 {/* Security Badge */}
-                <div className="mt-6 flex items-center justify-center gap-2 text-slate-500 dark:text-slate-500 text-sm transition-colors duration-700">
-                  <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                <div className="mt-6 flex items-center justify-center gap-2 text-slate-500 dark:text-slate-400 text-sm">
+                  <svg className="w-4 h-4 text-green-600 dark:text-green-500" fill="currentColor" viewBox="0 0 20 20">
                     <path fillRule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clipRule="evenodd" />
                   </svg>
                   <span>اتصال امن و رمزگذاری شده</span>
@@ -320,39 +391,136 @@ const LandingPage: React.FC = () => {
         </div>
       </main>
 
-      {/* Floating Particles */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        {[...Array(20)].map((_, i) => (
-          <div
-            key={i}
-            className="absolute w-1 h-1 bg-cyan-500/40 dark:bg-cyan-400/30 rounded-full"
-            style={{
-              left: `${Math.random() * 100}%`,
-              top: `${Math.random() * 100}%`,
-              animation: `float ${5 + Math.random() * 10}s linear infinite`,
-              animationDelay: `${Math.random() * 5}s`,
-            }}
-          ></div>
-        ))}
-      </div>
-
-      {/* Animation Keyframes */}
+      {/* Custom Animations */}
       <style>{`
-        @keyframes float {
+        @keyframes blob {
+          0%, 100% {
+            transform: translate(0, 0) scale(1);
+          }
+          33% {
+            transform: translate(30px, -50px) scale(1.1);
+          }
+          66% {
+            transform: translate(-20px, 20px) scale(0.9);
+          }
+        }
+
+        @keyframes float-slow {
+          0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg);
+          }
+          25% {
+            transform: translateY(-40px) translateX(30px) rotate(90deg);
+          }
+          50% {
+            transform: translateY(-80px) translateX(-30px) rotate(180deg);
+          }
+          75% {
+            transform: translateY(-40px) translateX(-50px) rotate(270deg);
+          }
+        }
+
+        @keyframes float-medium {
+          0%, 100% {
+            transform: translateY(0) translateX(0) rotate(0deg);
+          }
+          33% {
+            transform: translateY(-60px) translateX(40px) rotate(120deg);
+          }
+          66% {
+            transform: translateY(-30px) translateX(-40px) rotate(240deg);
+          }
+        }
+
+        @keyframes float-drift {
           0%, 100% {
             transform: translateY(0) translateX(0);
             opacity: 0;
           }
           10% {
-            opacity: 0.3;
+            opacity: 1;
           }
           50% {
-            transform: translateY(-100px) translateX(50px);
-            opacity: 0.6;
+            transform: translateY(-150px) translateX(100px);
+            opacity: 0.7;
           }
           90% {
             opacity: 0.3;
           }
+        }
+
+        @keyframes fade-in-up {
+          from {
+            opacity: 0;
+            transform: translateY(30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        @keyframes fade-in-right {
+          from {
+            opacity: 0;
+            transform: translateX(-30px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+
+        .animate-blob {
+          animation: blob 7s infinite;
+        }
+
+        .animate-float-slow {
+          animation: float-slow 20s ease-in-out infinite;
+        }
+
+        .animate-float-medium {
+          animation: float-medium 16s ease-in-out infinite;
+        }
+
+        .animate-float-drift {
+          animation: float-drift 15s ease-in-out infinite;
+        }
+
+        .animation-delay-2000 {
+          animation-delay: 2s;
+        }
+
+        .animation-delay-4000 {
+          animation-delay: 4s;
+        }
+
+        .animation-delay-200 {
+          animation-delay: 200ms;
+        }
+
+        .animate-fade-in-up {
+          animation: fade-in-up 0.6s ease-out forwards;
+        }
+
+        .animate-fade-in-right {
+          animation: fade-in-right 0.6s ease-out forwards;
+        }
+
+        @keyframes gradient {
+          0%, 100% {
+            background-size: 200% 200%;
+            background-position: left center;
+          }
+          50% {
+            background-size: 200% 200%;
+            background-position: right center;
+          }
+        }
+
+        .animate-gradient {
+          background-size: 200% auto;
+          animation: gradient 3s ease infinite;
         }
       `}</style>
     </div>
