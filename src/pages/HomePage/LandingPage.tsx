@@ -228,6 +228,7 @@ const LandingPage: React.FC = () => {
       {/* Navbar */}
       <Navbar darkMode={darkMode} toggleDarkMode={toggleDarkMode} />
 
+
       {/* Main Content */}
       <main className="relative z-10 min-h-screen flex items-center justify-center px-4 py-20">
         <div className="max-w-7xl mx-auto w-full">
@@ -235,6 +236,8 @@ const LandingPage: React.FC = () => {
 
             {/* Left Side - Content */}
             <div className="space-y-8 text-right order-2 lg:order-1 animate-fade-in-up">
+
+   
               {/* Badge */}
               {/* <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-blue-500/10 to-indigo-500/10 dark:from-blue-500/20 dark:to-indigo-500/20 border border-blue-200/50 dark:border-blue-500/20 backdrop-blur-sm">
                 <span className="relative flex h-2 w-2">

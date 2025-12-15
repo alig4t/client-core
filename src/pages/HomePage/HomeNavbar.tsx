@@ -21,7 +21,7 @@ const Navbar: React.FC<NavbarProps> = ({ darkMode, toggleDarkMode }) => {
   };
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-md bg-white/70 dark:bg-slate-950/30 border-b border-slate-200 dark:border-cyan-500/10 transition-colors duration-500">
+    <header className="fixed inset-x-0 top-0 z-50 backdrop-blur-md bg-white/20 dark:bg-slate-950/30 border-b border-slate-200 dark:border-cyan-500/10 transition-colors duration-500">
       <nav
         className="flex items-center justify-between p-4 lg:px-8 max-w-7xl mx-auto"
         aria-label="Global"
