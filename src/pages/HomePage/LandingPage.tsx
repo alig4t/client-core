@@ -297,15 +297,15 @@ const LandingPage: React.FC = () => {
             {/* Right Side - Login Card */}
             <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-in-up animation-delay-200">
               <div className="w-full max-w-md">
-                {/* Card with gradient border */}
+                {/* Card */}
                 <div className="relative group">
-                  {/* Static gradient glow */}
-                  <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 rounded-2xl opacity-20 dark:opacity-30 group-hover:opacity-30 dark:group-hover:opacity-40 blur transition-all duration-500"></div>
+                  {/* Subtle glow effect - only in light mode */}
+                  <div className="absolute -inset-1 bg-gradient-to-br from-blue-400/20 via-indigo-400/20 to-purple-400/20 dark:from-transparent dark:via-transparent dark:to-transparent rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-all duration-500"></div>
 
-                  <div className="relative bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl border border-slate-200/50 dark:border-slate-800/50 rounded-2xl p-8 shadow-xl">
+                  <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-xl dark:shadow-2xl dark:shadow-slate-950/50">
                     {/* Login Header */}
                     <div className="text-center mb-8">
-                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/30 transform group-hover:scale-110 transition-transform duration-300">
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-blue-500 to-indigo-600 dark:from-blue-600 dark:to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20 dark:shadow-blue-900/30 transform group-hover:scale-110 transition-transform duration-300">
                         <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                         </svg>
@@ -329,7 +329,7 @@ const LandingPage: React.FC = () => {
                       <button
                         disabled={mutation.isPending}
                         type="submit"
-                        className="w-full px-6 py-3.5 font-semibold text-white mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 rounded-lg shadow-lg shadow-blue-500/30 hover:shadow-blue-500/50 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:from-slate-400 disabled:to-slate-500 dark:disabled:from-slate-700 dark:disabled:to-slate-800 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+                        className="w-full px-6 py-3.5 font-semibold text-white mt-6 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 dark:from-blue-600 dark:to-indigo-600 dark:hover:from-blue-700 dark:hover:to-indigo-700 rounded-lg shadow-lg shadow-blue-500/25 hover:shadow-blue-500/40 dark:shadow-blue-900/40 dark:hover:shadow-blue-900/60 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 disabled:from-slate-300 disabled:to-slate-400 disabled:text-slate-100 dark:disabled:from-slate-700 dark:disabled:to-slate-800 dark:disabled:text-slate-400 disabled:cursor-not-allowed disabled:shadow-none transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
                       >
                         {mutation.isPending ? (
                           <span className="flex items-center justify-center gap-3">
