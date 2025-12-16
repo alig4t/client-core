@@ -13,6 +13,7 @@ import UserService from "@/Models/User/UserService";
 import Navbar from "./HomeNavbar";
 import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 import "./LandingPage.css";
+import { Eye, EyeOff } from "lucide-react";
 
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
@@ -26,6 +27,8 @@ function LoginFormFields() {
     register,
     formState: { errors },
   } = useFormContext<LoginFormData>();
+
+   const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div className="space-y-5">
@@ -48,24 +51,40 @@ function LoginFormFields() {
         )}
       </div>
 
+
       <div className="w-full">
-        <label
-          htmlFor="password"
-          className="block text-sm font-medium text-slate-700 dark:text-slate-300 text-right mb-2"
-        >
-          رمز عبور
-        </label>
+      <label
+        htmlFor="password"
+        className="block text-sm font-medium text-slate-700 dark:text-slate-300 text-right mb-2"
+      >
+        رمز عبور
+      </label>
+
+      <div className="relative">
         <input
           id="password"
-          type="password"
+          type={showPassword ? "text" : "password"}
           placeholder="رمز عبور خود را وارد کنید"
           {...register("password")}
-          className="w-full px-4 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
-        />
-        {errors.password && (
-          <ErrorFormText msg={errors.password.message as string} />
-        )}
+          // className="w-full px-4 py-3 pr-12 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
+       className="w-full px-4 pl-16 py-3 bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg text-slate-900 dark:text-white placeholder-slate-400 dark:placeholder-slate-500 text-right focus:outline-none focus:border-blue-500 dark:focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 transition-colors"
+        
+     />
+
+        <button
+          type="button"
+          onClick={() => setShowPassword((prev) => !prev)}
+          className="absolute left-2 top-1/2 -translate-y-1/2 text-slate-500/70 hover:text-slate-700 transition-colors dark:hover:text-slate-300"
+        >
+          {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+        </button>
       </div>
+
+      {errors.password && (
+        <ErrorFormText msg={errors.password.message as string} />
+      )}
+    </div>
+
     </div>
   );
 }
@@ -232,10 +251,10 @@ const LandingPage: React.FC = () => {
       {/* Main Content */}
       <main className="relative z-10 min-h-screen flex items-center justify-center px-4 py-20">
         <div className="max-w-7xl mx-auto w-full">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
+          <div className="grid lg:grid-cols-2 lg:gap-12 items-center">
 
             {/* Left Side - Content */}
-            <div className="space-y-8 text-right order-2 lg:order-1 animate-fade-in-up">
+            <div className="space-y-8 text-right order-1 lg:order-1 animate-fade-in-up">
 
    
               {/* Badge */}
@@ -249,7 +268,7 @@ const LandingPage: React.FC = () => {
 
               {/* Main Heading */}
               <div className="space-y-4">
-                <h1 className="text-5xl lg:text-6xl font-bold leading-tight text-slate-900 dark:text-white">
+                <h1 className="text-center lg:text-right text-4xl mt-4 lg:text-6xl font-bold leading-tight text-slate-900 dark:text-white">
                   مدیریت هوشمند
                   <span className="block bg-gradient-to-l from-blue-600 via-indigo-600 to-purple-600 dark:from-blue-500 dark:via-indigo-500 dark:to-purple-500 bg-clip-text text-transparent mt-2 animate-gradient">
                     شبکه‌های اجتماعی
@@ -257,7 +276,7 @@ const LandingPage: React.FC = () => {
                 </h1>
 
                 {/* Description */}
-                <p className="text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
+                <p className=" mx-auto text-center lg:text-right text-lg text-slate-600 dark:text-slate-400 leading-relaxed max-w-xl">
                   تمام پیام‌رسان‌ها، کانال‌ها و کلیدواژه‌های خود را در یک داشبورد
                   قدرتمند پایش و تحلیل کنید. دسترسی لحظه‌ای به اطلاعات حیاتی و آمار دقیق.
                 </p>
@@ -299,7 +318,7 @@ const LandingPage: React.FC = () => {
             </div>
 
             {/* Right Side - Login Card */}
-            <div className="order-1 lg:order-2 flex justify-center lg:justify-end animate-fade-in-up animation-delay-200">
+            <div className="order-1 lg:order-2 flex justify-center lg:justify-center animate-fade-in-up animation-delay-200">
               <div className="w-full max-w-md">
                 {/* Card */}
                 <div className="relative group">
