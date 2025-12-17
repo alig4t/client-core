@@ -58,6 +58,7 @@ import {
   Database,
   Globe,
   UserCheck,
+  UserSearch,
 } from "lucide-react";
 
 import type { RouteConfig } from "./path.types";
@@ -153,8 +154,8 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal/permissions",
   },
   {
-    path: withId("/dashboard/portal/permissions"),
-    // element: PermissionEdit,
+    path: withId("/dashboard/portal/permissions/edit"),
+    element: PermissionCreate,
     permission: Permission.Permission_Update,
     showInMenu: false,
     name: VIEWNAME.PERMISSION_EDIT,
@@ -211,7 +212,7 @@ export const routeConfig: RouteConfig[] = [
    {
     path: "/dashboard/portal/user",
     label: "کاربران",
-    icon: <Code size={18} />,
+    icon: <UserSearch size={18} />,
     element: UserPage,
     parent: "/dashboard/portal",
     permission: Permission.User_Read,
@@ -248,84 +249,9 @@ export const routeConfig: RouteConfig[] = [
 
 
 
-  // ================================
-  // 🤖 Bot
-  // ================================
-  {
-    path: "/dashboard/portal/bots",
-    label: "ربات‌ها",
-    icon: <Bot size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Bot_Read,
-    showInMenu: true,
-    name: VIEWNAME.BOTS,
-  },
 
-  // ================================
-  // 🏙️ City
-  // ================================
-  {
-    path: "/dashboard/portal/cities",
-    label: "شهرها",
-    icon: <MapPin size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.City_Read,
-    showInMenu: true,
-    name: VIEWNAME.CITIES,
-  },
 
-  // ================================
-  // 💬 Message
-  // ================================
-  {
-    path: "/dashboard/portal/messages",
-    label: "پیام‌ها",
-    icon: <MessageSquare size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Message_Read,
-    showInMenu: true,
-    name: VIEWNAME.MESSAGES,
-  },
-
-  // ================================
-  // 🔑 Keyword
-  // ================================
-  {
-    path: "/dashboard/portal/keywords",
-    label: "کلمات کلیدی",
-    icon: <Key size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Keyword_Read,
-    showInMenu: true,
-    name: VIEWNAME.KEYWORDS,
-  },
-
-  // ================================
-  // 👤 Person
-  // ================================
-  {
-    path: "/dashboard/portal/persons",
-    label: "افراد",
-    icon: <UserCheck size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Person_Read,
-    showInMenu: true,
-    name: VIEWNAME.PERSONS,
-  },
-
-  // ================================
-  // 🗃️ DashboardData
-  // ================================
-  {
-    path: "/dashboard/portal/data",
-    label: "داده‌های داشبورد",
-    icon: <Database size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.DashboardData_Read,
-    showInMenu: true,
-    name: VIEWNAME.DASHBOARD_DATA,
-  },
-
+ 
   // ================================
 // 📡 Platform (MessagingPlatform) Pages
 // ================================
