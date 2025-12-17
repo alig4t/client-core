@@ -32,8 +32,8 @@ const PermissionTableColumns: React.FC<PermissionTableColumnsProps> = memo(({
             <TBODY className="flex gap-x-2 justify-center">
                 <NavLink
                     variant="edit"
-                    permission={Permission.ComprehensiveEntity_Update}
-                    viewName={VIEWNAME.COMPREHENSIVE_EDIT}
+                    permission={Permission.Permission_Update}
+                    viewName={VIEWNAME.PERMISSION_EDIT}
                     idParam={item.id}
                     tooltipSide="top"
                     className="mr-2"
@@ -41,7 +41,7 @@ const PermissionTableColumns: React.FC<PermissionTableColumnsProps> = memo(({
 
                 <TableLink
                     to={getViewPath(VIEWNAME.COMPREHENSIVE_DISPLAY, item.id)}
-                    permission={Permission.ComprehensiveEntity_Read}
+                    permission={Permission.Permission_Read}
                 >
                     <Eye size={20} />
                 </TableLink>
@@ -50,7 +50,7 @@ const PermissionTableColumns: React.FC<PermissionTableColumnsProps> = memo(({
                     tooltipText="حذف"
                     onClick={() => onDelete(item.id)}
                     className="text-red-600 hover:text-red-800"
-                    permission={Permission.ComprehensiveEntity_Delete}
+                    permission={Permission.Permission_Delete}
                 >
                     <Trash2 size={20} />
                 </TableLink>

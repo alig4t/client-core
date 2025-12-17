@@ -23,10 +23,22 @@ const ComprehensivePage = lazy(
 const ComprehensiveCreate = lazy(
   () => import("@/Models/Comprehensive/ComprehensiveCreate")
 );
-// const ComprehensiveEdit = lazy(() => import("@/Models/Comprehensive/ComprehensiveEdit"));
 const ComprehensiveDisplay = lazy(
   () => import("@/Models/Comprehensive/ComprehensiveDisplay")
 );
+
+// User Module
+const UserPage = lazy(
+  () => import("@/Models/User/UserPage")
+);
+const UserCreate = lazy(
+  () => import("@/Models/User/UserCreate")
+);
+const UserDisplay = lazy(
+  () => import("@/Models/User/UserDisplay")
+);
+
+
 
 // Icons
 import {
@@ -46,6 +58,7 @@ import {
   Database,
   Globe,
   UserCheck,
+  UserSearch,
 } from "lucide-react";
 
 import type { RouteConfig } from "./path.types";
@@ -141,8 +154,8 @@ export const routeConfig: RouteConfig[] = [
     parent: "/dashboard/portal/permissions",
   },
   {
-    path: withId("/dashboard/portal/permissions"),
-    // element: PermissionEdit,
+    path: withId("/dashboard/portal/permissions/edit"),
+    element: PermissionCreate,
     permission: Permission.Permission_Update,
     showInMenu: false,
     name: VIEWNAME.PERMISSION_EDIT,
@@ -192,119 +205,133 @@ export const routeConfig: RouteConfig[] = [
   },
 
   // ================================
-  // 🤖 Bot
+  // 🧩 User Pages
   // ================================
-  {
-    path: "/dashboard/portal/bots",
-    label: "ربات‌ها",
-    icon: <Bot size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Bot_Read,
-    showInMenu: true,
-    name: VIEWNAME.BOTS,
-  },
 
-  // ================================
-  // 📢 Channel
-  // ================================
-  {
-    path: "/dashboard/portal/channels",
-    label: "کانال‌ها",
-    icon: <Hash size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Channel_Read,
-    showInMenu: true,
-    name: VIEWNAME.CHANNELS,
-  },
 
-  // ================================
-  // 🏙️ City
-  // ================================
-  {
-    path: "/dashboard/portal/cities",
-    label: "شهرها",
-    icon: <MapPin size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.City_Read,
-    showInMenu: true,
-    name: VIEWNAME.CITIES,
-  },
-
-  // ================================
-  // 💬 Message
-  // ================================
-  {
-    path: "/dashboard/portal/messages",
-    label: "پیام‌ها",
-    icon: <MessageSquare size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Message_Read,
-    showInMenu: true,
-    name: VIEWNAME.MESSAGES,
-  },
-
-  // ================================
-  // 👥 User
-  // ================================
-  {
-    path: "/dashboard/portal/users",
+   {
+    path: "/dashboard/portal/user",
     label: "کاربران",
-    icon: <Users size={18} />,
+    icon: <UserSearch size={18} />,
+    element: UserPage,
     parent: "/dashboard/portal",
     permission: Permission.User_Read,
     showInMenu: true,
-    name: VIEWNAME.USERS,
+    name: VIEWNAME.USERS_LIST,
+  },
+  {
+    path: "/dashboard/portal/user/create",
+    element: UserCreate,
+    permission: Permission.User_Create,
+    showInMenu: false,
+    name: VIEWNAME.USERS_CREATE,
+    label: "ایجاد کاربر",
+    parent: "/dashboard/portal/user",
+  },
+  {
+    path: withId("/dashboard/portal/user"),
+    element: UserDisplay,
+    permission: Permission.User_Read,
+    showInMenu: false,
+    name: VIEWNAME.USERS_DISPLAY,
+    label: "جزئیات کاربر",
+    parent: "/dashboard/portal/user",
+  },
+  {
+    path: withId("/dashboard/portal/user/edit"),
+    element: UserCreate,
+    permission: Permission.User_Update,
+    showInMenu: false,
+    name: VIEWNAME.USERS_EDIT,
+    label: "ویرایش کاربر",
+    parent: "/dashboard/portal/user",
   },
 
-  // ================================
-  // 🔑 Keyword
-  // ================================
-  {
-    path: "/dashboard/portal/keywords",
-    label: "کلمات کلیدی",
-    icon: <Key size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Keyword_Read,
-    showInMenu: true,
-    name: VIEWNAME.KEYWORDS,
-  },
 
-  // ================================
-  // 🌐 MessagingPlatform
-  // ================================
-  {
-    path: "/dashboard/portal/platforms",
-    label: "پلتفرم‌ها",
-    icon: <Globe size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.MessagingPlatform_Read,
-    showInMenu: true,
-    name: VIEWNAME.PLATFORMS,
-  },
 
-  // ================================
-  // 👤 Person
-  // ================================
-  {
-    path: "/dashboard/portal/persons",
-    label: "افراد",
-    icon: <UserCheck size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Person_Read,
-    showInMenu: true,
-    name: VIEWNAME.PERSONS,
-  },
 
+
+ 
   // ================================
-  // 🗃️ DashboardData
-  // ================================
-  {
-    path: "/dashboard/portal/data",
-    label: "داده‌های داشبورد",
-    icon: <Database size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.DashboardData_Read,
-    showInMenu: true,
-    name: VIEWNAME.DASHBOARD_DATA,
-  },
+// 📡 Platform (MessagingPlatform) Pages
+// ================================
+{
+  path: "/dashboard/portal/platform",
+  label: "پلتفرم‌ها",
+  icon: <Globe size={18} />,
+  element: lazy(() => import("@/Models/Platform/PlatformPage")),
+  parent: "/dashboard/portal",
+  permission: Permission.MessagingPlatform_Read,
+  showInMenu: true,
+  name: VIEWNAME.PLATFORM_LIST,
+},
+{
+  path: "/dashboard/portal/platform/create",
+  element: lazy(() => import("@/Models/Platform/PlatformCreate")),
+  permission: Permission.MessagingPlatform_Create,
+  showInMenu: false,
+  name: VIEWNAME.PLATFORM_CREATE,
+  label: "ایجاد پلتفرم",
+  parent: "/dashboard/portal/platform",
+},
+{
+  path: withId("/dashboard/portal/platform"),
+  element: lazy(() => import("@/Models/Platform/PlatformDisplay")),
+  permission: Permission.MessagingPlatform_Read,
+  showInMenu: false,
+  name: VIEWNAME.PLATFORM_DISPLAY,
+  label: "جزئیات پلتفرم",
+  parent: "/dashboard/portal/platform",
+},
+{
+  path: withId("/dashboard/portal/platform/edit"),
+  element: lazy(() => import("@/Models/Platform/PlatformCreate")),
+  permission: Permission.MessagingPlatform_Update,
+  showInMenu: false,
+  name: VIEWNAME.PLATFORM_EDIT,
+  label: "ویرایش پلتفرم",
+  parent: "/dashboard/portal/platform",
+},
+
+// ================================
+// 📺 Channel Pages
+// ================================
+{
+  path: "/dashboard/portal/channels",
+  label: "کانال‌ها",
+  icon: <Hash size={18} />,
+  element: lazy(() => import("@/Models/Channel/ChannelPage")),
+  parent: "/dashboard/portal",
+  permission: Permission.Channel_Read,
+  showInMenu: true,
+  name: VIEWNAME.CHANNEL_LIST,
+},
+{
+  path: "/dashboard/portal/channels/create",
+  element: lazy(() => import("@/Models/Channel/ChannelCreate")),
+  permission: Permission.Channel_Create,
+  showInMenu: false,
+  name: VIEWNAME.CHANNEL_CREATE,
+  label: "ایجاد کانال",
+  parent: "/dashboard/portal/channels",
+},
+{
+  path: withId("/dashboard/portal/channels"),
+  element: lazy(() => import("@/Models/Channel/ChannelDisplay")),
+  permission: Permission.Channel_Read,
+  showInMenu: false,
+  name: VIEWNAME.CHANNEL_DISPLAY,
+  label: "جزئیات کانال",
+  parent: "/dashboard/portal/channels",
+},
+{
+  path: withId("/dashboard/portal/channels/edit"),
+  element: lazy(() => import("@/Models/Channel/ChannelCreate")),
+  permission: Permission.Channel_Update,
+  showInMenu: false,
+  name: VIEWNAME.CHANNEL_EDIT,
+  label: "ویرایش کانال",
+  parent: "/dashboard/portal/channels",
+},
+
 ];
