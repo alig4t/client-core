@@ -23,10 +23,22 @@ const ComprehensivePage = lazy(
 const ComprehensiveCreate = lazy(
   () => import("@/Models/Comprehensive/ComprehensiveCreate")
 );
-// const ComprehensiveEdit = lazy(() => import("@/Models/Comprehensive/ComprehensiveEdit"));
 const ComprehensiveDisplay = lazy(
   () => import("@/Models/Comprehensive/ComprehensiveDisplay")
 );
+
+// User Module
+const UserPage = lazy(
+  () => import("@/Models/User/UserPage")
+);
+const UserCreate = lazy(
+  () => import("@/Models/User/UserCreate")
+);
+const UserDisplay = lazy(
+  () => import("@/Models/User/UserDisplay")
+);
+
+
 
 // Icons
 import {
@@ -192,6 +204,51 @@ export const routeConfig: RouteConfig[] = [
   },
 
   // ================================
+  // 🧩 User Pages
+  // ================================
+
+
+   {
+    path: "/dashboard/portal/user",
+    label: "کاربران",
+    icon: <Code size={18} />,
+    element: UserPage,
+    parent: "/dashboard/portal",
+    permission: Permission.User_Read,
+    showInMenu: true,
+    name: VIEWNAME.USERS_LIST,
+  },
+  {
+    path: "/dashboard/portal/user/create",
+    element: UserCreate,
+    permission: Permission.User_Create,
+    showInMenu: false,
+    name: VIEWNAME.USERS_CREATE,
+    label: "ایجاد کاربر",
+    parent: "/dashboard/portal/user",
+  },
+  {
+    path: withId("/dashboard/portal/user"),
+    element: UserDisplay,
+    permission: Permission.User_Read,
+    showInMenu: false,
+    name: VIEWNAME.USERS_DISPLAY,
+    label: "جزئیات کاربر",
+    parent: "/dashboard/portal/user",
+  },
+  {
+    path: withId("/dashboard/portal/user/edit"),
+    element: UserCreate,
+    permission: Permission.User_Update,
+    showInMenu: false,
+    name: VIEWNAME.USERS_EDIT,
+    label: "ویرایش کاربر",
+    parent: "/dashboard/portal/user",
+  },
+
+
+
+  // ================================
   // 🤖 Bot
   // ================================
   {
@@ -241,19 +298,6 @@ export const routeConfig: RouteConfig[] = [
     permission: Permission.Message_Read,
     showInMenu: true,
     name: VIEWNAME.MESSAGES,
-  },
-
-  // ================================
-  // 👥 User
-  // ================================
-  {
-    path: "/dashboard/portal/users",
-    label: "کاربران",
-    icon: <Users size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.User_Read,
-    showInMenu: true,
-    name: VIEWNAME.USERS,
   },
 
   // ================================

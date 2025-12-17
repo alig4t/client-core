@@ -99,7 +99,13 @@ export const Permission = {
   Role_Search: "role:search",
 
   // User
+  User_Root: "user:root",
+  User_Create: "user:create",
   User_Read: "user:read",
+  User_Update: "user:update",
+  User_Delete: "user:delete",
+  User_Search: "user:search",
+
   User_AssignRoles: "user:assign_roles",
 
   // UserChannel
