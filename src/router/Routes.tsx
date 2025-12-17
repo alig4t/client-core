@@ -262,19 +262,6 @@ export const routeConfig: RouteConfig[] = [
   },
 
   // ================================
-  // 📢 Channel
-  // ================================
-  {
-    path: "/dashboard/portal/channels",
-    label: "کانال‌ها",
-    icon: <Hash size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.Channel_Read,
-    showInMenu: true,
-    name: VIEWNAME.CHANNELS,
-  },
-
-  // ================================
   // 🏙️ City
   // ================================
   {
@@ -379,4 +366,46 @@ export const routeConfig: RouteConfig[] = [
   label: "ویرایش پلتفرم",
   parent: "/dashboard/portal/platform",
 },
+
+// ================================
+// 📺 Channel Pages
+// ================================
+{
+  path: "/dashboard/portal/channels",
+  label: "کانال‌ها",
+  icon: <Hash size={18} />,
+  element: lazy(() => import("@/Models/Channel/ChannelPage")),
+  parent: "/dashboard/portal",
+  permission: Permission.Channel_Read,
+  showInMenu: true,
+  name: VIEWNAME.CHANNEL_LIST,
+},
+{
+  path: "/dashboard/portal/channels/create",
+  element: lazy(() => import("@/Models/Channel/ChannelCreate")),
+  permission: Permission.Channel_Create,
+  showInMenu: false,
+  name: VIEWNAME.CHANNEL_CREATE,
+  label: "ایجاد کانال",
+  parent: "/dashboard/portal/channels",
+},
+{
+  path: withId("/dashboard/portal/channels"),
+  element: lazy(() => import("@/Models/Channel/ChannelDisplay")),
+  permission: Permission.Channel_Read,
+  showInMenu: false,
+  name: VIEWNAME.CHANNEL_DISPLAY,
+  label: "جزئیات کانال",
+  parent: "/dashboard/portal/channels",
+},
+{
+  path: withId("/dashboard/portal/channels/edit"),
+  element: lazy(() => import("@/Models/Channel/ChannelCreate")),
+  permission: Permission.Channel_Update,
+  showInMenu: false,
+  name: VIEWNAME.CHANNEL_EDIT,
+  label: "ویرایش کانال",
+  parent: "/dashboard/portal/channels",
+},
+
 ];

@@ -35,9 +35,15 @@ export const VIEWNAME = {
   USERS_EDIT: "USERS_EDIT",
 
 
+  // Channel
+  CHANNEL_LIST: "ChannelList",
+  CHANNEL_CREATE: "ChannelCreate",
+  CHANNEL_DISPLAY: "ChannelDisplay",
+  CHANNEL_EDIT: "ChannelEdit",
+
   // Other Modules
   BOTS: "BOTS",
-  CHANNELS: "CHANNELS",
+  // CHANNELS: "CHANNELS",
   CITIES: "CITIES",
   MESSAGES: "MESSAGES",
   USERS: "USERS",
