@@ -90,6 +90,12 @@ export const Permission = {
   Permission_Delete: "permission:delete",
   Permission_Search: "permission:search",
 
+  // PLATFORM
+  Platform_Read: "Platform_Read",
+  Platform_Create: "Platform_Create",
+  Platform_Update: "Platform_Update",
+  Platform_Delete: "Platform_Delete",
+
   // Role
   Role_Root: "role:root",
   Role_Create: "role:create",

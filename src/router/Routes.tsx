@@ -314,19 +314,6 @@ export const routeConfig: RouteConfig[] = [
   },
 
   // ================================
-  // 🌐 MessagingPlatform
-  // ================================
-  {
-    path: "/dashboard/portal/platforms",
-    label: "پلتفرم‌ها",
-    icon: <Globe size={18} />,
-    parent: "/dashboard/portal",
-    permission: Permission.MessagingPlatform_Read,
-    showInMenu: true,
-    name: VIEWNAME.PLATFORMS,
-  },
-
-  // ================================
   // 👤 Person
   // ================================
   {
@@ -351,4 +338,45 @@ export const routeConfig: RouteConfig[] = [
     showInMenu: true,
     name: VIEWNAME.DASHBOARD_DATA,
   },
+
+  // ================================
+// 📡 Platform (MessagingPlatform) Pages
+// ================================
+{
+  path: "/dashboard/portal/platform",
+  label: "پلتفرم‌ها",
+  icon: <Globe size={18} />,
+  element: lazy(() => import("@/Models/Platform/PlatformPage")),
+  parent: "/dashboard/portal",
+  permission: Permission.MessagingPlatform_Read,
+  showInMenu: true,
+  name: VIEWNAME.PLATFORM_LIST,
+},
+{
+  path: "/dashboard/portal/platform/create",
+  element: lazy(() => import("@/Models/Platform/PlatformCreate")),
+  permission: Permission.MessagingPlatform_Create,
+  showInMenu: false,
+  name: VIEWNAME.PLATFORM_CREATE,
+  label: "ایجاد پلتفرم",
+  parent: "/dashboard/portal/platform",
+},
+{
+  path: withId("/dashboard/portal/platform"),
+  element: lazy(() => import("@/Models/Platform/PlatformDisplay")),
+  permission: Permission.MessagingPlatform_Read,
+  showInMenu: false,
+  name: VIEWNAME.PLATFORM_DISPLAY,
+  label: "جزئیات پلتفرم",
+  parent: "/dashboard/portal/platform",
+},
+{
+  path: withId("/dashboard/portal/platform/edit"),
+  element: lazy(() => import("@/Models/Platform/PlatformCreate")),
+  permission: Permission.MessagingPlatform_Update,
+  showInMenu: false,
+  name: VIEWNAME.PLATFORM_EDIT,
+  label: "ویرایش پلتفرم",
+  parent: "/dashboard/portal/platform",
+},
 ];
