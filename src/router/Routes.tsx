@@ -271,7 +271,7 @@ export const routeConfig: RouteConfig[] = [
   // ================================
 {
   path: "/dashboard/portal/roles",
-  label: "Roles",
+  label: "نقش ها",
   icon: <UserCheck size={18} />,
   element: RolePage,
   parent: "/dashboard/portal",
@@ -285,7 +285,7 @@ export const routeConfig: RouteConfig[] = [
   permission: Permission.Role_Create,
   showInMenu: false,
   name: VIEWNAME.ROLE_CREATE,
-  label: "Create Role",
+  label: "ایجاد نقش",
   parent: "/dashboard/portal/roles",
 },
 {
@@ -294,7 +294,7 @@ export const routeConfig: RouteConfig[] = [
   permission: Permission.Role_Read,
   showInMenu: false,
   name: VIEWNAME.ROLE_DISPLAY,
-  label: "Role Details",
+  label: "جزئیات نقش",
   parent: "/dashboard/portal/roles",
 },
 {
@@ -303,7 +303,7 @@ export const routeConfig: RouteConfig[] = [
   permission: Permission.Role_Update,
   showInMenu: false,
   name: VIEWNAME.ROLE_EDIT,
-  label: "Edit Role",
+  label: "ویرایش نقش",
   parent: "/dashboard/portal/roles",
 },
 
