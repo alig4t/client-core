@@ -276,7 +276,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                     <table className="min-w-full text-sm text-right">
                         <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium border-b border-gray-100 dark:border-gray-700">
                             <tr>
-                                {isSelectionMode && <THEAD className="">#</THEAD>}
+                                {isSelectionMode && <THEAD className="pr-10 text-right">#</THEAD>}
                                 {header}
                             </tr>
                         </thead>
@@ -312,7 +312,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                                     }`}
                                             >
                                                 {isSelectionMode && (
-                                                    <TBODY className="text-center">
+                                                    <TBODY className="text-center pr-8">
                                                         <Checkbox
                                                             name={`row-${id}`}
                                                             standalone

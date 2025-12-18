@@ -19,7 +19,7 @@ export const RoleTableColumns: React.FC<RoleTableColumnsProps> = memo(
   ({ item, onDelete }) => {
     return (
       <>
-        <TBODY>{item.id}</TBODY>
+        {/* <TBODY>{item.id}</TBODY> */}
         <TBODY>{item.name}</TBODY>
         <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.createdAt)}</TBODY>
         <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.updatedAt)}</TBODY>
@@ -57,10 +57,10 @@ export const RoleTableColumns: React.FC<RoleTableColumnsProps> = memo(
 
 export const RoleTableHeaders: ReactNode = (
   <>
-    <THEAD>{RoleModelMeta.fields.id.label}</THEAD>
+    {/* <THEAD>{RoleModelMeta.fields.id.label}</THEAD> */}
     <THEAD>{RoleModelMeta.fields.name.label}</THEAD>
     <THEAD>{RoleModelMeta.fields.createdAt.label}</THEAD>
     <THEAD>{RoleModelMeta.fields.updatedAt.label}</THEAD>
-    <THEAD>O1U.U,UOOO¦</THEAD>
+    <THEAD>عملیات</THEAD>
   </>
 );

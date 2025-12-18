@@ -35,6 +35,7 @@ import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
 import { UserModelMeta } from "./UserModel.meta";
+import RoleService from "../Role/RoleService";
 
 const UserSchema = z.object({
   name: Validator.notNull(),
@@ -158,9 +159,17 @@ const UserCreate: React.FC = () => {
                     UserModelMeta.fields.username?.placeholder
                   }
                 />
-                
+                <FormAutoComplete
+                  name="roles"
+                  label={UserModelMeta.fields.roles?.label}
+                  service={RoleService}
+                  labelKey="name"
+                  valueKey="id"
+                  multi
+                />
+
               </RowContainer>
-              
+
               <ButtonPanel align="end">
                 <Button variant="cancel" onClick={handleCancel}>
                   {publicMessages.form.buttons.cancel}

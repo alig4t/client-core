@@ -17,6 +17,12 @@ export const UserModelMeta = createModelMeta<UserModel, FormFieldMetadata>(
       placeholder: "مثلاً admin",
       sortable: true,
     },
+    roles: {
+      label: "نقش ها",
+      type: "autocomplete",
+      displayField: "name",
+      sortable: true,
+    },
   },
   GET_AUTOCOMPLETE_DISPLAY_FIELD(),
   GET_DISPLAY_NAME(),

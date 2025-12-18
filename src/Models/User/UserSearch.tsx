@@ -16,6 +16,8 @@ import { RowContainer } from "@/core/components/general/container/RowContainer";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
 import { UserModelMeta } from "./UserModel.meta";
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
+import RoleService from "../Role/RoleService";
 
 // --- Filter output interface ---
 
@@ -73,8 +75,16 @@ const UserSearch: React.FC<UserSearchProps> = ({
             placeholder="جستجو..."
           />
 
+          {/* <FormAutoComplete
+            name={`roles_${FilterOperator.EQ}`}
+            label={UserModelMeta.fields.roles?.label}
+            service={RoleService}
+            labelKey="name"
+            valueKey="id"
+          /> */}
+
           {/* Numeric: integerField */}
-         
+
 
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
@@ -85,7 +95,7 @@ const UserSearch: React.FC<UserSearchProps> = ({
             label={makeRangeLabel(UserModelMeta.fields.createdAt.label, "to")}
           />
 
-          
+
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
             label={makeRangeLabel(UserModelMeta.fields.updatedAt.label, "from")}
