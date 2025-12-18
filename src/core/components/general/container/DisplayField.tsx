@@ -34,20 +34,20 @@ export const DisplayField: FC<DisplayFieldProps> = ({
   // Check for empty/null values and display a placeholder
   const isValueEmpty = value === null || value === undefined || value === "";
   const displayValue = isValueEmpty ? (
-    <span className="text-gray-400 italic">— نامشخص —</span>
+    <span className="text-[var(--text-tertiary)] italic">— نامشخص —</span>
   ) : (
     value
   );
 
   return (
     <div
-      className={`flex flex-col p-3  border-gray-200 rounded-lg bg-[var(--white)] ${colSpanClass}`}
+      className={`flex flex-col gap-1.5 p-4 bg-[var(--bg-tertiary)] rounded-lg ${colSpanClass}`}
     >
       {/* Label/Title */}
-      <dt className="text-xs font-medium text-gray-500 mb-1">{label}</dt>
+      <dt className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">{label}</dt>
 
       {/* Value */}
-      <dd className="text-sm font-semibold text-[var(--primary-text)] break-words">
+      <dd className="text-sm font-medium text-[var(--text-primary)] break-words">
         {link && !isValueEmpty ? (
           // Render as a Link if link props are provided and value is not empty
           <Link

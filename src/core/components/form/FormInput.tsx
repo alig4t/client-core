@@ -37,7 +37,7 @@ type FormInputProps = BaseFormInputProps &
 const ClearButton = ({ onClick }: { onClick: () => void }) => (
   <button
     type="button"
-    className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+    className="absolute top-1/2 left-2 !px-1 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] z-10 transition-colors duration-200"
     onClick={onClick}
     aria-label="پاک کردن"
     tabIndex={-1}
@@ -89,7 +89,7 @@ const FormInput: React.FC<FormInputProps> = ({
   const passwordToggleIcon = type === "password" && (
     <button
       type="button"
-      className="absolute !p-0 top-1/2 right-3 -translate-y-1/2 text-gray-400 hover:text-gray-600 z-10"
+      className="absolute !p-0 top-1/2 right-3 -translate-y-1/2 text-[var(--text-tertiary)] hover:text-[var(--text-secondary)] z-10 transition-colors duration-200"
       onClick={() => setShowPassword(!showPassword)}
       aria-label={showPassword ? "مخفی کردن رمز عبور" : "نمایش رمز عبور"}
       tabIndex={-1}
@@ -100,7 +100,7 @@ const FormInput: React.FC<FormInputProps> = ({
 
   // Pencil icon for non-password
   const pencilIcon = type !== "password" && (
-    <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 z-10">
+    <div className="absolute top-1/2 right-3 -translate-y-1/2 text-[var(--text-tertiary)] z-10">
       {type === "number" ||
         type === "long" ||
         type === "float" ||
@@ -114,7 +114,7 @@ const FormInput: React.FC<FormInputProps> = ({
   );
 
   const CLASS_LIST_STYLES =
-    "w-full pl-7 pr-10 py-2 border border-[var(--input-border)] text-[var(--primary-text)] rounded-lg text-right placeholder:text-[var(--placeholder-text)] placeholder:font-thin focus:outline-none focus:ring-2 focus:ring-purple-500";
+    "w-full px-4 py-2.5 pr-10 pl-10 bg-[var(--input-bg)] border border-[var(--input-border)] text-[var(--input-text)] rounded-lg text-right placeholder:text-[var(--input-placeholder)] placeholder:font-thin focus:outline-none focus:border-[var(--border-focus)] focus:ring-2 focus:ring-[var(--input-focus-ring)] focus:ring-opacity-20 disabled:bg-[var(--input-disabled-bg)] disabled:text-[var(--input-disabled-text)] disabled:cursor-not-allowed transition-colors duration-200";
 
   // --- Standalone Mode ---
   if (standalone) {
