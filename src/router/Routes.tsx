@@ -70,6 +70,9 @@ import {
   Globe,
   UserCheck,
   UserSearch,
+  MessageCircle,
+  MessageCircleWarningIcon,
+  MessageCircleDashed,
 } from "lucide-react";
 
 import type { RouteConfig } from "./path.types";
@@ -138,6 +141,15 @@ export const routeConfig: RouteConfig[] = [
     path: "/dashboard/portal",
     label: "پورتال",
     icon: <Bolt size={24} />,
+    showInMenu: true,
+    // Without element and name — just menu grouping
+  },
+
+  // --- Portal (main entry) ---
+  {
+    path: "/dashboard/broadcast",
+    label: "پیام رسان",
+    icon: <MessageCircle size={24} />,
     showInMenu: true,
     // Without element and name — just menu grouping
   },
@@ -311,82 +323,82 @@ export const routeConfig: RouteConfig[] = [
   // dY"­ Platform (MessagingPlatform) Pages
   // ================================
 {
-  path: "/dashboard/portal/platform",
+  path: "/dashboard/broadcast/platform",
   label: "پلتفرم‌ها",
   icon: <Globe size={18} />,
   element: lazy(() => import("@/Models/Platform/PlatformPage")),
-  parent: "/dashboard/portal",
+  parent: "/dashboard/broadcast",
   permission: Permission.MessagingPlatform_Read,
   showInMenu: true,
   name: VIEWNAME.PLATFORM_LIST,
 },
 {
-  path: "/dashboard/portal/platform/create",
+  path: "/dashboard/broadcast/platform/create",
   element: lazy(() => import("@/Models/Platform/PlatformCreate")),
   permission: Permission.MessagingPlatform_Create,
   showInMenu: false,
   name: VIEWNAME.PLATFORM_CREATE,
   label: "ایجاد پلتفرم",
-  parent: "/dashboard/portal/platform",
+  parent: "/dashboard/broadcast/platform",
 },
 {
-  path: withId("/dashboard/portal/platform"),
+  path: withId("/dashboard/broadcast/platform"),
   element: lazy(() => import("@/Models/Platform/PlatformDisplay")),
   permission: Permission.MessagingPlatform_Read,
   showInMenu: false,
   name: VIEWNAME.PLATFORM_DISPLAY,
   label: "جزئیات پلتفرم",
-  parent: "/dashboard/portal/platform",
+  parent: "/dashboard/broadcast/platform",
 },
 {
-  path: withId("/dashboard/portal/platform/edit"),
+  path: withId("/dashboard/broadcast/platform/edit"),
   element: lazy(() => import("@/Models/Platform/PlatformCreate")),
   permission: Permission.MessagingPlatform_Update,
   showInMenu: false,
   name: VIEWNAME.PLATFORM_EDIT,
   label: "ویرایش پلتفرم",
-  parent: "/dashboard/portal/platform",
+  parent: "/dashboard/broadcast/platform",
 },
 
 // ================================
 // 📺 Channel Pages
 // ================================
 {
-  path: "/dashboard/portal/channels",
+  path: "/dashboard/broadcast/channels",
   label: "کانال‌ها",
   icon: <Hash size={18} />,
   element: lazy(() => import("@/Models/Channel/ChannelPage")),
-  parent: "/dashboard/portal",
+  parent: "/dashboard/broadcast",
   permission: Permission.Channel_Read,
   showInMenu: true,
   name: VIEWNAME.CHANNEL_LIST,
 },
 {
-  path: "/dashboard/portal/channels/create",
+  path: "/dashboard/broadcast/channels/create",
   element: lazy(() => import("@/Models/Channel/ChannelCreate")),
   permission: Permission.Channel_Create,
   showInMenu: false,
   name: VIEWNAME.CHANNEL_CREATE,
   label: "ایجاد کانال",
-  parent: "/dashboard/portal/channels",
+  parent: "/dashboard/broadcast/channels",
 },
 {
-  path: withId("/dashboard/portal/channels"),
+  path: withId("/dashboard/broadcast/channels"),
   element: lazy(() => import("@/Models/Channel/ChannelDisplay")),
   permission: Permission.Channel_Read,
   showInMenu: false,
   name: VIEWNAME.CHANNEL_DISPLAY,
   label: "جزئیات کانال",
-  parent: "/dashboard/portal/channels",
+  parent: "/dashboard/broadcast/channels",
 },
 {
-  path: withId("/dashboard/portal/channels/edit"),
+  path: withId("/dashboard/broadcast/channels/edit"),
   element: lazy(() => import("@/Models/Channel/ChannelCreate")),
   permission: Permission.Channel_Update,
   showInMenu: false,
   name: VIEWNAME.CHANNEL_EDIT,
   label: "ویرایش کانال",
-  parent: "/dashboard/portal/channels",
+  parent: "/dashboard/broadcast/channels",
 },
 
 ];
