@@ -15,7 +15,7 @@ interface Props { item: ChannelModel; onDelete: (id: string | number) => void; }
 
 export const ChannelTableColumns = memo(({ item, onDelete }: Props) => (
   <>
-    <TBODY>{item.id}</TBODY>
+    {/* <TBODY>{item.id}</TBODY> */}
     <TBODY>{item.channelName}</TBODY>
     <TBODY>{item.channelIdentifier}</TBODY>
     <TBODY>{OptionUtils.getLabel(item.status, ChannelStatusOptionLabels)}</TBODY>
@@ -30,7 +30,7 @@ export const ChannelTableColumns = memo(({ item, onDelete }: Props) => (
 
 export const ChannelTableHeaders = (
   <>
-    <THEAD>ID</THEAD>
+    {/* <THEAD>ID</THEAD> */}
     <THEAD>{channelModelMeta.fields.channelName.label}</THEAD>
     <THEAD>{channelModelMeta.fields.channelIdentifier.label}</THEAD>
     <THEAD>{channelModelMeta.fields.status.label}</THEAD>

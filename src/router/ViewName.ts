@@ -34,6 +34,12 @@ export const VIEWNAME = {
   USERS_DISPLAY: "USERS_DISPLAY",
   USERS_EDIT: "USERS_EDIT",
 
+  // Role Module
+  ROLE_LIST: "ROLE_LIST",
+  ROLE_CREATE: "ROLE_CREATE",
+  ROLE_DISPLAY: "ROLE_DISPLAY",
+  ROLE_EDIT: "ROLE_EDIT",
+
 
   // Channel
   CHANNEL_LIST: "ChannelList",

@@ -4,7 +4,7 @@ import type { RoleModel } from '@/Models/Role/RoleModel';
 
 class RoleService extends BaseService<RoleModel> {
   constructor() {
-    super('/roles');
+    super('/role');
   }
 }
 

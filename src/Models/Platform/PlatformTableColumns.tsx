@@ -13,7 +13,7 @@ interface Props { item: PlatformModel; onDelete: (id: string | number) => void; 
 
 export const PlatformTableColumns = memo(({ item, onDelete }: Props) => (
   <>
-    <TBODY>{item.id}</TBODY>
+    {/* <TBODY>{item.id}</TBODY> */}
     <TBODY>{item.platformName}</TBODY>
     <TBODY>{item.platformKey}</TBODY>
     <TBODY>{item.apiEndpoint}</TBODY>
@@ -28,7 +28,7 @@ export const PlatformTableColumns = memo(({ item, onDelete }: Props) => (
 
 export const PlatformTableHeaders = (
   <>
-    <THEAD>ID</THEAD>
+    {/* <THEAD>ID</THEAD> */}
     <THEAD>{platformModelMeta.fields.platformName.label}</THEAD>
     <THEAD>{platformModelMeta.fields.platformKey.label}</THEAD>
     <THEAD>{platformModelMeta.fields.apiEndpoint.label}</THEAD>

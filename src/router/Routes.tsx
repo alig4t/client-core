@@ -38,6 +38,17 @@ const UserDisplay = lazy(
   () => import("@/Models/User/UserDisplay")
 );
 
+// Role Module
+const RolePage = lazy(
+  () => import("@/Models/Role/RolePage")
+);
+const RoleCreate = lazy(
+  () => import("@/Models/Role/RoleCreate")
+);
+const RoleDisplay = lazy(
+  () => import("@/Models/Role/RoleDisplay")
+);
+
 
 
 // Icons
@@ -255,6 +266,50 @@ export const routeConfig: RouteConfig[] = [
   // ================================
 // 📡 Platform (MessagingPlatform) Pages
 // ================================
+  // ================================
+  // Role Pages
+  // ================================
+{
+  path: "/dashboard/portal/roles",
+  label: "Roles",
+  icon: <UserCheck size={18} />,
+  element: RolePage,
+  parent: "/dashboard/portal",
+  permission: Permission.Role_Read,
+  showInMenu: true,
+  name: VIEWNAME.ROLE_LIST,
+},
+{
+  path: "/dashboard/portal/roles/create",
+  element: RoleCreate,
+  permission: Permission.Role_Create,
+  showInMenu: false,
+  name: VIEWNAME.ROLE_CREATE,
+  label: "Create Role",
+  parent: "/dashboard/portal/roles",
+},
+{
+  path: withId("/dashboard/portal/roles"),
+  element: RoleDisplay,
+  permission: Permission.Role_Read,
+  showInMenu: false,
+  name: VIEWNAME.ROLE_DISPLAY,
+  label: "Role Details",
+  parent: "/dashboard/portal/roles",
+},
+{
+  path: withId("/dashboard/portal/roles/edit"),
+  element: RoleCreate,
+  permission: Permission.Role_Update,
+  showInMenu: false,
+  name: VIEWNAME.ROLE_EDIT,
+  label: "Edit Role",
+  parent: "/dashboard/portal/roles",
+},
+
+  // ================================
+  // dY"­ Platform (MessagingPlatform) Pages
+  // ================================
 {
   path: "/dashboard/portal/platform",
   label: "پلتفرم‌ها",

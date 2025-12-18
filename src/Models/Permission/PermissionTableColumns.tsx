@@ -22,12 +22,12 @@ const PermissionTableColumns: React.FC<PermissionTableColumnsProps> = memo(({
 
     return (
         <>
-            <TBODY>{item.id}</TBODY>
+            {/* <TBODY>{item.id}</TBODY> */}
             <TBODY>{item.showName}</TBODY>
             <TBODY>{item.name}</TBODY>
 
-            <TBODY>{DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(item.createdAt)}</TBODY>
-            <TBODY>{DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(item.updatedAt)}</TBODY>
+             <TBODY>{DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(item.createdAt)}</TBODY>
+            {/* <TBODY>{DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(item.updatedAt)}</TBODY>  */}
 
             <TBODY className="flex gap-x-2 justify-center">
                 <NavLink
@@ -61,7 +61,7 @@ const PermissionTableColumns: React.FC<PermissionTableColumnsProps> = memo(({
 
 export const PermissionTableHeaders = (
     <>
-        <THEAD>{PermissionModelMeta.fields.id.label}</THEAD>
+        {/* <THEAD>{PermissionModelMeta.fields.id.label}</THEAD> */}
         <THEAD>{PermissionModelMeta.fields.showName.label}</THEAD>
         <THEAD>{PermissionModelMeta.fields.name.label}</THEAD>
         <THEAD>{PermissionModelMeta.fields.createdAt.label}</THEAD>
