@@ -145,7 +145,7 @@ const ComprehensiveCreate: React.FC = () => {
             )}
           />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
+          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
             <FormWrapper
               schema={comprehensiveSchema}
               onSubmit={onSubmit}

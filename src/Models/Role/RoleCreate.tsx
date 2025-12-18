@@ -112,14 +112,14 @@ const RoleCreate: React.FC = () => {
             }
           />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
+          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
             <FormWrapper
               schema={roleSchema}
               onSubmit={onSubmit}
               className="space-y-6"
               defaultValues={initialData}
             >
-              <RowContainer numberOfColumns={1}>
+              <RowContainer numberOfColumns={3}>
                 <FormInput
                   type="text"
                   name="name"
