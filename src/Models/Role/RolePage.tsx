@@ -24,7 +24,6 @@ const RolePage: React.FC = () => {
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit mx-auto">
           <PageHeader
             title={routeMeta?.label || RoleModelMeta.messages.manage.title}
             actionButton={{
@@ -38,7 +37,6 @@ const RolePage: React.FC = () => {
           </Accordion>
 
           <RoleTable filters={activeFilters} />
-        </div>
       </PageTransition>
     </PageWrapper>
   );

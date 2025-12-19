@@ -89,9 +89,109 @@ function LoginFormFields() {
   );
 }
 
+function LoggedInSection({ user, navigate }: { user: any; navigate: any }) {
+  return (
+    <div className="w-full max-w-md">
+      {/* Card */}
+      <div className="relative group">
+        {/* Subtle glow effect */}
+        <div className="absolute -inset-1 bg-gradient-to-br from-green-400/20 via-emerald-400/20 to-teal-400/20 dark:from-transparent dark:via-transparent dark:to-transparent rounded-2xl blur-xl opacity-60 group-hover:opacity-80 transition-all duration-500"></div>
+
+        <div className="relative bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl p-8 shadow-xl dark:shadow-2xl dark:shadow-slate-950/50">
+          {/* Welcome Header */}
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 mx-auto mb-4 bg-gradient-to-br from-green-500 to-emerald-600 dark:from-green-600 dark:to-emerald-700 rounded-2xl flex items-center justify-center shadow-lg shadow-green-500/20 dark:shadow-green-900/30 transform group-hover:scale-110 transition-transform duration-300">
+              <svg className="w-8 h-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h2 className="text-2xl font-bold text-slate-900 dark:text-white mb-2">
+              خوش آمدید! 👋
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm">
+              {user?.username || user?.name || 'کاربر گرامی'}
+            </p>
+          </div>
+
+          {/* Quick Stats */}
+          <div className="grid grid-cols-2 gap-4 mb-6">
+            {[
+              { label: 'کانال‌های فعال', value: '12', icon: '📱', gradient: 'from-blue-500 to-cyan-500' },
+              { label: 'پیام‌های جدید', value: '847', icon: '💬', gradient: 'from-indigo-500 to-blue-500' },
+              { label: 'کلیدواژه‌ها', value: '24', icon: '🔍', gradient: 'from-violet-500 to-indigo-500' },
+              { label: 'گزارش‌ها', value: '8', icon: '📊', gradient: 'from-purple-500 to-pink-500' },
+            ].map((stat, index) => (
+              <div
+                key={index}
+                className="relative overflow-hidden rounded-xl bg-gradient-to-br from-slate-50 to-slate-100 dark:from-slate-800 dark:to-slate-900 p-4 border border-slate-200 dark:border-slate-700 hover:scale-105 transition-transform duration-300"
+              >
+                <div className={`absolute top-0 right-0 w-16 h-16 bg-gradient-to-br ${stat.gradient} opacity-10 rounded-bl-3xl`}></div>
+                <div className="relative">
+                  <div className="text-2xl mb-1">{stat.icon}</div>
+                  <div className="text-2xl font-bold text-slate-900 dark:text-white mb-1">
+                    {stat.value}
+                  </div>
+                  <div className="text-xs text-slate-600 dark:text-slate-400">
+                    {stat.label}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Quick Actions */}
+          <div className="space-y-3">
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="w-full px-6 py-3.5 font-semibold text-white bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 dark:from-green-600 dark:to-emerald-600 dark:hover:from-green-700 dark:hover:to-emerald-700 rounded-lg shadow-lg shadow-green-500/25 hover:shadow-green-500/40 dark:shadow-green-900/40 dark:hover:shadow-green-900/60 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              ورود به داشبورد
+            </button>
+
+            <button
+              onClick={() => navigate('/dashboard')}
+              className="w-full px-6 py-3 font-medium text-slate-700 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg border border-slate-200 dark:border-slate-700 transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              مشاهده آمار و گزارش‌ها
+            </button>
+          </div>
+
+          {/* Status Indicator */}
+          <div className="mt-6 pt-6 border-t border-slate-200 dark:border-slate-800">
+            <div className="flex items-center justify-center gap-2 text-sm">
+              <span className="relative flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-500 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-green-600 dark:bg-green-500"></span>
+              </span>
+              <span className="text-slate-600 dark:text-slate-400">سیستم آنلاین و فعال</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Feature Highlights */}
+      <div className="mt-6 grid grid-cols-3 gap-3 text-center">
+        {[
+          { icon: '⚡', label: 'پردازش سریع' },
+          { icon: '🔒', label: 'امنیت بالا' },
+          { icon: '📈', label: 'تحلیل هوشمند' },
+        ].map((feature, index) => (
+          <div
+            key={index}
+            className="flex flex-col items-center gap-2 p-3 rounded-xl bg-white/50 dark:bg-slate-900/50 border border-slate-200/50 dark:border-slate-800/50 backdrop-blur-sm hover:scale-105 transition-transform duration-300"
+          >
+            <span className="text-2xl">{feature.icon}</span>
+            <span className="text-xs text-slate-600 dark:text-slate-400">{feature.label}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
-  const { login: authLogin } = useAuth();
+  const { login: authLogin, user, isAuthenticated } = useAuth();
   const [darkMode, setDarkMode] = useState(() => {
     return document.documentElement.classList.contains("dark");
   });
@@ -317,8 +417,11 @@ const LandingPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Right Side - Login Card */}
+            {/* Right Side - Login Card or Logged In Section */}
             <div className="order-1 lg:order-2 flex justify-center lg:justify-center animate-fade-in-up animation-delay-200">
+              {isAuthenticated ? (
+                <LoggedInSection user={user} navigate={navigate} />
+              ) : (
               <div className="w-full max-w-md">
                 {/* Card */}
                 <div className="relative group">
@@ -408,6 +511,7 @@ const LandingPage: React.FC = () => {
                   <span>اتصال امن و رمزگذاری شده</span>
                 </div>
               </div>
+              )}
             </div>
 
           </div>

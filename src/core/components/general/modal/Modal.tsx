@@ -104,36 +104,36 @@ const ModalAnimation = ({ isOpen, onDismiss, children, title, mobileBottomSheet 
           {/* Modal Panel */}
           <motion.div
             dir="rtl"
-            className={`relative mx-auto bg-white dark:bg-gray-800 shadow-2xl flex flex-col transform transition-all overflow-hidden ${
+            className={`relative mx-auto bg-[var(--card-bg)] border border-[var(--card-border)] shadow-lg flex flex-col transform transition-all overflow-hidden ${
               mobileBottomSheet
-                ? "w-full sm:w-full sm:max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[95vh] sm:max-h-[85vh]"
-                : "w-full max-w-lg rounded-3xl max-h-[95vh]"
+                ? "w-full sm:w-full sm:max-w-lg rounded-t-2xl sm:rounded-lg max-h-[95vh] sm:max-h-[85vh]"
+                : "w-full max-w-lg rounded-lg max-h-[95vh]"
             }`}
             variants={mobileBottomSheet ? mobileBottomSheetVariants : modalVariants}
             initial="hidden"
             animate="visible"
-            exit="exit" // 💡 تغییر 'hidden' به 'exit' برای استفاده از انیمیشن خروج
+            exit="exit"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-gray-100 dark:border-gray-700 flex-shrink-0">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-[var(--border-primary)] flex-shrink-0">
               {/* Grip Bar (Mobile Only) */}
               {mobileBottomSheet && (
-                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full sm:hidden" />
+                <div className="absolute top-3 left-1/2 -translate-x-1/2 w-12 h-1.5 bg-[var(--border-secondary)] rounded-full sm:hidden" />
               )}
-              <h2 className="text-xl font-extrabold text-gray-900 dark:text-white">
+              <h2 className="text-lg font-semibold text-[var(--text-primary)]">
                 {title}
               </h2>
               <button
                 onClick={onDismiss}
-                className="p-2 rounded-full text-indigo-600 dark:text-indigo-400 hover:bg-indigo-50/50 dark:hover:bg-gray-700 transition-colors"
+                className="p-2 rounded-lg text-[var(--color-primary)] hover:bg-[var(--bg-tertiary)] transition-colors duration-200"
                 aria-label="بستن مودال"
               >
-                <FiX className="w-6 h-6" />
+                <FiX className="w-5 h-5" />
               </button>
             </div>
 
             {/* Content */}
-            <div className="p-6 flex-1 overflow-y-auto scrollbar-thin scrollbar-thumb-indigo-300 dark:scrollbar-thumb-indigo-600 scrollbar-track-gray-100 dark:scrollbar-track-gray-900 scrollbar-thumb-rounded-full">
+            <div className="p-6 flex-1 overflow-y-auto scrollbar-thin">
               {children}
             </div>
           </motion.div>

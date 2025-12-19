@@ -78,7 +78,7 @@ export const ComprehensiveTableColumns: React.FC<ComprehensiveTableColumnsProps>
                 <TableLink
                     tooltipText="حذف"
                     onClick={() => onDelete(item.id)}
-                    className="text-red-600 hover:text-red-800"
+                    className="text-[var(--color-danger)] hover:text-[var(--color-danger-hover)] transition-colors duration-200"
                     permission={Permission.ComprehensiveEntity_Delete}
                 >
                     <Trash2 size={20} />

@@ -27,7 +27,7 @@ const ComprehensivePage: React.FC = () => {
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit mx-auto">
+        
           <PageHeader
             title={routeMeta?.label || comprehensiveModelMeta.messages.manage.title}
             actionButton={{
@@ -41,7 +41,7 @@ const ComprehensivePage: React.FC = () => {
           </Accordion>
 
           <ComprehensiveTable filters={activeFilters} />
-        </div>
+        
       </PageTransition>
     </PageWrapper>
   );

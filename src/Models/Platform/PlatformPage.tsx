@@ -23,7 +23,6 @@ const PlatformPage: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit mx-auto">
           <PageHeader
             title={routeMeta?.label || platformModelMeta.messages.manage.title}
             actionButton={{
@@ -36,7 +35,6 @@ const PlatformPage: React.FC = () => {
             <PlatformSearch onApplyFilters={setActiveFilters} />
           </Accordion>
           <PlatformTable filters={activeFilters} />
-        </div>
       </PageTransition>
     </PageWrapper>
   );

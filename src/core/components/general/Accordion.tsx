@@ -16,17 +16,17 @@ const Accordion: React.FC<AccordionProps> = ({
   const [isOpen, setIsOpen] = useState(startOpen);
 
   return (
-    <div className="border border-[var(--border)] bg-[var(--white)] dark:bg-[var(--black)] rounded-lg mb-6 overflow-hidden">
+    <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg mb-6 overflow-hidden">
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center p-4 bg-[var(--white)] hover:bg-gray-50 dark:hover:bg-[#0b111d] transition-colors duration-300"
+        className="w-full flex justify-between items-center px-6 py-4 bg-[var(--table-header-bg)] hover:bg-[var(--bg-tertiary)] transition-colors duration-200 border-b border-[var(--table-border)]"
       >
-        <div className="font-semibold text-[var(--primary-text)]">{title}</div>
+        <div className="text-base font-semibold text-[var(--text-primary)]">{title}</div>
         <motion.div
           animate={{ rotate: isOpen ? 180 : 0 }}
           transition={{ duration: 0.2, ease: "easeInOut" }}
         >
-          <ChevronDown size={20} className="text-gray-600 dark:text-gray-400" />
+          <ChevronDown size={20} className="text-[var(--text-secondary)]" />
         </motion.div>
       </button>
 
@@ -40,10 +40,10 @@ const Accordion: React.FC<AccordionProps> = ({
           height: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
           opacity: { duration: 0.25, ease: "easeInOut" }
         }}
-        className="bg-[var(--white)] overflow-hidden"
+        className="bg-[var(--card-bg)] overflow-hidden"
         aria-hidden={!isOpen}
       >
-        <div className="p-6 border-t border-[var(--border)]">{children}</div>
+        <div className="px-6 py-5">{children}</div>
       </motion.section>
     </div>
   );

@@ -22,6 +22,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import RoleService from "./RoleService";
 import { RoleModelMeta } from "./RoleModel.meta";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 
 const roleSchema = z.object({
   name: Validator.notNull(),
@@ -102,50 +103,50 @@ const RoleCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans">
-          <PageHeader
-            title={
-              routeMeta?.label ||
-              (isEditMode
-                ? RoleModelMeta.messages.pageTitle.edit
-                : RoleModelMeta.messages.pageTitle.create)
-            }
-          />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
-            <FormWrapper
-              schema={roleSchema}
-              onSubmit={onSubmit}
-              className="space-y-6"
-              defaultValues={initialData}
-            >
-              <RowContainer numberOfColumns={3}>
-                <FormInput
-                  type="text"
-                  name="name"
-                  label={RoleModelMeta.fields.name?.label}
-                  placeholder={RoleModelMeta.fields.name?.placeholder}
-                />
-              </RowContainer>
+        <PageHeader
+          title={
+            routeMeta?.label ||
+            (isEditMode
+              ? RoleModelMeta.messages.pageTitle.edit
+              : RoleModelMeta.messages.pageTitle.create)
+          }
+        />
 
-              <ButtonPanel align="end">
-                <Button variant="cancel" onClick={handleCancel}>
-                  {publicMessages.form.buttons.cancel}
-                </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  loading={mutation.isPending}
-                  disabled={mutation.isPending}
-                >
-                  {isEditMode
-                    ? publicMessages.form.buttons.update
-                    : publicMessages.form.buttons.save}
-                </Button>
-              </ButtonPanel>
-            </FormWrapper>
-          </div>
-        </div>
+        <CreatePageFormWrapper>
+          <FormWrapper
+            schema={roleSchema}
+            onSubmit={onSubmit}
+            className="space-y-6"
+            defaultValues={initialData}
+          >
+            <RowContainer numberOfColumns={1}>
+              <FormInput
+                type="text"
+                name="name"
+                label={RoleModelMeta.fields.name?.label}
+                placeholder={RoleModelMeta.fields.name?.placeholder}
+              />
+            </RowContainer>
+
+            <ButtonPanel align="end">
+              <Button variant="cancel" onClick={handleCancel}>
+                {publicMessages.form.buttons.cancel}
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
+              </Button>
+            </ButtonPanel>
+          </FormWrapper>
+        </CreatePageFormWrapper>
+
       </PageTransition>
     </PageWrapper>
   );

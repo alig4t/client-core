@@ -36,6 +36,7 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
 import { UserModelMeta } from "./UserModel.meta";
 import RoleService from "../Role/RoleService";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 
 const UserSchema = z.object({
   name: Validator.notNull(),
@@ -126,68 +127,68 @@ const UserCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans">
-          <PageHeader
-            title={routeMeta?.label || (
-              isEditMode
-                ? UserModelMeta.messages.pageTitle.edit
-                : UserModelMeta.messages.pageTitle.create
-            )}
-          />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
-            <FormWrapper
-              schema={UserSchema}
-              onSubmit={onSubmit}
-              className="space-y-6"
-              defaultValues={initialData} // Fill form with existing data in edit mode
-            >
-              <RowContainer numberOfColumns={2}>
-                <FormInput
-                  type="text"
-                  name="name"
-                  label={UserModelMeta.fields.name?.label}
-                  placeholder={
-                    UserModelMeta.fields.name?.placeholder
-                  }
-                />
-                <FormInput
-                  type="text"
-                  name="username"
-                  label={UserModelMeta.fields.username?.label}
-                  placeholder={
-                    UserModelMeta.fields.username?.placeholder
-                  }
-                />
-                <FormAutoComplete
-                  name="roles"
-                  label={UserModelMeta.fields.roles?.label}
-                  service={RoleService}
-                  labelKey="name"
-                  valueKey="id"
-                  multi
-                />
+        <PageHeader
+          title={routeMeta?.label || (
+            isEditMode
+              ? UserModelMeta.messages.pageTitle.edit
+              : UserModelMeta.messages.pageTitle.create
+          )}
+        />
 
-              </RowContainer>
+        <CreatePageFormWrapper>
+          <FormWrapper
+            schema={UserSchema}
+            onSubmit={onSubmit}
+            className="space-y-6"
+            defaultValues={initialData} // Fill form with existing data in edit mode
+          >
+            <RowContainer numberOfColumns={2}>
+              <FormInput
+                type="text"
+                name="name"
+                label={UserModelMeta.fields.name?.label}
+                placeholder={
+                  UserModelMeta.fields.name?.placeholder
+                }
+              />
+              <FormInput
+                type="text"
+                name="username"
+                label={UserModelMeta.fields.username?.label}
+                placeholder={
+                  UserModelMeta.fields.username?.placeholder
+                }
+              />
+              <FormAutoComplete
+                name="roles"
+                label={UserModelMeta.fields.roles?.label}
+                service={RoleService}
+                labelKey="name"
+                valueKey="id"
+                multi
+              />
 
-              <ButtonPanel align="end">
-                <Button variant="cancel" onClick={handleCancel}>
-                  {publicMessages.form.buttons.cancel}
-                </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  loading={mutation.isPending}
-                  disabled={mutation.isPending}
-                >
-                  {isEditMode
-                    ? publicMessages.form.buttons.update
-                    : publicMessages.form.buttons.save}
-                </Button>
-              </ButtonPanel>
-            </FormWrapper>
-          </div>
-        </div>
+            </RowContainer>
+
+            <ButtonPanel align="end">
+              <Button variant="cancel" onClick={handleCancel}>
+                {publicMessages.form.buttons.cancel}
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
+              </Button>
+            </ButtonPanel>
+          </FormWrapper>
+        </CreatePageFormWrapper>
+
       </PageTransition>
     </PageWrapper>
   );

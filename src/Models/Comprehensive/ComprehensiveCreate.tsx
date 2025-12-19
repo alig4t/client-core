@@ -35,6 +35,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.optional(),
@@ -136,7 +137,7 @@ const ComprehensiveCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans">
+    
           <PageHeader
             title={routeMeta?.label || (
               isEditMode
@@ -145,7 +146,7 @@ const ComprehensiveCreate: React.FC = () => {
             )}
           />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
+<CreatePageFormWrapper>
             <FormWrapper
               schema={comprehensiveSchema}
               onSubmit={onSubmit}
@@ -266,8 +267,8 @@ const ComprehensiveCreate: React.FC = () => {
                 </Button>
               </ButtonPanel>
             </FormWrapper>
-          </div>
-        </div>
+          </CreatePageFormWrapper>
+        
       </PageTransition>
     </PageWrapper>
   );

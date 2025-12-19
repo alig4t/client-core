@@ -28,6 +28,7 @@ import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreateP
 import OptionUtils from "@/core/forms/OptionUtils";
 import { ChannelStatusOption, ChannelStatusOptionLabels } from "./ChannelEnumField";
 import PlatformService from "../Platform/PlatformService";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 
 const channelSchema = z.object({
   channelName: Validator.notNull(),
@@ -109,7 +110,7 @@ const ChannelCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans">
+    
           <PageHeader
             title={
               routeMeta?.label ||
@@ -119,8 +120,8 @@ const ChannelCreate: React.FC = () => {
             }
           />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
-            <FormWrapper
+          <CreatePageFormWrapper>
+              <FormWrapper
               schema={channelSchema}
               onSubmit={onSubmit}
               className="space-y-6"
@@ -170,8 +171,9 @@ const ChannelCreate: React.FC = () => {
                 </Button>
               </ButtonPanel>
             </FormWrapper>
-          </div>
-        </div>
+          </CreatePageFormWrapper>
+
+        
       </PageTransition>
     </PageWrapper>
   );

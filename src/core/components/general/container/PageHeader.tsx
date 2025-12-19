@@ -17,10 +17,10 @@ type PageHeaderProps = {
 const PageHeader = ({ title, actionButton, className = '' }: PageHeaderProps) => {
   return (
     <div className={`flex justify-between items-center mb-6 ${className}`}>
-      <h1 className="!text-2xl font-bold text-[var(--primary-text)]">{title}</h1>
+      <h1 className="text-2xl font-bold text-[var(--text-primary)]">{title}</h1>
       {actionButton && (
         <Button
-          variant={actionButton.variant || 'success'} // But wait—'success' isn't in ButtonVariant!
+          variant={actionButton.variant || 'success'}
           onClick={actionButton.onClick}
           type="button"
         >

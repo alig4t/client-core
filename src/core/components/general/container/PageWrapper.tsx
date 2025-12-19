@@ -5,7 +5,7 @@ export const PageWrapper: FC<{
   className?: string;
 }> = ({ children, className = "" }) => {
   return (
-    <div dir="rtl" className={`p-4 sm:p-6 bg-pattern ${className}`}>
+    <div dir="rtl" className={`sm:p-8 max-w-[1800px] font-sans ${className}`}>
       {children}
     </div>
   );

@@ -10,7 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
   <ChevronDown
     size={14}
-    className={` text-gray-600 dark:text-gray-500 transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
+    className={`text-[var(--text-secondary)] transition-transform duration-200 ${isOpen ? "transform rotate-180" : ""}`}
   />
 );
 
@@ -185,21 +185,21 @@ export const FormSelect: React.FC<FormSelectProps> = ({
       <button
         type="button"
         id={name}
-        className="flex relative justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-800 border border-[var(--input-border)] dark:border-gray-600 rounded-lg shadow-sm cursor-pointer hover:border-purple-500 dark:hover:border-purple-400 transition duration-150 focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="flex relative justify-between items-center w-full px-4 py-2.5 text-right bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg cursor-pointer hover:border-[var(--border-focus)] transition-all duration-200 focus:outline-none focus:border-[var(--border-focus)] focus:ring-2 focus:ring-[var(--input-focus-ring)] focus:ring-opacity-20"
         onClick={() => setIsOpen(!isOpen)}
         aria-haspopup="listbox"
         aria-expanded={isOpen}
       >
         {minilabel && (
-          <span className="absolute right-2 px-1 w-fit bg-white dark:bg-gray-800 dark:text-gray-300 text-gray-400 top-0 -translate-y-1/2 text-[9px] rounded-sm">
+          <span className="absolute right-2 px-1 w-fit bg-[var(--input-bg)] text-[var(--text-tertiary)] top-0 -translate-y-1/2 text-[9px] rounded-sm">
             {minilabel}
           </span>
         )}
         <span
           className={`flex-1 truncate ${
             count > 0
-              ? "text-gray-900 dark:text-gray-100"
-              : "text-gray-500 dark:text-gray-400"
+              ? "text-[var(--input-text)]"
+              : "text-[var(--input-placeholder)]"
           }`}
         >
           {displayText}
@@ -215,7 +215,7 @@ export const FormSelect: React.FC<FormSelectProps> = ({
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
             transition={{ duration: 0.15, ease: "easeOut" }}
-            className={`absolute z-50 w-full bg-white dark:bg-gray-800 border border-[var(--input-border)] dark:border-gray-600 rounded-lg shadow-xl max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
+            className={`absolute z-50 w-full bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg shadow-lg max-h-60 overflow-y-auto ${dropdownPositionClasses}`}
           >
             <ul role="listbox" aria-labelledby={name} className="p-1">
               {options.map((option) => (
@@ -224,19 +224,19 @@ export const FormSelect: React.FC<FormSelectProps> = ({
                   role={multi ? "option" : "listitem"}
                   aria-selected={isSelected(option.value)}
                   onClick={() => handleToggle(option.value)}
-                  className={`flex justify-right gap-2 items-center my-0.5 p-2 text-sm rounded-md cursor-pointer transition duration-150 ${
+                  className={`flex justify-right gap-2 items-center my-0.5 px-3 py-2 text-sm rounded-md cursor-pointer transition-colors duration-150 ${
                     isSelected(option.value)
-                      ? "bg-purple-100 dark:bg-purple-900/40 font-semibold text-gray-900 dark:text-gray-100"
-                      : "text-gray-900 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700"
+                      ? "bg-[var(--bg-accent)] font-medium text-[var(--text-primary)]"
+                      : "text-[var(--text-primary)] hover:bg-[var(--bg-tertiary)]"
                   }`}
                 >
                   {multi ? (
                     // Checkbox style for multi-select
                     <div
-                      className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
+                      className={`w-5 h-5 flex items-center justify-center border-2 rounded transition-all ${
                         isSelected(option.value)
-                          ? "bg-purple-600 dark:bg-purple-500 border-purple-600 dark:border-purple-500"
-                          : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                          ? "bg-[var(--color-primary)] border-[var(--color-primary)]"
+                          : "bg-[var(--input-bg)] border-[var(--input-border)]"
                       }`}
                     >
                       {isSelected(option.value) && (

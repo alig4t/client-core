@@ -23,6 +23,7 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 
 const platformSchema = z.object({
   platformName: Validator.notNull(),
@@ -105,68 +106,67 @@ const PlatformCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans">
-          <PageHeader
-            title={
-              routeMeta?.label ||
-              (isEditMode
-                ? platformModelMeta.messages.pageTitle.edit
-                : platformModelMeta.messages.pageTitle.create)
-            }
-          />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto">
-            <FormWrapper
-              schema={platformSchema}
-              onSubmit={onSubmit}
-              className="space-y-6"
-              defaultValues={initialData}
-            >
-              <RowContainer numberOfColumns={2}>
-                <FormInput
-                  type="text"
-                  name="platformName"
-                  label={platformModelMeta.fields.platformName.label}
-                  placeholder={platformModelMeta.fields.platformName.placeholder}
-                />
-                <FormInput
-                  type="text"
-                  name="platformKey"
-                  label={platformModelMeta.fields.platformKey.label}
-                  placeholder={platformModelMeta.fields.platformKey.placeholder}
-                />
-                <FormInput
-                  type="text"
-                  name="apiEndpoint"
-                  label={platformModelMeta.fields.apiEndpoint.label}
-                  placeholder={platformModelMeta.fields.apiEndpoint.placeholder}
-                />
-                <FormInput
-                  type="text"
-                  name="authMethod"
-                  label={platformModelMeta.fields.authMethod.label}
-                  placeholder={platformModelMeta.fields.authMethod.placeholder}
-                />
-              </RowContainer>
+        <PageHeader
+          title={
+            routeMeta?.label ||
+            (isEditMode
+              ? platformModelMeta.messages.pageTitle.edit
+              : platformModelMeta.messages.pageTitle.create)
+          }
+        />
+        <CreatePageFormWrapper>
+          <FormWrapper
+            schema={platformSchema}
+            onSubmit={onSubmit}
+            className="space-y-6"
+            defaultValues={initialData}
+          >
+            <RowContainer numberOfColumns={2}>
+              <FormInput
+                type="text"
+                name="platformName"
+                label={platformModelMeta.fields.platformName.label}
+                placeholder={platformModelMeta.fields.platformName.placeholder}
+              />
+              <FormInput
+                type="text"
+                name="platformKey"
+                label={platformModelMeta.fields.platformKey.label}
+                placeholder={platformModelMeta.fields.platformKey.placeholder}
+              />
+              <FormInput
+                type="text"
+                name="apiEndpoint"
+                label={platformModelMeta.fields.apiEndpoint.label}
+                placeholder={platformModelMeta.fields.apiEndpoint.placeholder}
+              />
+              <FormInput
+                type="text"
+                name="authMethod"
+                label={platformModelMeta.fields.authMethod.label}
+                placeholder={platformModelMeta.fields.authMethod.placeholder}
+              />
+            </RowContainer>
 
-              <ButtonPanel align="end">
-                <Button variant="cancel" onClick={handleCancel}>
-                  {publicMessages.form.buttons.cancel}
-                </Button>
-                <Button
-                  variant="primary"
-                  type="submit"
-                  loading={mutation.isPending}
-                  disabled={mutation.isPending}
-                >
-                  {isEditMode
-                    ? publicMessages.form.buttons.update
-                    : publicMessages.form.buttons.save}
-                </Button>
-              </ButtonPanel>
-            </FormWrapper>
-          </div>
-        </div>
+            <ButtonPanel align="end">
+              <Button variant="cancel" onClick={handleCancel}>
+                {publicMessages.form.buttons.cancel}
+              </Button>
+              <Button
+                variant="primary"
+                type="submit"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
+              </Button>
+            </ButtonPanel>
+          </FormWrapper>
+        </CreatePageFormWrapper>
+
       </PageTransition>
     </PageWrapper>
   );
