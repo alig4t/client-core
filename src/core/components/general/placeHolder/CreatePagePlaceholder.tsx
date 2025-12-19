@@ -27,7 +27,7 @@ const CreatePagePlaceholder: React.FC<CreatePagePlaceholderProps> = ({ rowCount 
       </div>
 
       {/* Form Card */}
-      <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto relative overflow-hidden">
+      <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md mx-auto relative overflow-hidden">
         {/* Overlay for blur/skeleton */}
         <div className="opacity-80 space-y-6">
           {/* RowContainer - 2 columns (rowCount * 2 fields) */}
