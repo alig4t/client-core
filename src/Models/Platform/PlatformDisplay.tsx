@@ -35,7 +35,7 @@ const PlatformDisplay: React.FC = () => {
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
-      <div className="p-8 min-h-screen font-sans">
+   
         <RecordDisplayLayout
           title={`نمایش پلتفرم : ${data.platformName}`}
           actions={<Button variant="primary" onClick={() => navigate(getViewPath(VIEWNAME.PLATFORM_EDIT, id))}>ویرایش</Button>}
@@ -47,7 +47,7 @@ const PlatformDisplay: React.FC = () => {
             <DisplayField label={platformModelMeta.fields.authMethod.label} value={data.authMethod} />
           </RowContainer>
         </RecordDisplayLayout>
-      </div>
+  
     </PageWrapper>
   );
 };

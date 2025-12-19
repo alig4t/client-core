@@ -32,7 +32,7 @@ const PermissionPage: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit mx-auto">
+    
           <PageHeader
             title={routeMeta?.label || PermissionModelMeta.messages.manage.title}
             actionButton={{
@@ -47,7 +47,7 @@ const PermissionPage: React.FC = () => {
           </Accordion>
 
           <PermissionTable filters={activeFilters} />
-        </div>
+    
       </PageTransition>
     </PageWrapper>
   );

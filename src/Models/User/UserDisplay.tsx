@@ -86,7 +86,7 @@ const UserDisplayPage: React.FC = () => {
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
-      <div className="p-8 min-h-screen font-sans">
+  
         <RecordDisplayLayout
           title={publicMessages.record.displayTitle + " : " + userRecord.id}
           actions={
@@ -116,7 +116,7 @@ const UserDisplayPage: React.FC = () => {
 
           </RowContainer>
         </RecordDisplayLayout>
-      </div>
+
     </PageWrapper>
   );
 };

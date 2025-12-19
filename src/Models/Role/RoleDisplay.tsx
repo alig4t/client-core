@@ -74,12 +74,11 @@ const RoleDisplayPage: React.FC = () => {
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
-      <div className="p-8 min-h-screen font-sans">
         <RecordDisplayLayout
           title={publicMessages.record.displayTitle + " : " + roleRecord.id}
           actions={
             <Button variant="primary" onClick={handleEditClick}>
-              U^UOOñOUOO'
+              ویرایش'
             </Button>
           }
         >
@@ -102,7 +101,6 @@ const RoleDisplayPage: React.FC = () => {
             />
           </RowContainer>
         </RecordDisplayLayout>
-      </div>
     </PageWrapper>
   );
 };

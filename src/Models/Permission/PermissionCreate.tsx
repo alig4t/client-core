@@ -26,6 +26,7 @@ import PageTransition from "@/core/components/general/animation/PageTransition";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import Button from "@/core/components/general/button/Button";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 
 
 const permissionSchema = z.object({
@@ -119,13 +120,13 @@ const PermissionCreate: React.FC = () => {
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
-        <div className="sm:p-8 min-h-screen font-sans">
           <PageHeader
             title={routeMeta?.label || (isEditMode ? "ویرایش دسترسی" : "ایجاد دسترسی جدید")}
           />
 
-          <div className="bg-[var(--white)] p-6 rounded-lg border border-[var(--card-border)] shadow-md max-w-2xl mx-auto">
-            <FormWrapper
+         <CreatePageFormWrapper>
+
+           <FormWrapper
               schema={permissionSchema}
               onSubmit={onSubmit}
               className="space-y-6"
@@ -167,8 +168,9 @@ const PermissionCreate: React.FC = () => {
                 </Button>
               </ButtonPanel>
             </FormWrapper>
-          </div>
-        </div>
+                  </CreatePageFormWrapper>
+
+      
 
       </PageTransition>
     </PageWrapper>

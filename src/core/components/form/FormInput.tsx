@@ -1,7 +1,7 @@
 // FormInput.tsx
 import React, { useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { Binary, CircleX, Eye, EyeOff, Pencil } from "lucide-react";
+import { Binary, CircleX, Eye, EyeOff, Pencil, PencilIcon, PencilLineIcon } from "lucide-react";
 import ErrorFormText from "./ErrorFormText";
 import Label from "./Label";
 
@@ -108,7 +108,7 @@ const FormInput: React.FC<FormInputProps> = ({
         type === "bigDecimal" ? (
         <Binary size={20} className="bg-transparent rounded-lg" />
       ) : (
-        <Pencil size={20} className="bg-transparent rounded-lg" />
+        <PencilLineIcon size={20} className="bg-transparent rounded-lg" />
       )}
     </div>
   );
