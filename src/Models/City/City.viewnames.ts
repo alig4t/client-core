@@ -1,0 +1,6 @@
+export const CITY_VIEWNAMES = {
+  CITY: "CITY",
+  CITY_CREATE: "CITY_CREATE",
+  CITY_DISPLAY: "CITY_DISPLAY",
+  CITY_EDIT: "CITY_EDIT",
+} as const;

@@ -46,7 +46,9 @@
     "TableColumns": "./src/templates/TableColumns.hbs",
     "Create": "./src/templates/Create.hbs",
     "Display": "./src/templates/Display.hbs",
-    "Search": "./src/templates/Search.hbs"
+    "Search": "./src/templates/Search.hbs",
+    "ModuleRoutes": "./src/templates/ModuleRoutes.hbs",
+    "ModuleViewNames": "./src/templates/ModuleViewNames.hbs"
   },
   "fieldTypeMapping": {
     "STRING": "string",

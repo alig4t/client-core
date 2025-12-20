@@ -1,6 +1,10 @@
-// src/constants/ViewName.ts
+// Main ViewName Constants - Safe Modular Architecture
 
-export const VIEWNAME = {
+// Generated view names (safe - auto-updated by generator)
+import { GENERATED_VIEWNAMES } from "./generated.viewnames";
+
+// Core ViewNames (manual - safe)
+const CORE_VIEWNAMES = {
   // Public
   LANDING: "LANDING",
   LOGIN: "LOGIN",
@@ -11,82 +15,33 @@ export const VIEWNAME = {
   PROFILE: "PROFILE",
   SETTINGS: "SETTINGS",
 
-  // Permission Module
+  // Permission Module (manual)
   PERMISSION_LIST: "PERMISSION_LIST",
   PERMISSION_CREATE: "PERMISSION_CREATE",
   PERMISSION_EDIT: "PERMISSION_EDIT",
 
-  // Comprehensive Module
+  // Comprehensive Module (manual/example)
   COMPREHENSIVE_LIST: "COMPREHENSIVE_LIST",
   COMPREHENSIVE_CREATE: "COMPREHENSIVE_CREATE",
   COMPREHENSIVE_DISPLAY: "COMPREHENSIVE_DISPLAY",
   COMPREHENSIVE_EDIT: "COMPREHENSIVE_EDIT",
 
-  // Users Module
+  // Users Module (manual)
   USERS_LIST: "USERS_LIST",
   USERS_CREATE: "USERS_CREATE",
   USERS_DISPLAY: "USERS_DISPLAY",
   USERS_EDIT: "USERS_EDIT",
 
-
-  // Bot Module
-  BOTS: "BOTS",
-  BOT_CREATE: "BOT_CREATE",
-  BOT_DISPLAY: "BOT_DISPLAY",
-  BOT_EDIT: "BOT_EDIT",
-
-  // Channel Module
-  CHANNELS: "CHANNELS",
-  CHANNEL_CREATE: "CHANNEL_CREATE",
-  CHANNEL_DISPLAY: "CHANNEL_DISPLAY",
-  CHANNEL_EDIT: "CHANNEL_EDIT",
-
-  // City Module
-  CITIES: "CITIES",
-  CITY_CREATE: "CITY_CREATE",
-  CITY_DISPLAY: "CITY_DISPLAY",
-  CITY_EDIT: "CITY_EDIT",
-
-  // Keyword Module
-  KEYWORDS: "KEYWORDS",
-  KEYWORD_CREATE: "KEYWORD_CREATE",
-  KEYWORD_DISPLAY: "KEYWORD_DISPLAY",
-  KEYWORD_EDIT: "KEYWORD_EDIT",
-
-  // KeywordMatch Module
-  KEYWORD_MATCHES: "KEYWORD_MATCHES",
-  KEYWORD_MATCH_CREATE: "KEYWORD_MATCH_CREATE",
-  KEYWORD_MATCH_DISPLAY: "KEYWORD_MATCH_DISPLAY",
-  KEYWORD_MATCH_EDIT: "KEYWORD_MATCH_EDIT",
-
-  // MessagingPlatform Module
-  PLATFORMS: "PLATFORMS",
-  PLATFORM_CREATE: "PLATFORM_CREATE",
-  PLATFORM_DISPLAY: "PLATFORM_DISPLAY",
-  PLATFORM_EDIT: "PLATFORM_EDIT",
-
-  // Person Module
-  PERSONS: "PERSONS",
-  PERSON_CREATE: "PERSON_CREATE",
-  PERSON_DISPLAY: "PERSON_DISPLAY",
-  PERSON_EDIT: "PERSON_EDIT",
-
-  // UserChannel Module
-  USER_CHANNELS: "USER_CHANNELS",
-  USER_CHANNEL_CREATE: "USER_CHANNEL_CREATE",
-  USER_CHANNEL_DISPLAY: "USER_CHANNEL_DISPLAY",
-  USER_CHANNEL_EDIT: "USER_CHANNEL_EDIT",
-
-  // DashboardData Module
-  DASHBOARD_DATA: "DASHBOARD_DATA",
-  DASHBOARD_DATA_CREATE: "DASHBOARD_DATA_CREATE",
-  DASHBOARD_DATA_DISPLAY: "DASHBOARD_DATA_DISPLAY",
-  DASHBOARD_DATA_EDIT: "DASHBOARD_DATA_EDIT",
-
-  // Other Modules
+  // Other manual
   MESSAGES: "MESSAGES",
   USERS: "USERS",
 } as const;
 
-// For use in TypeScript as a type
+// ✅ SAFE MERGE: Core + Generated
+export const VIEWNAME = {
+  ...CORE_VIEWNAMES,
+  ...GENERATED_VIEWNAMES,  // ✨ All auto-generated view names
+} as const;
+
+// TypeScript type
 export type ViewName = typeof VIEWNAME[keyof typeof VIEWNAME];

@@ -1,0 +1,6 @@
+export const BOT_VIEWNAMES = {
+  BOT: "BOT",
+  BOT_CREATE: "BOT_CREATE",
+  BOT_DISPLAY: "BOT_DISPLAY",
+  BOT_EDIT: "BOT_EDIT",
+} as const;

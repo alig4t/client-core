@@ -42,6 +42,12 @@ export class FrontendGenerator {
     await this.generateFile('Display', `${entity.name}Display.tsx`, outputDir, context);
     await this.generateFile('Search', `${entity.name}Search.tsx`, outputDir, context);
 
+    // Generate routing files
+    if (entity.meta.routing) {
+      await this.generateFile('ModuleRoutes', `${entity.name}.routes.tsx`, outputDir, context);
+      await this.generateFile('ModuleViewNames', `${entity.name}.viewnames.ts`, outputDir, context);
+    }
+
     // Generate enum files if needed
     for (const field of entity.fields) {
       if (field.enums && field.enums.length > 0) {

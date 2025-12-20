@@ -1,0 +1,53 @@
+import { lazy } from "react";
+import { {{meta.routing.menuIcon}} } from "lucide-react";
+import { VIEWNAME } from "@/router/ViewName";
+import { Permission } from "@/router/Permission";
+import type { RouteConfig } from "@/router/path.types";
+
+const {{entityName}}Page = lazy(() => import("./{{entityName}}Page"));
+const {{entityName}}Create = lazy(() => import("./{{entityName}}Create"));
+const {{entityName}}Display = lazy(() => import("./{{entityName}}Display"));
+
+export const {{entityName}}Routes: RouteConfig[] = [
+  // List Page
+  {
+    path: "{{meta.routing.basePath}}",
+    label: "{{meta.routing.menuLabel}}",
+    icon: <{{meta.routing.menuIcon}} size={18} />,
+    element: {{entityName}}Page,
+    parent: "{{meta.routing.menuParent}}",
+    permission: Permission.{{entityName}}_Read,
+    showInMenu: {{meta.routing.showInMenu}},
+    name: VIEWNAME.{{snakeCase entityName}},
+  },
+  // Create Page
+  {
+    path: "{{meta.routing.basePath}}/create",
+    element: {{entityName}}Create,
+    permission: Permission.{{entityName}}_Create,
+    showInMenu: false,
+    name: VIEWNAME.{{snakeCase entityName}}_CREATE,
+    label: "ایجاد {{meta.displayName}}",
+    parent: "{{meta.routing.basePath}}",
+  },
+  // Display Page
+  {
+    path: "{{meta.routing.basePath}}/:id",
+    element: {{entityName}}Display,
+    permission: Permission.{{entityName}}_Read,
+    showInMenu: false,
+    name: VIEWNAME.{{snakeCase entityName}}_DISPLAY,
+    label: "جزئیات {{meta.displayName}}",
+    parent: "{{meta.routing.basePath}}",
+  },
+  // Edit Page
+  {
+    path: "{{meta.routing.basePath}}/:id/edit",
+    element: {{entityName}}Create,
+    permission: Permission.{{entityName}}_Update,
+    showInMenu: false,
+    name: VIEWNAME.{{snakeCase entityName}}_EDIT,
+    label: "ویرایش {{meta.displayName}}",
+    parent: "{{meta.routing.basePath}}",
+  },
+];
