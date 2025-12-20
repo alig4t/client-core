@@ -43,7 +43,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     return (
       <div className={`flex items-center ${className}`}>
         {!hideLabel && label && (
-          <label htmlFor={name} className="mr-2 text-sm text-gray-700">
+          <label htmlFor={name} className="mr-2 text-sm text-[var(--text-primary)]">
             {label}
           </label>
         )}
@@ -58,9 +58,9 @@ export const Checkbox: React.FC<CheckboxProps> = ({
             {...rest}
           />
           <div
-            className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-colors duration-200 ${checked
-                ? "bg-purple-600 border-purple-600"
-                : "border-gray-300 hover:border-purple-500"
+            className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-all duration-200 ${checked
+                ? "bg-[var(--color-primary)] border-[var(--color-primary)]"
+                : "bg-[var(--input-bg)] border-[var(--input-border)] hover:border-[var(--border-focus)]"
               } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
           >
             {checked && (
@@ -127,9 +127,9 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         {...rest}
       />
       <div
-        className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-colors duration-200 ${currentValue
-          ? "bg-purple-600 border-purple-600"
-          : "border-gray-300 hover:border-purple-500"
+        className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-all duration-200 ${currentValue
+          ? "bg-[var(--color-primary)] border-[var(--color-primary)]"
+          : "bg-[var(--input-bg)] border-[var(--input-border)] hover:border-[var(--border-focus)]"
           } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
       >
         {currentValue && (
@@ -167,7 +167,7 @@ export const Checkbox: React.FC<CheckboxProps> = ({
         {/* border border-gray-300 */}
         {renderCheckbox()}
         {label && (
-          <label htmlFor={name} className="mr-2 text-sm text-gray-700 dark:text-gray-300">
+          <label htmlFor={name} className="mr-2 text-sm text-[var(--text-primary)]">
             {label}
           </label>
         )}

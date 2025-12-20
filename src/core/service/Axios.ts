@@ -110,7 +110,7 @@ api.interceptors.response.use(
           position: "bottom-left",
         });
         setTimeout(() => {
-          window.location.href = '/login';
+          window.location.href = '/';
         }, 1500);
       }
     }

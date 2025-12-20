@@ -1,145 +1,333 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
-
 @layer base {
+  /* ==========================================================================
+     MODERN FLAT UI DESIGN SYSTEM
+     Primary Color: Indigo (#6366F1)
+     Spacing: Comfortable (24px cards, 16px inputs)
+     Style: Flat, Minimal, Modern
+     ========================================================================== */
 
-    /* ==========================================================================
-       تم روشن (Light Mode)
-       ========================================================================== */
-    :root {
-        --white: #ffffff;
-        --primary-text: oklch(27.8% 0.033 256.848);
-        --muted-text: var(--color-gray-800);
-        --background: #F7F7F7;
-        --foreground: #666666;
-        --foreground-2: #424242;
-        --placeholder-text: #9f9fa9;
-        --card: var(--color-gray-50);
-        --card-foreground: #020817;
+  /* ==========================================================================
+     LIGHT MODE (Default)
+     ========================================================================== */
+  :root {
+    /* ===== Backgrounds ===== */
+    --bg-primary: #FFFFFF;           /* Cards, forms, tables */
+    --bg-secondary: #F9FAFB;         /* Page background (Gray-50) */
+    --bg-tertiary: #F3F4F6;          /* Hover states, disabled (Gray-100) */
+    --bg-accent: #EEF2FF;            /* Indigo-50 for selected rows, highlights */
 
-        --popover: #ffffff;
-        --popover-foreground: #020817;
+    /* ===== Text Colors ===== */
+    --text-primary: #111827;         /* Gray-900 for headings and primary text */
+    --text-secondary: #6B7280;       /* Gray-500 for labels, secondary text */
+    --text-tertiary: #9CA3AF;        /* Gray-400 for placeholders, disabled text */
 
-        /* رنگ اصلی سفارشی شما */
-        --primary: #101828;
-        --primary-foreground: #f8fafc;
+    /* ===== Border Colors ===== */
+    --border-primary: #E5E7EB;       /* Gray-200 for default borders */
+    --border-secondary: #D1D5DB;     /* Gray-300 for input borders */
+    --border-focus: #6366F1;         /* Indigo-500 for focus states */
 
-        --secondary: #f1f5f9;
-        --secondary-foreground: #101828;
+    /* ===== Action Colors: Primary (Indigo) ===== */
+    --color-primary: #6366F1;        /* Indigo-500 for primary actions */
+    --color-primary-hover: #4F46E5;  /* Indigo-600 for hover */
+    --color-primary-light: #E0E7FF;  /* Indigo-100 for light backgrounds */
 
-        --muted: #f1f5f9;
-        --muted-foreground: #a0a0a0;
+    /* ===== Action Colors: Success (Green) ===== */
+    --color-success: #10B981;        /* Green-500 for success actions */
+    --color-success-hover: #059669;  /* Green-600 */
+    --color-success-light: #D1FAE5;  /* Green-100 */
 
-        --accent: #f1f5f9;
-        --accent-foreground: #101828;
+    /* ===== Action Colors: Danger (Red) ===== */
+    --color-danger: #EF4444;         /* Red-500 for destructive actions */
+    --color-danger-hover: #DC2626;   /* Red-600 */
+    --color-danger-light: #FEE2E2;   /* Red-100 */
 
-        --destructive: #ef4444;
-        --destructive-foreground: #f8fafc;
+    /* ===== Action Colors: Warning (Amber) ===== */
+    --color-warning: #F59E0B;        /* Amber-500 for warnings */
+    --color-warning-hover: #D97706;  /* Amber-600 */
+    --color-warning-light: #FEF3C7;  /* Amber-100 */
 
-        /* --- تغییر رنگ حاشیه به خاکستری ملایم‌تر --- */
-        --card-border: oklch(92.8% 0.006 264.531);
+    /* ===== Component Tokens: Inputs ===== */
+    --input-bg: #FFFFFF;
+    --input-border: #E5E7EB;         /* Gray-200 */
+    --input-text: #111827;           /* Gray-900 */
+    --input-placeholder: #9CA3AF;    /* Gray-400 */
+    --input-focus-ring: #6366F1;     /* Indigo-500 */
+    --input-disabled-bg: #F3F4F6;    /* Gray-100 */
+    --input-disabled-text: #9CA3AF;  /* Gray-400 */
 
-        --border: var(--color-gray-200);
-        /* gray-200 */
-        --input: #e5e7eb;
-        --input-border: #e5e7eb;
-        /* gray-200 */
-        --ring: #aaa9a9;
+    /* ===== Component Tokens: Buttons ===== */
+    --button-primary-bg: #6366F1;
+    --button-primary-text: #FFFFFF;
+    --button-primary-hover: #4F46E5;
 
-        --radius: 0.5rem;
+    --button-success-bg: #10B981;
+    --button-success-text: #FFFFFF;
+    --button-success-hover: #059669;
 
-        /* ... (متغیرهای چارت و سایدبار بدون تغییر) ... */
-        --chart-1: #f59e0b;
-        --chart-2: #06b6d4;
-        --chart-3: #6366f1;
-        --chart-4: #84cc16;
-        --chart-5: #eab308;
-        --sidebar: #f8fafc;
-        --sidebar-foreground: #020817;
-        --sidebar-primary: #101828;
-        --sidebar-primary-foreground: #f8fafc;
-        --sidebar-accent: #f1f5f9;
-        --sidebar-accent-foreground: #101828;
-        --sidebar-border: #e2e8f0;
-        --sidebar-ring: #94a3b8;
-    }
+    --button-danger-bg: #EF4444;
+    --button-danger-text: #FFFFFF;
+    --button-danger-hover: #DC2626;
 
-    /* ==========================================================================
-       تم تاریک (Dark Mode)
-       ========================================================================== */
-    .dark {
-        --white: #101828;
-        --primary-text: oklch(92% 0.004 286.32);
-        --muted-text: var(--color-gray-300);
-        --input-border: oklch(44.6% 0.03 256.802);
-        --placeholder-text: #575757;
+    --button-secondary-bg: #FFFFFF;
+    --button-secondary-text: #374151;  /* Gray-700 */
+    --button-secondary-border: #D1D5DB; /* Gray-300 */
+    --button-secondary-hover: #F9FAFB;  /* Gray-50 */
 
-        --background: #101828;
-        --foreground: #f8fafc;
-        --foreground-2: #ebebeb;
-        --card: #101828;
-        /* #1e2939 */
-        --card-foreground: #f8fafc;
+    /* ===== Component Tokens: Tables ===== */
+    --table-header-bg: #F9FAFB;      /* Gray-50 */
+    --table-header-text: #6B7280;    /* Gray-500 */
+    --table-row-bg: #FFFFFF;
+    --table-row-hover: #F9FAFB;      /* Gray-50 */
+    --table-row-selected: #EEF2FF;   /* Indigo-50 */
+    --table-border: #E5E7EB;         /* Gray-200 */
+    --table-cell-text: #111827;      /* Gray-900 */
 
-        --popover: #020817;
-        --popover-foreground: #f8fafc;
+    /* ===== Component Tokens: Cards ===== */
+    --card-bg: #FFFFFF;
+    --card-border: #E5E7EB;          /* Gray-200 */
 
-        --primary: #f8fafc;
-        --primary-foreground: #101828;
+    /* ===== Shadows (Minimal) ===== */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 
-        --secondary: #1e293b;
-        --secondary-foreground: #f8fafc;
+    /* ===== Spacing (Comfortable) ===== */
+    --spacing-card: 1.5rem;          /* 24px - Card padding */
+    --spacing-input-x: 1rem;         /* 16px - Input horizontal padding */
+    --spacing-input-y: 0.625rem;     /* 10px - Input vertical padding */
+    --spacing-section: 1.5rem;       /* 24px - Section gaps */
 
-        --muted: #1e293b;
-        --muted-foreground: #94a3b8;
+    /* ===== Border Radius ===== */
+    --radius-sm: 0.375rem;           /* 6px - Small elements, badges */
+    --radius-md: 0.5rem;             /* 8px - Inputs, buttons */
+    --radius-lg: 0.75rem;            /* 12px - Cards, containers */
+    --radius-xl: 1rem;               /* 16px - Large containers */
 
-        --accent: #1e293b;
-        --accent-foreground: #f8fafc;
+    /* ===== Legacy Variables (Backward Compatibility) ===== */
+    --white: #ffffff;
+    --primary-text: #111827;
+    --muted-text: #6B7280;
+    --background: #F9FAFB;
+    --foreground: #111827;
+    --foreground-2: #374151;
+    --placeholder-text: #9CA3AF;
+    --card: #FFFFFF;
+    --card-foreground: #111827;
 
-        --destructive: #7f1d1d;
-        --destructive-foreground: #f8fafc;
+    --popover: #ffffff;
+    --popover-foreground: #111827;
 
-        --card-border: oklch(44.6% 0.03 256.802);
-        /* --- تغییر رنگ حاشیه به خاکستری تیره‌تر و نامحسوس‌تر --- */
-        --border: var(--color-gray-700);
-        /* gray-800 */
-        --input: #1f2937;
-        /* gray-800 */
-        --ring: #4b5563;
-        /* gray-600 */
+    --primary: #6366F1;
+    --primary-foreground: #FFFFFF;
 
-        /* ... (متغیرهای چارت و سایدبار بدون تغییر) ... */
-        --chart-1: #4f46e5;
-        --chart-2: #22d3ee;
-        --chart-3: #eab308;
-        --chart-4: #d946ef;
-        --chart-5: #f97316;
-        --sidebar: #101828;
-        --sidebar-foreground: #f8fafc;
-        --sidebar-primary: #4f46e5;
-        --sidebar-primary-foreground: #f8fafc;
-        --sidebar-accent: #1e293b;
-        --sidebar-accent-foreground: #f8fafc;
-        --sidebar-border: #1e293b;
-        --sidebar-ring: #64748b;
-    }
+    --secondary: #F1F5F9;
+    --secondary-foreground: #111827;
+
+    --muted: #F1F5F9;
+    --muted-foreground: #6B7280;
+
+    --accent: #EEF2FF;
+    --accent-foreground: #111827;
+
+    --destructive: #EF4444;
+    --destructive-foreground: #FFFFFF;
+
+    --card-border: #E5E7EB;
+    --border: #E5E7EB;
+    --input: #FFFFFF;
+    --ring: #6366F1;
+
+    --radius: 0.5rem;
+
+    /* Chart colors */
+    --chart-1: #F59E0B;  /* Amber */
+    --chart-2: #06B6D4;  /* Cyan */
+    --chart-3: #6366F1;  /* Indigo */
+    --chart-4: #84CC16;  /* Lime */
+    --chart-5: #EAB308;  /* Yellow */
+
+    /* Sidebar colors */
+    --sidebar: #F8FAFC;
+    --sidebar-foreground: #111827;
+    --sidebar-primary: #6366F1;
+    --sidebar-primary-foreground: #FFFFFF;
+    --sidebar-accent: #EEF2FF;
+    --sidebar-accent-foreground: #111827;
+    --sidebar-border: #E2E8F0;
+    --sidebar-ring: #94A3B8;
+  }
+
+  /* ==========================================================================
+     DARK MODE
+     ========================================================================== */
+  .dark {
+    /* ===== Backgrounds ===== */
+    --bg-primary: #1F2937;           /* Gray-800 for cards, forms, tables */
+    --bg-secondary: #111827;         /* Gray-900 for page background */
+    --bg-tertiary: #374151;          /* Gray-700 for hover states */
+    --bg-accent: #312E81;            /* Indigo-900 for selected rows */
+
+    /* ===== Text Colors ===== */
+    --text-primary: #F9FAFB;         /* Gray-50 for headings and primary text */
+    --text-secondary: #D1D5DB;       /* Gray-300 for labels, secondary text */
+    --text-tertiary: #9CA3AF;        /* Gray-400 for placeholders */
+
+    /* ===== Border Colors ===== */
+    --border-primary: #374151;       /* Gray-700 for default borders */
+    --border-secondary: #4B5563;     /* Gray-600 for input borders */
+    --border-focus: #818CF8;         /* Indigo-400 for focus states */
+
+    /* ===== Action Colors: Primary (Indigo) ===== */
+    --color-primary: #818CF8;        /* Indigo-400 for primary actions */
+    --color-primary-hover: #6366F1;  /* Indigo-500 */
+    --color-primary-light: #312E81;  /* Indigo-900 */
+
+    /* ===== Action Colors: Success (Green) ===== */
+    --color-success: #34D399;        /* Green-400 */
+    --color-success-hover: #10B981;  /* Green-500 */
+    --color-success-light: #064E3B;  /* Green-900 */
+
+    /* ===== Action Colors: Danger (Red) ===== */
+    --color-danger: #F87171;         /* Red-400 */
+    --color-danger-hover: #EF4444;   /* Red-500 */
+    --color-danger-light: #7F1D1D;   /* Red-900 */
+
+    /* ===== Action Colors: Warning (Amber) ===== */
+    --color-warning: #FBBF24;        /* Amber-400 */
+    --color-warning-hover: #F59E0B;  /* Amber-500 */
+    --color-warning-light: #78350F;  /* Amber-900 */
+
+    /* ===== Component Tokens: Inputs ===== */
+    --input-bg: #1F2937;             /* Gray-800 */
+    --input-border: #4B5563;         /* Gray-600 */
+    --input-text: #F9FAFB;           /* Gray-50 */
+    --input-placeholder: #9CA3AF;    /* Gray-400 */
+    --input-focus-ring: #818CF8;     /* Indigo-400 */
+    --input-disabled-bg: #374151;    /* Gray-700 */
+    --input-disabled-text: #9CA3AF;  /* Gray-400 */
+
+    /* ===== Component Tokens: Buttons ===== */
+    --button-primary-bg: #818CF8;
+    --button-primary-text: #1F2937;
+    --button-primary-hover: #6366F1;
+
+    --button-success-bg: #34D399;
+    --button-success-text: #1F2937;
+    --button-success-hover: #10B981;
+
+    --button-danger-bg: #F87171;
+    --button-danger-text: #1F2937;
+    --button-danger-hover: #EF4444;
+
+    --button-secondary-bg: #374151;
+    --button-secondary-text: #D1D5DB;
+    --button-secondary-border: #4B5563;
+    --button-secondary-hover: #4B5563;
+
+    /* ===== Component Tokens: Tables ===== */
+    --table-header-bg: #111827;      /* Gray-900 */
+    --table-header-text: #D1D5DB;    /* Gray-300 */
+    --table-row-bg: #1F2937;         /* Gray-800 */
+    --table-row-hover: #374151;      /* Gray-700 */
+    --table-row-selected: #312E81;   /* Indigo-900 */
+    --table-border: #374151;         /* Gray-700 */
+    --table-cell-text: #F9FAFB;      /* Gray-50 */
+
+    /* ===== Component Tokens: Cards ===== */
+    --card-bg: #1F2937;              /* Gray-800 */
+    --card-border: #374151;          /* Gray-700 */
+
+    /* ===== Shadows (Minimal, darker for dark mode) ===== */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
+
+    /* ===== Legacy Variables (Backward Compatibility) ===== */
+    --white: #1F2937;
+    --primary-text: #F9FAFB;
+    --muted-text: #D1D5DB;
+    --input-border: #4B5563;
+    --placeholder-text: #9CA3AF;
+
+    --background: #111827;
+    --foreground: #F9FAFB;
+    --foreground-2: #D1D5DB;
+    --card: #1F2937;
+    --card-foreground: #F9FAFB;
+
+    --popover: #1F2937;
+    --popover-foreground: #F9FAFB;
+
+    --primary: #818CF8;
+    --primary-foreground: #1F2937;
+
+    --secondary: #1E293B;
+    --secondary-foreground: #F9FAFB;
+
+    --muted: #1E293B;
+    --muted-foreground: #94A3B8;
+
+    --accent: #312E81;
+    --accent-foreground: #F9FAFB;
+
+    --destructive: #F87171;
+    --destructive-foreground: #1F2937;
+
+    --card-border: #374151;
+    --border: #374151;
+    --input: #1F2937;
+    --ring: #818CF8;
+
+    /* Chart colors (adjusted for dark mode) */
+    --chart-1: #4F46E5;  /* Indigo */
+    --chart-2: #22D3EE;  /* Cyan */
+    --chart-3: #EAB308;  /* Yellow */
+    --chart-4: #D946EF;  /* Fuchsia */
+    --chart-5: #F97316;  /* Orange */
+
+    /* Sidebar colors */
+    --sidebar: #111827;
+    --sidebar-foreground: #F9FAFB;
+    --sidebar-primary: #818CF8;
+    --sidebar-primary-foreground: #1F2937;
+    --sidebar-accent: #312E81;
+    --sidebar-accent-foreground: #F9FAFB;
+    --sidebar-border: #374151;
+    --sidebar-ring: #64748B;
+  }
+
+  /* ==========================================================================
+     BASE STYLES
+     ========================================================================== */
+  * {
+    border-color: var(--border-primary);
+  }
+
+  body {
+    background-color: var(--bg-secondary);
+    color: var(--text-primary);
+  }
 }
 
-
+/* ==========================================================================
+   TAILWIND V4 THEME EXTENSIONS
+   ========================================================================== */
 @theme {
+  --color-primary: var(--color-primary);
+  --color-primary-foreground: var(--button-primary-text);
 
-    --color-primary: var(--primary);
-    --color-primary-foreground: var(--primary-foreground);
-    --animate-infinite-slider: infiniteSlider 20s linear infinite;
+  /* Animation for infinite slider */
+  --animate-infinite-slider: infiniteSlider 20s linear infinite;
 
-    @keyframes infiniteSlider {
-        0% {
-            transform: translateX(0);
-        }
-
-        100% {
-            transform: translateX(50%);
-        }
+  @keyframes infiniteSlider {
+    0% {
+      transform: translateX(0);
     }
+    100% {
+      transform: translateX(50%);
+    }
+  }
 }

@@ -11,7 +11,7 @@ const ProtectedRoute = () => {
   const { isAuthenticated, hasPermission, user } = useAuth();
   const location = useLocation();
 
-  const LOGIN_PAGE = getViewPath(VIEWNAME.LOGIN);
+  const LOGIN_PAGE = getViewPath(VIEWNAME.LANDING);
 
   // If not logged in
   if (!isAuthenticated || !user) {

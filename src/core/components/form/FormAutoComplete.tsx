@@ -142,7 +142,11 @@ export const FormAutoComplete = <T extends BaseModel>({
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
   const [loading, setLoading] = useState(false);
   const [fetchedOptions, setFetchedOptions] = useState<T[]>([]);
+  const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
+  const [totalPages, setTotalPages] = useState<number>(1);
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const listRef = useRef<HTMLDivElement>(null);
 
   // Watch current value from RHF
   const currentValue = useWatch({ name, control });
@@ -176,20 +180,41 @@ export const FormAutoComplete = <T extends BaseModel>({
       const searchFilterKey = `${String(labelKey)}_like`;
       const results = await service.getAll({
         filters: { ...extraFilters, [searchFilterKey]: debouncedSearchTerm },
-        size: 20,
+        page: currentPage,
+        size: 5,
       });
       setFetchedOptions(results.data);
+      if (results.meta) {
+        setTotalPages(results.meta.totalPages);
+      }
     } catch (e) {
       console.error("Failed to fetch autocomplete options:", e);
       setFetchedOptions([]);
     } finally {
       setLoading(false);
     }
-  }, [isOpen, debouncedSearchTerm, service, extraFilters, labelKey]);
+  }, [isOpen, debouncedSearchTerm, currentPage, service, extraFilters, labelKey]);
 
   useEffect(() => {
     fetchOptions();
   }, [fetchOptions]);
+
+  // Reset page when search term changes or dropdown opens
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [debouncedSearchTerm]);
+
+  // Reset page when dropdown opens
+  useEffect(() => {
+    if (isOpen) {
+      setCurrentPage(1);
+    }
+  }, [isOpen]);
+
+  // Reset highlighted index when options change
+  useEffect(() => {
+    setHighlightedIndex(0);
+  }, [fetchedOptions]);
 
   // ✅ Helper: Create minimal object with only id and label
   const createMinimalItem = useCallback(
@@ -253,6 +278,68 @@ export const FormAutoComplete = <T extends BaseModel>({
       displayText = selectedLabels[0];
     }
   }
+
+  // Keyboard navigation
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      switch (e.key) {
+        case "ArrowDown":
+          e.preventDefault();
+          setHighlightedIndex((prev) =>
+            prev < fetchedOptions.length - 1 ? prev + 1 : prev
+          );
+          break;
+        case "ArrowUp":
+          e.preventDefault();
+          setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : 0));
+          break;
+        case "PageDown":
+          e.preventDefault();
+          if (currentPage < totalPages) {
+            setCurrentPage((prev) => prev + 1);
+          }
+          break;
+        case "PageUp":
+          e.preventDefault();
+          if (currentPage > 1) {
+            setCurrentPage((prev) => prev - 1);
+          }
+          break;
+        case "Enter":
+          e.preventDefault();
+          if (fetchedOptions[highlightedIndex]) {
+            handleToggle(fetchedOptions[highlightedIndex]);
+          }
+          break;
+        case "Escape":
+          e.preventDefault();
+          setIsOpen(false);
+          setSearchTerm("");
+          setCurrentPage(1);
+          break;
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen, fetchedOptions, highlightedIndex, handleToggle, currentPage, totalPages]);
+
+  // Scroll highlighted item into view
+  useEffect(() => {
+    if (isOpen && listRef.current) {
+      const highlightedElement = listRef.current.querySelector(
+        `[data-index="${highlightedIndex}"]`
+      );
+      if (highlightedElement) {
+        highlightedElement.scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+      }
+    }
+  }, [highlightedIndex, isOpen]);
 
   // Smart positioning
   const [openDirection, setOpenDirection] = useState<"down" | "up">("down");
@@ -328,8 +415,14 @@ export const FormAutoComplete = <T extends BaseModel>({
                 className="w-full p-2 text-right placeholder:text-[var(--placeholder-text)] dark:placeholder:text-gray-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
                 autoFocus
               />
+              {totalPages > 1 && (
+                <div className="flex justify-between items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
+                  <span>صفحه {currentPage} از {totalPages}</span>
+                  <span className="text-[10px]">PageUp/PageDown برای تغییر صفحه</span>
+                </div>
+              )}
             </div>
-            <div className="max-h-60 overflow-y-auto">
+            <div className="max-h-60 overflow-y-auto" ref={listRef}>
               {loading && (
                 <div className="flex justify-center items-center p-4 text-purple-600 dark:text-purple-400">
                   <LoadingSpinner />
@@ -343,32 +436,40 @@ export const FormAutoComplete = <T extends BaseModel>({
               )}
               {!loading && fetchedOptions.length > 0 && (
                 <ul className="p-1">
-                  {fetchedOptions.map((item) => (
-                    <li
-                      key={item[valueKey] as string | number}
-                      onClick={() => handleToggle(item)}
-                      className={`flex items-center gap-2 p-2 my-0.5 text-sm rounded-md cursor-pointer transition duration-150 ${
-                        isSelected(item)
-                          ? "bg-purple-100 dark:bg-purple-900/40 font-semibold text-gray-900 dark:text-gray-100"
-                          : "text-gray-900 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700"
-                      }`}
-                    >
-                      {multi ? (
-                        <div
-                          className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
-                            isSelected(item)
-                              ? "bg-purple-600 dark:bg-purple-500 border-purple-600 dark:border-purple-500"
-                              : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-                          }`}
-                        >
-                          {isSelected(item) && <CheckIcon />}
-                        </div>
-                      ) : isSelected(item) ? (
-                        <CheckIcon />
-                      ) : null}
-                      <span>{item[labelKey] as string}</span>
-                    </li>
-                  ))}
+                  {fetchedOptions.map((item, index) => {
+                    const selected = isSelected(item);
+                    const highlighted = index === highlightedIndex;
+                    return (
+                      <li
+                        key={item[valueKey] as string | number}
+                        data-index={index}
+                        onClick={() => handleToggle(item)}
+                        onMouseEnter={() => setHighlightedIndex(index)}
+                        className={`flex items-center gap-2 p-2 my-0.5 text-sm rounded-md cursor-pointer transition duration-150 ${
+                          selected
+                            ? "bg-purple-100 dark:bg-purple-900/40 font-semibold text-gray-900 dark:text-gray-100"
+                            : highlighted
+                            ? "bg-purple-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200"
+                            : "text-gray-900 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700"
+                        }`}
+                      >
+                        {multi ? (
+                          <div
+                            className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
+                              selected
+                                ? "bg-purple-600 dark:bg-purple-500 border-purple-600 dark:border-purple-500"
+                                : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
+                            }`}
+                          >
+                            {selected && <CheckIcon />}
+                          </div>
+                        ) : selected ? (
+                          <CheckIcon />
+                        ) : null}
+                        <span>{item[labelKey] as string}</span>
+                      </li>
+                    );
+                  })}
                 </ul>
               )}
             </div>

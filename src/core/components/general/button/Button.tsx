@@ -23,24 +23,24 @@ type ButtonProps = {
 
 export const variantClasses = {
   primary:
-    "bg-purple-600 text-white shadow-md hover:bg-purple-700 focus:ring-purple-500 disabled:bg-purple-300",
+    "bg-[var(--button-primary-bg)] text-[var(--button-primary-text)] hover:bg-[var(--button-primary-hover)] focus:ring-[var(--border-focus)] border border-transparent disabled:opacity-50",
   success:
-    "bg-green-600 text-white shadow-md hover:bg-green-700 focus:ring-green-500 disabled:bg-green-300",
+    "bg-[var(--button-success-bg)] text-[var(--button-success-text)] hover:bg-[var(--button-success-hover)] focus:ring-[var(--color-success)] border border-transparent disabled:opacity-50",
   secondary:
-    "border bg-gray-100 border-gray-300 !text-gray-600 dark:text-gray-400 hover:!bg-gray-200 hover:!text-gray-600 focus:ring-gray-500",
+    "bg-[var(--button-secondary-bg)] text-[var(--button-secondary-text)] border border-[var(--button-secondary-border)] hover:bg-[var(--button-secondary-hover)] focus:ring-[var(--border-secondary)]",
   cancel:
-    "border border-gray-300 text-gray-700 dark:text-gray-400 hover:bg-gray-100 hover:!text-gray-700 focus:ring-gray-500",
+    "bg-transparent text-[var(--text-secondary)] border border-[var(--border-secondary)] hover:bg-[var(--bg-tertiary)] hover:text-[var(--text-primary)] focus:ring-[var(--border-secondary)]",
   danger:
-    "bg-rose-600 text-white shadow-md hover:bg-rose-700 focus:ring-rose-500 disabled:bg-rose-300",
+    "bg-[var(--button-danger-bg)] text-[var(--button-danger-text)] hover:bg-[var(--button-danger-hover)] focus:ring-[var(--color-danger)] border border-transparent disabled:opacity-50",
 };
 
 // کلاس‌های مربوط به badge بر اساس variant دکمه
 export const badgeVariantClasses: Record<ButtonVariant, string> = {
-  primary: "bg-purple-100 text-purple-800",
-  success: "bg-green-100 text-green-800",
-  secondary: "bg-gray-100 text-gray-800",
-  cancel: "bg-gray-100 text-gray-800",
-  danger: "bg-rose-100 text-rose-800",
+  primary: "bg-[var(--color-primary-light)] text-[var(--color-primary)]",
+  success: "bg-[var(--color-success-light)] text-[var(--color-success)]",
+  secondary: "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]",
+  cancel: "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]",
+  danger: "bg-[var(--color-danger-light)] text-[var(--color-danger)]",
 };
 
 const Button = ({
@@ -57,11 +57,11 @@ const Button = ({
   const isDisabled = disabled || loading;
 
   const baseClasses =
-    "inline-flex items-center px-4 py-2 font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors duration-300 disabled:cursor-not-allowed";
+    "inline-flex items-center px-5 py-2.5 text-sm font-medium rounded-lg focus:outline-none focus:ring-2 focus:ring-offset-2 transition-all duration-200 disabled:cursor-not-allowed";
 
   // استفاده از کلاس badge متناسب با variant
   const badgeClasses = `mr-2 text-xs font-bold px-2 pb-[2px] pt-[3px] rounded-full ${
-    badgeVariantClasses[variant] || "bg-zinc-200 text-gray-800"
+    badgeVariantClasses[variant] || "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]"
   }`;
 
   return (
@@ -74,7 +74,7 @@ const Button = ({
       {loading && (
         <>
           <div className="flex justify-center items-center ml-4">
-            <Loader2 size={16} className={`animate-spin text-purple-600`} />
+            <Loader2 size={16} className="animate-spin" />
           </div>
           در حال پردازش...
         </>

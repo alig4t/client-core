@@ -22,7 +22,7 @@ export const RecordDisplayLayout: FC<RecordDisplayLayoutProps> = ({
     <div dir="rtl" className="p-8 min-h-screen font-sans">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
-        <h1 className="!text-2xl font-bold text-[var(--primary-text)]">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">
           {title}
         </h1>
         {actions && <div className="flex gap-2">{actions}</div>}
@@ -30,7 +30,7 @@ export const RecordDisplayLayout: FC<RecordDisplayLayoutProps> = ({
 
       {/* Main Content Card */}
       <div
-        className={`bg-[var(--white)] p-6 rounded-xl border border-[var(--card-border)] shadow-lg max-w-4xl mx-auto transition-opacity duration-300 ${
+        className={`bg-[var(--card-bg)] p-6 rounded-lg border border-[var(--card-border)] max-w-4xl mx-auto transition-opacity duration-300 ${
           isFetching ? "opacity-50 pointer-events-none" : "opacity-100"
         }`}
       >

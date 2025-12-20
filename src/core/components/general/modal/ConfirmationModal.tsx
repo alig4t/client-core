@@ -31,17 +31,17 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
       <div dir="rtl" className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
           {/* Icon */}
-          <AlertTriangle className="h-6 w-6 text-red-600 flex-shrink-0" />
+          <AlertTriangle className="h-6 w-6 text-[var(--color-danger)] flex-shrink-0" />
 
-          <p className="text-sm text-gray-700 dark:text-gray-300">{message}</p>
+          <p className="text-sm text-[var(--text-secondary)]">{message}</p>
         </div>
 
         {/* Action Buttons */}
-        <div className="flex justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-700">
-          <Button variant="secondary" onClick={onClose} disabled={isDeleting}>
+        <div className="flex justify-end gap-3 pt-4 border-t border-[var(--border-primary)]">
+          <Button variant="cancel" onClick={onClose} disabled={isDeleting}>
             انصراف
           </Button>
-          <Button variant="primary" onClick={onConfirm} disabled={isDeleting}>
+          <Button variant="danger" onClick={onConfirm} disabled={isDeleting}>
             {isDeleting ? "در حال حذف..." : "حذف کن"}
           </Button>
         </div>

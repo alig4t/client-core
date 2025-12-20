@@ -90,6 +90,13 @@ export const Permission = {
   Permission_Delete: "permission:delete",
   Permission_Search: "permission:search",
 
+  // PLATFORM
+  Platform_Read: "Platform_Read",
+  Platform_Create: "Platform_Create",
+  Platform_Update: "Platform_Update",
+  Platform_Delete: "Platform_Delete",
+
+
   // Role
   Role_Root: "role:root",
   Role_Create: "role:create",
@@ -99,7 +106,13 @@ export const Permission = {
   Role_Search: "role:search",
 
   // User
+  User_Root: "user:root",
+  User_Create: "user:create",
   User_Read: "user:read",
+  User_Update: "user:update",
+  User_Delete: "user:delete",
+  User_Search: "user:search",
+
   User_AssignRoles: "user:assign_roles",
 
   // UserChannel

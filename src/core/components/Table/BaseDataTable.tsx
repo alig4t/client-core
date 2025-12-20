@@ -200,12 +200,12 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
         }
         console.log(childrenCount)
         return Array.from({ length: pageSize }).map((_, index) => (
-            <tr key={`skeleton-${index}`} className="animate-pulse border-b border-gray-100 dark:border-gray-800">
-                {isSelectionMode && <td className="p-4"><div className="h-4 w-4 bg-gray-200 dark:bg-gray-700 rounded"></div></td>}
+            <tr key={`skeleton-${index}`} className="animate-pulse border-b border-[var(--table-border)]">
+                {isSelectionMode && <td className="p-4"><div className="h-4 w-4 bg-[var(--bg-tertiary)] rounded"></div></td>}
 
                 {Array.from({ length: childrenCount }).map((_, index2) => (
                     <td className="p-4">
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mx-auto"></div>
+                        <div className="h-4 bg-[var(--bg-tertiary)] rounded w-3/4 mx-auto"></div>
                     </td>
                 ))}
 
@@ -221,11 +221,8 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
     return (
         <div className="w-full space-y-4">
             {/* Header Controls */}
-            <div className="flex flex-col md:flex-row justify-between
-             items-center gap-4 bg-white dark:bg-gray-800 p-4 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700
-             max-w-full
-             ">
-                <h2 className="text-lg font-bold text-gray-800 dark:text-gray-100">{title}</h2>
+            <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[var(--card-bg)] p-6 rounded-lg border border-[var(--card-border)] max-w-full">
+                <h2 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h2>
 
                 <div className="flex flex-wrap-reverse md:flex-nowrap items-center gap-2 w-full sm:w-auto">
                     <AnimatePresence mode="wait">
@@ -271,12 +268,12 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
             </div>
 
             {/* Table */}
-            <div className="w-full bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+            <div className="w-full bg-[var(--card-bg)] rounded-lg border border-[var(--card-border)] overflow-hidden">
                 <div className="relative w-full overflow-x-auto scrollbar-thin">
                     <table className="min-w-full text-sm text-right">
-                        <thead className="bg-gray-50 dark:bg-gray-900/50 text-gray-500 dark:text-gray-400 font-medium border-b border-gray-100 dark:border-gray-700">
+                        <thead className="bg-[var(--table-header-bg)] text-[var(--table-header-text)] font-medium border-b border-[var(--table-border)]">
                             <tr>
-                                {isSelectionMode && <THEAD className="">#</THEAD>}
+                                {isSelectionMode && <THEAD className="pr-10 text-right">#</THEAD>}
                                 {header}
                             </tr>
                         </thead>
@@ -284,7 +281,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                             variants={containerVariants}
                             initial="hidden"
                             animate="visible"
-                            className="divide-y divide-gray-100 dark:divide-gray-800"
+                            className="divide-y divide-[var(--table-border)]"
                         >
                             {isLoading ? (
                                 renderSkeleton()
@@ -307,12 +304,12 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                                 animate="visible"
                                                 exit="exit"
                                                 className={`whitespace-nowrap transition-colors duration-150 ${isSelected
-                                                        ? "bg-purple-50 dark:bg-purple-900/20 hover:bg-purple-100 dark:hover:bg-purple-900/30"
-                                                        : "hover:bg-gray-50 dark:hover:bg-gray-700/50"
+                                                        ? "bg-[var(--table-row-selected)] hover:bg-[var(--table-row-selected)] border-l-2 border-[var(--color-primary)]"
+                                                        : "bg-[var(--table-row-bg)] hover:bg-[var(--table-row-hover)]"
                                                     }`}
                                             >
                                                 {isSelectionMode && (
-                                                    <TBODY className="text-center">
+                                                    <TBODY className="text-center pr-8">
                                                         <Checkbox
                                                             name={`row-${id}`}
                                                             standalone
@@ -329,7 +326,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                                 </AnimatePresence>
                             ) : (
                                 <tr>
-                                    <td colSpan={100} className="p-8 text-center text-gray-500 dark:text-gray-400">
+                                    <td colSpan={100} className="p-8 text-center text-[var(--text-tertiary)]">
                                         داده‌ای یافت نشد.
                                     </td>
                                 </tr>
@@ -339,8 +336,8 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                 </div>
 
                 {/* Pagination */}
-                <div className="p-4 border-t border-gray-100 dark:border-gray-700 flex flex-col sm:flex-row justify-between items-center gap-4">
-                    <span className="text-sm text-gray-500 dark:text-gray-400">
+                <div className="px-6 py-4 border-t border-[var(--table-border)] bg-[var(--table-header-bg)] flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <span className="text-sm text-[var(--text-secondary)]">
                         نمایش {page * pageSize + 1} تا {Math.min((page + 1) * pageSize, totalItems)} از {totalItems} رکورد
                     </span>
 
@@ -362,7 +359,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
                             <ChevronRight size={16} />
                         </Button>
 
-                        <span className="px-4 text-sm font-medium text-gray-700 dark:text-gray-300">
+                        <span className="px-4 text-sm font-medium text-[var(--text-primary)]">
                             صفحه {page + 1} از {totalPages}
                         </span>
 
@@ -387,7 +384,7 @@ const BaseDataTable = <TData extends Record<string, any>, TFilters extends Recor
             </div>
 
             {isFetching && !isLoading && (
-                <div className="absolute inset-0 bg-white/50 dark:bg-black/50 z-10 flex items-center justify-center">
+                <div className="absolute inset-0 bg-[var(--bg-secondary)]/50 z-10 flex items-center justify-center">
                     {/* Optional: Add a spinner here */}
                 </div>
             )}
