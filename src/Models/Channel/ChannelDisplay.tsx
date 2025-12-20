@@ -38,7 +38,7 @@ const ChannelDisplay: React.FC = () => {
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
-      <div className="p-8 min-h-screen font-sans">
+
         <RecordDisplayLayout
           title={`${channelModelMeta.messages.pageTitle.edit} : ${data.channelName}`}
           actions={
@@ -54,7 +54,6 @@ const ChannelDisplay: React.FC = () => {
             <DisplayField label={channelModelMeta.fields.platform.label} value={data.platform?.platformName || "---"} />
           </RowContainer>
         </RecordDisplayLayout>
-      </div>
     </PageWrapper>
   );
 };
