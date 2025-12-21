@@ -97,7 +97,7 @@ const KeywordMatchDisplay: React.FC = () => {
             value={
               keywordMatchRecord.message ? (
                 <LinkView
-                  viewName={VIEWNAME.MESSAGE_DISPLAY}
+                  viewName={VIEWNAME.MESSAGING_PLATFORM_DISPLAY}
                   id={ keywordMatchRecord.message.id}
                   label={ keywordMatchRecord.message. }
                 />

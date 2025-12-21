@@ -1,11 +1,11 @@
 import type { BaseModel } from "@/core/models/BaseModel";
-import type { Message } from "";
+import type { MessagingPlatformModel } from "@/Models/MessagingPlatform/MessagingPlatformModel";
 import type { KeywordModel } from "@/Models/Keyword/KeywordModel";
-import type { User } from "@/core/models/User";
+import type { UserModel } from "../User/UserModel";
 
 export interface KeywordMatchModel extends BaseModel {
   matchedAt: string;
-  message: Message;
+  message: MessagingPlatformModel;
   keyword: KeywordModel;
-  coreUser: User;
+  coreUser: UserModel;
 }

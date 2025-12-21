@@ -25,6 +25,8 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 import KeywordService from "@/Models/Keyword/KeywordService";
 import { keywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
 import UserService from "@/Models/User/UserService";
@@ -137,9 +139,9 @@ const KeywordMatchCreate: React.FC = () => {
               <FormAutoComplete
                 name="message"
                 label={keywordMatchModelMeta.fields.message.label}
-                service={MessageService}
+                service={MessagingPlatformService}
                 valueKey="id"
-                labelKey={messageModelMeta.displayField}
+                labelKey={messagingPlatformModelMeta.displayField}
               />
               <FormAutoComplete
                 name="keyword"

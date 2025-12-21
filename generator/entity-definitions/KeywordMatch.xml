@@ -13,7 +13,7 @@
         <relationship>
             <name>message</name>
             <relationshipType>MANY_TO_ONE</relationshipType>
-            <relatedEntityName>Message</relatedEntityName>
+            <relatedEntityName>MessagingPlatform</relatedEntityName>
             <joinColumnName>message_id</joinColumnName>
             <required>true</required>
             <fetch>LAZY</fetch>
