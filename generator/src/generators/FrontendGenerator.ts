@@ -263,6 +263,8 @@ export class FrontendGenerator {
 ${enumValues}
 } as const;
 
+export type ${enumName} = (typeof ${enumName})[keyof typeof ${enumName}]
+
 export const ${enumName}Labels = {
 ${labelEntries}
 };

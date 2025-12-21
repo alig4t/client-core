@@ -31,7 +31,7 @@ const {{entityName}}Table: React.FC<{{entityName}}TableProps> = ({
       queryKey="{{camelCase entityName}}"
       service={ {{entityName}}Service}
       header={ {{entityName}}TableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <{{entityName}}TableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={ {{camelCase entityName}}ModelMeta.pluralDisplayName}
@@ -39,6 +39,9 @@ const {{entityName}}Table: React.FC<{{entityName}}TableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+    // defaultSort="createdAt,desc"
+    // defaultPageSize={10}
+    // dataIdKey="id"
     />
   );
 };

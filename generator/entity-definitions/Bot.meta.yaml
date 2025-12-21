@@ -15,10 +15,11 @@ fields:
     label: توکن
     placeholder: توکن ربات را وارد کنید
     sortable: true
-
+    type: text
   status:
     label: وضعیت
     sortable: true
+    type: select
     enums:
       ACTIVE: فعال
       INACTIVE: غیرفعال
