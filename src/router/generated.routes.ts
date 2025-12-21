@@ -5,6 +5,7 @@
 import { BotRoutes } from "@/Models/Bot/Bot.routes.tsx";
 import { ChannelRoutes } from "@/Models/Channel/Channel.routes.tsx";
 import { CityRoutes } from "@/Models/City/City.routes.tsx";
+import { ComprehensiveEntityRoutes } from "@/Models/ComprehensiveEntity/ComprehensiveEntity.routes";
 import { DashboardDataRoutes } from "@/Models/DashboardData/DashboardData.routes.tsx";
 import { KeywordRoutes } from "@/Models/Keyword/Keyword.routes.tsx";
 import { KeywordMatchRoutes } from "@/Models/KeywordMatch/KeywordMatch.routes.tsx";
@@ -22,4 +23,5 @@ export const generatedRoutes = [
   ...MessagingPlatformRoutes,
   ...PersonRoutes,
   ...UserChannelRoutes,
+  ...ComprehensiveEntityRoutes
 ];

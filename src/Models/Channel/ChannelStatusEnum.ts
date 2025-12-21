@@ -1,9 +1,12 @@
-export enum ChannelStatusEnum {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-}
+export const ChannelStatusEnum = {
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+} as const;
 
-export const ChannelStatusEnumLabels = [
-  { value: ChannelStatusEnum.ACTIVE, label: "فعال" },
-  { value: ChannelStatusEnum.INACTIVE, label: "غیرفعال" },
-];
+export type ChannelStatusEnum =
+  (typeof ChannelStatusEnum)[keyof typeof ChannelStatusEnum];
+
+export const ChannelStatusEnumLabels = {
+  [ChannelStatusEnum.ACTIVE]: "فعال",
+  [ChannelStatusEnum.INACTIVE]: "غیرفعال",
+};

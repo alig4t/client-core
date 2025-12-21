@@ -26,7 +26,7 @@ const ChannelTable: React.FC<ChannelTableProps> = ({ filters, onSelectionChange 
       queryKey="channel"
       service={ChannelService}
       header={ChannelTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <ChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={channelModelMeta.pluralDisplayName}
@@ -34,6 +34,9 @@ const ChannelTable: React.FC<ChannelTableProps> = ({ filters, onSelectionChange 
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

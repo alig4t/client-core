@@ -2,21 +2,19 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { KeywordMatchModel } from "./KeywordMatchModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const keywordMatchModelMeta = createModelMeta<
-  KeywordMatchModel,
-  FormFieldMetadata
->(
+export const keywordMatchModelMeta = createModelMeta<KeywordMatchModel, FormFieldMetadata>(
   {
     matchedAt: {
       label: "زمان تطابق",
+      type: "datetime-local",
       sortable: true,
       required: true,
     },
     message: {
-      label: "پیام",
-      type: "autocomplete",
-      displayField: "content",
-      sortable: false,
+      label: "",
+      type: "",
+      displayField: "",
+      sortable: ,
       required: true,
     },
     keyword: {
@@ -36,7 +34,7 @@ export const keywordMatchModelMeta = createModelMeta<
   },
   GET_AUTOCOMPLETE_DISPLAY_FIELD(),
   GET_DISPLAY_NAME(),
-  GET_PLURAL_DISPLAY_NAME()
+  GET_PLURAL_DISPLAY_NAME(),
 );
 
 function GET_AUTOCOMPLETE_DISPLAY_FIELD(): keyof KeywordMatchModel {

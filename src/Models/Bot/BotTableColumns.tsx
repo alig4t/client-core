@@ -49,7 +49,7 @@ export const BotTableColumns: React.FC<BotTableColumnsProps> = memo(
             tooltipText="حذف"
             onClick={() => onDelete(item.id)}
             permission={Permission.Bot_Delete}
-            variant="danger"
+            className="text-[var(--color-danger)] hover:text-[var(--color-danger-hover)] transition-colors duration-200"
           >
             <Trash2 size={20} />
           </TableLink>

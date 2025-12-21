@@ -48,7 +48,7 @@ export const DashboardDataTableColumns: React.FC<DashboardDataTableColumnsProps>
             tooltipText="حذف"
             onClick={() => onDelete(item.id)}
             permission={Permission.DashboardData_Delete}
-            variant="danger"
+            className="text-[var(--color-danger)] hover:text-[var(--color-danger-hover)] transition-colors duration-200"
           >
             <Trash2 size={20} />
           </TableLink>

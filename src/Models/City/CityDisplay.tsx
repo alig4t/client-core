@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import CityService from "./CityService";
@@ -22,12 +23,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const CityDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: cityRecord,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["city", id],
     queryFn: () => CityService.getById(Number(id!)),
@@ -35,25 +37,61 @@ const CityDisplay: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.CITY_EDIT, id));
+    navigate(getViewPath(VIEWNAME.CITY_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!cityRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState message={publicMessages.record.notfound} onRetry={refetch} />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={cityModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.CITY_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.CITYS))}
+        title={publicMessages.record.displayTitle + " : " + cityRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
+        <RowContainer numberOfColumns={3}>
           <DisplayField
             label={cityModelMeta.fields.cityName.label}
-            value={cityRecord?.cityName}
+            value={cityRecord.cityName}
           />
           <DisplayField
             label={cityModelMeta.fields.country.label}
-            value={cityRecord?.country}
+            value={cityRecord.country}
           />
         </RowContainer>
       </RecordDisplayLayout>

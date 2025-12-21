@@ -18,7 +18,7 @@ export const PersonRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Person_Read,
     showInMenu: true,
-    name: VIEWNAME.PERSON,
+    name: VIEWNAME.PERSON_SEARCH,
   },
   // Create Page
   {

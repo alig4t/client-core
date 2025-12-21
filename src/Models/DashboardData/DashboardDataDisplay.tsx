@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import DashboardDataService from "./DashboardDataService";
@@ -22,12 +23,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const DashboardDataDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: dashboardDataRecord,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["dashboardData", id],
     queryFn: () => DashboardDataService.getById(Number(id!)),
@@ -35,25 +37,105 @@ const DashboardDataDisplay: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.DASHBOARD_DATA_EDIT, id));
+    navigate(getViewPath(VIEWNAME.DASHBOARD_DATA_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!dashboardDataRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState message={publicMessages.record.notfound} onRetry={refetch} />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={dashboardDataModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.DASHBOARD_DATA_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.DASHBOARD_DATAS))}
+        title={publicMessages.record.displayTitle + " : " + dashboardDataRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
+        <RowContainer numberOfColumns={3}>
           <DisplayField
             label={dashboardDataModelMeta.fields.frequencyCount.label}
-            value={dashboardDataRecord?.frequencyCount}
+            value={dashboardDataRecord.frequencyCount}
           />
           <DisplayField
             label={dashboardDataModelMeta.fields.lastMatchedAt.label}
-            value={DateUtil.GREGORIAN_TO_JALALI(dashboardDataRecord?.lastMatchedAt)}
+            value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
+              dashboardDataRecord.lastMatchedAt
+            )}
+          />
+          <DisplayField
+            label={dashboardDataModelMeta.fields.coreUser.label}
+            value={
+              dashboardDataRecord.coreUser ? (
+                <LinkView
+                  viewName={VIEWNAME.USER_DISPLAY}
+                  id={dashboardDataRecord.coreUser.id}
+                  label={dashboardDataRecord.coreUser.username}
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+          <DisplayField
+            label={dashboardDataModelMeta.fields.keyword.label}
+            value={
+              dashboardDataRecord.keyword ? (
+                <LinkView
+                  viewName={VIEWNAME.KEYWORD_DISPLAY}
+                  id={dashboardDataRecord.keyword.id}
+                  label={dashboardDataRecord.keyword.keywordText}
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+          <DisplayField
+            label={dashboardDataModelMeta.fields.channel.label}
+            value={
+              dashboardDataRecord.channel ? (
+                <LinkView
+                  viewName={VIEWNAME.CHANNEL_DISPLAY}
+                  id={dashboardDataRecord.channel.id}
+                  label={dashboardDataRecord.channel.channelName}
+                />
+              ) : (
+                "---"
+              )
+            }
           />
         </RowContainer>
       </RecordDisplayLayout>

@@ -32,7 +32,7 @@ const KeywordMatchTable: React.FC<KeywordMatchTableProps> = ({
       queryKey="keywordMatch"
       service={KeywordMatchService}
       header={KeywordMatchTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <KeywordMatchTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={keywordMatchModelMeta.pluralDisplayName}
@@ -40,6 +40,9 @@ const KeywordMatchTable: React.FC<KeywordMatchTableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

@@ -9,24 +9,28 @@ export const messagingPlatformModelMeta = createModelMeta<
   {
     platformName: {
       label: "نام پلتفرم",
+      type: "text",
       placeholder: "نام پلتفرم را وارد کنید",
       sortable: true,
       required: true,
     },
     platformKey: {
       label: "کلید پلتفرم",
+      type: "text",
       placeholder: "کلید یکتا پلتفرم",
       sortable: true,
       required: true,
     },
     apiEndpoint: {
       label: "آدرس API",
+      type: "text",
       placeholder: "https://api.example.com",
       sortable: false,
       required: true,
     },
     authMethod: {
       label: "روش احراز هویت",
+      type: "text",
       placeholder: "مثلاً Bearer Token",
       sortable: false,
       required: true,

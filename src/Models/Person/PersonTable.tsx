@@ -26,7 +26,7 @@ const PersonTable: React.FC<PersonTableProps> = ({ filters, onSelectionChange })
       queryKey="person"
       service={PersonService}
       header={PersonTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <PersonTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={personModelMeta.pluralDisplayName}
@@ -34,6 +34,9 @@ const PersonTable: React.FC<PersonTableProps> = ({ filters, onSelectionChange })
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

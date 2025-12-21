@@ -5,6 +5,7 @@
 import { BOT_VIEWNAMES } from "@/Models/Bot/Bot.viewnames";
 import { CHANNEL_VIEWNAMES } from "@/Models/Channel/Channel.viewnames";
 import { CITY_VIEWNAMES } from "@/Models/City/City.viewnames";
+import { COMPREHENSIVE_ENTITY_VIEWNAMES } from "@/Models/ComprehensiveEntity/ComprehensiveEntity.viewnames";
 import { DASHBOARD_DATA_VIEWNAMES } from "@/Models/DashboardData/DashboardData.viewnames";
 import { KEYWORD_VIEWNAMES } from "@/Models/Keyword/Keyword.viewnames";
 import { KEYWORD_MATCH_VIEWNAMES } from "@/Models/KeywordMatch/KeywordMatch.viewnames";
@@ -22,4 +23,5 @@ export const GENERATED_VIEWNAMES = {
   ...MESSAGING_PLATFORM_VIEWNAMES,
   ...PERSON_VIEWNAMES,
   ...USER_CHANNEL_VIEWNAMES,
+  ...COMPREHENSIVE_ENTITY_VIEWNAMES
 } as const;

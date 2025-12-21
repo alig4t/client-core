@@ -32,7 +32,7 @@ const MessagingPlatformTable: React.FC<MessagingPlatformTableProps> = ({
       queryKey="messagingPlatform"
       service={MessagingPlatformService}
       header={MessagingPlatformTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <MessagingPlatformTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={messagingPlatformModelMeta.pluralDisplayName}
@@ -40,6 +40,9 @@ const MessagingPlatformTable: React.FC<MessagingPlatformTableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

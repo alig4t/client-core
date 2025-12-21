@@ -18,7 +18,7 @@ export const MessagingPlatformRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.MessagingPlatform_Read,
     showInMenu: true,
-    name: VIEWNAME.MESSAGING_PLATFORM,
+    name: VIEWNAME.MESSAGING_PLATFORM_SEARCH,
   },
   // Create Page
   {

@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import CityService from "./CityService";
@@ -21,10 +21,12 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 
 const citySchema = z.object({
-  cityName: Validator.text(),
-  country: Validator.text(),
+  cityName: Validator.notNull(),
+  country: Validator.notNull(),
 });
 
 type CityFormData = z.infer<typeof citySchema>;
@@ -33,8 +35,8 @@ const CityCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["city", id],
@@ -52,12 +54,31 @@ const CityCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? cityModelMeta.messages.update.success.title
+          : cityModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? cityModelMeta.messages.update.success.description
+            : cityModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.CITYS));
+      queryClient.invalidateQueries({ queryKey: ["city"] });
+      navigate(getViewPath(VIEWNAME.CITY_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? cityModelMeta.messages.update.error.title
+          : cityModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? cityModelMeta.messages.update.error.description
+            : cityModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -65,44 +86,77 @@ const CityCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.CITY_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? cityModelMeta.messages.pageTitle.edit
+      : cityModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${cityModelMeta.displayName}`
-                : `ایجاد ${cityModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? cityModelMeta.messages.pageTitle.edit
+              : cityModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={citySchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
-            <RowContainer></RowContainer>
+            <RowContainer>
+              <FormInput
+                name="cityName"
+                label={cityModelMeta.fields.cityName.label}
+                placeholder={cityModelMeta.fields.cityName.placeholder}
+                maxLength={100}
+              />
+              <FormInput
+                name="country"
+                label={cityModelMeta.fields.country.label}
+                placeholder={cityModelMeta.fields.country.placeholder}
+                maxLength={100}
+              />
+            </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.CITYS))}
+                onClick={() => navigate(getViewPath(VIEWNAME.CITY_SEARCH))}
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );

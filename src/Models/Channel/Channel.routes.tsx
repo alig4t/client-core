@@ -18,7 +18,7 @@ export const ChannelRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Channel_Read,
     showInMenu: true,
-    name: VIEWNAME.CHANNEL,
+    name: VIEWNAME.CHANNEL_SEARCH,
   },
   // Create Page
   {

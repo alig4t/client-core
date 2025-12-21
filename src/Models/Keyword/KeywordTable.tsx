@@ -26,7 +26,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ filters, onSelectionChange 
       queryKey="keyword"
       service={KeywordService}
       header={KeywordTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <KeywordTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={keywordModelMeta.pluralDisplayName}
@@ -34,6 +34,9 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ filters, onSelectionChange 
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

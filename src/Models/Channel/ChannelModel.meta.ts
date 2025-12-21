@@ -6,18 +6,21 @@ export const channelModelMeta = createModelMeta<ChannelModel, FormFieldMetadata>
   {
     channelName: {
       label: "نام کانال",
+      type: "text",
       placeholder: "نام کانال را وارد کنید",
       sortable: true,
       required: true,
     },
     channelIdentifier: {
       label: "شناسه کانال",
+      type: "text",
       placeholder: "شناسه یکتا کانال",
       sortable: true,
       required: true,
     },
     status: {
       label: "وضعیت",
+      type: "select",
       sortable: true,
       required: true,
       options: [
@@ -34,7 +37,7 @@ export const channelModelMeta = createModelMeta<ChannelModel, FormFieldMetadata>
     },
     bots: {
       label: "ربات‌ها",
-      type: "multiAutoComplete",
+      type: "autocomplete",
       displayField: "token",
       sortable: false,
     },

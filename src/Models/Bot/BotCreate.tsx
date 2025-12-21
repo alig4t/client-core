@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import BotService from "./BotService";
@@ -23,11 +23,14 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 
 const botSchema = z.object({
-  token: Validator.text(),
-  status: Validator.select(),
+  token: Validator.notNull(),
+  status: Validator.notNull(),
   platform: Validator.notNull(),
 });
 
@@ -37,8 +40,8 @@ const BotCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["bot", id],
@@ -56,12 +59,31 @@ const BotCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? botModelMeta.messages.update.success.title
+          : botModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? botModelMeta.messages.update.success.description
+            : botModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.BOTS));
+      queryClient.invalidateQueries({ queryKey: ["bot"] });
+      navigate(getViewPath(VIEWNAME.BOT_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? botModelMeta.messages.update.error.title
+          : botModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? botModelMeta.messages.update.error.description
+            : botModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -69,50 +91,83 @@ const BotCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.BOT_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? botModelMeta.messages.pageTitle.edit
+      : botModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${botModelMeta.displayName}`
-                : `ایجاد ${botModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? botModelMeta.messages.pageTitle.edit
+              : botModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={botSchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
             <RowContainer>
+              <FormInput
+                name="token"
+                label={botModelMeta.fields.token.label}
+                placeholder={botModelMeta.fields.token.placeholder}
+                maxLength={255}
+              />
+              <FormSelect
+                name="status"
+                label={botModelMeta.fields.status.label}
+                options={botModelMeta.fields.status.options || []}
+              />
               <FormAutoComplete
                 name="platform"
                 label={botModelMeta.fields.platform.label}
                 service={MessagingPlatformService}
+                valueKey="id"
+                labelKey={messagingPlatformModelMeta.displayField}
               />
             </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.BOTS))}
+                onClick={() => navigate(getViewPath(VIEWNAME.BOT_SEARCH))}
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );

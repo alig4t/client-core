@@ -18,7 +18,7 @@ export const KeywordMatchRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.KeywordMatch_Read,
     showInMenu: true,
-    name: VIEWNAME.KEYWORD_MATCH,
+    name: VIEWNAME.KEYWORD_MATCH_SEARCH,
   },
   // Create Page
   {

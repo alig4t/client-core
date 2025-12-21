@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import KeywordService from "./KeywordService";
@@ -22,11 +22,17 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import ChannelService from "@/Models/Channel/ChannelService";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
+import { userModelMeta } from "@/Models/User/UserModel.meta";
+import ChannelService from "@/Models/Channel/ChannelService";
+import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
+import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 
 const keywordSchema = z.object({
-  keywordText: Validator.text(),
+  keywordText: Validator.notNull(),
   coreUser: Validator.notNull(),
   channel: Validator.notNull(),
   messages: Validator.optional(),
@@ -38,8 +44,8 @@ const KeywordCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["keyword", id],
@@ -57,12 +63,31 @@ const KeywordCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? keywordModelMeta.messages.update.success.title
+          : keywordModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? keywordModelMeta.messages.update.success.description
+            : keywordModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.KEYWORDS));
+      queryClient.invalidateQueries({ queryKey: ["keyword"] });
+      navigate(getViewPath(VIEWNAME.KEYWORD_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? keywordModelMeta.messages.update.error.title
+          : keywordModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? keywordModelMeta.messages.update.error.description
+            : keywordModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -70,61 +95,92 @@ const KeywordCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.KEYWORD_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? keywordModelMeta.messages.pageTitle.edit
+      : keywordModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${keywordModelMeta.displayName}`
-                : `ایجاد ${keywordModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? keywordModelMeta.messages.pageTitle.edit
+              : keywordModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={keywordSchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
             <RowContainer>
+              <FormInput
+                name="keywordText"
+                label={keywordModelMeta.fields.keywordText.label}
+                placeholder={keywordModelMeta.fields.keywordText.placeholder}
+                maxLength={100}
+              />
               <FormAutoComplete
                 name="coreUser"
                 label={keywordModelMeta.fields.coreUser.label}
                 service={UserService}
+                valueKey="id"
+                labelKey={userModelMeta.displayField}
               />
               <FormAutoComplete
                 name="channel"
                 label={keywordModelMeta.fields.channel.label}
                 service={ChannelService}
+                valueKey="id"
+                labelKey={channelModelMeta.displayField}
               />
               <FormAutoComplete
                 name="messages"
                 label={keywordModelMeta.fields.messages.label}
-                service={MessageService}
-                multiple
+                service={MessagingPlatformService}
+                labelKey={messagingPlatformModelMeta.displayField}
+                valueKey="id"
               />
             </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.KEYWORDS))}
+                onClick={() => navigate(getViewPath(VIEWNAME.KEYWORD_SEARCH))}
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );

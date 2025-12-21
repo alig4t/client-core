@@ -109,7 +109,7 @@
         <relationship>
             <name>manyToManyMessages</name>
             <relationshipType>MANY_TO_MANY</relationshipType>
-            <relatedEntityName>Message</relatedEntityName>
+            <relatedEntityName>MessagingPlatform</relatedEntityName>
             <joinTableName>comprehensive_message</joinTableName>
         </relationship>
         

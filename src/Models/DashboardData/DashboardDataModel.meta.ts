@@ -9,12 +9,14 @@ export const dashboardDataModelMeta = createModelMeta<
   {
     frequencyCount: {
       label: "تعداد تکرار",
+      type: "number",
       placeholder: "تعداد",
       sortable: true,
       required: true,
     },
     lastMatchedAt: {
       label: "آخرین تطابق",
+      type: "datetime-local",
       sortable: true,
       required: true,
     },

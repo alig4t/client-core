@@ -1,9 +1,12 @@
-export enum ComprehensiveEntityEnumFieldEnum {
-  OPTION_A = "OPTION_A",
-  OPTION_B = "OPTION_B",
-}
+export const ComprehensiveEntityEnumFieldEnum = {
+  OPTION_A: "OPTION_A",
+  OPTION_B: "OPTION_B",
+} as const;
 
-export const ComprehensiveEntityEnumFieldEnumLabels = [
-  { value: ComprehensiveEntityEnumFieldEnum.OPTION_A, label: "گزینه A" },
-  { value: ComprehensiveEntityEnumFieldEnum.OPTION_B, label: "گزینه B" },
-];
+export type ComprehensiveEntityEnumFieldEnum =
+  (typeof ComprehensiveEntityEnumFieldEnum)[keyof typeof ComprehensiveEntityEnumFieldEnum];
+
+export const ComprehensiveEntityEnumFieldEnumLabels = {
+  [ComprehensiveEntityEnumFieldEnum.OPTION_A]: "گزینه A",
+  [ComprehensiveEntityEnumFieldEnum.OPTION_B]: "گزینه B",
+};

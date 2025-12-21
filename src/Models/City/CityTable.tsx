@@ -26,7 +26,7 @@ const CityTable: React.FC<CityTableProps> = ({ filters, onSelectionChange }) => 
       queryKey="city"
       service={CityService}
       header={CityTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <CityTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={cityModelMeta.pluralDisplayName}
@@ -34,6 +34,9 @@ const CityTable: React.FC<CityTableProps> = ({ filters, onSelectionChange }) => 
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

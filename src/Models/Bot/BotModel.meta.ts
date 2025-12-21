@@ -6,12 +6,14 @@ export const botModelMeta = createModelMeta<BotModel, FormFieldMetadata>(
   {
     token: {
       label: "توکن",
+      type: "text",
       placeholder: "توکن ربات را وارد کنید",
       sortable: true,
       required: true,
     },
     status: {
       label: "وضعیت",
+      type: "select",
       sortable: true,
       required: true,
       options: [

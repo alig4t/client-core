@@ -26,7 +26,7 @@ const BotTable: React.FC<BotTableProps> = ({ filters, onSelectionChange }) => {
       queryKey="bot"
       service={BotService}
       header={BotTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <BotTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={botModelMeta.pluralDisplayName}
@@ -34,6 +34,9 @@ const BotTable: React.FC<BotTableProps> = ({ filters, onSelectionChange }) => {
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

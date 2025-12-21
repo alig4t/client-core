@@ -32,7 +32,7 @@ const DashboardDataTable: React.FC<DashboardDataTableProps> = ({
       queryKey="dashboardData"
       service={DashboardDataService}
       header={DashboardDataTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <DashboardDataTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={dashboardDataModelMeta.pluralDisplayName}
@@ -40,6 +40,9 @@ const DashboardDataTable: React.FC<DashboardDataTableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

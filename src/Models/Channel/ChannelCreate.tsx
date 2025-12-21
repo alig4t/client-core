@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import ChannelService from "./ChannelService";
@@ -23,13 +23,17 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 import BotService from "@/Models/Bot/BotService";
+import { botModelMeta } from "@/Models/Bot/BotModel.meta";
 
 const channelSchema = z.object({
-  channelName: Validator.text(),
-  channelIdentifier: Validator.text(),
-  status: Validator.select(),
+  channelName: Validator.notNull(),
+  channelIdentifier: Validator.notNull(),
+  status: Validator.notNull(),
   platform: Validator.notNull(),
   bots: Validator.optional(),
 });
@@ -40,8 +44,8 @@ const ChannelCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["channel", id],
@@ -59,12 +63,31 @@ const ChannelCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? channelModelMeta.messages.update.success.title
+          : channelModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? channelModelMeta.messages.update.success.description
+            : channelModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.CHANNELS));
+      queryClient.invalidateQueries({ queryKey: ["channel"] });
+      navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? channelModelMeta.messages.update.error.title
+          : channelModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? channelModelMeta.messages.update.error.description
+            : channelModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -72,56 +95,96 @@ const ChannelCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? channelModelMeta.messages.pageTitle.edit
+      : channelModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${channelModelMeta.displayName}`
-                : `ایجاد ${channelModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? channelModelMeta.messages.pageTitle.edit
+              : channelModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={channelSchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
             <RowContainer>
+              <FormInput
+                name="channelName"
+                label={channelModelMeta.fields.channelName.label}
+                placeholder={channelModelMeta.fields.channelName.placeholder}
+                maxLength={100}
+              />
+              <FormInput
+                name="channelIdentifier"
+                label={channelModelMeta.fields.channelIdentifier.label}
+                placeholder={channelModelMeta.fields.channelIdentifier.placeholder}
+                maxLength={255}
+              />
+              <FormSelect
+                name="status"
+                label={channelModelMeta.fields.status.label}
+                options={channelModelMeta.fields.status.options || []}
+              />
               <FormAutoComplete
                 name="platform"
                 label={channelModelMeta.fields.platform.label}
                 service={MessagingPlatformService}
+                valueKey="id"
+                labelKey={messagingPlatformModelMeta.displayField}
               />
               <FormAutoComplete
                 name="bots"
                 label={channelModelMeta.fields.bots.label}
                 service={BotService}
-                multiple
+                labelKey={botModelMeta.displayField}
+                valueKey="id"
               />
             </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.CHANNELS))}
+                onClick={() => navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH))}
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );

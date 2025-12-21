@@ -6,6 +6,7 @@ export const userChannelModelMeta = createModelMeta<UserChannelModel, FormFieldM
   {
     role: {
       label: "نقش",
+      type: "select",
       sortable: true,
       required: true,
       options: [

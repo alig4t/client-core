@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import MessagingPlatformService from "./MessagingPlatformService";
@@ -22,12 +23,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const MessagingPlatformDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: messagingPlatformRecord,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["messagingPlatform", id],
     queryFn: () => MessagingPlatformService.getById(Number(id!)),
@@ -35,25 +37,69 @@ const MessagingPlatformDisplay: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.MESSAGING_PLATFORM_EDIT, id));
+    navigate(getViewPath(VIEWNAME.MESSAGING_PLATFORM_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!messagingPlatformRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState message={publicMessages.record.notfound} onRetry={refetch} />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={messagingPlatformModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.MESSAGING_PLATFORM_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.MESSAGING_PLATFORMS))}
+        title={publicMessages.record.displayTitle + " : " + messagingPlatformRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
+        <RowContainer numberOfColumns={3}>
           <DisplayField
             label={messagingPlatformModelMeta.fields.platformName.label}
-            value={messagingPlatformRecord?.platformName}
+            value={messagingPlatformRecord.platformName}
           />
           <DisplayField
             label={messagingPlatformModelMeta.fields.platformKey.label}
-            value={messagingPlatformRecord?.platformKey}
+            value={messagingPlatformRecord.platformKey}
+          />
+          <DisplayField
+            label={messagingPlatformModelMeta.fields.apiEndpoint.label}
+            value={messagingPlatformRecord.apiEndpoint}
+          />
+          <DisplayField
+            label={messagingPlatformModelMeta.fields.authMethod.label}
+            value={messagingPlatformRecord.authMethod}
           />
         </RowContainer>
       </RecordDisplayLayout>

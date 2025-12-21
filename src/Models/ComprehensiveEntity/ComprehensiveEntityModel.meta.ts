@@ -9,56 +9,66 @@ export const comprehensiveEntityModelMeta = createModelMeta<
   {
     stringField: {
       label: "رشته",
+      type: "text",
       placeholder: "مقدار رشته‌ای را وارد کنید",
       sortable: true,
       required: true,
     },
     integerField: {
       label: "عدد صحیح",
+      type: "number",
       placeholder: "مثلاً 42",
       sortable: true,
       required: false,
     },
     longField: {
       label: "عدد بلند",
+      type: "number",
       placeholder: "مثلاً 9007199254740991",
       sortable: true,
       required: false,
     },
     doubleField: {
       label: "عدد اعشاری",
+      type: "number",
       placeholder: "مثلاً 3.14",
       sortable: true,
       required: false,
     },
     bigDecimalField: {
       label: "عدد دقیق (BigDecimal)",
+      type: "text",
       placeholder: "مثلاً 123.456789",
       sortable: true,
       required: false,
     },
     booleanField: {
       label: "بولین",
+      type: "boolean",
       sortable: true,
       required: false,
     },
     dateField: {
       label: "تاریخ و زمان (UTC)",
+      type: "date",
       sortable: true,
       required: false,
     },
     localDateField: {
       label: "تاریخ (بدون زمان)",
+      type: "date",
       sortable: false,
       required: false,
     },
     localDateTimeField: {
       label: "تاریخ و زمان محلی",
+      type: "datetime-local",
       sortable: false,
       required: false,
     },
     enumField: {
       label: "گزینه‌ها",
+      type: "select",
       sortable: false,
       required: false,
       options: [
@@ -68,12 +78,14 @@ export const comprehensiveEntityModelMeta = createModelMeta<
     },
     uniqueField: {
       label: "فیلد یکتا",
+      type: "text",
       placeholder: "مقدار یکتا",
       sortable: false,
       required: true,
     },
     indexedField: {
       label: "فیلد ایندکس‌شده",
+      type: "text",
       placeholder: "مقدار ایندکس‌شده",
       sortable: false,
       required: false,
@@ -94,13 +106,13 @@ export const comprehensiveEntityModelMeta = createModelMeta<
     },
     oneToManyKeywords: {
       label: "کلمات کلیدی",
-      type: "multiAutoComplete",
+      type: "autocomplete",
       displayField: "keyword",
       sortable: false,
     },
     manyToManyMessages: {
       label: "پیام‌ها",
-      type: "multiAutoComplete",
+      type: "autocomplete",
       displayField: "content",
       sortable: false,
     },

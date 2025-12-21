@@ -21,7 +21,6 @@ fields:
     enums:
       ACTIVE: فعال
       INACTIVE: غیرفعال
-    type: select
 relationships:
   platform:
     label: پلتفرم

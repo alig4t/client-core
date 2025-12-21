@@ -18,7 +18,7 @@ export const ComprehensiveEntityRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.ComprehensiveEntity_Read,
     showInMenu: true,
-    name: VIEWNAME.COMPREHENSIVE_ENTITY,
+    name: VIEWNAME.COMPREHENSIVE_ENTITY_SEARCH,
   },
   // Create Page
   {

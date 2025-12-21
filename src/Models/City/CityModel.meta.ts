@@ -6,12 +6,14 @@ export const cityModelMeta = createModelMeta<CityModel, FormFieldMetadata>(
   {
     cityName: {
       label: "نام شهر",
+      type: "text",
       placeholder: "نام شهر را وارد کنید",
       sortable: true,
       required: true,
     },
     country: {
       label: "کشور",
+      type: "text",
       placeholder: "نام کشور را وارد کنید",
       sortable: true,
       required: true,

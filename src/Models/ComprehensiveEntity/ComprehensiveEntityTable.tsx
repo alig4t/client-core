@@ -32,7 +32,7 @@ const ComprehensiveEntityTable: React.FC<ComprehensiveEntityTableProps> = ({
       queryKey="comprehensiveEntity"
       service={ComprehensiveEntityService}
       header={ComprehensiveEntityTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <ComprehensiveEntityTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={comprehensiveEntityModelMeta.pluralDisplayName}
@@ -40,6 +40,9 @@ const ComprehensiveEntityTable: React.FC<ComprehensiveEntityTableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

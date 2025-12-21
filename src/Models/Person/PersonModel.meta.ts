@@ -6,24 +6,28 @@ export const personModelMeta = createModelMeta<PersonModel, FormFieldMetadata>(
   {
     firstName: {
       label: "نام",
+      type: "text",
       placeholder: "نام را وارد کنید",
       sortable: true,
       required: true,
     },
     lastName: {
       label: "نام خانوادگی",
+      type: "text",
       placeholder: "نام خانوادگی را وارد کنید",
       sortable: true,
       required: true,
     },
     nationalId: {
       label: "کد ملی",
+      type: "text",
       placeholder: "کد ملی 10 رقمی",
       sortable: false,
       required: false,
     },
     birthDate: {
       label: "تاریخ تولد",
+      type: "date",
       sortable: false,
       required: false,
     },

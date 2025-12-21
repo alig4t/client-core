@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import UserChannelService from "./UserChannelService";
@@ -23,11 +23,15 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import ChannelService from "@/Models/Channel/ChannelService";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
+import { userModelMeta } from "@/Models/User/UserModel.meta";
+import ChannelService from "@/Models/Channel/ChannelService";
+import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
 
 const userChannelSchema = z.object({
-  role: Validator.select(),
+  role: Validator.notNull(),
   coreUser: Validator.notNull(),
   channel: Validator.notNull(),
 });
@@ -38,8 +42,8 @@ const UserChannelCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["userChannel", id],
@@ -57,12 +61,31 @@ const UserChannelCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? userChannelModelMeta.messages.update.success.title
+          : userChannelModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? userChannelModelMeta.messages.update.success.description
+            : userChannelModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.USER_CHANNELS));
+      queryClient.invalidateQueries({ queryKey: ["userChannel"] });
+      navigate(getViewPath(VIEWNAME.USER_CHANNEL_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? userChannelModelMeta.messages.update.error.title
+          : userChannelModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? userChannelModelMeta.messages.update.error.description
+            : userChannelModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -70,55 +93,84 @@ const UserChannelCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.USER_CHANNEL_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? userChannelModelMeta.messages.pageTitle.edit
+      : userChannelModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${userChannelModelMeta.displayName}`
-                : `ایجاد ${userChannelModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? userChannelModelMeta.messages.pageTitle.edit
+              : userChannelModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={userChannelSchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
             <RowContainer>
+              <FormSelect
+                name="role"
+                label={userChannelModelMeta.fields.role.label}
+                options={userChannelModelMeta.fields.role.options || []}
+              />
               <FormAutoComplete
                 name="coreUser"
                 label={userChannelModelMeta.fields.coreUser.label}
                 service={UserService}
+                valueKey="id"
+                labelKey={userModelMeta.displayField}
               />
               <FormAutoComplete
                 name="channel"
                 label={userChannelModelMeta.fields.channel.label}
                 service={ChannelService}
+                valueKey="id"
+                labelKey={channelModelMeta.displayField}
               />
             </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.USER_CHANNELS))}
+                onClick={() => navigate(getViewPath(VIEWNAME.USER_CHANNEL_SEARCH))}
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );

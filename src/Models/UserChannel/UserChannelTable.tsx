@@ -32,7 +32,7 @@ const UserChannelTable: React.FC<UserChannelTableProps> = ({
       queryKey="userChannel"
       service={UserChannelService}
       header={UserChannelTableHeaders}
-      renderRow={(item, onDelete) => (
+      renderRow={(item, index, onDelete) => (
         <UserChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
       title={userChannelModelMeta.pluralDisplayName}
@@ -40,6 +40,9 @@ const UserChannelTable: React.FC<UserChannelTableProps> = ({
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}
+      // defaultSort="createdAt,desc"
+      // defaultPageSize={10}
+      // dataIdKey="id"
     />
   );
 };

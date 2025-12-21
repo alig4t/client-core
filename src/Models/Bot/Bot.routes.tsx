@@ -18,7 +18,7 @@ export const BotRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.Bot_Read,
     showInMenu: true,
-    name: VIEWNAME.BOT,
+    name: VIEWNAME.BOT_SEARCH,
   },
   // Create Page
   {

@@ -18,7 +18,7 @@ export const CityRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.City_Read,
     showInMenu: true,
-    name: VIEWNAME.CITY,
+    name: VIEWNAME.CITY_SEARCH,
   },
   // Create Page
   {

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import KeywordMatchService from "./KeywordMatchService";
@@ -22,12 +23,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const KeywordMatchDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: keywordMatchRecord,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["keywordMatch", id],
     queryFn: () => KeywordMatchService.getById(Number(id!)),
@@ -35,21 +37,102 @@ const KeywordMatchDisplay: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.KEYWORD_MATCH_EDIT, id));
+    navigate(getViewPath(VIEWNAME.KEYWORD_MATCH_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!keywordMatchRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={publicMessages.record.notfound}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={keywordMatchModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.KEYWORD_MATCH_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.KEYWORD_MATCHS))}
+        title={publicMessages.record.displayTitle + " : " + keywordMatchRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
+        <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={keywordMatchModelMeta.fields.matchedAt.label}
-            value={DateUtil.GREGORIAN_TO_JALALI(keywordMatchRecord?.matchedAt)}
+            label={ keywordMatchModelMeta.fields.matchedAt.label}
+            value={ DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(keywordMatchRecord.matchedAt) }
+          />
+          <DisplayField
+            label={ keywordMatchModelMeta.fields.message.label}
+            value={
+              keywordMatchRecord.message ? (
+                <LinkView
+                  viewName={VIEWNAME.MESSAGE_DISPLAY}
+                  id={ keywordMatchRecord.message.id}
+                  label={ keywordMatchRecord.message. }
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+          <DisplayField
+            label={ keywordMatchModelMeta.fields.keyword.label}
+            value={
+              keywordMatchRecord.keyword ? (
+                <LinkView
+                  viewName={VIEWNAME.KEYWORD_DISPLAY}
+                  id={ keywordMatchRecord.keyword.id}
+                  label={ keywordMatchRecord.keyword.keywordText }
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+          <DisplayField
+            label={ keywordMatchModelMeta.fields.coreUser.label}
+            value={
+              keywordMatchRecord.coreUser ? (
+                <LinkView
+                  viewName={VIEWNAME.USER_DISPLAY}
+                  id={ keywordMatchRecord.coreUser.id}
+                  label={ keywordMatchRecord.coreUser.username }
+                />
+              ) : (
+                "---"
+              )
+            }
           />
         </RowContainer>
       </RecordDisplayLayout>

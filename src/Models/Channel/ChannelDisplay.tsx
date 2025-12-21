@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import ChannelService from "./ChannelService";
@@ -15,6 +16,7 @@ import Button from "@/core/components/general/button/Button";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { getViewPath } from "@/core/router/RouteUtils";
+import { ChannelStatusEnumLabels } from "./ChannelStatusEnum";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 import { publicMessages } from "@/core/forms/MessageUtils";
@@ -22,12 +24,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const ChannelDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: channelRecord,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["channel", id],
     queryFn: () => ChannelService.getById(Number(id!)),
@@ -35,32 +38,85 @@ const ChannelDisplay: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.CHANNEL_EDIT, id));
+    navigate(getViewPath(VIEWNAME.CHANNEL_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!channelRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState message={publicMessages.record.notfound} onRetry={refetch} />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={channelModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.CHANNEL_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.CHANNELS))}
+        title={publicMessages.record.displayTitle + " : " + channelRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
+        <RowContainer numberOfColumns={3}>
           <DisplayField
             label={channelModelMeta.fields.channelName.label}
-            value={channelRecord?.channelName}
+            value={channelRecord.channelName}
           />
           <DisplayField
             label={channelModelMeta.fields.channelIdentifier.label}
-            value={channelRecord?.channelIdentifier}
+            value={channelRecord.channelIdentifier}
           />
           <DisplayField
             label={channelModelMeta.fields.status.label}
-            value={OptionUtils.getLabel(
-              channelRecord?.status,
-              channelModelMeta.fields.status.options
-            )}
+            value={OptionUtils.getLabel(channelRecord.status, ChannelStatusEnumLabels)}
+          />
+          <DisplayField
+            label={channelModelMeta.fields.platform.label}
+            value={
+              channelRecord.platform ? (
+                <LinkView
+                  viewName={VIEWNAME.MESSAGING_PLATFORM_DISPLAY}
+                  id={channelRecord.platform.id}
+                  label={channelRecord.platform.platformName}
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+          <DisplayField
+            label={channelModelMeta.fields.bots.label}
+            value={
+              channelRecord.bots?.map((item: any) => item?.token)?.join(", ") || "---"
+            }
           />
         </RowContainer>
       </RecordDisplayLayout>

@@ -1,9 +1,12 @@
-export enum UserChannelRoleEnum {
-  OWNER = "OWNER",
-  MEMBER = "MEMBER",
-}
+export const UserChannelRoleEnum = {
+  OWNER: "OWNER",
+  MEMBER: "MEMBER",
+} as const;
 
-export const UserChannelRoleEnumLabels = [
-  { value: UserChannelRoleEnum.OWNER, label: "مالک" },
-  { value: UserChannelRoleEnum.MEMBER, label: "عضو" },
-];
+export type UserChannelRoleEnum =
+  (typeof UserChannelRoleEnum)[keyof typeof UserChannelRoleEnum];
+
+export const UserChannelRoleEnumLabels = {
+  [UserChannelRoleEnum.OWNER]: "مالک",
+  [UserChannelRoleEnum.MEMBER]: "عضو",
+};

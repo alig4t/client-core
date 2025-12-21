@@ -1,9 +1,11 @@
-export enum BotStatusEnum {
-  ACTIVE = "ACTIVE",
-  INACTIVE = "INACTIVE",
-}
+export const BotStatusEnum = {
+  ACTIVE: "ACTIVE",
+  INACTIVE: "INACTIVE",
+} as const;
 
-export const BotStatusEnumLabels = [
-  { value: BotStatusEnum.ACTIVE, label: "فعال" },
-  { value: BotStatusEnum.INACTIVE, label: "غیرفعال" },
-];
+export type BotStatusEnum = (typeof BotStatusEnum)[keyof typeof BotStatusEnum];
+
+export const BotStatusEnumLabels = {
+  [BotStatusEnum.ACTIVE]: "فعال",
+  [BotStatusEnum.INACTIVE]: "غیرفعال",
+};

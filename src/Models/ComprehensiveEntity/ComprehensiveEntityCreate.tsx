@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import ComprehensiveEntityService from "./ComprehensiveEntityService";
@@ -25,12 +25,21 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import ChannelService from "@/Models/Channel/ChannelService";
-import KeywordService from "@/Models/Keyword/KeywordService";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
+import { userModelMeta } from "@/Models/User/UserModel.meta";
+import ChannelService from "@/Models/Channel/ChannelService";
+import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
+import KeywordService from "@/Models/Keyword/KeywordService";
+import { keywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
+import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import DocumentService from "@/Models/Document/DocumentService";
+import { documentModelMeta } from "@/Models/Document/DocumentModel.meta";
 
 const comprehensiveEntitySchema = z.object({
-  stringField: Validator.text(),
+  stringField: Validator.notNull(),
   integerField: Validator.optional(),
   longField: Validator.optional(),
   doubleField: Validator.optional(),
@@ -40,7 +49,7 @@ const comprehensiveEntitySchema = z.object({
   localDateField: Validator.optional(),
   localDateTimeField: Validator.optional(),
   enumField: Validator.optional(),
-  uniqueField: Validator.text(),
+  uniqueField: Validator.notNull(),
   indexedField: Validator.optional(),
   oneToOneUser: Validator.notNull(),
   manyToOneChannel: Validator.notNull(),
@@ -55,8 +64,8 @@ const ComprehensiveEntityCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["comprehensiveEntity", id],
@@ -74,12 +83,31 @@ const ComprehensiveEntityCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? comprehensiveEntityModelMeta.messages.update.success.title
+          : comprehensiveEntityModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? comprehensiveEntityModelMeta.messages.update.success.description
+            : comprehensiveEntityModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.COMPREHENSIVE_ENTITYS));
+      queryClient.invalidateQueries({ queryKey: ["comprehensiveEntity"] });
+      navigate(getViewPath(VIEWNAME.COMPREHENSIVE_ENTITY_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? comprehensiveEntityModelMeta.messages.update.error.title
+          : comprehensiveEntityModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? comprehensiveEntityModelMeta.messages.update.error.description
+            : comprehensiveEntityModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -87,73 +115,161 @@ const ComprehensiveEntityCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.COMPREHENSIVE_ENTITY_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? comprehensiveEntityModelMeta.messages.pageTitle.edit
+      : comprehensiveEntityModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${comprehensiveEntityModelMeta.displayName}`
-                : `ایجاد ${comprehensiveEntityModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? comprehensiveEntityModelMeta.messages.pageTitle.edit
+              : comprehensiveEntityModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={comprehensiveEntitySchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
             <RowContainer>
+              <FormInput
+                name="stringField"
+                label={comprehensiveEntityModelMeta.fields.stringField.label}
+                placeholder={comprehensiveEntityModelMeta.fields.stringField.placeholder}
+                maxLength={100}
+              />
+              <FormInput
+                name="integerField"
+                label={comprehensiveEntityModelMeta.fields.integerField.label}
+                type="number"
+              />
+              <FormInput
+                name="longField"
+                label={comprehensiveEntityModelMeta.fields.longField.label}
+                type="number"
+              />
+              <FormInput
+                name="doubleField"
+                label={comprehensiveEntityModelMeta.fields.doubleField.label}
+                type="number"
+              />
+              <FormInput
+                name="bigDecimalField"
+                label={comprehensiveEntityModelMeta.fields.bigDecimalField.label}
+                placeholder={
+                  comprehensiveEntityModelMeta.fields.bigDecimalField.placeholder
+                }
+              />
+              <Checkbox
+                name="booleanField"
+                label={comprehensiveEntityModelMeta.fields.booleanField.label}
+              />
+              <DateInput
+                name="dateField"
+                label={comprehensiveEntityModelMeta.fields.dateField.label}
+              />
+              <DateInput
+                name="localDateField"
+                label={comprehensiveEntityModelMeta.fields.localDateField.label}
+              />
+              <DateInput
+                name="localDateTimeField"
+                label={comprehensiveEntityModelMeta.fields.localDateTimeField.label}
+              />
+              <FormSelect
+                name="enumField"
+                label={comprehensiveEntityModelMeta.fields.enumField.label}
+                options={comprehensiveEntityModelMeta.fields.enumField.options || []}
+              />
+              <FormInput
+                name="uniqueField"
+                label={comprehensiveEntityModelMeta.fields.uniqueField.label}
+                placeholder={comprehensiveEntityModelMeta.fields.uniqueField.placeholder}
+              />
+              <FormInput
+                name="indexedField"
+                label={comprehensiveEntityModelMeta.fields.indexedField.label}
+                placeholder={comprehensiveEntityModelMeta.fields.indexedField.placeholder}
+              />
               <FormAutoComplete
                 name="oneToOneUser"
                 label={comprehensiveEntityModelMeta.fields.oneToOneUser.label}
                 service={UserService}
+                valueKey="id"
+                labelKey={userModelMeta.displayField}
               />
               <FormAutoComplete
                 name="manyToOneChannel"
                 label={comprehensiveEntityModelMeta.fields.manyToOneChannel.label}
                 service={ChannelService}
+                valueKey="id"
+                labelKey={channelModelMeta.displayField}
               />
               <FormAutoComplete
                 name="oneToManyKeywords"
                 label={comprehensiveEntityModelMeta.fields.oneToManyKeywords.label}
                 service={KeywordService}
-                multiple
+                labelKey={keywordModelMeta.displayField}
+                valueKey="id"
               />
               <FormAutoComplete
                 name="manyToManyMessages"
                 label={comprehensiveEntityModelMeta.fields.manyToManyMessages.label}
-                service={MessageService}
-                multiple
+                service={MessagingPlatformService}
+                labelKey={messagingPlatformModelMeta.displayField}
+                valueKey="id"
               />
               <FormAutoComplete
                 name="attachments"
                 label={comprehensiveEntityModelMeta.fields.attachments.label}
                 service={DocumentService}
-                multiple
+                labelKey={documentModelMeta.displayField}
+                valueKey="id"
               />
             </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.COMPREHENSIVE_ENTITYS))}
+                onClick={() =>
+                  navigate(getViewPath(VIEWNAME.COMPREHENSIVE_ENTITY_SEARCH))
+                }
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );

@@ -4,6 +4,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import PersonService from "./PersonService";
@@ -22,12 +23,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const PersonDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: personRecord,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["person", id],
     queryFn: () => PersonService.getById(Number(id!)),
@@ -35,25 +37,97 @@ const PersonDisplay: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.PERSON_EDIT, id));
+    navigate(getViewPath(VIEWNAME.PERSON_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!personRecord) {
+    return (
+      <PageWrapper>
+        <TableErrorState message={publicMessages.record.notfound} onRetry={refetch} />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={personModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.PERSON_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.PERSONS))}
+        title={publicMessages.record.displayTitle + " : " + personRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
+        <RowContainer numberOfColumns={3}>
           <DisplayField
             label={personModelMeta.fields.firstName.label}
-            value={personRecord?.firstName}
+            value={personRecord.firstName}
           />
           <DisplayField
             label={personModelMeta.fields.lastName.label}
-            value={personRecord?.lastName}
+            value={personRecord.lastName}
+          />
+          <DisplayField
+            label={personModelMeta.fields.nationalId.label}
+            value={personRecord.nationalId}
+          />
+          <DisplayField
+            label={personModelMeta.fields.birthDate.label}
+            value={DateUtil.GEORGIAN_TO_JALALI(personRecord.birthDate)}
+          />
+          <DisplayField
+            label={personModelMeta.fields.coreUser.label}
+            value={
+              personRecord.coreUser ? (
+                <LinkView
+                  viewName={VIEWNAME.USER_DISPLAY}
+                  id={personRecord.coreUser.id}
+                  label={personRecord.coreUser.username}
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+          <DisplayField
+            label={personModelMeta.fields.city.label}
+            value={
+              personRecord.city ? (
+                <LinkView
+                  viewName={VIEWNAME.CITY_DISPLAY}
+                  id={personRecord.city.id}
+                  label={personRecord.city.cityName}
+                />
+              ) : (
+                "---"
+              )
+            }
           />
         </RowContainer>
       </RecordDisplayLayout>

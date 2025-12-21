@@ -18,7 +18,7 @@ export const DashboardDataRoutes: RouteConfig[] = [
     parent: "/dashboard/portal",
     permission: Permission.DashboardData_Read,
     showInMenu: false,
-    name: VIEWNAME.DASHBOARD_DATA,
+    name: VIEWNAME.DASHBOARD_DATA_SEARCH,
   },
   // Create Page
   {

@@ -6,6 +6,7 @@ export const keywordModelMeta = createModelMeta<KeywordModel, FormFieldMetadata>
   {
     keywordText: {
       label: "متن کلمه کلیدی",
+      type: "text",
       placeholder: "کلمه کلیدی را وارد کنید",
       sortable: true,
       required: true,
@@ -26,7 +27,7 @@ export const keywordModelMeta = createModelMeta<KeywordModel, FormFieldMetadata>
     },
     messages: {
       label: "پیام‌ها",
-      type: "multiAutoComplete",
+      type: "autocomplete",
       displayField: "content",
       sortable: false,
     },

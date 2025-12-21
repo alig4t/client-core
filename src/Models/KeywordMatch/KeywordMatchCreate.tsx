@@ -2,7 +2,7 @@ import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import KeywordMatchService from "./KeywordMatchService";
@@ -23,11 +23,15 @@ import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import KeywordService from "@/Models/Keyword/KeywordService";
+import { keywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
 import UserService from "@/Models/User/UserService";
+import { userModelMeta } from "@/Models/User/UserModel.meta";
 
 const keywordMatchSchema = z.object({
-  matchedAt: Validator.dateTime(),
+  matchedAt: Validator.notNull(),
   message: Validator.notNull(),
   keyword: Validator.notNull(),
   coreUser: Validator.notNull(),
@@ -39,8 +43,8 @@ const KeywordMatchCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["keywordMatch", id],
@@ -58,12 +62,31 @@ const KeywordMatchCreate: React.FC = () => {
     },
     onSuccess: () => {
       toast.success(
-        isEditMode ? publicMessages.updateSuccess : publicMessages.createSuccess
+        isEditMode
+          ? keywordMatchModelMeta.messages.update.success.title
+          : keywordMatchModelMeta.messages.create.success.title,
+        {
+          description: isEditMode
+            ? keywordMatchModelMeta.messages.update.success.description
+            : keywordMatchModelMeta.messages.create.success.description,
+          position: "bottom-left",
+        }
       );
-      navigate(getViewPath(VIEWNAME.KEYWORD_MATCHS));
+      queryClient.invalidateQueries({ queryKey: ["keywordMatch"] });
+      navigate(getViewPath(VIEWNAME.KEYWORD_MATCH_SEARCH));
     },
     onError: () => {
-      toast.error(isEditMode ? publicMessages.updateError : publicMessages.createError);
+      toast.error(
+        isEditMode
+          ? keywordMatchModelMeta.messages.update.error.title
+          : keywordMatchModelMeta.messages.create.error.title,
+        {
+          description: isEditMode
+            ? keywordMatchModelMeta.messages.update.error.description
+            : keywordMatchModelMeta.messages.create.error.description,
+          position: "bottom-left",
+        }
+      );
     },
   });
 
@@ -71,60 +94,90 @@ const KeywordMatchCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  if (isEditMode && isLoading) {
-    return <CreatePagePlaceholder />;
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.KEYWORD_MATCH_SEARCH));
+  };
+
+  const breadcrumbItems = useBreadcrumbs(
+    isEditMode
+      ? keywordMatchModelMeta.messages.pageTitle.edit
+      : keywordMatchModelMeta.messages.pageTitle.create
+  );
+
+  if (isLoading && isEditMode) {
+    return (
+      <PageWrapper>
+        <CreatePagePlaceholder rowCount={3} />
+      </PageWrapper>
+    );
   }
 
   return (
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
-          <PageHeader
-            title={
-              isEditMode
-                ? `ویرایش ${keywordMatchModelMeta.displayName}`
-                : `ایجاد ${keywordMatchModelMeta.displayName}`
-            }
-          />
-
+        <PageHeader
+          title={
+            isEditMode
+              ? keywordMatchModelMeta.messages.pageTitle.edit
+              : keywordMatchModelMeta.messages.pageTitle.create
+          }
+        />
+        <CreatePageFormWrapper>
           <FormWrapper
             schema={keywordMatchSchema}
             onSubmit={onSubmit}
             defaultValues={existingData}
           >
             <RowContainer>
+              <DateInput
+                name="matchedAt"
+                label={keywordMatchModelMeta.fields.matchedAt.label}
+              />
               <FormAutoComplete
                 name="message"
                 label={keywordMatchModelMeta.fields.message.label}
                 service={MessageService}
+                valueKey="id"
+                labelKey={messageModelMeta.displayField}
               />
               <FormAutoComplete
                 name="keyword"
                 label={keywordMatchModelMeta.fields.keyword.label}
                 service={KeywordService}
+                valueKey="id"
+                labelKey={keywordModelMeta.displayField}
               />
               <FormAutoComplete
                 name="coreUser"
                 label={keywordMatchModelMeta.fields.coreUser.label}
                 service={UserService}
+                valueKey="id"
+                labelKey={userModelMeta.displayField}
               />
             </RowContainer>
 
-            <div className="flex gap-4 mt-6 justify-end">
+            <ButtonPanel align="end">
               <Button
                 type="button"
                 variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.KEYWORD_MATCHS))}
+                onClick={() => navigate(getViewPath(VIEWNAME.KEYWORD_MATCH_SEARCH))}
               >
-                {publicMessages.cancel}
+                {publicMessages.form.buttons.cancel}
               </Button>
-              <Button type="submit" loading={mutation.isPending}>
-                {isEditMode ? publicMessages.update : publicMessages.create}
+              <Button
+                type="submit"
+                variant="primary"
+                loading={mutation.isPending}
+                disabled={mutation.isPending}
+              >
+                {isEditMode
+                  ? publicMessages.form.buttons.update
+                  : publicMessages.form.buttons.save}
               </Button>
-            </div>
+            </ButtonPanel>
           </FormWrapper>
-        </div>
+        </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
   );
