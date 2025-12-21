@@ -43,7 +43,7 @@ import { {{camelCase this.entityName}}ModelMeta } from "@/Models/{{this.entityNa
 const {{camelCase entityName}}Schema = z.object({
 {{#each fields}}
 {{#if this.required}}
-  {{this.name}}: Validator.{{this.validatorType}}(),
+  {{this.name}}: Validator.notNull(),
 {{else}}
   {{this.name}}: Validator.optional(),
 {{/if}}
