@@ -33,7 +33,7 @@
         <relationship>
             <name>messages</name>
             <relationshipType>MANY_TO_MANY</relationshipType>
-            <relatedEntityName>Message</relatedEntityName>
+            <relatedEntityName>MessagingPlatform</relatedEntityName>
             <joinTableName>keyword_message</joinTableName>
         </relationship>
     </relationships>

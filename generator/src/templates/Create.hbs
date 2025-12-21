@@ -34,15 +34,11 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
-
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 {{#each relationshipServices}}
-{{#unless this.isCore}}
 import {{this.serviceName}} from "@/Models/{{this.entityName}}/{{this.serviceName}}";
-{{/unless}}
+import { {{camelCase this.entityName}}ModelMeta } from "@/Models/{{this.entityName}}/{{this.entityName}}Model.meta";
 {{/each}}
-{{#if hasCoreUserRelationship}}
-import UserService from "@/Models/User/UserService";
-{{/if}}
 
 const {{camelCase entityName}}Schema = z.object({
 {{#each fields}}
@@ -196,7 +192,7 @@ const {{entityName}}Create: React.FC = () => {
                     label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                     service={ {{this.relatedEntityName}}Service}
                     valueKey="id"
-                    labelKey="{{this.meta.autocompleteField}}"
+                    labelKey={ {{camelCase this.relatedEntityName}}ModelMeta.displayField }
                   />
     {{/if}}
     {{#if (isToMany this.relationshipType)}}
@@ -204,24 +200,29 @@ const {{entityName}}Create: React.FC = () => {
                     name="{{this.name}}"
                     label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                     service={ {{this.relatedEntityName}}Service}
-                    multiple
+                    labelKey={ {{camelCase this.relatedEntityName}}ModelMeta.displayField }
+                    valueKey="id"
+                    
                   />
     {{/if}}
     {{/each}}
                 </RowContainer>
 
-                <div className="flex gap-4 mt-6 justify-end">
-                  <Button
-                    type="button"
-                    variant="secondary"
-                    onClick={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}S))}
-                  >
-                    {publicMessages.cancel}
-                  </Button>
-                  <Button type="submit" loading={mutation.isPending}>
-                    {isEditMode ? publicMessages.update : publicMessages.create}
-                  </Button>
-                </div>
+                  <ButtonPanel align="end">
+                    <Button
+                      type="button"
+                      variant="secondary"
+                      onClick={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}_SEARCH))}
+                    >
+                      {publicMessages.form.buttons.cancel}
+                    </Button>
+                    <Button type="submit" variant="primary" loading={mutation.isPending} disabled={mutation.isPending}>
+                      {isEditMode 
+                      ? publicMessages.form.buttons.update
+                      : publicMessages.form.buttons.save}
+                    </Button>
+                  </ButtonPanel>
+              
               </FormWrapper>
             </CreatePageFormWrapper>
         </PageTransition>

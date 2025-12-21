@@ -16,7 +16,7 @@ fields:
     sortable: true
 
 relationships:
-  message:
+  messagingPlatform:
     label: پیام
     type: autocomplete
     displayField: content

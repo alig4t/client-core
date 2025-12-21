@@ -4,8 +4,12 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
+{{#if hasFileFields}}
+import FilePreview from "@/core/components/form/FilePreview";
+{{/if}}
 import {{entityName}}Service from "./{{entityName}}Service";
 import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
@@ -15,6 +19,11 @@ import Button from "@/core/components/general/button/Button";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { getViewPath } from "@/core/router/RouteUtils";
+{{#each fields}}
+{{#if this.isEnum}}
+import { {{../entityName}}{{pascalCase this.name}}EnumLabels } from "./{{../entityName}}{{pascalCase this.name}}Enum";
+{{/if}}
+{{/each}}
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 import { publicMessages } from "@/core/forms/MessageUtils";
@@ -22,12 +31,13 @@ import { publicMessages } from "@/core/forms/MessageUtils";
 const {{entityName}}Display: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const breadcrumbItems = useBreadcrumbs();
 
   const {
     data: {{camelCase entityName}}Record,
     isLoading,
     isError,
+    error,
+    refetch,
   } = useQuery({
     queryKey: ["{{camelCase entityName}}", id],
     queryFn: () => {{entityName}}Service.getById(Number(id!)),
@@ -35,43 +45,122 @@ const {{entityName}}Display: React.FC = () => {
     ...ReactQueryOptions.displayOptions,
   });
 
-  if (isLoading) return <ViewPagePlaceholder />;
-  if (isError) return <TableErrorState />;
+  // Breadcrumb for navigation
+  const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
+
+  // Handler for edit button
+  const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.{{snakeCase entityName}}_EDIT, id));
+    navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}_EDIT, id));
+  };
+
+  if (isLoading) {
+    return (
+      <PageWrapper>
+        <ViewPagePlaceholder />
+      </PageWrapper>
+    );
+  }
+
+  if (isError) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={(error as Error)?.message || "خطا در بارگذاری داده‌ها"}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
+
+  if (!{{camelCase entityName}}Record) {
+    return (
+      <PageWrapper>
+        <TableErrorState
+          message={publicMessages.record.notfound}
+          onRetry={refetch}
+        />
+      </PageWrapper>
+    );
+  }
 
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
       <RecordDisplayLayout
-        title={ {{camelCase entityName}}ModelMeta.displayName}
-        onEdit={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}_EDIT, id))}
-        onBack={() => navigate(getViewPath(VIEWNAME.{{snakeCase entityName}}S))}
+        title={publicMessages.record.displayTitle + " : " + {{camelCase entityName}}Record.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
       >
-        <RowContainer>
-{{#each displayFields}}
-{{#if this.isDate}}
+        <RowContainer numberOfColumns={3}>
+{{#each fields}}
+{{#if (eq this.type "LOCAL_DATE_TIME")}}
           <DisplayField
             label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-            value={ DateUtil.GREGORIAN_TO_JALALI({{camelCase ../entityName}}Record?.{{this.name}}) }
+            value={ DateUtil.GEORGIAN_TO_JALALI_WITH_TIME({{camelCase ../entityName}}Record.{{this.name}}) }
+          />
+{{else if this.isDate}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ DateUtil.GEORGIAN_TO_JALALI({{camelCase ../entityName}}Record.{{this.name}}) }
           />
 {{else if this.isBoolean}}
           <DisplayField
             label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-            value={ OptionUtils.getLabel({{camelCase ../entityName}}Record?.{{this.name}} ? "true" : "false", OptionUtils.YES_OR_NO_OPTIONS) }
+            value={ OptionUtils.GET_BOOLEAN_OPTION({{camelCase ../entityName}}Record.{{this.name}}) }
           />
 {{else if this.isEnum}}
           <DisplayField
             label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-            value={ OptionUtils.getLabel({{camelCase ../entityName}}Record?.{{this.name}}, {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.options) }
+            value={ OptionUtils.getLabel({{camelCase ../entityName}}Record.{{this.name}}, {{../entityName}}{{pascalCase this.name}}EnumLabels) }
           />
-{{else if this.isRelationship}}
+{{else if (eq this.type "DOUBLE")}}
           <DisplayField
             label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-            value={ {{camelCase ../entityName}}Record?.{{this.name}}?.{{this.displayField}} || "-" }
+            value={ {{camelCase ../entityName}}Record.{{this.name}}?.toFixed(2) }
+          />
+{{else if (eq this.type "BIG_DECIMAL")}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ {{camelCase ../entityName}}Record.{{this.name}}?.toFixed(4) }
           />
 {{else}}
           <DisplayField
             label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-            value={ {{camelCase ../entityName}}Record?.{{this.name}} }
+            value={ {{camelCase ../entityName}}Record.{{this.name}} }
+          />
+{{/if}}
+{{/each}}
+{{#each relationships}}
+{{#if this.document}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={
+              <FilePreview fileId={({{camelCase ../entityName}}Record as any).{{this.name}}?.[0]?.id} previewSize="sm" className="mr-2" />
+            }
+          />
+{{else if (isToOne this.relationshipType)}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={
+              {{camelCase ../entityName}}Record.{{this.name}} ? (
+                <LinkView
+                  viewName={VIEWNAME.{{snakeCase this.relatedEntityName}}_DISPLAY}
+                  id={ {{camelCase ../entityName}}Record.{{this.name}}.id}
+                  label={ {{camelCase ../entityName}}Record.{{this.name}}.{{this.meta.displayField}} }
+                />
+              ) : (
+                "---"
+              )
+            }
+          />
+{{else if (isToMany this.relationshipType)}}
+          <DisplayField
+            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            value={ {{camelCase ../entityName}}Record.{{this.name}}?.map((item: any) => item?.{{this.meta.displayField}})?.join(", ") || "---" }
           />
 {{/if}}
 {{/each}}

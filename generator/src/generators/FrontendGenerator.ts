@@ -256,16 +256,16 @@ export class FrontendGenerator {
     const fileName = `${enumName}.ts`;
     const filePath = join(outputDir, fileName);
 
-    const enumValues = field.enums!.map(e => `  ${e.name} = "${e.name}",`).join('\n');
-    const labelEntries = field.enums!.map(e => `  { value: ${enumName}.${e.name}, label: "${e.label || e.value}" },`).join('\n');
+    const enumValues = field.enums!.map(e => `  ${e.name} : "${e.name}",`).join('\n');
+    const labelEntries = field.enums!.map(e => `    [${enumName}.${e.name}]: "${e.label || e.value}" ,`).join('\n');
 
-    const content = `export enum ${enumName} {
+    const content = `export const ${enumName} = {
 ${enumValues}
-}
+} as const;
 
-export const ${enumName}Labels = [
+export const ${enumName}Labels = {
 ${labelEntries}
-];
+};
 `;
 
     let formatted = content;

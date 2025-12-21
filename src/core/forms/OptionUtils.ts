@@ -10,7 +10,8 @@ export const YES_OR_NO_OPTIONS: Option[] = [
   { value: 0, label: "نه" },
 ];
 
-export const GET_BOOLEAN_OPTION = (value: boolean): string => {
+export const GET_BOOLEAN_OPTION = (value: boolean | undefined): string => {
+  if(!value) return "-"
   return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
 }
 
