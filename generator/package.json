@@ -8,7 +8,8 @@
     "build": "tsc",
     "generate": "node dist/index.js",
     "generate:all": "node dist/index.js --all",
-    "dev": "tsx src/index.ts"
+    "dev": "tsx src/index.ts",
+    "add-types": "tsx src/utils/AddTypesToYaml.ts"
   },
   "dependencies": {
     "fast-xml-parser": "^4.5.0",

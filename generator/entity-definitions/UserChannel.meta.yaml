@@ -1,7 +1,6 @@
 displayName: کاربر-کانال
 displayNamePlural: کاربران-کانال
 autocompleteField: role
-
 routing:
   basePath: /dashboard/portal/user-channels
   menuLabel: کاربران کانال
@@ -9,7 +8,6 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 70
-
 fields:
   role:
     label: نقش
@@ -17,14 +15,13 @@ fields:
     enums:
       OWNER: مالک
       MEMBER: عضو
-
+    type: select
 relationships:
   coreUser:
     label: کاربر
     type: autocomplete
     displayField: username
     sortable: false
-
   channel:
     label: کانال
     type: autocomplete

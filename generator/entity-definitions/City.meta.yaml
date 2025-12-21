@@ -1,7 +1,6 @@
 displayName: شهر
 displayNamePlural: شهرها
 autocompleteField: cityName
-
 routing:
   basePath: /dashboard/portal/cities
   menuLabel: شهرها
@@ -9,14 +8,14 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 30
-
 fields:
   cityName:
     label: نام شهر
     placeholder: نام شهر را وارد کنید
     sortable: true
-
+    type: text
   country:
     label: کشور
     placeholder: نام کشور را وارد کنید
     sortable: true
+    type: text

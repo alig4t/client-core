@@ -1,9 +1,6 @@
-# Frontend Metadata for ComprehensiveEntity
-
 displayName: ترکیبی
 displayNamePlural: ترکیبی‌ها
 autocompleteField: stringField
-
 routing:
   basePath: /dashboard/portal/comprehensive
   menuLabel: ترکیبی‌ها
@@ -11,91 +8,86 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 99
-
 fields:
   stringField:
     label: رشته
     placeholder: مقدار رشته‌ای را وارد کنید
     sortable: true
-
+    type: text
   integerField:
     label: عدد صحیح
     placeholder: مثلاً 42
     sortable: true
-
+    type: number
   longField:
     label: عدد بلند
     placeholder: مثلاً 9007199254740991
     sortable: true
-
+    type: number
   doubleField:
     label: عدد اعشاری
     placeholder: مثلاً 3.14
     sortable: true
-
+    type: number
   bigDecimalField:
     label: عدد دقیق (BigDecimal)
     placeholder: مثلاً 123.456789
     sortable: true
-
+    type: text
   booleanField:
     label: بولین
     sortable: true
-
+    type: boolean
   dateField:
     label: تاریخ و زمان (UTC)
     sortable: true
-
+    type: date
   localDateField:
     label: تاریخ (بدون زمان)
     sortable: false
-
+    type: date
   localDateTimeField:
     label: تاریخ و زمان محلی
     sortable: false
-
+    type: datetime-local
   enumField:
     label: گزینه‌ها
     sortable: false
     enums:
       OPTION_A: گزینه A
       OPTION_B: گزینه B
-
+    type: select
   uniqueField:
     label: فیلد یکتا
     placeholder: مقدار یکتا
     sortable: false
-
+    type: text
   indexedField:
     label: فیلد ایندکس‌شده
     placeholder: مقدار ایندکس‌شده
     sortable: false
-
+    type: text
 relationships:
   oneToOneUser:
     label: کاربر مرتبط
     type: autocomplete
     displayField: username
     sortable: false
-
   manyToOneChannel:
     label: کانال مرتبط
     type: autocomplete
     displayField: channelName
     sortable: false
-
   oneToManyKeywords:
     label: کلمات کلیدی
-    type: multiAutoComplete
+    type: autocomplete
     displayField: keyword
     sortable: false
-
   manyToManyMessages:
     label: پیام‌ها
-    type: multiAutoComplete
+    type: autocomplete
     displayField: content
     sortable: false
-
   attachments:
     label: پیوست‌ها
     type: File

@@ -1,7 +1,6 @@
 displayName: تطابق کلمه کلیدی
 displayNamePlural: تطابق‌های کلمه کلیدی
 autocompleteField: matchedAt
-
 routing:
   basePath: /dashboard/portal/keyword-matches
   menuLabel: تطابق‌های کلمات
@@ -9,25 +8,22 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 50
-
 fields:
   matchedAt:
     label: زمان تطابق
     sortable: true
-
+    type: datetime-local
 relationships:
   messagingPlatform:
     label: پیام
     type: autocomplete
     displayField: content
     sortable: false
-
   keyword:
     label: کلمه کلیدی
     type: autocomplete
     displayField: keywordText
     sortable: false
-
   coreUser:
     label: کاربر
     type: autocomplete

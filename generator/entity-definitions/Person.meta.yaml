@@ -1,7 +1,6 @@
 displayName: شخص
 displayNamePlural: اشخاص
 autocompleteField: firstName
-
 routing:
   basePath: /dashboard/portal/persons
   menuLabel: اشخاص
@@ -9,34 +8,32 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 60
-
 fields:
   firstName:
     label: نام
     placeholder: نام را وارد کنید
     sortable: true
-
+    type: text
   lastName:
     label: نام خانوادگی
     placeholder: نام خانوادگی را وارد کنید
     sortable: true
-
+    type: text
   nationalId:
     label: کد ملی
     placeholder: کد ملی 10 رقمی
     sortable: false
-
+    type: text
   birthDate:
     label: تاریخ تولد
     sortable: false
-
+    type: date
 relationships:
   coreUser:
     label: کاربر سیستم
     type: autocomplete
     displayField: username
     sortable: false
-
   city:
     label: شهر
     type: autocomplete

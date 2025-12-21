@@ -1,7 +1,6 @@
 displayName: پلتفرم پیام‌رسانی
 displayNamePlural: پلتفرم‌های پیام‌رسانی
 autocompleteField: platformName
-
 routing:
   basePath: /dashboard/portal/platforms
   menuLabel: پلتفرم‌ها
@@ -9,24 +8,24 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 5
-
 fields:
   platformName:
     label: نام پلتفرم
     placeholder: نام پلتفرم را وارد کنید
     sortable: true
-
+    type: text
   platformKey:
     label: کلید پلتفرم
     placeholder: کلید یکتا پلتفرم
     sortable: true
-
+    type: text
   apiEndpoint:
     label: آدرس API
     placeholder: https://api.example.com
     sortable: false
-
+    type: text
   authMethod:
     label: روش احراز هویت
     placeholder: مثلاً Bearer Token
     sortable: false
+    type: text

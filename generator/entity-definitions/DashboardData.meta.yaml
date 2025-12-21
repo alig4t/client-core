@@ -1,7 +1,6 @@
 displayName: داده داشبورد
 displayNamePlural: داده‌های داشبورد
 autocompleteField: frequencyCount
-
 routing:
   basePath: /dashboard/portal/dashboard-data
   menuLabel: داده‌های داشبورد
@@ -9,30 +8,27 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: false
   menuOrder: 80
-
 fields:
   frequencyCount:
     label: تعداد تکرار
     placeholder: تعداد
     sortable: true
-
+    type: number
   lastMatchedAt:
     label: آخرین تطابق
     sortable: true
-
+    type: datetime-local
 relationships:
   coreUser:
     label: کاربر
     type: autocomplete
     displayField: username
     sortable: false
-
   keyword:
     label: کلمه کلیدی
     type: autocomplete
     displayField: keywordText
     sortable: false
-
   channel:
     label: کانال
     type: autocomplete

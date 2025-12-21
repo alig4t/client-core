@@ -1,7 +1,6 @@
 displayName: ربات
 displayNamePlural: ربات‌ها
 autocompleteField: token
-
 routing:
   basePath: /dashboard/portal/bots
   menuLabel: ربات‌ها
@@ -9,20 +8,19 @@ routing:
   menuParent: /dashboard/portal
   showInMenu: true
   menuOrder: 20
-
 fields:
   token:
     label: توکن
     placeholder: توکن ربات را وارد کنید
     sortable: true
-
+    type: text
   status:
     label: وضعیت
     sortable: true
     enums:
       ACTIVE: فعال
       INACTIVE: غیرفعال
-
+    type: select
 relationships:
   platform:
     label: پلتفرم

@@ -16,6 +16,7 @@ fields:
     label: متن کلمه کلیدی
     placeholder: کلمه کلیدی را وارد کنید
     sortable: true
+    type: text
 
 relationships:
   coreUser:
@@ -32,6 +33,6 @@ relationships:
 
   messages:
     label: پیام‌ها
-    type: multiAutoComplete
+    type: autocomplete
     displayField: content
     sortable: false
