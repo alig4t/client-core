@@ -17,6 +17,7 @@ fields:
   status:
     label: وضعیت
     sortable: true
+    type: select
     enums:
       ACTIVE: فعال
       INACTIVE: غیرفعال
