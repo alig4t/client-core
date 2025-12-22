@@ -11,7 +11,7 @@
     </fields>
     <relationships>
         <relationship>
-            <name>message</name>
+            <name>messagingPlatform</name>
             <relationshipType>MANY_TO_ONE</relationshipType>
             <relatedEntityName>MessagingPlatform</relatedEntityName>
             <joinColumnName>message_id</joinColumnName>

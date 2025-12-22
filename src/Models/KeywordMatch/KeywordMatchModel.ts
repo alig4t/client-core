@@ -5,7 +5,7 @@ import type { UserModel } from "../User/UserModel";
 
 export interface KeywordMatchModel extends BaseModel {
   matchedAt: string;
-  message: MessagingPlatformModel;
+  messagingPlatform: MessagingPlatformModel;
   keyword: KeywordModel;
   coreUser: UserModel;
 }

@@ -3,7 +3,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 import type { UserModel } from "./UserModel";
 
-export const UserModelMeta = createModelMeta<UserModel, FormFieldMetadata>(
+export const userModelMeta = createModelMeta<UserModel, FormFieldMetadata>(
   {
     name: {
       label: "نام",

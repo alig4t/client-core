@@ -11,6 +11,7 @@ import { KEYWORD_VIEWNAMES } from "@/Models/Keyword/Keyword.viewnames";
 import { KEYWORD_MATCH_VIEWNAMES } from "@/Models/KeywordMatch/KeywordMatch.viewnames";
 import { MESSAGING_PLATFORM_VIEWNAMES } from "@/Models/MessagingPlatform/MessagingPlatform.viewnames";
 import { PERSON_VIEWNAMES } from "@/Models/Person/Person.viewnames";
+import { USER_VIEWNAMES } from "@/Models/User/User.viewnames";
 import { USER_CHANNEL_VIEWNAMES } from "@/Models/UserChannel/UserChannel.viewnames";
 
 export const GENERATED_VIEWNAMES = {
@@ -23,5 +24,6 @@ export const GENERATED_VIEWNAMES = {
   ...MESSAGING_PLATFORM_VIEWNAMES,
   ...PERSON_VIEWNAMES,
   ...USER_CHANNEL_VIEWNAMES,
-  ...COMPREHENSIVE_ENTITY_VIEWNAMES
+  ...COMPREHENSIVE_ENTITY_VIEWNAMES,
+  ...USER_VIEWNAMES
 } as const;

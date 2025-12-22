@@ -34,7 +34,7 @@ import { userModelMeta } from "@/Models/User/UserModel.meta";
 
 const keywordMatchSchema = z.object({
   matchedAt: Validator.notNull(),
-  message: Validator.notNull(),
+  messagingPlatform: Validator.notNull(),
   keyword: Validator.notNull(),
   coreUser: Validator.notNull(),
 });
@@ -137,8 +137,8 @@ const KeywordMatchCreate: React.FC = () => {
                 label={keywordMatchModelMeta.fields.matchedAt.label}
               />
               <FormAutoComplete
-                name="message"
-                label={keywordMatchModelMeta.fields.message.label}
+                name="messagingPlatform"
+                label={keywordMatchModelMeta.fields.messagingPlatform.label}
                 service={MessagingPlatformService}
                 valueKey="id"
                 labelKey={messagingPlatformModelMeta.displayField}
