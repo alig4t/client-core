@@ -29,6 +29,8 @@ import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatfo
 import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 import BotService from "@/Models/Bot/BotService";
 import { botModelMeta } from "@/Models/Bot/BotModel.meta";
+import StepperDemo from "@/core/components/general/stepper/StepperDemo";
+import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
 
 const channelSchema = z.object({
   channelName: Validator.notNull(),
@@ -113,9 +115,19 @@ const ChannelCreate: React.FC = () => {
     );
   }
 
+  const steps : CompactStep[] = [
+    {id:1,label:"ثبت کانال"},
+    {id:2,label:"ساخت draft"},
+    {id:3,label:"تایید "},
+  ]
+
   return (
     <PageWrapper>
       <PageTransition>
+
+
+        {/* <StepperDemo /> */}
+
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
         <PageHeader
           title={
@@ -125,6 +137,8 @@ const ChannelCreate: React.FC = () => {
           }
         />
         <CreatePageFormWrapper>
+        <CompactStepper steps={steps} currentStep={0} className="max-w-lg mx-auto mt-3 mb-8" />
+
           <FormWrapper
             schema={channelSchema}
             onSubmit={onSubmit}

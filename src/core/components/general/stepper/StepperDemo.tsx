@@ -1,8 +1,8 @@
 // src/core/components/general/stepper/StepperDemo.tsx
 
 import React, { useState } from "react";
-import Stepper, { Step } from "./Stepper";
-import CompactStepper, { CompactStep } from "./CompactStepper";
+import Stepper, {type Step } from "./Stepper";
+import CompactStepper, { type CompactStep } from "./CompactStepper";
 import Button from "@/core/components/general/button/Button";
 import { User, Mail, FileText, CheckCircle } from "lucide-react";
 
