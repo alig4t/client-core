@@ -1,6 +1,6 @@
 // Main Routes - Safe Modular Architecture
 import { lazy } from "react";
-import { Home, User, Settings as SettingsIcon, Shield, Code, Bolt } from "lucide-react";
+import { Home, User, Settings as SettingsIcon, Shield, Code, Bolt, MessageCircleCode } from "lucide-react";
 import type { RouteConfig } from "./path.types";
 import { Permission } from "./Permission";
 import { VIEWNAME } from "./ViewName";
@@ -92,7 +92,17 @@ const coreRoutes: RouteConfig[] = [
     label: "پورتال",
     icon: <Bolt size={24} />,
     showInMenu: true,
+    name: VIEWNAME.PORTAL,
   },
+  
+  {
+    path: "/dashboard/messaging",
+    label: "پیام رسان ها",
+    icon: <MessageCircleCode size={24} />,
+    showInMenu: true,
+    name: VIEWNAME.MESSAGING,
+  },
+  
 
   // Permission Module (manual)
   {
@@ -123,44 +133,44 @@ const coreRoutes: RouteConfig[] = [
     parent: "/dashboard/portal/permissions",
   },
 
-  // Comprehensive (example entity - manual)
-  {
-    path: "/dashboard/portal/comprehensive",
-    label: "ترکیبی ها",
-    icon: <Code size={18} />,
-    element: ComprehensivePage,
-    parent: "/dashboard/portal",
-    permission: Permission.ComprehensiveEntity_Read,
-    showInMenu: true,
-    name: VIEWNAME.COMPREHENSIVE_LIST,
-  },
-  {
-    path: "/dashboard/portal/comprehensive/create",
-    element: ComprehensiveCreate,
-    permission: Permission.ComprehensiveEntity_Create,
-    showInMenu: false,
-    name: VIEWNAME.COMPREHENSIVE_CREATE,
-    label: "ایجاد ترکیبی",
-    parent: "/dashboard/portal/comprehensive",
-  },
-  {
-    path: withId("/dashboard/portal/comprehensive"),
-    element: ComprehensiveDisplay,
-    permission: Permission.ComprehensiveEntity_Read,
-    showInMenu: false,
-    name: VIEWNAME.COMPREHENSIVE_DISPLAY,
-    label: "جزئیات ترکیبی",
-    parent: "/dashboard/portal/comprehensive",
-  },
-  {
-    path: withId("/dashboard/portal/comprehensive/edit"),
-    element: ComprehensiveCreate,
-    permission: Permission.ComprehensiveEntity_Update,
-    showInMenu: false,
-    name: VIEWNAME.COMPREHENSIVE_EDIT,
-    label: "ویرایش ترکیبی",
-    parent: "/dashboard/portal/comprehensive",
-  },
+  // // Comprehensive (example entity - manual)
+  // {
+  //   path: "/dashboard/portal/comprehensive",
+  //   label: "ترکیبی ها",
+  //   icon: <Code size={18} />,
+  //   element: ComprehensivePage,
+  //   parent: "/dashboard/portal",
+  //   permission: Permission.ComprehensiveEntity_Read,
+  //   showInMenu: true,
+  //   name: VIEWNAME.COMPREHENSIVE_LIST,
+  // },
+  // {
+  //   path: "/dashboard/portal/comprehensive/create",
+  //   element: ComprehensiveCreate,
+  //   permission: Permission.ComprehensiveEntity_Create,
+  //   showInMenu: false,
+  //   name: VIEWNAME.COMPREHENSIVE_CREATE,
+  //   label: "ایجاد ترکیبی",
+  //   parent: "/dashboard/portal/comprehensive",
+  // },
+  // {
+  //   path: withId("/dashboard/portal/comprehensive"),
+  //   element: ComprehensiveDisplay,
+  //   permission: Permission.ComprehensiveEntity_Read,
+  //   showInMenu: false,
+  //   name: VIEWNAME.COMPREHENSIVE_DISPLAY,
+  //   label: "جزئیات ترکیبی",
+  //   parent: "/dashboard/portal/comprehensive",
+  // },
+  // {
+  //   path: withId("/dashboard/portal/comprehensive/edit"),
+  //   element: ComprehensiveCreate,
+  //   permission: Permission.ComprehensiveEntity_Update,
+  //   showInMenu: false,
+  //   name: VIEWNAME.COMPREHENSIVE_EDIT,
+  //   label: "ویرایش ترکیبی",
+  //   parent: "/dashboard/portal/comprehensive",
+  // },
 ];
 
 // ✅ SAFE MERGE: Generated + Custom + Core

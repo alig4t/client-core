@@ -14,6 +14,8 @@ const CORE_VIEWNAMES = {
   DASHBOARD: "DASHBOARD",
   PROFILE: "PROFILE",
   SETTINGS: "SETTINGS",
+  MESSAGING: "messaging",
+  PORTAL: "portal",
 
   // Permission Module (manual)
   PERMISSION_LIST: "PERMISSION_LIST",

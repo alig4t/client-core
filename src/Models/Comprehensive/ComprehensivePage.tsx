@@ -4,16 +4,19 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { keywordModelMeta } from "./KeywordModel.meta";
-import KeywordSearch from "./KeywordSearch";
+
+
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import KeywordTable from "./KeywordTable";
+
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { useLoading } from "@/stores/LoadingContext";
 import Button from "@/core/components/general/button/Button";
+import KeywordTable from "../Keyword/KeywordTable";
+import KeywordSearch from "../Keyword/KeywordSearch";
+import { keywordModelMeta } from "../Keyword/KeywordModel.meta";
 const KeywordPage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
