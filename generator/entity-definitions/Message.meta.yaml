@@ -1,0 +1,51 @@
+displayName: پیام
+displayNamePlural: پیام‌ها
+autocompleteField: platformMessageId
+routing:
+  basePath: /dashboard/portal/messages
+  menuLabel: پیام‌ها
+  menuIcon: MessageCircle
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 40
+fields:
+  platformMessageId:
+    label: شناسه پیام پلتفرم
+    placeholder: شناسه یکتا پیام در پلتفرم
+    sortable: true
+    type: text
+  text:
+    label: متن پیام
+    placeholder: متن پیام را وارد کنید
+    sortable: false
+    type: textarea
+  sentAt:
+    label: زمان ارسال
+    sortable: true
+    type: datetime
+  senderId:
+    label: شناسه فرستنده
+    placeholder: شناسه فرستنده
+    sortable: true
+    type: text
+  senderUsername:
+    label: نام کاربری فرستنده
+    placeholder: نام کاربری فرستنده
+    sortable: true
+    type: text
+relationships:
+  channel:
+    label: کانال
+    type: autocomplete
+    displayField: channelName
+    sortable: false
+  keywords:
+    label: کلمات کلیدی
+    type: autocomplete
+    displayField: keywordText
+    sortable: false
+  attachments:
+    label: پیوست‌ها
+    type: autocomplete
+    displayField: fileName
+    sortable: false
