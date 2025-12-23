@@ -14,7 +14,7 @@ import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { publicMessages } from "@/core/forms/MessageUtils";
-import { UserModelMeta } from "./UserModel.meta";
+import { userModelMeta } from "./UserModel.meta";
 import UserSearch from "./UserSearch";
 import UserTable from "./UserTable";
 
@@ -30,9 +30,9 @@ const UserPage: React.FC = () => {
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
 
           <PageHeader
-            title={routeMeta?.label || UserModelMeta.messages.manage.title}
+            title={routeMeta?.label || userModelMeta.messages.manage.title}
             actionButton={{
-              label: UserModelMeta.messages.createButton,
+              label: userModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

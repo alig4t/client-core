@@ -15,7 +15,7 @@ import Validator from "@/core/forms/validation";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
-import { UserModelMeta } from "./UserModel.meta";
+import { userModelMeta } from "./UserModel.meta";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import RoleService from "../Role/RoleService";
 
@@ -65,19 +65,19 @@ const UserSearch: React.FC<UserSearchProps> = ({
           {/* String */}
           <FormInput
             name={`name_${FilterOperator.LIKE}`}
-            label={UserModelMeta.fields.name?.label}
+            label={userModelMeta.fields.name?.label}
             placeholder="جستجو..."
           />
 
           <FormInput
             name={`username_${FilterOperator.LIKE}`}
-            label={UserModelMeta.fields.username?.label}
+            label={userModelMeta.fields.username?.label}
             placeholder="جستجو..."
           />
 
           {/* <FormAutoComplete
             name={`roles_${FilterOperator.EQ}`}
-            label={UserModelMeta.fields.roles?.label}
+            label={userModelMeta.fields.roles?.label}
             service={RoleService}
             labelKey="name"
             valueKey="id"
@@ -88,21 +88,21 @@ const UserSearch: React.FC<UserSearchProps> = ({
 
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(UserModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(userModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(UserModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(userModelMeta.fields.createdAt.label, "to")}
           />
 
 
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(UserModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(userModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(UserModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(userModelMeta.fields.updatedAt.label, "to")}
           />
 
 

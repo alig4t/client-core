@@ -5,11 +5,8 @@ import { useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
-import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
-import FilePreview from "@/core/components/form/FilePreview";
-import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
 import { useNavigate } from "react-router-dom";
@@ -21,7 +18,7 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import UserService from "./UserService";
-import { UserModelMeta } from "./UserModel.meta";
+import { userModelMeta } from "./UserModel.meta";
 
 const UserDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -97,20 +94,20 @@ const UserDisplayPage: React.FC = () => {
         >
           <RowContainer numberOfColumns={3}>
             <DisplayField
-              label={UserModelMeta.fields.name.label}
+              label={userModelMeta.fields.name.label}
               value={userRecord.name}
             />
             <DisplayField
-              label={UserModelMeta.fields.username.label}
+              label={userModelMeta.fields.username.label}
               value={userRecord.username}
             />
             <DisplayField
-              label={UserModelMeta.fields.createdAt.label}
+              label={userModelMeta.fields.createdAt.label}
               value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(userRecord.createdAt)}
             />
 
             <DisplayField
-              label={UserModelMeta.fields.updatedAt.label}
+              label={userModelMeta.fields.updatedAt.label}
               value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(userRecord.updatedAt)}
             />
 

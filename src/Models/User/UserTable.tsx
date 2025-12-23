@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import type { UserModel } from "./UserModel";
 import UserService from "./UserService";
-import { UserModelMeta } from "./UserModel.meta";
+import { userModelMeta } from "./UserModel.meta";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
 import { UserTableColumns, userTableHeaders } from "./UserTableColumns";
 
@@ -39,8 +39,8 @@ const UserTable: React.FC<UserTableProps> = ({
           onDelete={onDelete}
         />
       )}
-      title={UserModelMeta.messages.list.title}
-      sortOptions={buildSortOptions(UserModelMeta)}
+      title={userModelMeta.messages.list.title}
+      sortOptions={buildSortOptions(userModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

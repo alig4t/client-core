@@ -11,7 +11,7 @@ import { Permission } from "@/router/Permission";
 
 import LinkView from "@/core/components/general/link/LinkView";
 import type { UserModel } from "./UserModel";
-import { UserModelMeta } from "./UserModel.meta";
+import { userModelMeta } from "./UserModel.meta";
 
 interface userTableColumnsProps {
     item: UserModel;
@@ -64,11 +64,11 @@ export const UserTableColumns: React.FC<userTableColumnsProps> = memo(({
 
 export const userTableHeaders: ReactNode = (
   <>
-    <THEAD>{UserModelMeta.fields.id.label}</THEAD>
-    <THEAD>{UserModelMeta.fields.name.label}</THEAD>
-    <THEAD>{UserModelMeta.fields.username.label}</THEAD>
-    <THEAD>{UserModelMeta.fields.createdAt.label}</THEAD>
-    <THEAD>{UserModelMeta.fields.updatedAt.label}</THEAD>
+    <THEAD>{userModelMeta.fields.id.label}</THEAD>
+    <THEAD>{userModelMeta.fields.name.label}</THEAD>
+    <THEAD>{userModelMeta.fields.username.label}</THEAD>
+    <THEAD>{userModelMeta.fields.createdAt.label}</THEAD>
+    <THEAD>{userModelMeta.fields.updatedAt.label}</THEAD>
     <THEAD>عملیات</THEAD>
   </>
 );
