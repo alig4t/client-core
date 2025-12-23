@@ -31,7 +31,6 @@ import BotService from "@/Models/Bot/BotService";
 import { botModelMeta } from "@/Models/Bot/BotModel.meta";
 import StepperDemo from "@/core/components/general/stepper/StepperDemo";
 import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
-import PlatformService from "../Platform/PlatformService";
 import { useLoading } from "@/stores/LoadingContext";
 import PlatformAuthorizationControllerService, { type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
 
@@ -69,7 +68,7 @@ const ChannelCreate: React.FC = () => {
       console.log(data)
 
       openWaitDialog();
-      const platform = await PlatformService.getById(data.platform.id)
+      const platform = await MessagingPlatformService.getById(data.platform.id)
 
      
       console.log(platform)
