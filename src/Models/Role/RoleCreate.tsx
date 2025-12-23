@@ -61,7 +61,7 @@ const RoleCreate: React.FC = () => {
         }
       );
       queryClient.invalidateQueries({ queryKey: ["role"] });
-      navigate(getViewPath(VIEWNAME.ROLE_LIST));
+      navigate(getViewPath(VIEWNAME.ROLE_SEARCH));
     },
     onError: (error: any) => {
       toast.error(
@@ -82,7 +82,7 @@ const RoleCreate: React.FC = () => {
 
   const onSubmit = (data: RoleFormData) => mutation.mutate(data);
 
-  const handleCancel = () => navigate(getViewPath(VIEWNAME.ROLE_LIST));
+  const handleCancel = () => navigate(getViewPath(VIEWNAME.ROLE_SEARCH));
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode

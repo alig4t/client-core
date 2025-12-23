@@ -11,6 +11,7 @@ import { KeywordRoutes } from "@/Models/Keyword/Keyword.routes.tsx";
 import { KeywordMatchRoutes } from "@/Models/KeywordMatch/KeywordMatch.routes.tsx";
 import { MessagingPlatformRoutes } from "@/Models/MessagingPlatform/MessagingPlatform.routes.tsx";
 import { PersonRoutes } from "@/Models/Person/Person.routes.tsx";
+import { ROLE_VIEWNAMES } from "@/Models/Role/Role.viewnames";
 import { UserChannelRoutes } from "@/Models/UserChannel/UserChannel.routes.tsx";
 
 export const generatedRoutes = [
@@ -23,5 +24,5 @@ export const generatedRoutes = [
   ...MessagingPlatformRoutes,
   ...PersonRoutes,
   ...UserChannelRoutes,
-  ...ComprehensiveEntityRoutes
+  ...ComprehensiveEntityRoutes,
 ];
