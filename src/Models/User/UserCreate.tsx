@@ -34,9 +34,9 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
-import { UserModelMeta } from "./UserModel.meta";
 import RoleService from "../Role/RoleService";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import { userModelMeta } from "./UserModel.meta";
 
 const UserSchema = z.object({
   name: Validator.notNull(),
@@ -70,12 +70,12 @@ const UserCreate: React.FC = () => {
     onSuccess: (data) => {
       toast.success(
         isEditMode
-          ? UserModelMeta.messages.update.success.title
-          : UserModelMeta.messages.create.success.title,
+          ? userModelMeta.messages.update.success.title
+          : userModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? UserModelMeta.messages.update.success.description
-            : UserModelMeta.messages.create.success.description,
+            ? userModelMeta.messages.update.success.description
+            : userModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -85,14 +85,14 @@ const UserCreate: React.FC = () => {
     onError: (error: any) => {
       toast.error(
         isEditMode
-          ? UserModelMeta.messages.update.error.title
-          : UserModelMeta.messages.create.error.title,
+          ? userModelMeta.messages.update.error.title
+          : userModelMeta.messages.create.error.title,
         {
           description:
             error?.message ||
             (isEditMode
-              ? UserModelMeta.messages.update.error.defaultDescription
-              : UserModelMeta.messages.create.error
+              ? userModelMeta.messages.update.error.defaultDescription
+              : userModelMeta.messages.create.error
                 .defaultDescription),
           position: "bottom-left",
         }
@@ -110,8 +110,8 @@ const UserCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? UserModelMeta.messages.pageTitle.edit
-      : UserModelMeta.messages.pageTitle.create
+      ? userModelMeta.messages.pageTitle.edit
+      : userModelMeta.messages.pageTitle.create
   );
   const routeMeta = useRouteMetadata();
 
@@ -131,8 +131,8 @@ const UserCreate: React.FC = () => {
         <PageHeader
           title={routeMeta?.label || (
             isEditMode
-              ? UserModelMeta.messages.pageTitle.edit
-              : UserModelMeta.messages.pageTitle.create
+              ? userModelMeta.messages.pageTitle.edit
+              : userModelMeta.messages.pageTitle.create
           )}
         />
 
@@ -147,22 +147,22 @@ const UserCreate: React.FC = () => {
               <FormInput
                 type="text"
                 name="name"
-                label={UserModelMeta.fields.name?.label}
+                label={userModelMeta.fields.name?.label}
                 placeholder={
-                  UserModelMeta.fields.name?.placeholder
+                  userModelMeta.fields.name?.placeholder
                 }
               />
               <FormInput
                 type="text"
                 name="username"
-                label={UserModelMeta.fields.username?.label}
+                label={userModelMeta.fields.username?.label}
                 placeholder={
-                  UserModelMeta.fields.username?.placeholder
+                  userModelMeta.fields.username?.placeholder
                 }
               />
               <FormAutoComplete
                 name="roles"
-                label={UserModelMeta.fields.roles?.label}
+                label={userModelMeta.fields.roles?.label}
                 service={RoleService}
                 labelKey="name"
                 valueKey="id"

@@ -35,6 +35,8 @@ interface ApiResponsePayload<T> {
   };
 }
 
+type HttpMethod = "get" | "post" | "put" | "delete";
+
 
 export class BaseService<T> {
   protected url: string;
@@ -43,11 +45,31 @@ export class BaseService<T> {
     this.url = url;
   }
 
+  protected async call<R = any>(
+    method: HttpMethod,
+    relativeUrl: string = "",
+    data?: any,
+    params?: Record<string, any>
+  ): Promise<R> {
+    const fullUrl = relativeUrl
+      ? `${this.url}/${relativeUrl}`.replace(/\/+/g, "/")
+      : this.url;
+
+    const response = await api.request<R>({
+      url: fullUrl,
+      method,
+      data,
+      params,
+    });
+
+    return response.data;
+  }
+
   async getAll(params: ServerSideParams<T> = {}): Promise<ApiResponsePayload<T>> {
     const queryParams = new URLSearchParams();
     queryParams.append('page', String(params.page ?? 0));
     queryParams.append('size', String(params.size ?? 10));
- 
+
     if (params.filters) {
       Object.entries(params.filters).forEach(([key, value]) => {
         if (value !== null && value !== undefined && value !== '') {
@@ -56,18 +78,18 @@ export class BaseService<T> {
       });
     }
     if (params.sort) queryParams.append('sort', params.sort);
-    
+
     // Cast the response to ApiResponse<T[]> to be explicit
     const response = await api.get(`${this.url}?${queryParams.toString()}`) as ApiResponse<T[]>;
-    
+
     console.log('Full response:', response);
-    
+
     if (!response.meta) {
       throw new Error('Pagination metadata missing in response');
     }
 
     console.log('Response data:', response.data);
-    
+
     return {
       data: response.data,
       meta: {

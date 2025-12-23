@@ -143,8 +143,8 @@ export const FormAutoComplete = <T extends BaseModel>({
   const [loading, setLoading] = useState(false);
   const [fetchedOptions, setFetchedOptions] = useState<T[]>([]);
   const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(1);
-  const [totalPages, setTotalPages] = useState<number>(1);
+  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [totalPages, setTotalPages] = useState<number>(0);
   const wrapperRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
@@ -201,13 +201,13 @@ export const FormAutoComplete = <T extends BaseModel>({
 
   // Reset page when search term changes or dropdown opens
   useEffect(() => {
-    setCurrentPage(1);
+    setCurrentPage(0);
   }, [debouncedSearchTerm]);
 
   // Reset page when dropdown opens
   useEffect(() => {
     if (isOpen) {
-      setCurrentPage(1);
+      setCurrentPage(0);
     }
   }, [isOpen]);
 
@@ -303,7 +303,7 @@ export const FormAutoComplete = <T extends BaseModel>({
           break;
         case "PageUp":
           e.preventDefault();
-          if (currentPage > 1) {
+          if (currentPage > 0) {
             setCurrentPage((prev) => prev - 1);
           }
           break;
@@ -317,7 +317,7 @@ export const FormAutoComplete = <T extends BaseModel>({
           e.preventDefault();
           setIsOpen(false);
           setSearchTerm("");
-          setCurrentPage(1);
+          setCurrentPage(0);
           break;
       }
     };
