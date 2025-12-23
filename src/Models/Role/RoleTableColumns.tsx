@@ -25,21 +25,21 @@ export const RoleTableColumns: React.FC<RoleTableColumnsProps> = memo(
         <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.updatedAt)}</TBODY>
 
         <TBODY className="flex gap-x-2 justify-center">
-          <NavLink
+          {/* <NavLink
             variant="edit"
             permission={Permission.Role_Update}
             viewName={VIEWNAME.ROLE_EDIT}
             idParam={item.id}
             tooltipSide="top"
             className="mr-2"
-          />
+          /> */}
 
-          <TableLink
+          {/* <TableLink
             to={getViewPath(VIEWNAME.ROLE_DISPLAY, item.id)}
             permission={Permission.Role_Read}
           >
             <Eye size={20} />
-          </TableLink>
+          </TableLink> */}
 
           <TableLink
             tooltipText="O-OøU?"
