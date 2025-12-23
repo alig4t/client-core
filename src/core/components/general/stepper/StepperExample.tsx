@@ -1,7 +1,7 @@
 // src/core/components/general/stepper/StepperExample.tsx
 
 import React, { useState } from "react";
-import Stepper, { Step } from "./Stepper";
+import Stepper, { type Step } from "./Stepper";
 import Button from "@/core/components/general/button/Button";
 import { User, Mail, CheckCircle, FileText } from "lucide-react";
 
