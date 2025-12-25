@@ -1,0 +1,34 @@
+# User.meta.yaml
+displayName: کاربر
+displayNamePlural: کاربران
+autocompleteField: username
+routing:
+  basePath: /dashboard/portal/users
+  menuLabel: کاربران
+  menuIcon: User
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 30
+fields:
+  name:
+    label: نام
+    placeholder: مثلاً علی قاسمی
+    sortable: true
+    type: text
+  username:
+    label: نام کاربری
+    placeholder: مثلاً admin
+    sortable: true
+    type: text
+    unique: true
+  roles:
+    label: نقش‌ها
+    type: autocomplete
+    displayField: name
+    sortable: false
+relationships:
+  roles:
+    label: نقش‌ها
+    type: autocomplete
+    displayField: name
+    sortable: false
