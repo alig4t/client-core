@@ -16,7 +16,7 @@ import { useLoading } from "@/stores/LoadingContext";
 import Button from "@/core/components/general/button/Button";
 import KeywordTable from "../Keyword/KeywordTable";
 import KeywordSearch from "../Keyword/KeywordSearch";
-import { keywordModelMeta } from "../Keyword/KeywordModel.meta";
+import { KeywordModelMeta } from "../Keyword/KeywordModel.meta";
 const KeywordPage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
@@ -46,9 +46,9 @@ const KeywordPage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={routeMeta?.label || keywordModelMeta.messages.manage.title}
+            title={routeMeta?.label || KeywordModelMeta.messages.manage.title}
             actionButton={{
-              label: keywordModelMeta.messages.createButton,
+              label: KeywordModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

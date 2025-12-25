@@ -1,10 +1,27 @@
 import { BaseService } from "@/core/service/BaseService";
 import type { UserModel } from "./UserModel";
+import { api } from "@/core/service/Axios";
 
 class UserService extends BaseService<UserModel> {
   constructor() {
-    super("/user");
+    super('/auth');
   }
+
+
+  login = (data: { username: string; password: string }) => {
+    return api.post("/auth/login", data);
+  };
+
+  register = (data: { name: string; username: string; password: string }) => {
+    return api.post("/auth/register", data);
+  };
+
+  getAll = () => {
+    return api.get("/auth/users");
+  };
+
+
+  // Add login, register, profile, etc. as needed
 }
 
 export default new UserService();
