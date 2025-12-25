@@ -29,6 +29,10 @@ import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatfo
 import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 import BotService from "@/Models/Bot/BotService";
 import { BotModelMeta } from "@/Models/Bot/BotModel.meta";
+import StepperDemo from "@/core/components/general/stepper/StepperDemo";
+import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
+import { useLoading } from "@/stores/LoadingContext";
+import PlatformAuthorizationControllerService, { type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
 
 const channelSchema = z.object({
   channelName: Validator.notNull(),
@@ -46,6 +50,7 @@ const ChannelCreate: React.FC = () => {
   const isEditMode = !!id;
   const routeMeta = useRouteMetadata();
   const queryClient = useQueryClient();
+  const { openWaitDialog, closeWaitDialog } = useLoading();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["channel", id],
@@ -55,11 +60,27 @@ const ChannelCreate: React.FC = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: (data: ChannelFormData) => {
+    mutationFn: async (data: ChannelFormData) => {
       if (isEditMode) {
         return ChannelService.update(Number(id), data);
       }
-      return ChannelService.create(data);
+
+      console.log(data)
+
+      openWaitDialog();
+      const platform = await MessagingPlatformService.getById(data.platform.id)
+
+     
+      console.log(platform)
+      let dto : DraftDto  = {
+        platformKey:platform.platformKey,
+        authorizationType: "MONITORING_CHANNEL"
+      }
+      const draftResult = await PlatformAuthorizationControllerService.draftAuthorizations(dto)
+       closeWaitDialog();
+      console.log(draftResult)
+      return ChannelService.create({});
+      // return new Promise();
     },
     onSuccess: () => {
       toast.success(
@@ -113,9 +134,19 @@ const ChannelCreate: React.FC = () => {
     );
   }
 
+  const steps: CompactStep[] = [
+    { id: 1, label: "ثبت کانال" },
+    { id: 2, label: "ساخت draft" },
+    { id: 3, label: "تایید " },
+  ]
+
   return (
     <PageWrapper>
       <PageTransition>
+
+
+        {/* <StepperDemo /> */}
+
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
         <PageHeader
           title={
@@ -125,6 +156,8 @@ const ChannelCreate: React.FC = () => {
           }
         />
         <CreatePageFormWrapper>
+          <CompactStepper steps={steps} currentStep={0} className="max-w-lg mx-auto mt-3 mb-8" />
+
           <FormWrapper
             schema={channelSchema}
             onSubmit={onSubmit}
