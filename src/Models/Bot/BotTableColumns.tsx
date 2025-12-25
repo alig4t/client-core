@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { BotModel } from "./BotModel";
-import { botModelMeta } from "./BotModel.meta";
+import { BotModelMeta } from "./BotModel.meta";
 import { BotStatusEnumLabels } from "./BotStatusEnum";
 import LinkView from "@/core/components/general/link/LinkView";
 
@@ -62,8 +62,8 @@ export const BotTableColumns: React.FC<BotTableColumnsProps> = memo(
 export const BotTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{botModelMeta.fields.token.label}</THEAD>
-    <THEAD>{botModelMeta.fields.status.label}</THEAD>
+    <THEAD>{BotModelMeta.fields.token.label}</THEAD>
+    <THEAD>{BotModelMeta.fields.status.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

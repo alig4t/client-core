@@ -1,4 +1,3 @@
-// src/pages/ComprehensiveCreate.tsx
 import React from "react";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
@@ -6,49 +5,46 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
-
-import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
+import UserService from "./UserService";
+import { UserModelMeta } from "./UserModel.meta";
+import FormInput from "@/core/components/form/FormInput";
 import z from "@/core/forms/zod.config";
+import Validator from "@/core/forms/validation";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import Button from "@/core/components/general/button/Button";
 import PageHeader from "@/core/components/general/container/PageHeader";
-import FormInput from "@/core/components/form/FormInput";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-
-import Validator from "@/core/forms/validation";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import { useLoading } from "@/stores/LoadingContext";
-import UserService from "../User/UserService";
-
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
 import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
-import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
-import RoleService from "../Role/RoleService";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
-import { userModelMeta } from "./UserModel.meta";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import RoleService from "@/Models/Role/RoleService";
+import { RoleModelMeta } from "@/Models/Role/RoleModel.meta";
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 
-const UserSchema = z.object({
+const userSchema = z.object({
   name: Validator.notNull(),
   username: Validator.notNull(),
+  roles: Validator.optional(),
 });
 
-type UserFormData = z.infer<typeof UserSchema>;
+type UserFormData = z.infer<typeof userSchema>;
 
 const UserCreate: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>(); // Get id from URL
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
+  const routeMeta = useRouteMetadata();
   const queryClient = useQueryClient();
-  const isEditMode = !!id; // Detect edit mode
-  const { openWaitDialog, closeWaitDialog } = useLoading();
 
-  // Load data in edit mode
-  const { data: initialData, isLoading: isLoadingInitial } = useQuery({
+  const { data: existingData, isLoading } = useQuery({
     queryKey: ["user", id],
-    queryFn: () => UserService.getById(Number(id)),
+    queryFn: () => UserService.getById(Number(id!)),
     enabled: isEditMode,
     ...ReactQueryOptions.editOptions,
   });
@@ -60,33 +56,30 @@ const UserCreate: React.FC = () => {
       }
       return UserService.create(data);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success(
         isEditMode
-          ? userModelMeta.messages.update.success.title
-          : userModelMeta.messages.create.success.title,
+          ? UserModelMeta.messages.update.success.title
+          : UserModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? userModelMeta.messages.update.success.description
-            : userModelMeta.messages.create.success.description,
+            ? UserModelMeta.messages.update.success.description
+            : UserModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
       queryClient.invalidateQueries({ queryKey: ["user"] });
-      navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
+      navigate(getViewPath(VIEWNAME.USER_SEARCH));
     },
-    onError: (error: any) => {
+    onError: () => {
       toast.error(
         isEditMode
-          ? userModelMeta.messages.update.error.title
-          : userModelMeta.messages.create.error.title,
+          ? UserModelMeta.messages.update.error.title
+          : UserModelMeta.messages.create.error.title,
         {
-          description:
-            error?.message ||
-            (isEditMode
-              ? userModelMeta.messages.update.error.defaultDescription
-              : userModelMeta.messages.create.error
-                .defaultDescription),
+          description: isEditMode
+            ? UserModelMeta.messages.update.error.description
+            : UserModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -98,17 +91,16 @@ const UserCreate: React.FC = () => {
   };
 
   const handleCancel = () => {
-    navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
+    navigate(getViewPath(VIEWNAME.USER_SEARCH));
   };
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? userModelMeta.messages.pageTitle.edit
-      : userModelMeta.messages.pageTitle.create
+      ? UserModelMeta.messages.pageTitle.edit
+      : UserModelMeta.messages.pageTitle.create
   );
-  const routeMeta = useRouteMetadata();
 
-  if (isLoadingInitial && isEditMode) {
+  if (isLoading && isEditMode) {
     return (
       <PageWrapper>
         <CreatePagePlaceholder rowCount={3} />
@@ -120,57 +112,52 @@ const UserCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-
         <PageHeader
-          title={routeMeta?.label || (
+          title={
             isEditMode
-              ? userModelMeta.messages.pageTitle.edit
-              : userModelMeta.messages.pageTitle.create
-          )}
+              ? UserModelMeta.messages.pageTitle.edit
+              : UserModelMeta.messages.pageTitle.create
+          }
         />
-
         <CreatePageFormWrapper>
           <FormWrapper
-            schema={UserSchema}
+            schema={userSchema}
             onSubmit={onSubmit}
-            className="space-y-6"
-            defaultValues={initialData} // Fill form with existing data in edit mode
+            defaultValues={existingData}
           >
-            <RowContainer numberOfColumns={2}>
+            <RowContainer>
               <FormInput
-                type="text"
                 name="name"
-                label={userModelMeta.fields.name?.label}
-                placeholder={
-                  userModelMeta.fields.name?.placeholder
-                }
+                label={UserModelMeta.fields.name.label}
+                placeholder={UserModelMeta.fields.name.placeholder}
+                maxLength={100}
               />
               <FormInput
-                type="text"
                 name="username"
-                label={userModelMeta.fields.username?.label}
-                placeholder={
-                  userModelMeta.fields.username?.placeholder
-                }
+                label={UserModelMeta.fields.username.label}
+                placeholder={UserModelMeta.fields.username.placeholder}
+                maxLength={50}
               />
               <FormAutoComplete
                 name="roles"
-                label={userModelMeta.fields.roles?.label}
+                label={UserModelMeta.fields.roles.label}
                 service={RoleService}
-                labelKey="name"
+                labelKey={RoleModelMeta.displayField}
                 valueKey="id"
-                multi
               />
-
             </RowContainer>
 
             <ButtonPanel align="end">
-              <Button variant="cancel" onClick={handleCancel}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(getViewPath(VIEWNAME.USER_SEARCH))}
+              >
                 {publicMessages.form.buttons.cancel}
               </Button>
               <Button
-                variant="primary"
                 type="submit"
+                variant="primary"
                 loading={mutation.isPending}
                 disabled={mutation.isPending}
               >
@@ -181,7 +168,6 @@ const UserCreate: React.FC = () => {
             </ButtonPanel>
           </FormWrapper>
         </CreatePageFormWrapper>
-
       </PageTransition>
     </PageWrapper>
   );

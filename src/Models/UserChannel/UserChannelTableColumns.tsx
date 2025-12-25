@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { UserChannelModel } from "./UserChannelModel";
-import { userChannelModelMeta } from "./UserChannelModel.meta";
+import { UserChannelModelMeta } from "./UserChannelModel.meta";
 import { UserChannelRoleEnumLabels } from "./UserChannelRoleEnum";
 import LinkView from "@/core/components/general/link/LinkView";
 
@@ -61,7 +61,7 @@ export const UserChannelTableColumns: React.FC<UserChannelTableColumnsProps> = m
 export const UserChannelTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{userChannelModelMeta.fields.role.label}</THEAD>
+    <THEAD>{UserChannelModelMeta.fields.role.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

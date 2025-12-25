@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { MessagingPlatformModel } from "./MessagingPlatformModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const messagingPlatformModelMeta = createModelMeta<
+export const MessagingPlatformModelMeta = createModelMeta<
   MessagingPlatformModel,
   FormFieldMetadata
 >(

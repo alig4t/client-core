@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { KeywordMatchModel } from "./KeywordMatchModel";
 import KeywordMatchService from "./KeywordMatchService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { keywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import {
   KeywordMatchTableColumns,
@@ -35,8 +35,8 @@ const KeywordMatchTable: React.FC<KeywordMatchTableProps> = ({
       renderRow={(item, index, onDelete) => (
         <KeywordMatchTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={keywordMatchModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(keywordMatchModelMeta)}
+      title={KeywordMatchModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(KeywordMatchModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

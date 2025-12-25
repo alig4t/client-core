@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { {{entityName}}Model } from "./{{entityName}}Model";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const {{camelCase entityName}}ModelMeta = createModelMeta<{{entityName}}Model, FormFieldMetadata>(
+export const {{pascalCase entityName}}ModelMeta = createModelMeta<{{entityName}}Model, FormFieldMetadata>(
   {
 {{#each fields}}
     {{this.name}}: {

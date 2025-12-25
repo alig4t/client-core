@@ -33,7 +33,7 @@ fields:
     label: عدد دقیق (BigDecimal)
     placeholder: مثلاً 123.456789
     sortable: true
-    type: text
+    type: bigDecimalField
   booleanField:
     label: بولین
     sortable: true

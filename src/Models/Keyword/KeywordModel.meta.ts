@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { KeywordModel } from "./KeywordModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const keywordModelMeta = createModelMeta<KeywordModel, FormFieldMetadata>(
+export const KeywordModelMeta = createModelMeta<KeywordModel, FormFieldMetadata>(
   {
     keywordText: {
       label: "متن کلمه کلیدی",

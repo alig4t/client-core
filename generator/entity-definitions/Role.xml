@@ -1,0 +1,24 @@
+<!-- Role.xml -->
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+    <name>Role</name>
+    <generate>true</generate>
+    <fields>
+        <field>
+            <name>name</name>
+            <type>STRING</type>
+            <required>true</required>
+            <unique>true</unique>
+            <maxLength>50</maxLength>
+            <searchable>true</searchable>
+        </field>
+    </fields>
+    <relationships>
+        <relationship>
+            <name>users</name>
+            <relationshipType>MANY_TO_MANY</relationshipType>
+            <relatedEntityName>User</relatedEntityName>
+            <joinTableName>user_role</joinTableName>
+        </relationship>
+    </relationships>
+</entity>

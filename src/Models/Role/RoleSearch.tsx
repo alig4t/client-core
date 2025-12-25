@@ -1,27 +1,22 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
-import {
-  FormWrapper,
-  type searchFilters,
-} from "@/core/components/form/FormWrapper";
-import { DateInput } from "@/core/components/form/DateInput";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
-import Button from "@/core/components/general/button/Button";
+import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
+import { RoleModelMeta } from "./RoleModel.meta";
 import FormInput from "@/core/components/form/FormInput";
-import { z } from "zod";
+import { DateInput } from "@/core/components/form/DateInput";
+import Button from "@/core/components/general/button/Button";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import { FilterOperator } from "@/core/forms/FilterOperators";
-import Validator from "@/core/forms/validation";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import { makeRangeLabel, publicMessages } from "@/core/forms/MessageUtils";
-import { RoleModelMeta } from "./RoleModel.meta";
-
-interface RoleSearchProps {
-  onApplyFilters: (filters: searchFilters) => void;
-}
+import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
+import z from "@/core/forms/zod.config";
+import Validator from "@/core/forms/validation";
+import OptionUtils from "@/core/forms/OptionUtils";
 
 const searchSchema = z.object({
   [`name_${FilterOperator.LIKE}`]: Validator.optional(),
+  // BaseModel fields
   [`createdAt_${FilterOperator.GE}`]: Validator.optional(),
   [`createdAt_${FilterOperator.LE}`]: Validator.optional(),
   [`updatedAt_${FilterOperator.GE}`]: Validator.optional(),
@@ -30,10 +25,15 @@ const searchSchema = z.object({
 
 type SearchFormData = z.infer<typeof searchSchema>;
 
+interface RoleSearchProps {
+  onApplyFilters: (filters: searchFilters) => void;
+}
+
 const RoleSearch: React.FC<RoleSearchProps> = ({ onApplyFilters }) => {
   const [formMethods, setFormMethods] = React.useState<any>(null);
 
   const onSubmit: SubmitHandler<SearchFormData> = (data) => {
+    console.log(data);
     onApplyFilters(data);
   };
 
@@ -46,18 +46,15 @@ const RoleSearch: React.FC<RoleSearchProps> = ({ onApplyFilters }) => {
 
   return (
     <PageWrapper>
-      <FormWrapper
-        onSubmit={onSubmit}
-        schema={searchSchema}
-        onFormReady={setFormMethods}
-      >
+      <FormWrapper onSubmit={onSubmit} schema={searchSchema} onFormReady={setFormMethods}>
         <RowContainer>
           <FormInput
             name={`name_${FilterOperator.LIKE}`}
             label={RoleModelMeta.fields.name?.label}
-            placeholder="عنوان نقش"
+            placeholder="جستجو..."
           />
 
+          {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
             label={makeRangeLabel(RoleModelMeta.fields.createdAt.label, "from")}
@@ -66,7 +63,6 @@ const RoleSearch: React.FC<RoleSearchProps> = ({ onApplyFilters }) => {
             name={`createdAt_${FilterOperator.LE}`}
             label={makeRangeLabel(RoleModelMeta.fields.createdAt.label, "to")}
           />
-
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
             label={makeRangeLabel(RoleModelMeta.fields.updatedAt.label, "from")}

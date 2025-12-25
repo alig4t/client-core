@@ -5,6 +5,7 @@ export type FieldType =
   | "email"
   | "password"
   | "number"
+  | "bigDecimalField"
   | "date"               // Date only: yyyy-MM-dd
   | "datetime-local"     // Date + Time without timezone (for localDateTime and dateField)
   | "textarea"

@@ -117,7 +117,7 @@
         <relationship>
             <name>attachments</name>
             <relationshipType>ONE_TO_MANY</relationshipType>
-            <relatedEntityName>Document</relatedEntityName>
+            <relatedEntityName>Attachment</relatedEntityName>
             <document>true</document>
             <joinColumnName>comprehensive_entity_id</joinColumnName>
         </relationship>

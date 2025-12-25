@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { botModelMeta } from "./BotModel.meta";
+import { BotModelMeta } from "./BotModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,19 +50,19 @@ const BotSearch: React.FC<BotSearchProps> = ({ onApplyFilters }) => {
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(botModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(BotModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(botModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(BotModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(botModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(BotModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(botModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(BotModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

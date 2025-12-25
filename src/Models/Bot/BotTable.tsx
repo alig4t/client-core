@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { BotModel } from "./BotModel";
 import BotService from "./BotService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { botModelMeta } from "./BotModel.meta";
+import { BotModelMeta } from "./BotModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { BotTableColumns, BotTableHeaders } from "./BotTableColumns";
 
@@ -29,8 +29,8 @@ const BotTable: React.FC<BotTableProps> = ({ filters, onSelectionChange }) => {
       renderRow={(item, index, onDelete) => (
         <BotTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={botModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(botModelMeta)}
+      title={BotModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(BotModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

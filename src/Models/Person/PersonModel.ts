@@ -1,7 +1,6 @@
 import type { BaseModel } from "@/core/models/BaseModel";
-
+import type { UserModel } from "@/Models/User/UserModel";
 import type { CityModel } from "@/Models/City/CityModel";
-import type { UserModel } from "../User/UserModel";
 
 export interface PersonModel extends BaseModel {
   firstName: string;

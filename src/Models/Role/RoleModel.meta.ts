@@ -1,6 +1,6 @@
 import { createModelMeta } from "@/core/models/modelMetaUtils";
-import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 import type { RoleModel } from "./RoleModel";
+import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
 export const RoleModelMeta = createModelMeta<RoleModel, FormFieldMetadata>(
   {
@@ -10,6 +10,12 @@ export const RoleModelMeta = createModelMeta<RoleModel, FormFieldMetadata>(
       placeholder: "عنوان نقش",
       sortable: true,
       required: true,
+    },
+    users: {
+      label: "کاربران",
+      type: "autocomplete",
+      displayField: "username",
+      sortable: false,
     },
   },
   GET_AUTOCOMPLETE_DISPLAY_FIELD(),

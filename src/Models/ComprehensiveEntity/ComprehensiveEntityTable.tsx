@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { ComprehensiveEntityModel } from "./ComprehensiveEntityModel";
 import ComprehensiveEntityService from "./ComprehensiveEntityService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { comprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import {
   ComprehensiveEntityTableColumns,
@@ -35,8 +35,8 @@ const ComprehensiveEntityTable: React.FC<ComprehensiveEntityTableProps> = ({
       renderRow={(item, index, onDelete) => (
         <ComprehensiveEntityTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={comprehensiveEntityModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(comprehensiveEntityModelMeta)}
+      title={ComprehensiveEntityModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(ComprehensiveEntityModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

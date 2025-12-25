@@ -151,7 +151,7 @@ export class FrontendGenerator {
       BOOLEAN: 'boolean',
       DATE: 'date',
       LOCAL_DATE: 'date',
-      LOCAL_DATE_TIME: 'dateTime',
+      LOCAL_DATE_TIME: 'datetime-local',
       ENUM: 'select',
     };
     return typeMap[field.type] || 'text';

@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { CityModel } from "./CityModel";
 import CityService from "./CityService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { cityModelMeta } from "./CityModel.meta";
+import { CityModelMeta } from "./CityModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { CityTableColumns, CityTableHeaders } from "./CityTableColumns";
 
@@ -29,8 +29,8 @@ const CityTable: React.FC<CityTableProps> = ({ filters, onSelectionChange }) => 
       renderRow={(item, index, onDelete) => (
         <CityTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={cityModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(cityModelMeta)}
+      title={CityModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(CityModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

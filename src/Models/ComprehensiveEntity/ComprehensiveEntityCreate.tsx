@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import ComprehensiveEntityService from "./ComprehensiveEntityService";
-import { comprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
@@ -28,15 +28,15 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
-import { userModelMeta } from "@/Models/User/UserModel.meta";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import ChannelService from "@/Models/Channel/ChannelService";
-import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
+import { ChannelModelMeta } from "@/Models/Channel/ChannelModel.meta";
 import KeywordService from "@/Models/Keyword/KeywordService";
-import { keywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
+import { KeywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
-import DocumentService from "@/Models/Document/DocumentService";
-import { documentModelMeta } from "@/Models/Document/DocumentModel.meta";
+import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import AttachmentService from "@/Models/Attachment/AttachmentService";
+import { AttachmentModelMeta } from "@/Models/Attachment/AttachmentModel.meta";
 
 const comprehensiveEntitySchema = z.object({
   stringField: Validator.notNull(),
@@ -84,12 +84,12 @@ const ComprehensiveEntityCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? comprehensiveEntityModelMeta.messages.update.success.title
-          : comprehensiveEntityModelMeta.messages.create.success.title,
+          ? ComprehensiveEntityModelMeta.messages.update.success.title
+          : ComprehensiveEntityModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? comprehensiveEntityModelMeta.messages.update.success.description
-            : comprehensiveEntityModelMeta.messages.create.success.description,
+            ? ComprehensiveEntityModelMeta.messages.update.success.description
+            : ComprehensiveEntityModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -99,12 +99,12 @@ const ComprehensiveEntityCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? comprehensiveEntityModelMeta.messages.update.error.title
-          : comprehensiveEntityModelMeta.messages.create.error.title,
+          ? ComprehensiveEntityModelMeta.messages.update.error.title
+          : ComprehensiveEntityModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? comprehensiveEntityModelMeta.messages.update.error.description
-            : comprehensiveEntityModelMeta.messages.create.error.description,
+            ? ComprehensiveEntityModelMeta.messages.update.error.description
+            : ComprehensiveEntityModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -121,8 +121,8 @@ const ComprehensiveEntityCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? comprehensiveEntityModelMeta.messages.pageTitle.edit
-      : comprehensiveEntityModelMeta.messages.pageTitle.create
+      ? ComprehensiveEntityModelMeta.messages.pageTitle.edit
+      : ComprehensiveEntityModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -140,8 +140,8 @@ const ComprehensiveEntityCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? comprehensiveEntityModelMeta.messages.pageTitle.edit
-              : comprehensiveEntityModelMeta.messages.pageTitle.create
+              ? ComprehensiveEntityModelMeta.messages.pageTitle.edit
+              : ComprehensiveEntityModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -153,96 +153,89 @@ const ComprehensiveEntityCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="stringField"
-                label={comprehensiveEntityModelMeta.fields.stringField.label}
-                placeholder={comprehensiveEntityModelMeta.fields.stringField.placeholder}
+                label={ComprehensiveEntityModelMeta.fields.stringField.label}
+                placeholder={ComprehensiveEntityModelMeta.fields.stringField.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="integerField"
-                label={comprehensiveEntityModelMeta.fields.integerField.label}
+                label={ComprehensiveEntityModelMeta.fields.integerField.label}
                 type="number"
               />
               <FormInput
                 name="longField"
-                label={comprehensiveEntityModelMeta.fields.longField.label}
+                label={ComprehensiveEntityModelMeta.fields.longField.label}
                 type="number"
               />
               <FormInput
                 name="doubleField"
-                label={comprehensiveEntityModelMeta.fields.doubleField.label}
+                label={ComprehensiveEntityModelMeta.fields.doubleField.label}
                 type="number"
-              />
-              <FormInput
-                name="bigDecimalField"
-                label={comprehensiveEntityModelMeta.fields.bigDecimalField.label}
-                placeholder={
-                  comprehensiveEntityModelMeta.fields.bigDecimalField.placeholder
-                }
               />
               <Checkbox
                 name="booleanField"
-                label={comprehensiveEntityModelMeta.fields.booleanField.label}
+                label={ComprehensiveEntityModelMeta.fields.booleanField.label}
               />
               <DateInput
                 name="dateField"
-                label={comprehensiveEntityModelMeta.fields.dateField.label}
+                label={ComprehensiveEntityModelMeta.fields.dateField.label}
               />
               <DateInput
                 name="localDateField"
-                label={comprehensiveEntityModelMeta.fields.localDateField.label}
+                label={ComprehensiveEntityModelMeta.fields.localDateField.label}
               />
               <DateInput
                 name="localDateTimeField"
-                label={comprehensiveEntityModelMeta.fields.localDateTimeField.label}
+                label={ComprehensiveEntityModelMeta.fields.localDateTimeField.label}
               />
               <FormSelect
                 name="enumField"
-                label={comprehensiveEntityModelMeta.fields.enumField.label}
-                options={comprehensiveEntityModelMeta.fields.enumField.options || []}
+                label={ComprehensiveEntityModelMeta.fields.enumField.label}
+                options={ComprehensiveEntityModelMeta.fields.enumField.options || []}
               />
               <FormInput
                 name="uniqueField"
-                label={comprehensiveEntityModelMeta.fields.uniqueField.label}
-                placeholder={comprehensiveEntityModelMeta.fields.uniqueField.placeholder}
+                label={ComprehensiveEntityModelMeta.fields.uniqueField.label}
+                placeholder={ComprehensiveEntityModelMeta.fields.uniqueField.placeholder}
               />
               <FormInput
                 name="indexedField"
-                label={comprehensiveEntityModelMeta.fields.indexedField.label}
-                placeholder={comprehensiveEntityModelMeta.fields.indexedField.placeholder}
+                label={ComprehensiveEntityModelMeta.fields.indexedField.label}
+                placeholder={ComprehensiveEntityModelMeta.fields.indexedField.placeholder}
               />
               <FormAutoComplete
                 name="oneToOneUser"
-                label={comprehensiveEntityModelMeta.fields.oneToOneUser.label}
+                label={ComprehensiveEntityModelMeta.fields.oneToOneUser.label}
                 service={UserService}
                 valueKey="id"
-                labelKey={userModelMeta.displayField}
+                labelKey={UserModelMeta.displayField}
               />
               <FormAutoComplete
                 name="manyToOneChannel"
-                label={comprehensiveEntityModelMeta.fields.manyToOneChannel.label}
+                label={ComprehensiveEntityModelMeta.fields.manyToOneChannel.label}
                 service={ChannelService}
                 valueKey="id"
-                labelKey={channelModelMeta.displayField}
+                labelKey={ChannelModelMeta.displayField}
               />
               <FormAutoComplete
                 name="oneToManyKeywords"
-                label={comprehensiveEntityModelMeta.fields.oneToManyKeywords.label}
+                label={ComprehensiveEntityModelMeta.fields.oneToManyKeywords.label}
                 service={KeywordService}
-                labelKey={keywordModelMeta.displayField}
+                labelKey={KeywordModelMeta.displayField}
                 valueKey="id"
               />
               <FormAutoComplete
                 name="manyToManyMessages"
-                label={comprehensiveEntityModelMeta.fields.manyToManyMessages.label}
+                label={ComprehensiveEntityModelMeta.fields.manyToManyMessages.label}
                 service={MessagingPlatformService}
-                labelKey={messagingPlatformModelMeta.displayField}
+                labelKey={MessagingPlatformModelMeta.displayField}
                 valueKey="id"
               />
               <FormAutoComplete
                 name="attachments"
-                label={comprehensiveEntityModelMeta.fields.attachments.label}
-                service={DocumentService}
-                labelKey={documentModelMeta.displayField}
+                label={ComprehensiveEntityModelMeta.fields.attachments.label}
+                service={AttachmentService}
+                labelKey={AttachmentModelMeta.displayField}
                 valueKey="id"
               />
             </RowContainer>

@@ -22,7 +22,7 @@ fields:
   sentAt:
     label: زمان ارسال
     sortable: true
-    type: datetime
+    type: date
   senderId:
     label: شناسه فرستنده
     placeholder: شناسه فرستنده

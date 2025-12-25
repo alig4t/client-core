@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import MessagingPlatformService from "./MessagingPlatformService";
-import { messagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,19 +86,19 @@ const MessagingPlatformDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={messagingPlatformModelMeta.fields.platformName.label}
+            label={MessagingPlatformModelMeta.fields.platformName.label}
             value={messagingPlatformRecord.platformName}
           />
           <DisplayField
-            label={messagingPlatformModelMeta.fields.platformKey.label}
+            label={MessagingPlatformModelMeta.fields.platformKey.label}
             value={messagingPlatformRecord.platformKey}
           />
           <DisplayField
-            label={messagingPlatformModelMeta.fields.apiEndpoint.label}
+            label={MessagingPlatformModelMeta.fields.apiEndpoint.label}
             value={messagingPlatformRecord.apiEndpoint}
           />
           <DisplayField
-            label={messagingPlatformModelMeta.fields.authMethod.label}
+            label={MessagingPlatformModelMeta.fields.authMethod.label}
             value={messagingPlatformRecord.authMethod}
           />
         </RowContainer>

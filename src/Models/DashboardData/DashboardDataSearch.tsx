@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { dashboardDataModelMeta } from "./DashboardDataModel.meta";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,19 +50,19 @@ const DashboardDataSearch: React.FC<DashboardDataSearchProps> = ({ onApplyFilter
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(dashboardDataModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(DashboardDataModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(dashboardDataModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(DashboardDataModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(dashboardDataModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(DashboardDataModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(dashboardDataModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(DashboardDataModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

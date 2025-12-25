@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import BotService from "./BotService";
-import { botModelMeta } from "./BotModel.meta";
+import { BotModelMeta } from "./BotModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
@@ -26,7 +26,7 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 
 const botSchema = z.object({
   token: Validator.notNull(),
@@ -60,12 +60,12 @@ const BotCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? botModelMeta.messages.update.success.title
-          : botModelMeta.messages.create.success.title,
+          ? BotModelMeta.messages.update.success.title
+          : BotModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? botModelMeta.messages.update.success.description
-            : botModelMeta.messages.create.success.description,
+            ? BotModelMeta.messages.update.success.description
+            : BotModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -75,12 +75,12 @@ const BotCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? botModelMeta.messages.update.error.title
-          : botModelMeta.messages.create.error.title,
+          ? BotModelMeta.messages.update.error.title
+          : BotModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? botModelMeta.messages.update.error.description
-            : botModelMeta.messages.create.error.description,
+            ? BotModelMeta.messages.update.error.description
+            : BotModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -97,8 +97,8 @@ const BotCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? botModelMeta.messages.pageTitle.edit
-      : botModelMeta.messages.pageTitle.create
+      ? BotModelMeta.messages.pageTitle.edit
+      : BotModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -116,8 +116,8 @@ const BotCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? botModelMeta.messages.pageTitle.edit
-              : botModelMeta.messages.pageTitle.create
+              ? BotModelMeta.messages.pageTitle.edit
+              : BotModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -129,21 +129,21 @@ const BotCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="token"
-                label={botModelMeta.fields.token.label}
-                placeholder={botModelMeta.fields.token.placeholder}
+                label={BotModelMeta.fields.token.label}
+                placeholder={BotModelMeta.fields.token.placeholder}
                 maxLength={255}
               />
               <FormSelect
                 name="status"
-                label={botModelMeta.fields.status.label}
-                options={botModelMeta.fields.status.options || []}
+                label={BotModelMeta.fields.status.label}
+                options={BotModelMeta.fields.status.options || []}
               />
               <FormAutoComplete
                 name="platform"
-                label={botModelMeta.fields.platform.label}
+                label={BotModelMeta.fields.platform.label}
                 service={MessagingPlatformService}
                 valueKey="id"
-                labelKey={messagingPlatformModelMeta.displayField}
+                labelKey={MessagingPlatformModelMeta.displayField}
               />
             </RowContainer>
 

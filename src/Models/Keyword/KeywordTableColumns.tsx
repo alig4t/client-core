@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { KeywordModel } from "./KeywordModel";
-import { keywordModelMeta } from "./KeywordModel.meta";
+import { KeywordModelMeta } from "./KeywordModel.meta";
 import LinkView from "@/core/components/general/link/LinkView";
 
 interface KeywordTableColumnsProps {
@@ -60,7 +60,7 @@ export const KeywordTableColumns: React.FC<KeywordTableColumnsProps> = memo(
 export const KeywordTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{keywordModelMeta.fields.keywordText.label}</THEAD>
+    <THEAD>{KeywordModelMeta.fields.keywordText.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

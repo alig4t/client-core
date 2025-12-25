@@ -11,7 +11,7 @@ import { DisplayField } from "@/core/components/general/container/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
 {{/if}}
 import {{entityName}}Service from "./{{entityName}}Service";
-import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import { {{pascalCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -99,37 +99,37 @@ const {{entityName}}Display: React.FC = () => {
 {{#each fields}}
 {{#if (eq this.type "LOCAL_DATE_TIME")}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ DateUtil.GEORGIAN_TO_JALALI_WITH_TIME({{camelCase ../entityName}}Record.{{this.name}}) }
           />
 {{else if this.isDate}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ DateUtil.GEORGIAN_TO_JALALI({{camelCase ../entityName}}Record.{{this.name}}) }
           />
 {{else if this.isBoolean}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ OptionUtils.GET_BOOLEAN_OPTION({{camelCase ../entityName}}Record.{{this.name}}) }
           />
 {{else if this.isEnum}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ OptionUtils.getLabel({{camelCase ../entityName}}Record.{{this.name}}, {{../entityName}}{{pascalCase this.name}}EnumLabels) }
           />
 {{else if (eq this.type "DOUBLE")}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ {{camelCase ../entityName}}Record.{{this.name}}?.toFixed(2) }
           />
 {{else if (eq this.type "BIG_DECIMAL")}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ {{camelCase ../entityName}}Record.{{this.name}}?.toFixed(4) }
           />
 {{else}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ {{camelCase ../entityName}}Record.{{this.name}} }
           />
 {{/if}}
@@ -137,14 +137,14 @@ const {{entityName}}Display: React.FC = () => {
 {{#each relationships}}
 {{#if this.document}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={
               <FilePreview fileId={({{camelCase ../entityName}}Record as any).{{this.name}}?.[0]?.id} previewSize="sm" className="mr-2" />
             }
           />
 {{else if (isToOne this.relationshipType)}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={
               {{camelCase ../entityName}}Record.{{this.name}} ? (
                 <LinkView
@@ -159,7 +159,7 @@ const {{entityName}}Display: React.FC = () => {
           />
 {{else if (isToMany this.relationshipType)}}
           <DisplayField
-            label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+            label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
             value={ {{camelCase ../entityName}}Record.{{this.name}}?.map((item: any) => item?.{{this.meta.displayField}})?.join(", ") || "---" }
           />
 {{/if}}

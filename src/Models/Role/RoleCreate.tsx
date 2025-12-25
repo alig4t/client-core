@@ -5,27 +5,31 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
+import RoleService from "./RoleService";
+import { RoleModelMeta } from "./RoleModel.meta";
+import FormInput from "@/core/components/form/FormInput";
 import z from "@/core/forms/zod.config";
+import Validator from "@/core/forms/validation";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import Button from "@/core/components/general/button/Button";
 import PageHeader from "@/core/components/general/container/PageHeader";
-import FormInput from "@/core/components/form/FormInput";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-import Validator from "@/core/forms/validation";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
 import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
-import RoleService from "./RoleService";
-import { RoleModelMeta } from "./RoleModel.meta";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import UserService from "@/Models/User/UserService";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 
 const roleSchema = z.object({
   name: Validator.notNull(),
+  users: Validator.optional(),
 });
 
 type RoleFormData = z.infer<typeof roleSchema>;
@@ -33,21 +37,24 @@ type RoleFormData = z.infer<typeof roleSchema>;
 const RoleCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
-  const queryClient = useQueryClient();
   const isEditMode = !!id;
+  const routeMeta = useRouteMetadata();
+  const queryClient = useQueryClient();
 
-  const { data: initialData, isLoading: isLoadingInitial } = useQuery({
+  const { data: existingData, isLoading } = useQuery({
     queryKey: ["role", id],
-    queryFn: () => RoleService.getById(Number(id)),
+    queryFn: () => RoleService.getById(Number(id!)),
     enabled: isEditMode,
     ...ReactQueryOptions.editOptions,
   });
 
   const mutation = useMutation({
-    mutationFn: (data: RoleFormData) =>
-      isEditMode
-        ? RoleService.update(Number(id), data)
-        : RoleService.create(data),
+    mutationFn: (data: RoleFormData) => {
+      if (isEditMode) {
+        return RoleService.update(Number(id), data);
+      }
+      return RoleService.create(data);
+    },
     onSuccess: () => {
       toast.success(
         isEditMode
@@ -63,38 +70,39 @@ const RoleCreate: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["role"] });
       navigate(getViewPath(VIEWNAME.ROLE_SEARCH));
     },
-    onError: (error: any) => {
+    onError: () => {
       toast.error(
         isEditMode
           ? RoleModelMeta.messages.update.error.title
           : RoleModelMeta.messages.create.error.title,
         {
-          description:
-            error?.message ||
-            (isEditMode
-              ? RoleModelMeta.messages.update.error.defaultDescription
-              : RoleModelMeta.messages.create.error.defaultDescription),
+          description: isEditMode
+            ? RoleModelMeta.messages.update.error.description
+            : RoleModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
     },
   });
 
-  const onSubmit = (data: RoleFormData) => mutation.mutate(data);
+  const onSubmit = (data: RoleFormData) => {
+    mutation.mutate(data);
+  };
 
-  const handleCancel = () => navigate(getViewPath(VIEWNAME.ROLE_SEARCH));
+  const handleCancel = () => {
+    navigate(getViewPath(VIEWNAME.ROLE_SEARCH));
+  };
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
       ? RoleModelMeta.messages.pageTitle.edit
       : RoleModelMeta.messages.pageTitle.create
   );
-  const routeMeta = useRouteMetadata();
 
-  if (isLoadingInitial && isEditMode) {
+  if (isLoading && isEditMode) {
     return (
       <PageWrapper>
-        <CreatePagePlaceholder rowCount={2} />
+        <CreatePagePlaceholder rowCount={3} />
       </PageWrapper>
     );
   }
@@ -103,39 +111,46 @@ const RoleCreate: React.FC = () => {
     <PageWrapper>
       <PageTransition>
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-
         <PageHeader
           title={
-            routeMeta?.label ||
-            (isEditMode
+            isEditMode
               ? RoleModelMeta.messages.pageTitle.edit
-              : RoleModelMeta.messages.pageTitle.create)
+              : RoleModelMeta.messages.pageTitle.create
           }
         />
-
         <CreatePageFormWrapper>
           <FormWrapper
             schema={roleSchema}
             onSubmit={onSubmit}
-            className="space-y-6"
-            defaultValues={initialData}
+            defaultValues={existingData}
           >
-            <RowContainer numberOfColumns={1}>
+            <RowContainer>
               <FormInput
-                type="text"
                 name="name"
-                label={RoleModelMeta.fields.name?.label}
-                placeholder={RoleModelMeta.fields.name?.placeholder}
+                label={RoleModelMeta.fields.name.label}
+                placeholder={RoleModelMeta.fields.name.placeholder}
+                maxLength={50}
+              />
+              <FormAutoComplete
+                name="users"
+                label={RoleModelMeta.fields.users.label}
+                service={UserService}
+                labelKey={UserModelMeta.displayField}
+                valueKey="id"
               />
             </RowContainer>
 
             <ButtonPanel align="end">
-              <Button variant="cancel" onClick={handleCancel}>
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={() => navigate(getViewPath(VIEWNAME.ROLE_SEARCH))}
+              >
                 {publicMessages.form.buttons.cancel}
               </Button>
               <Button
-                variant="primary"
                 type="submit"
+                variant="primary"
                 loading={mutation.isPending}
                 disabled={mutation.isPending}
               >
@@ -146,7 +161,6 @@ const RoleCreate: React.FC = () => {
             </ButtonPanel>
           </FormWrapper>
         </CreatePageFormWrapper>
-
       </PageTransition>
     </PageWrapper>
   );

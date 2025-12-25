@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import KeywordMatchService from "./KeywordMatchService";
-import { keywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import { DateInput } from "@/core/components/form/DateInput";
@@ -26,11 +26,11 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 import KeywordService from "@/Models/Keyword/KeywordService";
-import { keywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
+import { KeywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
 import UserService from "@/Models/User/UserService";
-import { userModelMeta } from "@/Models/User/UserModel.meta";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 
 const keywordMatchSchema = z.object({
   matchedAt: Validator.notNull(),
@@ -65,12 +65,12 @@ const KeywordMatchCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? keywordMatchModelMeta.messages.update.success.title
-          : keywordMatchModelMeta.messages.create.success.title,
+          ? KeywordMatchModelMeta.messages.update.success.title
+          : KeywordMatchModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? keywordMatchModelMeta.messages.update.success.description
-            : keywordMatchModelMeta.messages.create.success.description,
+            ? KeywordMatchModelMeta.messages.update.success.description
+            : KeywordMatchModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -80,12 +80,12 @@ const KeywordMatchCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? keywordMatchModelMeta.messages.update.error.title
-          : keywordMatchModelMeta.messages.create.error.title,
+          ? KeywordMatchModelMeta.messages.update.error.title
+          : KeywordMatchModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? keywordMatchModelMeta.messages.update.error.description
-            : keywordMatchModelMeta.messages.create.error.description,
+            ? KeywordMatchModelMeta.messages.update.error.description
+            : KeywordMatchModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -102,8 +102,8 @@ const KeywordMatchCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? keywordMatchModelMeta.messages.pageTitle.edit
-      : keywordMatchModelMeta.messages.pageTitle.create
+      ? KeywordMatchModelMeta.messages.pageTitle.edit
+      : KeywordMatchModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -121,8 +121,8 @@ const KeywordMatchCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? keywordMatchModelMeta.messages.pageTitle.edit
-              : keywordMatchModelMeta.messages.pageTitle.create
+              ? KeywordMatchModelMeta.messages.pageTitle.edit
+              : KeywordMatchModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -134,28 +134,28 @@ const KeywordMatchCreate: React.FC = () => {
             <RowContainer>
               <DateInput
                 name="matchedAt"
-                label={keywordMatchModelMeta.fields.matchedAt.label}
+                label={KeywordMatchModelMeta.fields.matchedAt.label}
               />
               <FormAutoComplete
                 name="messagingPlatform"
-                label={keywordMatchModelMeta.fields.messagingPlatform.label}
+                label={KeywordMatchModelMeta.fields.messagingPlatform.label}
                 service={MessagingPlatformService}
                 valueKey="id"
-                labelKey={messagingPlatformModelMeta.displayField}
+                labelKey={MessagingPlatformModelMeta.displayField}
               />
               <FormAutoComplete
                 name="keyword"
-                label={keywordMatchModelMeta.fields.keyword.label}
+                label={KeywordMatchModelMeta.fields.keyword.label}
                 service={KeywordService}
                 valueKey="id"
-                labelKey={keywordModelMeta.displayField}
+                labelKey={KeywordModelMeta.displayField}
               />
               <FormAutoComplete
                 name="coreUser"
-                label={keywordMatchModelMeta.fields.coreUser.label}
+                label={KeywordMatchModelMeta.fields.coreUser.label}
                 service={UserService}
                 valueKey="id"
-                labelKey={userModelMeta.displayField}
+                labelKey={UserModelMeta.displayField}
               />
             </RowContainer>
 

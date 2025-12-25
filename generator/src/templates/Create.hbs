@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import {{entityName}}Service from "./{{entityName}}Service";
-import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import { {{pascalCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
 import FormInput from "@/core/components/form/FormInput";
 {{#if hasSelectFields}}
 import { FormSelect } from "@/core/components/form/FormSelect";
@@ -37,7 +37,7 @@ import CreatePageFormWrapper from "@/core/components/general/container/CreateFor
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 {{#each relationshipServices}}
 import {{this.serviceName}} from "@/Models/{{this.entityName}}/{{this.serviceName}}";
-import { {{camelCase this.entityName}}ModelMeta } from "@/Models/{{this.entityName}}/{{this.entityName}}Model.meta";
+import { {{pascalCase this.entityName}}ModelMeta } from "@/Models/{{this.entityName}}/{{this.entityName}}Model.meta";
 {{/each}}
 
 const {{camelCase entityName}}Schema = z.object({
@@ -83,12 +83,12 @@ const {{entityName}}Create: React.FC = () => {
     onSuccess: () => {
   toast.success(
     isEditMode
-      ? {{camelCase entityName}}ModelMeta.messages.update.success.title
-      : {{camelCase entityName}}ModelMeta.messages.create.success.title,
+      ? {{pascalCase entityName}}ModelMeta.messages.update.success.title
+      : {{pascalCase entityName}}ModelMeta.messages.create.success.title,
       {
         description: isEditMode
-          ? {{camelCase entityName}}ModelMeta.messages.update.success.description
-          : {{camelCase entityName}}ModelMeta.messages.create.success.description,
+          ? {{pascalCase entityName}}ModelMeta.messages.update.success.description
+          : {{pascalCase entityName}}ModelMeta.messages.create.success.description,
         position: "bottom-left",
       }
   );
@@ -98,12 +98,12 @@ const {{entityName}}Create: React.FC = () => {
     onError: () => {
       toast.error(
          isEditMode
-      ? {{camelCase entityName}}ModelMeta.messages.update.error.title
-      : {{camelCase entityName}}ModelMeta.messages.create.error.title,
+      ? {{pascalCase entityName}}ModelMeta.messages.update.error.title
+      : {{pascalCase entityName}}ModelMeta.messages.create.error.title,
       {
         description: isEditMode
-          ? {{camelCase entityName}}ModelMeta.messages.update.error.description
-          : {{camelCase entityName}}ModelMeta.messages.create.error.description,
+          ? {{pascalCase entityName}}ModelMeta.messages.update.error.description
+          : {{pascalCase entityName}}ModelMeta.messages.create.error.description,
         position: "bottom-left",
       }
         );
@@ -120,8 +120,8 @@ const {{entityName}}Create: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? {{camelCase entityName}}ModelMeta.messages.pageTitle.edit
-      : {{camelCase entityName}}ModelMeta.messages.pageTitle.create
+      ? {{pascalCase entityName}}ModelMeta.messages.pageTitle.edit
+      : {{pascalCase entityName}}ModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -140,8 +140,8 @@ const {{entityName}}Create: React.FC = () => {
             <PageHeader
               title={
                 isEditMode
-                  ?  {{camelCase entityName}}ModelMeta.messages.pageTitle.edit
-                  :  {{camelCase entityName}}ModelMeta.messages.pageTitle.create
+                  ?  {{pascalCase entityName}}ModelMeta.messages.pageTitle.edit
+                  :  {{pascalCase entityName}}ModelMeta.messages.pageTitle.create
               }
             />
             <CreatePageFormWrapper>
@@ -155,8 +155,8 @@ const {{entityName}}Create: React.FC = () => {
     {{#if (eq this.meta.type "text")}}
                   <FormInput
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-                    placeholder={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.placeholder}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    placeholder={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.placeholder}
     {{#if this.maxLength}}
                     maxLength={ {{this.maxLength}} }
     {{/if}}
@@ -164,24 +164,24 @@ const {{entityName}}Create: React.FC = () => {
     {{else if (eq this.meta.type "number")}}
                   <FormInput
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                     type="number"
                   />
     {{else if (eq this.meta.type "select")}}
                   <FormSelect
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
-                    options={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.options || []}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    options={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.options || []}
                   />
     {{else if (eq this.meta.type "boolean")}}
                   <Checkbox
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                   />
     {{else if (or (eq this.meta.type "date") (eq this.meta.type "datetime-local"))}}
                   <DateInput
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                   />
     {{/if}}
     {{/each}}
@@ -189,18 +189,18 @@ const {{entityName}}Create: React.FC = () => {
     {{#if (isToOne this.relationshipType)}}
                   <FormAutoComplete
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                     service={ {{this.relatedEntityName}}Service}
                     valueKey="id"
-                    labelKey={ {{camelCase this.relatedEntityName}}ModelMeta.displayField }
+                    labelKey={ {{pascalCase this.relatedEntityName}}ModelMeta.displayField }
                   />
     {{/if}}
     {{#if (isToMany this.relationshipType)}}
                   <FormAutoComplete
                     name="{{this.name}}"
-                    label={ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
+                    label={ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}
                     service={ {{this.relatedEntityName}}Service}
-                    labelKey={ {{camelCase this.relatedEntityName}}ModelMeta.displayField }
+                    labelKey={ {{pascalCase this.relatedEntityName}}ModelMeta.displayField }
                     valueKey="id"
                     
                   />

@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import CityService from "./CityService";
-import { cityModelMeta } from "./CityModel.meta";
+import { CityModelMeta } from "./CityModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,11 +86,11 @@ const CityDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={cityModelMeta.fields.cityName.label}
+            label={CityModelMeta.fields.cityName.label}
             value={cityRecord.cityName}
           />
           <DisplayField
-            label={cityModelMeta.fields.country.label}
+            label={CityModelMeta.fields.country.label}
             value={cityRecord.country}
           />
         </RowContainer>

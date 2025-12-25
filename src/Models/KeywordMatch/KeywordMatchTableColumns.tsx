@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { KeywordMatchModel } from "./KeywordMatchModel";
-import { keywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import LinkView from "@/core/components/general/link/LinkView";
 
 interface KeywordMatchTableColumnsProps {
@@ -60,7 +60,7 @@ export const KeywordMatchTableColumns: React.FC<KeywordMatchTableColumnsProps> =
 export const KeywordMatchTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{keywordMatchModelMeta.fields.matchedAt.label}</THEAD>
+    <THEAD>{KeywordMatchModelMeta.fields.matchedAt.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

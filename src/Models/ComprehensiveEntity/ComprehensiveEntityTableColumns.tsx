@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { ComprehensiveEntityModel } from "./ComprehensiveEntityModel";
-import { comprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import { ComprehensiveEntityEnumFieldEnumLabels } from "./ComprehensiveEntityEnumFieldEnum";
 import LinkView from "@/core/components/general/link/LinkView";
 
@@ -66,13 +66,13 @@ export const ComprehensiveEntityTableColumns: React.FC<ComprehensiveEntityTableC
 export const ComprehensiveEntityTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.stringField.label}</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.integerField.label}</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.longField.label}</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.doubleField.label}</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.bigDecimalField.label}</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.booleanField.label}</THEAD>
-    <THEAD>{comprehensiveEntityModelMeta.fields.dateField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.stringField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.integerField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.longField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.doubleField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.bigDecimalField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.booleanField.label}</THEAD>
+    <THEAD>{ComprehensiveEntityModelMeta.fields.dateField.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

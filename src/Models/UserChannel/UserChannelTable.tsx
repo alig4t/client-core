@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { UserChannelModel } from "./UserChannelModel";
 import UserChannelService from "./UserChannelService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { userChannelModelMeta } from "./UserChannelModel.meta";
+import { UserChannelModelMeta } from "./UserChannelModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import {
   UserChannelTableColumns,
@@ -35,8 +35,8 @@ const UserChannelTable: React.FC<UserChannelTableProps> = ({
       renderRow={(item, index, onDelete) => (
         <UserChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={userChannelModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(userChannelModelMeta)}
+      title={UserChannelModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(UserChannelModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

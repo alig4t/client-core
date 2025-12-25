@@ -12,9 +12,9 @@
     "overwriteExisting": true
   },
   "coreEntities": {
-    "User": {
+    "UserModel": {
       "isCore": true,
-      "importPath": "@/core/models/User",
+      "importPath": "@/core/models/UserModel",
       "servicePath": "@/core/services/UserService"
     },
     "Document": {
@@ -22,14 +22,14 @@
       "importPath": "@/core/models/Document",
       "servicePath": "@/core/services/DocumentService"
     },
-    "Role": {
+    "RoleModel": {
       "isCore": true,
-      "importPath": "@/core/models/Role",
+      "importPath": "@/core/models/RoleModel",
       "servicePath": "@/core/services/RoleService"
     },
-    "Permission": {
+    "PermissionModel": {
       "isCore": true,
-      "importPath": "@/core/models/Permission",
+      "importPath": "@/core/models/PermissionModel",
       "servicePath": "@/core/services/PermissionService"
     },
     "Message": {
@@ -55,7 +55,7 @@
     "INTEGER": "number",
     "LONG": "number",
     "DOUBLE": "number",
-    "BIG_DECIMAL": "string",
+    "BIG_DECIMAL": "number",
     "BOOLEAN": "boolean",
     "DATE": "string",
     "LOCAL_DATE": "string",

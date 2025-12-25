@@ -1,11 +1,15 @@
 import React from "react";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
-import { DisplayField } from "@/core/components/general/container/DisplayField";
+import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
+import RoleService from "./RoleService";
+import { RoleModelMeta } from "./RoleModel.meta";
+import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
 import Button from "@/core/components/general/button/Button";
@@ -15,10 +19,8 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 import { publicMessages } from "@/core/forms/MessageUtils";
-import RoleService from "./RoleService";
-import { RoleModelMeta } from "./RoleModel.meta";
 
-const RoleDisplayPage: React.FC = () => {
+const RoleDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
 
@@ -30,14 +32,17 @@ const RoleDisplayPage: React.FC = () => {
     refetch,
   } = useQuery({
     queryKey: ["role", id],
-    queryFn: () => RoleService.getById(Number(id)),
+    queryFn: () => RoleService.getById(Number(id!)),
     enabled: !!id,
     ...ReactQueryOptions.displayOptions,
   });
 
+  // Breadcrumb for navigation
   const breadcrumbItems = useBreadcrumbs(publicMessages.record.displayTitle);
 
+  // Handler for edit button
   const handleEditClick = () => {
+    console.log(getViewPath(VIEWNAME.ROLE_EDIT, id));
     navigate(getViewPath(VIEWNAME.ROLE_EDIT, id));
   };
 
@@ -63,10 +68,7 @@ const RoleDisplayPage: React.FC = () => {
   if (!roleRecord) {
     return (
       <PageWrapper>
-        <TableErrorState
-          message={publicMessages.record.notfound}
-          onRetry={refetch}
-        />
+        <TableErrorState message={publicMessages.record.notfound} onRetry={refetch} />
       </PageWrapper>
     );
   }
@@ -74,35 +76,26 @@ const RoleDisplayPage: React.FC = () => {
   return (
     <PageWrapper>
       <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <RecordDisplayLayout
-          title={publicMessages.record.displayTitle + " : " + roleRecord.id}
-          actions={
-            <Button variant="primary" onClick={handleEditClick}>
-              ویرایش'
-            </Button>
-          }
-        >
-          <RowContainer numberOfColumns={3}>
-            <DisplayField
-              label={RoleModelMeta.fields.name.label}
-              value={roleRecord.name}
-            />
-            <DisplayField
-              label={RoleModelMeta.fields.createdAt.label}
-              value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
-                roleRecord.createdAt
-              )}
-            />
-            <DisplayField
-              label={RoleModelMeta.fields.updatedAt.label}
-              value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
-                roleRecord.updatedAt
-              )}
-            />
-          </RowContainer>
-        </RecordDisplayLayout>
+      <RecordDisplayLayout
+        title={publicMessages.record.displayTitle + " : " + roleRecord.id}
+        actions={
+          <Button variant="primary" onClick={handleEditClick}>
+            ویرایش
+          </Button>
+        }
+      >
+        <RowContainer numberOfColumns={3}>
+          <DisplayField label={RoleModelMeta.fields.name.label} value={roleRecord.name} />
+          <DisplayField
+            label={RoleModelMeta.fields.users.label}
+            value={
+              roleRecord.users?.map((item: any) => item?.username)?.join(", ") || "---"
+            }
+          />
+        </RowContainer>
+      </RecordDisplayLayout>
     </PageWrapper>
   );
 };
 
-export default RoleDisplayPage;
+export default RoleDisplay;

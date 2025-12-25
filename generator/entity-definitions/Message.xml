@@ -2,7 +2,7 @@
 <entity>
     <name>Message</name>
     <tableName>messages</tableName>
-    <generate>false</generate>
+    <generate>true</generate>
     <fields>
         <field>
             <name>platformMessageId</name>
@@ -51,7 +51,7 @@
         <relationship>
             <name>attachments</name>
             <relationshipType>ONE_TO_MANY</relationshipType>
-            <relatedEntityName>Document</relatedEntityName>
+            <relatedEntityName>Attachment</relatedEntityName>
             <document>true</document>
             <joinColumnName>message_id</joinColumnName>
         </relationship>

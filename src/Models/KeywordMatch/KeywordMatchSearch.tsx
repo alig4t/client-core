@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { keywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,19 +50,19 @@ const KeywordMatchSearch: React.FC<KeywordMatchSearchProps> = ({ onApplyFilters 
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(keywordMatchModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(KeywordMatchModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(keywordMatchModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(KeywordMatchModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(keywordMatchModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(KeywordMatchModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(keywordMatchModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(KeywordMatchModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

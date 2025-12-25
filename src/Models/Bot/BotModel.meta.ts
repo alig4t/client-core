@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { BotModel } from "./BotModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const botModelMeta = createModelMeta<BotModel, FormFieldMetadata>(
+export const BotModelMeta = createModelMeta<BotModel, FormFieldMetadata>(
   {
     token: {
       label: "توکن",

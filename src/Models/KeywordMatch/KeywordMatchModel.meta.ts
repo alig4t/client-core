@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { KeywordMatchModel } from "./KeywordMatchModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const keywordMatchModelMeta = createModelMeta<
+export const KeywordMatchModelMeta = createModelMeta<
   KeywordMatchModel,
   FormFieldMetadata
 >(
@@ -16,7 +16,7 @@ export const keywordMatchModelMeta = createModelMeta<
     messagingPlatform: {
       label: "پیام",
       type: "autocomplete",
-      displayField: "content",
+      displayField: "platformName",
       sortable: false,
       required: true,
     },

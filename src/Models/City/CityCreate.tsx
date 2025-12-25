@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import CityService from "./CityService";
-import { cityModelMeta } from "./CityModel.meta";
+import { CityModelMeta } from "./CityModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import z from "@/core/forms/zod.config";
 import Validator from "@/core/forms/validation";
@@ -55,12 +55,12 @@ const CityCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? cityModelMeta.messages.update.success.title
-          : cityModelMeta.messages.create.success.title,
+          ? CityModelMeta.messages.update.success.title
+          : CityModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? cityModelMeta.messages.update.success.description
-            : cityModelMeta.messages.create.success.description,
+            ? CityModelMeta.messages.update.success.description
+            : CityModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -70,12 +70,12 @@ const CityCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? cityModelMeta.messages.update.error.title
-          : cityModelMeta.messages.create.error.title,
+          ? CityModelMeta.messages.update.error.title
+          : CityModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? cityModelMeta.messages.update.error.description
-            : cityModelMeta.messages.create.error.description,
+            ? CityModelMeta.messages.update.error.description
+            : CityModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -92,8 +92,8 @@ const CityCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? cityModelMeta.messages.pageTitle.edit
-      : cityModelMeta.messages.pageTitle.create
+      ? CityModelMeta.messages.pageTitle.edit
+      : CityModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -111,8 +111,8 @@ const CityCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? cityModelMeta.messages.pageTitle.edit
-              : cityModelMeta.messages.pageTitle.create
+              ? CityModelMeta.messages.pageTitle.edit
+              : CityModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -124,14 +124,14 @@ const CityCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="cityName"
-                label={cityModelMeta.fields.cityName.label}
-                placeholder={cityModelMeta.fields.cityName.placeholder}
+                label={CityModelMeta.fields.cityName.label}
+                placeholder={CityModelMeta.fields.cityName.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="country"
-                label={cityModelMeta.fields.country.label}
-                placeholder={cityModelMeta.fields.country.placeholder}
+                label={CityModelMeta.fields.country.label}
+                placeholder={CityModelMeta.fields.country.placeholder}
                 maxLength={100}
               />
             </RowContainer>

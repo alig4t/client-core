@@ -81,9 +81,10 @@ export function getOptions(
  * @param labels The mapping of enum values to labels
  */
 export function getLabel(
-  value: string | number,
+  value: string | number | undefined,
   labels: Record<string | number, string>
 ): string {
+  if(!value) return ''
   return labels[value] || String(value);
 }
 

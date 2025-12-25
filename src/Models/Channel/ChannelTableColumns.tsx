@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { ChannelModel } from "./ChannelModel";
-import { channelModelMeta } from "./ChannelModel.meta";
+import { ChannelModelMeta } from "./ChannelModel.meta";
 import { ChannelStatusEnumLabels } from "./ChannelStatusEnum";
 import LinkView from "@/core/components/general/link/LinkView";
 
@@ -63,9 +63,9 @@ export const ChannelTableColumns: React.FC<ChannelTableColumnsProps> = memo(
 export const ChannelTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{channelModelMeta.fields.channelName.label}</THEAD>
-    <THEAD>{channelModelMeta.fields.channelIdentifier.label}</THEAD>
-    <THEAD>{channelModelMeta.fields.status.label}</THEAD>
+    <THEAD>{ChannelModelMeta.fields.channelName.label}</THEAD>
+    <THEAD>{ChannelModelMeta.fields.channelIdentifier.label}</THEAD>
+    <THEAD>{ChannelModelMeta.fields.status.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

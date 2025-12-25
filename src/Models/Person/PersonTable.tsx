@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { PersonModel } from "./PersonModel";
 import PersonService from "./PersonService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { personModelMeta } from "./PersonModel.meta";
+import { PersonModelMeta } from "./PersonModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { PersonTableColumns, PersonTableHeaders } from "./PersonTableColumns";
 
@@ -29,8 +29,8 @@ const PersonTable: React.FC<PersonTableProps> = ({ filters, onSelectionChange })
       renderRow={(item, index, onDelete) => (
         <PersonTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={personModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(personModelMeta)}
+      title={PersonModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(PersonModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

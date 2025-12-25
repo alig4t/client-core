@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { cityModelMeta } from "./CityModel.meta";
+import { CityModelMeta } from "./CityModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,26 +50,26 @@ const CitySearch: React.FC<CitySearchProps> = ({ onApplyFilters }) => {
         <RowContainer>
           <FormInput
             name={`cityName_${FilterOperator.LIKE}`}
-            label={cityModelMeta.fields.cityName?.label}
+            label={CityModelMeta.fields.cityName?.label}
             placeholder="جستجو..."
           />
 
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(cityModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(CityModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(cityModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(CityModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(cityModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(CityModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(cityModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(CityModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

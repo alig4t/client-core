@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { {{entityName}}Model } from "./{{entityName}}Model";
 import {{entityName}}Service from "./{{entityName}}Service";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import { {{pascalCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { {{entityName}}TableColumns, {{entityName}}TableHeaders } from "./{{entityName}}TableColumns";
 
@@ -34,8 +34,8 @@ const {{entityName}}Table: React.FC<{{entityName}}TableProps> = ({
       renderRow={(item, index, onDelete) => (
         <{{entityName}}TableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={ {{camelCase entityName}}ModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions({{camelCase entityName}}ModelMeta)}
+      title={ {{pascalCase entityName}}ModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions({{pascalCase entityName}}ModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import DashboardDataService from "./DashboardDataService";
-import { dashboardDataModelMeta } from "./DashboardDataModel.meta";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import { DateInput } from "@/core/components/form/DateInput";
@@ -26,11 +26,11 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
-import { userModelMeta } from "@/Models/User/UserModel.meta";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import KeywordService from "@/Models/Keyword/KeywordService";
-import { keywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
+import { KeywordModelMeta } from "@/Models/Keyword/KeywordModel.meta";
 import ChannelService from "@/Models/Channel/ChannelService";
-import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
+import { ChannelModelMeta } from "@/Models/Channel/ChannelModel.meta";
 
 const dashboardDataSchema = z.object({
   frequencyCount: Validator.notNull(),
@@ -66,12 +66,12 @@ const DashboardDataCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? dashboardDataModelMeta.messages.update.success.title
-          : dashboardDataModelMeta.messages.create.success.title,
+          ? DashboardDataModelMeta.messages.update.success.title
+          : DashboardDataModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? dashboardDataModelMeta.messages.update.success.description
-            : dashboardDataModelMeta.messages.create.success.description,
+            ? DashboardDataModelMeta.messages.update.success.description
+            : DashboardDataModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -81,12 +81,12 @@ const DashboardDataCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? dashboardDataModelMeta.messages.update.error.title
-          : dashboardDataModelMeta.messages.create.error.title,
+          ? DashboardDataModelMeta.messages.update.error.title
+          : DashboardDataModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? dashboardDataModelMeta.messages.update.error.description
-            : dashboardDataModelMeta.messages.create.error.description,
+            ? DashboardDataModelMeta.messages.update.error.description
+            : DashboardDataModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -103,8 +103,8 @@ const DashboardDataCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? dashboardDataModelMeta.messages.pageTitle.edit
-      : dashboardDataModelMeta.messages.pageTitle.create
+      ? DashboardDataModelMeta.messages.pageTitle.edit
+      : DashboardDataModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -122,8 +122,8 @@ const DashboardDataCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? dashboardDataModelMeta.messages.pageTitle.edit
-              : dashboardDataModelMeta.messages.pageTitle.create
+              ? DashboardDataModelMeta.messages.pageTitle.edit
+              : DashboardDataModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -135,33 +135,33 @@ const DashboardDataCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="frequencyCount"
-                label={dashboardDataModelMeta.fields.frequencyCount.label}
+                label={DashboardDataModelMeta.fields.frequencyCount.label}
                 type="number"
               />
               <DateInput
                 name="lastMatchedAt"
-                label={dashboardDataModelMeta.fields.lastMatchedAt.label}
+                label={DashboardDataModelMeta.fields.lastMatchedAt.label}
               />
               <FormAutoComplete
                 name="coreUser"
-                label={dashboardDataModelMeta.fields.coreUser.label}
+                label={DashboardDataModelMeta.fields.coreUser.label}
                 service={UserService}
                 valueKey="id"
-                labelKey={userModelMeta.displayField}
+                labelKey={UserModelMeta.displayField}
               />
               <FormAutoComplete
                 name="keyword"
-                label={dashboardDataModelMeta.fields.keyword.label}
+                label={DashboardDataModelMeta.fields.keyword.label}
                 service={KeywordService}
                 valueKey="id"
-                labelKey={keywordModelMeta.displayField}
+                labelKey={KeywordModelMeta.displayField}
               />
               <FormAutoComplete
                 name="channel"
-                label={dashboardDataModelMeta.fields.channel.label}
+                label={DashboardDataModelMeta.fields.channel.label}
                 service={ChannelService}
                 valueKey="id"
-                labelKey={channelModelMeta.displayField}
+                labelKey={ChannelModelMeta.displayField}
               />
             </RowContainer>
 

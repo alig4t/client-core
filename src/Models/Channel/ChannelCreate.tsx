@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import ChannelService from "./ChannelService";
-import { channelModelMeta } from "./ChannelModel.meta";
+import { ChannelModelMeta } from "./ChannelModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
@@ -26,13 +26,9 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 import BotService from "@/Models/Bot/BotService";
-import { botModelMeta } from "@/Models/Bot/BotModel.meta";
-import StepperDemo from "@/core/components/general/stepper/StepperDemo";
-import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
-import { useLoading } from "@/stores/LoadingContext";
-import PlatformAuthorizationControllerService, { type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
+import { BotModelMeta } from "@/Models/Bot/BotModel.meta";
 
 const channelSchema = z.object({
   channelName: Validator.notNull(),
@@ -50,7 +46,6 @@ const ChannelCreate: React.FC = () => {
   const isEditMode = !!id;
   const routeMeta = useRouteMetadata();
   const queryClient = useQueryClient();
-  const { openWaitDialog, closeWaitDialog } = useLoading();
 
   const { data: existingData, isLoading } = useQuery({
     queryKey: ["channel", id],
@@ -60,37 +55,21 @@ const ChannelCreate: React.FC = () => {
   });
 
   const mutation = useMutation({
-    mutationFn: async (data: ChannelFormData) => {
+    mutationFn: (data: ChannelFormData) => {
       if (isEditMode) {
         return ChannelService.update(Number(id), data);
       }
-
-      console.log(data)
-
-      openWaitDialog();
-      const platform = await MessagingPlatformService.getById(data.platform.id)
-
-     
-      console.log(platform)
-      let dto : DraftDto  = {
-        platformKey:platform.platformKey,
-        authorizationType: "MONITORING_CHANNEL"
-      }
-      const draftResult = await PlatformAuthorizationControllerService.draftAuthorizations(dto)
-       closeWaitDialog();
-      console.log(draftResult)
-      return ChannelService.create({});
-      // return new Promise();
+      return ChannelService.create(data);
     },
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? channelModelMeta.messages.update.success.title
-          : channelModelMeta.messages.create.success.title,
+          ? ChannelModelMeta.messages.update.success.title
+          : ChannelModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? channelModelMeta.messages.update.success.description
-            : channelModelMeta.messages.create.success.description,
+            ? ChannelModelMeta.messages.update.success.description
+            : ChannelModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -100,12 +79,12 @@ const ChannelCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? channelModelMeta.messages.update.error.title
-          : channelModelMeta.messages.create.error.title,
+          ? ChannelModelMeta.messages.update.error.title
+          : ChannelModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? channelModelMeta.messages.update.error.description
-            : channelModelMeta.messages.create.error.description,
+            ? ChannelModelMeta.messages.update.error.description
+            : ChannelModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -122,8 +101,8 @@ const ChannelCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? channelModelMeta.messages.pageTitle.edit
-      : channelModelMeta.messages.pageTitle.create
+      ? ChannelModelMeta.messages.pageTitle.edit
+      : ChannelModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -134,30 +113,18 @@ const ChannelCreate: React.FC = () => {
     );
   }
 
-  const steps: CompactStep[] = [
-    { id: 1, label: "ثبت کانال" },
-    { id: 2, label: "ساخت draft" },
-    { id: 3, label: "تایید " },
-  ]
-
   return (
     <PageWrapper>
       <PageTransition>
-
-
-        {/* <StepperDemo /> */}
-
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
         <PageHeader
           title={
             isEditMode
-              ? channelModelMeta.messages.pageTitle.edit
-              : channelModelMeta.messages.pageTitle.create
+              ? ChannelModelMeta.messages.pageTitle.edit
+              : ChannelModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
-          <CompactStepper steps={steps} currentStep={0} className="max-w-lg mx-auto mt-3 mb-8" />
-
           <FormWrapper
             schema={channelSchema}
             onSubmit={onSubmit}
@@ -166,33 +133,33 @@ const ChannelCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="channelName"
-                label={channelModelMeta.fields.channelName.label}
-                placeholder={channelModelMeta.fields.channelName.placeholder}
+                label={ChannelModelMeta.fields.channelName.label}
+                placeholder={ChannelModelMeta.fields.channelName.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="channelIdentifier"
-                label={channelModelMeta.fields.channelIdentifier.label}
-                placeholder={channelModelMeta.fields.channelIdentifier.placeholder}
+                label={ChannelModelMeta.fields.channelIdentifier.label}
+                placeholder={ChannelModelMeta.fields.channelIdentifier.placeholder}
                 maxLength={255}
               />
               <FormSelect
                 name="status"
-                label={channelModelMeta.fields.status.label}
-                options={channelModelMeta.fields.status.options || []}
+                label={ChannelModelMeta.fields.status.label}
+                options={ChannelModelMeta.fields.status.options || []}
               />
               <FormAutoComplete
                 name="platform"
-                label={channelModelMeta.fields.platform.label}
+                label={ChannelModelMeta.fields.platform.label}
                 service={MessagingPlatformService}
                 valueKey="id"
-                labelKey={messagingPlatformModelMeta.displayField}
+                labelKey={MessagingPlatformModelMeta.displayField}
               />
               <FormAutoComplete
                 name="bots"
-                label={channelModelMeta.fields.bots.label}
+                label={ChannelModelMeta.fields.bots.label}
                 service={BotService}
-                labelKey={botModelMeta.displayField}
+                labelKey={BotModelMeta.displayField}
                 valueKey="id"
               />
             </RowContainer>

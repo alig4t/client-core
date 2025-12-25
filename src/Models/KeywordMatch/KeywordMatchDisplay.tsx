@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import KeywordMatchService from "./KeywordMatchService";
-import { keywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,17 +86,17 @@ const KeywordMatchDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={keywordMatchModelMeta.fields.matchedAt.label}
+            label={KeywordMatchModelMeta.fields.matchedAt.label}
             value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(keywordMatchRecord.matchedAt)}
           />
           <DisplayField
-            label={keywordMatchModelMeta.fields.messagingPlatform.label}
+            label={KeywordMatchModelMeta.fields.messagingPlatform.label}
             value={
               keywordMatchRecord.messagingPlatform ? (
                 <LinkView
                   viewName={VIEWNAME.MESSAGING_PLATFORM_DISPLAY}
                   id={keywordMatchRecord.messagingPlatform.id}
-                  label={keywordMatchRecord.messagingPlatform.content}
+                  label={keywordMatchRecord.messagingPlatform.platformName}
                 />
               ) : (
                 "---"
@@ -104,7 +104,7 @@ const KeywordMatchDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={keywordMatchModelMeta.fields.keyword.label}
+            label={KeywordMatchModelMeta.fields.keyword.label}
             value={
               keywordMatchRecord.keyword ? (
                 <LinkView
@@ -118,7 +118,7 @@ const KeywordMatchDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={keywordMatchModelMeta.fields.coreUser.label}
+            label={KeywordMatchModelMeta.fields.coreUser.label}
             value={
               keywordMatchRecord.coreUser ? (
                 <LinkView

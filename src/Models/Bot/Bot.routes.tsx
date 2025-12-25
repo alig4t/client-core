@@ -11,43 +11,43 @@ const BotDisplay = lazy(() => import("./BotDisplay"));
 export const BotRoutes: RouteConfig[] = [
   // List Page
   {
-    path: "/dashboard/messaging/bots",
+    path: "/dashboard/portal/bots",
     label: "ربات‌ها",
     icon: <Bot size={18} />,
     element: BotPage,
-    parent: "/dashboard/messaging",
+    parent: "/dashboard/portal",
     permission: Permission.Bot_Read,
     showInMenu: true,
     name: VIEWNAME.BOT_SEARCH,
   },
   // Create Page
   {
-    path: "/dashboard/messaging/bots/create",
+    path: "/dashboard/portal/bots/create",
     element: BotCreate,
     permission: Permission.Bot_Create,
     showInMenu: false,
     name: VIEWNAME.BOT_CREATE,
     label: "ایجاد ربات",
-    parent: "/dashboard/messaging/bots",
+    parent: "/dashboard/portal/bots",
   },
   // Display Page
   {
-    path: "/dashboard/messaging/bots/:id",
+    path: "/dashboard/portal/bots/:id",
     element: BotDisplay,
     permission: Permission.Bot_Read,
     showInMenu: false,
     name: VIEWNAME.BOT_DISPLAY,
     label: "جزئیات ربات",
-    parent: "/dashboard/messaging/bots",
+    parent: "/dashboard/portal/bots",
   },
   // Edit Page
   {
-    path: "/dashboard/messaging/bots/:id/edit",
+    path: "/dashboard/portal/bots/:id/edit",
     element: BotCreate,
     permission: Permission.Bot_Update,
     showInMenu: false,
     name: VIEWNAME.BOT_EDIT,
     label: "ویرایش ربات",
-    parent: "/dashboard/messaging/bots",
+    parent: "/dashboard/portal/bots",
   },
 ];

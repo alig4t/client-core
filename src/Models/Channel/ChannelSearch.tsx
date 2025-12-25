@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { channelModelMeta } from "./ChannelModel.meta";
+import { ChannelModelMeta } from "./ChannelModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,26 +50,26 @@ const ChannelSearch: React.FC<ChannelSearchProps> = ({ onApplyFilters }) => {
         <RowContainer>
           <FormInput
             name={`channelName_${FilterOperator.LIKE}`}
-            label={channelModelMeta.fields.channelName?.label}
+            label={ChannelModelMeta.fields.channelName?.label}
             placeholder="جستجو..."
           />
 
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(channelModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(ChannelModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(channelModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(ChannelModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(channelModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(ChannelModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(channelModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(ChannelModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

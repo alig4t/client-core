@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import MessagingPlatformService from "./MessagingPlatformService";
-import { messagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import z from "@/core/forms/zod.config";
 import Validator from "@/core/forms/validation";
@@ -57,12 +57,12 @@ const MessagingPlatformCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? messagingPlatformModelMeta.messages.update.success.title
-          : messagingPlatformModelMeta.messages.create.success.title,
+          ? MessagingPlatformModelMeta.messages.update.success.title
+          : MessagingPlatformModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? messagingPlatformModelMeta.messages.update.success.description
-            : messagingPlatformModelMeta.messages.create.success.description,
+            ? MessagingPlatformModelMeta.messages.update.success.description
+            : MessagingPlatformModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -72,12 +72,12 @@ const MessagingPlatformCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? messagingPlatformModelMeta.messages.update.error.title
-          : messagingPlatformModelMeta.messages.create.error.title,
+          ? MessagingPlatformModelMeta.messages.update.error.title
+          : MessagingPlatformModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? messagingPlatformModelMeta.messages.update.error.description
-            : messagingPlatformModelMeta.messages.create.error.description,
+            ? MessagingPlatformModelMeta.messages.update.error.description
+            : MessagingPlatformModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -94,8 +94,8 @@ const MessagingPlatformCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? messagingPlatformModelMeta.messages.pageTitle.edit
-      : messagingPlatformModelMeta.messages.pageTitle.create
+      ? MessagingPlatformModelMeta.messages.pageTitle.edit
+      : MessagingPlatformModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -113,8 +113,8 @@ const MessagingPlatformCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? messagingPlatformModelMeta.messages.pageTitle.edit
-              : messagingPlatformModelMeta.messages.pageTitle.create
+              ? MessagingPlatformModelMeta.messages.pageTitle.edit
+              : MessagingPlatformModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -126,26 +126,26 @@ const MessagingPlatformCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="platformName"
-                label={messagingPlatformModelMeta.fields.platformName.label}
-                placeholder={messagingPlatformModelMeta.fields.platformName.placeholder}
+                label={MessagingPlatformModelMeta.fields.platformName.label}
+                placeholder={MessagingPlatformModelMeta.fields.platformName.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="platformKey"
-                label={messagingPlatformModelMeta.fields.platformKey.label}
-                placeholder={messagingPlatformModelMeta.fields.platformKey.placeholder}
+                label={MessagingPlatformModelMeta.fields.platformKey.label}
+                placeholder={MessagingPlatformModelMeta.fields.platformKey.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="apiEndpoint"
-                label={messagingPlatformModelMeta.fields.apiEndpoint.label}
-                placeholder={messagingPlatformModelMeta.fields.apiEndpoint.placeholder}
+                label={MessagingPlatformModelMeta.fields.apiEndpoint.label}
+                placeholder={MessagingPlatformModelMeta.fields.apiEndpoint.placeholder}
                 maxLength={255}
               />
               <FormInput
                 name="authMethod"
-                label={messagingPlatformModelMeta.fields.authMethod.label}
-                placeholder={messagingPlatformModelMeta.fields.authMethod.placeholder}
+                label={MessagingPlatformModelMeta.fields.authMethod.label}
+                placeholder={MessagingPlatformModelMeta.fields.authMethod.placeholder}
                 maxLength={100}
               />
             </RowContainer>

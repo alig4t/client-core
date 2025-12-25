@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { {{entityName}}Model } from "./{{entityName}}Model";
-import { {{camelCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
+import { {{pascalCase entityName}}ModelMeta } from "./{{entityName}}Model.meta";
 {{#if hasEnumFields}}
 {{#each fields}}
 {{#if this.enums}}
@@ -88,7 +88,7 @@ export const {{entityName}}TableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
 {{#each displayFields}}
-    <THEAD>{ {{camelCase ../entityName}}ModelMeta.fields.{{this.name}}.label}</THEAD>
+    <THEAD>{ {{pascalCase ../entityName}}ModelMeta.fields.{{this.name}}.label}</THEAD>
 {{/each}}
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>

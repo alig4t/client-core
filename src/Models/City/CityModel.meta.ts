@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { CityModel } from "./CityModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const cityModelMeta = createModelMeta<CityModel, FormFieldMetadata>(
+export const CityModelMeta = createModelMeta<CityModel, FormFieldMetadata>(
   {
     cityName: {
       label: "نام شهر",

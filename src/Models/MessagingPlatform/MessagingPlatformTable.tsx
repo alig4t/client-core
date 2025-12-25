@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { MessagingPlatformModel } from "./MessagingPlatformModel";
 import MessagingPlatformService from "./MessagingPlatformService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { messagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import {
   MessagingPlatformTableColumns,
@@ -35,8 +35,8 @@ const MessagingPlatformTable: React.FC<MessagingPlatformTableProps> = ({
       renderRow={(item, index, onDelete) => (
         <MessagingPlatformTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={messagingPlatformModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(messagingPlatformModelMeta)}
+      title={MessagingPlatformModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(MessagingPlatformModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

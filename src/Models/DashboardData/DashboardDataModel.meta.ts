@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { DashboardDataModel } from "./DashboardDataModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const dashboardDataModelMeta = createModelMeta<
+export const DashboardDataModelMeta = createModelMeta<
   DashboardDataModel,
   FormFieldMetadata
 >(

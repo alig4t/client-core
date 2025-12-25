@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import KeywordService from "./KeywordService";
-import { keywordModelMeta } from "./KeywordModel.meta";
+import { KeywordModelMeta } from "./KeywordModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import z from "@/core/forms/zod.config";
@@ -25,11 +25,11 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
-import { userModelMeta } from "@/Models/User/UserModel.meta";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import ChannelService from "@/Models/Channel/ChannelService";
-import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
+import { ChannelModelMeta } from "@/Models/Channel/ChannelModel.meta";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { messagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
 
 const keywordSchema = z.object({
   keywordText: Validator.notNull(),
@@ -64,12 +64,12 @@ const KeywordCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? keywordModelMeta.messages.update.success.title
-          : keywordModelMeta.messages.create.success.title,
+          ? KeywordModelMeta.messages.update.success.title
+          : KeywordModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? keywordModelMeta.messages.update.success.description
-            : keywordModelMeta.messages.create.success.description,
+            ? KeywordModelMeta.messages.update.success.description
+            : KeywordModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -79,12 +79,12 @@ const KeywordCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? keywordModelMeta.messages.update.error.title
-          : keywordModelMeta.messages.create.error.title,
+          ? KeywordModelMeta.messages.update.error.title
+          : KeywordModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? keywordModelMeta.messages.update.error.description
-            : keywordModelMeta.messages.create.error.description,
+            ? KeywordModelMeta.messages.update.error.description
+            : KeywordModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -101,8 +101,8 @@ const KeywordCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? keywordModelMeta.messages.pageTitle.edit
-      : keywordModelMeta.messages.pageTitle.create
+      ? KeywordModelMeta.messages.pageTitle.edit
+      : KeywordModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -120,8 +120,8 @@ const KeywordCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? keywordModelMeta.messages.pageTitle.edit
-              : keywordModelMeta.messages.pageTitle.create
+              ? KeywordModelMeta.messages.pageTitle.edit
+              : KeywordModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -133,29 +133,29 @@ const KeywordCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="keywordText"
-                label={keywordModelMeta.fields.keywordText.label}
-                placeholder={keywordModelMeta.fields.keywordText.placeholder}
+                label={KeywordModelMeta.fields.keywordText.label}
+                placeholder={KeywordModelMeta.fields.keywordText.placeholder}
                 maxLength={100}
               />
               <FormAutoComplete
                 name="coreUser"
-                label={keywordModelMeta.fields.coreUser.label}
+                label={KeywordModelMeta.fields.coreUser.label}
                 service={UserService}
                 valueKey="id"
-                labelKey={userModelMeta.displayField}
+                labelKey={UserModelMeta.displayField}
               />
               <FormAutoComplete
                 name="channel"
-                label={keywordModelMeta.fields.channel.label}
+                label={KeywordModelMeta.fields.channel.label}
                 service={ChannelService}
                 valueKey="id"
-                labelKey={channelModelMeta.displayField}
+                labelKey={ChannelModelMeta.displayField}
               />
               <FormAutoComplete
                 name="messages"
-                label={keywordModelMeta.fields.messages.label}
+                label={KeywordModelMeta.fields.messages.label}
                 service={MessagingPlatformService}
-                labelKey={messagingPlatformModelMeta.displayField}
+                labelKey={MessagingPlatformModelMeta.displayField}
                 valueKey="id"
               />
             </RowContainer>

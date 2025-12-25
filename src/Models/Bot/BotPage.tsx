@@ -4,7 +4,7 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { botModelMeta } from "./BotModel.meta";
+import { BotModelMeta } from "./BotModel.meta";
 import BotSearch from "./BotSearch";
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
@@ -26,9 +26,9 @@ const BotPage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={routeMeta?.label || botModelMeta.messages.manage.title}
+            title={routeMeta?.label || BotModelMeta.messages.manage.title}
             actionButton={{
-              label: botModelMeta.messages.createButton,
+              label: BotModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

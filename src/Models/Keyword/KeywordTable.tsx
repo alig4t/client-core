@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { KeywordModel } from "./KeywordModel";
 import KeywordService from "./KeywordService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { keywordModelMeta } from "./KeywordModel.meta";
+import { KeywordModelMeta } from "./KeywordModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { KeywordTableColumns, KeywordTableHeaders } from "./KeywordTableColumns";
 
@@ -29,8 +29,8 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ filters, onSelectionChange 
       renderRow={(item, index, onDelete) => (
         <KeywordTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={keywordModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(keywordModelMeta)}
+      title={KeywordModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(KeywordModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

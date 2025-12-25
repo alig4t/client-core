@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import KeywordService from "./KeywordService";
-import { keywordModelMeta } from "./KeywordModel.meta";
+import { KeywordModelMeta } from "./KeywordModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,11 +86,11 @@ const KeywordDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={keywordModelMeta.fields.keywordText.label}
+            label={KeywordModelMeta.fields.keywordText.label}
             value={keywordRecord.keywordText}
           />
           <DisplayField
-            label={keywordModelMeta.fields.coreUser.label}
+            label={KeywordModelMeta.fields.coreUser.label}
             value={
               keywordRecord.coreUser ? (
                 <LinkView
@@ -104,7 +104,7 @@ const KeywordDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={keywordModelMeta.fields.channel.label}
+            label={KeywordModelMeta.fields.channel.label}
             value={
               keywordRecord.channel ? (
                 <LinkView
@@ -118,7 +118,7 @@ const KeywordDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={keywordModelMeta.fields.messages.label}
+            label={KeywordModelMeta.fields.messages.label}
             value={
               keywordRecord.messages?.map((item: any) => item?.content)?.join(", ") ||
               "---"

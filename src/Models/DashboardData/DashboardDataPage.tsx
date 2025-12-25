@@ -4,7 +4,7 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { dashboardDataModelMeta } from "./DashboardDataModel.meta";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import DashboardDataSearch from "./DashboardDataSearch";
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
@@ -26,9 +26,9 @@ const DashboardDataPage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={routeMeta?.label || dashboardDataModelMeta.messages.manage.title}
+            title={routeMeta?.label || DashboardDataModelMeta.messages.manage.title}
             actionButton={{
-              label: dashboardDataModelMeta.messages.createButton,
+              label: DashboardDataModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

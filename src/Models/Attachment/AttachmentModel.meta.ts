@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { AttachmentModel } from "./AttachmentModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const attachmentModelMeta = createModelMeta<
+export const AttachmentModelMeta = createModelMeta<
   AttachmentModel,
   FormFieldMetadata
 >(

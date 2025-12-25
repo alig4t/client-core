@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { CityModel } from "./CityModel";
-import { cityModelMeta } from "./CityModel.meta";
+import { CityModelMeta } from "./CityModel.meta";
 import LinkView from "@/core/components/general/link/LinkView";
 
 interface CityTableColumnsProps {
@@ -61,8 +61,8 @@ export const CityTableColumns: React.FC<CityTableColumnsProps> = memo(
 export const CityTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{cityModelMeta.fields.cityName.label}</THEAD>
-    <THEAD>{cityModelMeta.fields.country.label}</THEAD>
+    <THEAD>{CityModelMeta.fields.cityName.label}</THEAD>
+    <THEAD>{CityModelMeta.fields.country.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

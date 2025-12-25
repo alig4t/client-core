@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import ChannelService from "./ChannelService";
-import { channelModelMeta } from "./ChannelModel.meta";
+import { ChannelModelMeta } from "./ChannelModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -87,19 +87,19 @@ const ChannelDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={channelModelMeta.fields.channelName.label}
+            label={ChannelModelMeta.fields.channelName.label}
             value={channelRecord.channelName}
           />
           <DisplayField
-            label={channelModelMeta.fields.channelIdentifier.label}
+            label={ChannelModelMeta.fields.channelIdentifier.label}
             value={channelRecord.channelIdentifier}
           />
           <DisplayField
-            label={channelModelMeta.fields.status.label}
+            label={ChannelModelMeta.fields.status.label}
             value={OptionUtils.getLabel(channelRecord.status, ChannelStatusEnumLabels)}
           />
           <DisplayField
-            label={channelModelMeta.fields.platform.label}
+            label={ChannelModelMeta.fields.platform.label}
             value={
               channelRecord.platform ? (
                 <LinkView
@@ -113,7 +113,7 @@ const ChannelDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={channelModelMeta.fields.bots.label}
+            label={ChannelModelMeta.fields.bots.label}
             value={
               channelRecord.bots?.map((item: any) => item?.token)?.join(", ") || "---"
             }

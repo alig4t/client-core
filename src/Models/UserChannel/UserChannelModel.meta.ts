@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { UserChannelModel } from "./UserChannelModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const userChannelModelMeta = createModelMeta<UserChannelModel, FormFieldMetadata>(
+export const UserChannelModelMeta = createModelMeta<UserChannelModel, FormFieldMetadata>(
   {
     role: {
       label: "نقش",

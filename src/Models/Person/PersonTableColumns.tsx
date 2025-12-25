@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { PersonModel } from "./PersonModel";
-import { personModelMeta } from "./PersonModel.meta";
+import { PersonModelMeta } from "./PersonModel.meta";
 import LinkView from "@/core/components/general/link/LinkView";
 
 interface PersonTableColumnsProps {
@@ -61,8 +61,8 @@ export const PersonTableColumns: React.FC<PersonTableColumnsProps> = memo(
 export const PersonTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{personModelMeta.fields.firstName.label}</THEAD>
-    <THEAD>{personModelMeta.fields.lastName.label}</THEAD>
+    <THEAD>{PersonModelMeta.fields.firstName.label}</THEAD>
+    <THEAD>{PersonModelMeta.fields.lastName.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

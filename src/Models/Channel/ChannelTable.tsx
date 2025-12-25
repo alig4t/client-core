@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { ChannelModel } from "./ChannelModel";
 import ChannelService from "./ChannelService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { channelModelMeta } from "./ChannelModel.meta";
+import { ChannelModelMeta } from "./ChannelModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import { ChannelTableColumns, ChannelTableHeaders } from "./ChannelTableColumns";
 
@@ -29,8 +29,8 @@ const ChannelTable: React.FC<ChannelTableProps> = ({ filters, onSelectionChange 
       renderRow={(item, index, onDelete) => (
         <ChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={channelModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(channelModelMeta)}
+      title={ChannelModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(ChannelModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

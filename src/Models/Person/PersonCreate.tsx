@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import PersonService from "./PersonService";
-import { personModelMeta } from "./PersonModel.meta";
+import { PersonModelMeta } from "./PersonModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import { DateInput } from "@/core/components/form/DateInput";
@@ -26,9 +26,9 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
-import { userModelMeta } from "@/Models/User/UserModel.meta";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import CityService from "@/Models/City/CityService";
-import { cityModelMeta } from "@/Models/City/CityModel.meta";
+import { CityModelMeta } from "@/Models/City/CityModel.meta";
 
 const personSchema = z.object({
   firstName: Validator.notNull(),
@@ -65,12 +65,12 @@ const PersonCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? personModelMeta.messages.update.success.title
-          : personModelMeta.messages.create.success.title,
+          ? PersonModelMeta.messages.update.success.title
+          : PersonModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? personModelMeta.messages.update.success.description
-            : personModelMeta.messages.create.success.description,
+            ? PersonModelMeta.messages.update.success.description
+            : PersonModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -80,12 +80,12 @@ const PersonCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? personModelMeta.messages.update.error.title
-          : personModelMeta.messages.create.error.title,
+          ? PersonModelMeta.messages.update.error.title
+          : PersonModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? personModelMeta.messages.update.error.description
-            : personModelMeta.messages.create.error.description,
+            ? PersonModelMeta.messages.update.error.description
+            : PersonModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -102,8 +102,8 @@ const PersonCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? personModelMeta.messages.pageTitle.edit
-      : personModelMeta.messages.pageTitle.create
+      ? PersonModelMeta.messages.pageTitle.edit
+      : PersonModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -121,8 +121,8 @@ const PersonCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? personModelMeta.messages.pageTitle.edit
-              : personModelMeta.messages.pageTitle.create
+              ? PersonModelMeta.messages.pageTitle.edit
+              : PersonModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -134,39 +134,39 @@ const PersonCreate: React.FC = () => {
             <RowContainer>
               <FormInput
                 name="firstName"
-                label={personModelMeta.fields.firstName.label}
-                placeholder={personModelMeta.fields.firstName.placeholder}
+                label={PersonModelMeta.fields.firstName.label}
+                placeholder={PersonModelMeta.fields.firstName.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="lastName"
-                label={personModelMeta.fields.lastName.label}
-                placeholder={personModelMeta.fields.lastName.placeholder}
+                label={PersonModelMeta.fields.lastName.label}
+                placeholder={PersonModelMeta.fields.lastName.placeholder}
                 maxLength={100}
               />
               <FormInput
                 name="nationalId"
-                label={personModelMeta.fields.nationalId.label}
-                placeholder={personModelMeta.fields.nationalId.placeholder}
+                label={PersonModelMeta.fields.nationalId.label}
+                placeholder={PersonModelMeta.fields.nationalId.placeholder}
                 maxLength={20}
               />
               <DateInput
                 name="birthDate"
-                label={personModelMeta.fields.birthDate.label}
+                label={PersonModelMeta.fields.birthDate.label}
               />
               <FormAutoComplete
                 name="coreUser"
-                label={personModelMeta.fields.coreUser.label}
+                label={PersonModelMeta.fields.coreUser.label}
                 service={UserService}
                 valueKey="id"
-                labelKey={userModelMeta.displayField}
+                labelKey={UserModelMeta.displayField}
               />
               <FormAutoComplete
                 name="city"
-                label={personModelMeta.fields.city.label}
+                label={PersonModelMeta.fields.city.label}
                 service={CityService}
                 valueKey="id"
-                labelKey={cityModelMeta.displayField}
+                labelKey={CityModelMeta.displayField}
               />
             </RowContainer>
 

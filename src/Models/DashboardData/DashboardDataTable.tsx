@@ -3,7 +3,7 @@ import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import type { DashboardDataModel } from "./DashboardDataModel";
 import DashboardDataService from "./DashboardDataService";
 import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { dashboardDataModelMeta } from "./DashboardDataModel.meta";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
 import {
   DashboardDataTableColumns,
@@ -35,8 +35,8 @@ const DashboardDataTable: React.FC<DashboardDataTableProps> = ({
       renderRow={(item, index, onDelete) => (
         <DashboardDataTableColumns key={item.id} item={item} onDelete={onDelete} />
       )}
-      title={dashboardDataModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(dashboardDataModelMeta)}
+      title={DashboardDataModelMeta.pluralDisplayName}
+      sortOptions={buildSortOptions(DashboardDataModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
       enableDelete={true}

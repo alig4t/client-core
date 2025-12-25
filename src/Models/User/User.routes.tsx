@@ -1,5 +1,5 @@
 import { lazy } from "react";
-import { Users } from "lucide-react";
+import { User } from "lucide-react";
 import { VIEWNAME } from "@/router/ViewName";
 import { Permission } from "@/router/Permission";
 import type { RouteConfig } from "@/router/path.types";
@@ -11,9 +11,9 @@ const UserDisplay = lazy(() => import("./UserDisplay"));
 export const UserRoutes: RouteConfig[] = [
   // List Page
   {
-    path: "/dashboard/portal/persons",
-    label: "اشخاص",
-    icon: <Users size={18} />,
+    path: "/dashboard/portal/users",
+    label: "کاربران",
+    icon: <User size={18} />,
     element: UserPage,
     parent: "/dashboard/portal",
     permission: Permission.User_Read,
@@ -22,32 +22,32 @@ export const UserRoutes: RouteConfig[] = [
   },
   // Create Page
   {
-    path: "/dashboard/portal/persons/create",
+    path: "/dashboard/portal/users/create",
     element: UserCreate,
     permission: Permission.User_Create,
     showInMenu: false,
     name: VIEWNAME.USER_CREATE,
-    label: "ایجاد شخص",
-    parent: "/dashboard/portal/persons",
+    label: "ایجاد کاربر",
+    parent: "/dashboard/portal/users",
   },
   // Display Page
   {
-    path: "/dashboard/portal/persons/:id",
+    path: "/dashboard/portal/users/:id",
     element: UserDisplay,
     permission: Permission.User_Read,
     showInMenu: false,
     name: VIEWNAME.USER_DISPLAY,
-    label: "جزئیات شخص",
-    parent: "/dashboard/portal/persons",
+    label: "جزئیات کاربر",
+    parent: "/dashboard/portal/users",
   },
   // Edit Page
   {
-    path: "/dashboard/portal/persons/:id/edit",
+    path: "/dashboard/portal/users/:id/edit",
     element: UserCreate,
     permission: Permission.User_Update,
     showInMenu: false,
     name: VIEWNAME.USER_EDIT,
-    label: "ویرایش شخص",
-    parent: "/dashboard/portal/persons",
+    label: "ویرایش کاربر",
+    parent: "/dashboard/portal/users",
   },
 ];

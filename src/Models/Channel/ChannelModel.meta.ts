@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { ChannelModel } from "./ChannelModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const channelModelMeta = createModelMeta<ChannelModel, FormFieldMetadata>(
+export const ChannelModelMeta = createModelMeta<ChannelModel, FormFieldMetadata>(
   {
     channelName: {
       label: "نام کانال",

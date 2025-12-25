@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { ComprehensiveEntityModel } from "./ComprehensiveEntityModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const comprehensiveEntityModelMeta = createModelMeta<
+export const ComprehensiveEntityModelMeta = createModelMeta<
   ComprehensiveEntityModel,
   FormFieldMetadata
 >(
@@ -37,7 +37,7 @@ export const comprehensiveEntityModelMeta = createModelMeta<
     },
     bigDecimalField: {
       label: "عدد دقیق (BigDecimal)",
-      type: "text",
+      type: "bigDecimalField",
       placeholder: "مثلاً 123.456789",
       sortable: true,
       required: false,

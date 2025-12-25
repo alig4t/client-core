@@ -6,7 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import UserChannelService from "./UserChannelService";
-import { userChannelModelMeta } from "./UserChannelModel.meta";
+import { UserChannelModelMeta } from "./UserChannelModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
@@ -26,9 +26,9 @@ import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import UserService from "@/Models/User/UserService";
-import { userModelMeta } from "@/Models/User/UserModel.meta";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import ChannelService from "@/Models/Channel/ChannelService";
-import { channelModelMeta } from "@/Models/Channel/ChannelModel.meta";
+import { ChannelModelMeta } from "@/Models/Channel/ChannelModel.meta";
 
 const userChannelSchema = z.object({
   role: Validator.notNull(),
@@ -62,12 +62,12 @@ const UserChannelCreate: React.FC = () => {
     onSuccess: () => {
       toast.success(
         isEditMode
-          ? userChannelModelMeta.messages.update.success.title
-          : userChannelModelMeta.messages.create.success.title,
+          ? UserChannelModelMeta.messages.update.success.title
+          : UserChannelModelMeta.messages.create.success.title,
         {
           description: isEditMode
-            ? userChannelModelMeta.messages.update.success.description
-            : userChannelModelMeta.messages.create.success.description,
+            ? UserChannelModelMeta.messages.update.success.description
+            : UserChannelModelMeta.messages.create.success.description,
           position: "bottom-left",
         }
       );
@@ -77,12 +77,12 @@ const UserChannelCreate: React.FC = () => {
     onError: () => {
       toast.error(
         isEditMode
-          ? userChannelModelMeta.messages.update.error.title
-          : userChannelModelMeta.messages.create.error.title,
+          ? UserChannelModelMeta.messages.update.error.title
+          : UserChannelModelMeta.messages.create.error.title,
         {
           description: isEditMode
-            ? userChannelModelMeta.messages.update.error.description
-            : userChannelModelMeta.messages.create.error.description,
+            ? UserChannelModelMeta.messages.update.error.description
+            : UserChannelModelMeta.messages.create.error.description,
           position: "bottom-left",
         }
       );
@@ -99,8 +99,8 @@ const UserChannelCreate: React.FC = () => {
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode
-      ? userChannelModelMeta.messages.pageTitle.edit
-      : userChannelModelMeta.messages.pageTitle.create
+      ? UserChannelModelMeta.messages.pageTitle.edit
+      : UserChannelModelMeta.messages.pageTitle.create
   );
 
   if (isLoading && isEditMode) {
@@ -118,8 +118,8 @@ const UserChannelCreate: React.FC = () => {
         <PageHeader
           title={
             isEditMode
-              ? userChannelModelMeta.messages.pageTitle.edit
-              : userChannelModelMeta.messages.pageTitle.create
+              ? UserChannelModelMeta.messages.pageTitle.edit
+              : UserChannelModelMeta.messages.pageTitle.create
           }
         />
         <CreatePageFormWrapper>
@@ -131,22 +131,22 @@ const UserChannelCreate: React.FC = () => {
             <RowContainer>
               <FormSelect
                 name="role"
-                label={userChannelModelMeta.fields.role.label}
-                options={userChannelModelMeta.fields.role.options || []}
+                label={UserChannelModelMeta.fields.role.label}
+                options={UserChannelModelMeta.fields.role.options || []}
               />
               <FormAutoComplete
                 name="coreUser"
-                label={userChannelModelMeta.fields.coreUser.label}
+                label={UserChannelModelMeta.fields.coreUser.label}
                 service={UserService}
                 valueKey="id"
-                labelKey={userModelMeta.displayField}
+                labelKey={UserModelMeta.displayField}
               />
               <FormAutoComplete
                 name="channel"
-                label={userChannelModelMeta.fields.channel.label}
+                label={UserChannelModelMeta.fields.channel.label}
                 service={ChannelService}
                 valueKey="id"
-                labelKey={channelModelMeta.displayField}
+                labelKey={ChannelModelMeta.displayField}
               />
             </RowContainer>
 

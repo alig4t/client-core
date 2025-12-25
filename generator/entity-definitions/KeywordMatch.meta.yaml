@@ -17,7 +17,7 @@ relationships:
   messagingPlatform:
     label: پیام
     type: autocomplete
-    displayField: content
+    displayField: platformName
     sortable: false
   keyword:
     label: کلمه کلیدی

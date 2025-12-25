@@ -2,7 +2,7 @@ import { createModelMeta } from "@/core/models/modelMetaUtils";
 import type { MessageModel } from "./MessageModel";
 import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
 
-export const messageModelMeta = createModelMeta<MessageModel, FormFieldMetadata>(
+export const MessageModelMeta = createModelMeta<MessageModel, FormFieldMetadata>(
   {
     platformMessageId: {
       label: "شناسه پیام پلتفرم",
@@ -20,7 +20,7 @@ export const messageModelMeta = createModelMeta<MessageModel, FormFieldMetadata>
     },
     sentAt: {
       label: "زمان ارسال",
-      type: "datetime",
+      type: "date",
       sortable: true,
       required: true,
     },

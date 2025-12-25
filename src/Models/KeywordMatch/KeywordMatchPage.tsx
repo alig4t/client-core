@@ -4,7 +4,7 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { keywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import KeywordMatchSearch from "./KeywordMatchSearch";
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
@@ -26,9 +26,9 @@ const KeywordMatchPage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={routeMeta?.label || keywordMatchModelMeta.messages.manage.title}
+            title={routeMeta?.label || KeywordMatchModelMeta.messages.manage.title}
             actionButton={{
-              label: keywordMatchModelMeta.messages.createButton,
+              label: KeywordMatchModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

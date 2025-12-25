@@ -4,7 +4,7 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { comprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import ComprehensiveEntitySearch from "./ComprehensiveEntitySearch";
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
@@ -26,9 +26,9 @@ const ComprehensiveEntityPage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={routeMeta?.label || comprehensiveEntityModelMeta.messages.manage.title}
+            title={routeMeta?.label || ComprehensiveEntityModelMeta.messages.manage.title}
             actionButton={{
-              label: comprehensiveEntityModelMeta.messages.createButton,
+              label: ComprehensiveEntityModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

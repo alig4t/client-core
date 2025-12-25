@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import BotService from "./BotService";
-import { botModelMeta } from "./BotModel.meta";
+import { BotModelMeta } from "./BotModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,13 +86,13 @@ const BotDisplay: React.FC = () => {
         }
       >
         <RowContainer numberOfColumns={3}>
-          <DisplayField label={botModelMeta.fields.token.label} value={botRecord.token} />
+          <DisplayField label={BotModelMeta.fields.token.label} value={botRecord.token} />
           <DisplayField
-            label={botModelMeta.fields.status.label}
+            label={BotModelMeta.fields.status.label}
             value={OptionUtils.getLabel(botRecord.status, BotStatusEnumLabels)}
           />
           <DisplayField
-            label={botModelMeta.fields.platform.label}
+            label={BotModelMeta.fields.platform.label}
             value={
               botRecord.platform ? (
                 <LinkView

@@ -9,6 +9,7 @@ import { COMPREHENSIVE_ENTITY_VIEWNAMES } from "@/Models/ComprehensiveEntity/Com
 import { DASHBOARD_DATA_VIEWNAMES } from "@/Models/DashboardData/DashboardData.viewnames";
 import { KEYWORD_VIEWNAMES } from "@/Models/Keyword/Keyword.viewnames";
 import { KEYWORD_MATCH_VIEWNAMES } from "@/Models/KeywordMatch/KeywordMatch.viewnames";
+import { MESSAGE_VIEWNAMES } from "@/Models/Message/Message.viewnames";
 import { MESSAGING_PLATFORM_VIEWNAMES } from "@/Models/MessagingPlatform/MessagingPlatform.viewnames";
 import { PERSON_VIEWNAMES } from "@/Models/Person/Person.viewnames";
 import { ROLE_VIEWNAMES } from "@/Models/Role/Role.viewnames";
@@ -27,5 +28,6 @@ export const GENERATED_VIEWNAMES = {
   ...USER_CHANNEL_VIEWNAMES,
   ...COMPREHENSIVE_ENTITY_VIEWNAMES,
   ...USER_VIEWNAMES,
-  ...ROLE_VIEWNAMES
+  ...ROLE_VIEWNAMES,
+  ...MESSAGE_VIEWNAMES
 } as const;

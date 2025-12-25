@@ -60,7 +60,7 @@ export function registerHelpers(handlebars: any) {
       INTEGER: 'number',
       LONG: 'number',
       DOUBLE: 'number',
-      BIG_DECIMAL: 'string',
+      BIG_DECIMAL: 'number',
       BOOLEAN: 'boolean',
       DATE: 'string',
       LOCAL_DATE: 'string',

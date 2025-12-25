@@ -9,7 +9,7 @@ import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import FilePreview from "@/core/components/form/FilePreview";
 import ComprehensiveEntityService from "./ComprehensiveEntityService";
-import { comprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -88,60 +88,60 @@ const ComprehensiveEntityDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.stringField.label}
+            label={ComprehensiveEntityModelMeta.fields.stringField.label}
             value={comprehensiveEntityRecord.stringField}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.integerField.label}
+            label={ComprehensiveEntityModelMeta.fields.integerField.label}
             value={comprehensiveEntityRecord.integerField}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.longField.label}
+            label={ComprehensiveEntityModelMeta.fields.longField.label}
             value={comprehensiveEntityRecord.longField}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.doubleField.label}
+            label={ComprehensiveEntityModelMeta.fields.doubleField.label}
             value={comprehensiveEntityRecord.doubleField?.toFixed(2)}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.bigDecimalField.label}
+            label={ComprehensiveEntityModelMeta.fields.bigDecimalField.label}
             value={comprehensiveEntityRecord.bigDecimalField?.toFixed(4)}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.booleanField.label}
+            label={ComprehensiveEntityModelMeta.fields.booleanField.label}
             value={OptionUtils.GET_BOOLEAN_OPTION(comprehensiveEntityRecord.booleanField)}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.dateField.label}
+            label={ComprehensiveEntityModelMeta.fields.dateField.label}
             value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveEntityRecord.dateField)}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.localDateField.label}
+            label={ComprehensiveEntityModelMeta.fields.localDateField.label}
             value={DateUtil.GEORGIAN_TO_JALALI(comprehensiveEntityRecord.localDateField)}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.localDateTimeField.label}
+            label={ComprehensiveEntityModelMeta.fields.localDateTimeField.label}
             value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
               comprehensiveEntityRecord.localDateTimeField
             )}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.enumField.label}
+            label={ComprehensiveEntityModelMeta.fields.enumField.label}
             value={OptionUtils.getLabel(
               comprehensiveEntityRecord.enumField,
               ComprehensiveEntityEnumFieldEnumLabels
             )}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.uniqueField.label}
+            label={ComprehensiveEntityModelMeta.fields.uniqueField.label}
             value={comprehensiveEntityRecord.uniqueField}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.indexedField.label}
+            label={ComprehensiveEntityModelMeta.fields.indexedField.label}
             value={comprehensiveEntityRecord.indexedField}
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.oneToOneUser.label}
+            label={ComprehensiveEntityModelMeta.fields.oneToOneUser.label}
             value={
               comprehensiveEntityRecord.oneToOneUser ? (
                 <LinkView
@@ -155,7 +155,7 @@ const ComprehensiveEntityDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.manyToOneChannel.label}
+            label={ComprehensiveEntityModelMeta.fields.manyToOneChannel.label}
             value={
               comprehensiveEntityRecord.manyToOneChannel ? (
                 <LinkView
@@ -169,7 +169,7 @@ const ComprehensiveEntityDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.oneToManyKeywords.label}
+            label={ComprehensiveEntityModelMeta.fields.oneToManyKeywords.label}
             value={
               comprehensiveEntityRecord.oneToManyKeywords
                 ?.map((item: any) => item?.keyword)
@@ -177,7 +177,7 @@ const ComprehensiveEntityDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.manyToManyMessages.label}
+            label={ComprehensiveEntityModelMeta.fields.manyToManyMessages.label}
             value={
               comprehensiveEntityRecord.manyToManyMessages
                 ?.map((item: any) => item?.content)
@@ -185,7 +185,7 @@ const ComprehensiveEntityDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={comprehensiveEntityModelMeta.fields.attachments.label}
+            label={ComprehensiveEntityModelMeta.fields.attachments.label}
             value={
               <FilePreview
                 fileId={(comprehensiveEntityRecord as any).attachments?.[0]?.id}

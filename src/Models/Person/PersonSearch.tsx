@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { personModelMeta } from "./PersonModel.meta";
+import { PersonModelMeta } from "./PersonModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,19 +50,19 @@ const PersonSearch: React.FC<PersonSearchProps> = ({ onApplyFilters }) => {
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(personModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(PersonModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(personModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(PersonModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(personModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(PersonModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(personModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(PersonModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

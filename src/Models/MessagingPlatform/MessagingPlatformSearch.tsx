@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { messagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -52,7 +52,7 @@ const MessagingPlatformSearch: React.FC<MessagingPlatformSearchProps> = ({
         <RowContainer>
           <FormInput
             name={`platformName_${FilterOperator.LIKE}`}
-            label={messagingPlatformModelMeta.fields.platformName?.label}
+            label={MessagingPlatformModelMeta.fields.platformName?.label}
             placeholder="جستجو..."
           />
 
@@ -60,28 +60,28 @@ const MessagingPlatformSearch: React.FC<MessagingPlatformSearchProps> = ({
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
             label={makeRangeLabel(
-              messagingPlatformModelMeta.fields.createdAt.label,
+              MessagingPlatformModelMeta.fields.createdAt.label,
               "from"
             )}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
             label={makeRangeLabel(
-              messagingPlatformModelMeta.fields.createdAt.label,
+              MessagingPlatformModelMeta.fields.createdAt.label,
               "to"
             )}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
             label={makeRangeLabel(
-              messagingPlatformModelMeta.fields.updatedAt.label,
+              MessagingPlatformModelMeta.fields.updatedAt.label,
               "from"
             )}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
             label={makeRangeLabel(
-              messagingPlatformModelMeta.fields.updatedAt.label,
+              MessagingPlatformModelMeta.fields.updatedAt.label,
               "to"
             )}
           />

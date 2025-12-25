@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import PersonService from "./PersonService";
-import { personModelMeta } from "./PersonModel.meta";
+import { PersonModelMeta } from "./PersonModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,23 +86,23 @@ const PersonDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={personModelMeta.fields.firstName.label}
+            label={PersonModelMeta.fields.firstName.label}
             value={personRecord.firstName}
           />
           <DisplayField
-            label={personModelMeta.fields.lastName.label}
+            label={PersonModelMeta.fields.lastName.label}
             value={personRecord.lastName}
           />
           <DisplayField
-            label={personModelMeta.fields.nationalId.label}
+            label={PersonModelMeta.fields.nationalId.label}
             value={personRecord.nationalId}
           />
           <DisplayField
-            label={personModelMeta.fields.birthDate.label}
+            label={PersonModelMeta.fields.birthDate.label}
             value={DateUtil.GEORGIAN_TO_JALALI(personRecord.birthDate)}
           />
           <DisplayField
-            label={personModelMeta.fields.coreUser.label}
+            label={PersonModelMeta.fields.coreUser.label}
             value={
               personRecord.coreUser ? (
                 <LinkView
@@ -116,7 +116,7 @@ const PersonDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={personModelMeta.fields.city.label}
+            label={PersonModelMeta.fields.city.label}
             value={
               personRecord.city ? (
                 <LinkView

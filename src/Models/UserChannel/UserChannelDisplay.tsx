@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import UserChannelService from "./UserChannelService";
-import { userChannelModelMeta } from "./UserChannelModel.meta";
+import { UserChannelModelMeta } from "./UserChannelModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -87,14 +87,14 @@ const UserChannelDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={userChannelModelMeta.fields.role.label}
+            label={UserChannelModelMeta.fields.role.label}
             value={OptionUtils.getLabel(
               userChannelRecord.role,
               UserChannelRoleEnumLabels
             )}
           />
           <DisplayField
-            label={userChannelModelMeta.fields.coreUser.label}
+            label={UserChannelModelMeta.fields.coreUser.label}
             value={
               userChannelRecord.coreUser ? (
                 <LinkView
@@ -108,7 +108,7 @@ const UserChannelDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={userChannelModelMeta.fields.channel.label}
+            label={UserChannelModelMeta.fields.channel.label}
             value={
               userChannelRecord.channel ? (
                 <LinkView

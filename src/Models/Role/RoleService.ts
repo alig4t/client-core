@@ -1,10 +1,9 @@
-// services/RoleService.ts
-import { BaseService } from '@/core/service/BaseService';
-import type { RoleModel } from '@/Models/Role/RoleModel';
+import { BaseService } from "@/core/service/BaseService";
+import type { RoleModel } from "./RoleModel";
 
 class RoleService extends BaseService<RoleModel> {
   constructor() {
-    super('/role');
+    super("/role");
   }
 }
 

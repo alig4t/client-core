@@ -2,8 +2,14 @@
 import { api } from '@/core/service/Axios';
 import type { ApiResponse } from '@/core/service/Axios';
 import type { AttachmentModel } from './AttachmentModel';
+import { BaseService } from '@/core/service/BaseService';
 
-class AttachmentService {
+class AttachmentService extends BaseService<AttachmentModel> {
+
+  constructor() {
+    super("/attachment");
+  }
+
   async upload(file: File): Promise<AttachmentModel> {
     const formData = new FormData();
     formData.append('file', file);

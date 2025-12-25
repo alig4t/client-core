@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { DashboardDataModel } from "./DashboardDataModel";
-import { dashboardDataModelMeta } from "./DashboardDataModel.meta";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import LinkView from "@/core/components/general/link/LinkView";
 
 interface DashboardDataTableColumnsProps {
@@ -61,8 +61,8 @@ export const DashboardDataTableColumns: React.FC<DashboardDataTableColumnsProps>
 export const DashboardDataTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{dashboardDataModelMeta.fields.frequencyCount.label}</THEAD>
-    <THEAD>{dashboardDataModelMeta.fields.lastMatchedAt.label}</THEAD>
+    <THEAD>{DashboardDataModelMeta.fields.frequencyCount.label}</THEAD>
+    <THEAD>{DashboardDataModelMeta.fields.lastMatchedAt.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

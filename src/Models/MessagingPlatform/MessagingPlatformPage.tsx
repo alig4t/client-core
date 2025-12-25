@@ -4,7 +4,7 @@ import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
 import { useNavigate } from "react-router-dom";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { messagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import MessagingPlatformSearch from "./MessagingPlatformSearch";
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
@@ -26,9 +26,9 @@ const MessagingPlatformPage: React.FC = () => {
 
         <div className="sm:p-8 min-h-screen font-sans mix-w-fit lg:max-w-6xl mx-auto">
           <PageHeader
-            title={routeMeta?.label || messagingPlatformModelMeta.messages.manage.title}
+            title={routeMeta?.label || MessagingPlatformModelMeta.messages.manage.title}
             actionButton={{
-              label: messagingPlatformModelMeta.messages.createButton,
+              label: MessagingPlatformModelMeta.messages.createButton,
               onClick: () => navigate("create"),
               variant: "success",
             }}

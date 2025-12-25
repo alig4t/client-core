@@ -1,0 +1,24 @@
+# Role.meta.yaml
+displayName: نقش
+displayNamePlural: نقش ها
+autocompleteField: name
+routing:
+  basePath: /dashboard/portal/roles
+  menuLabel: نقش ها
+  menuIcon: Shield
+  menuParent: /dashboard/portal
+  showInMenu: true
+  menuOrder: 40
+fields:
+  name:
+    label: عنوان
+    placeholder: عنوان نقش
+    sortable: true
+    type: text
+    required: true
+relationships:
+  users:
+    label: کاربران
+    type: autocomplete
+    displayField: username
+    sortable: false

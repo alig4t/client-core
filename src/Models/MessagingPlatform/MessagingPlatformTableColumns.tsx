@@ -9,7 +9,7 @@ import { getViewPath } from "@/core/router/RouteUtils";
 import { Eye, Trash2 } from "lucide-react";
 import { Permission } from "@/router/Permission";
 import type { MessagingPlatformModel } from "./MessagingPlatformModel";
-import { messagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import LinkView from "@/core/components/general/link/LinkView";
 
 interface MessagingPlatformTableColumnsProps {
@@ -60,8 +60,8 @@ export const MessagingPlatformTableColumns: React.FC<MessagingPlatformTableColum
 export const MessagingPlatformTableHeaders = (
   <>
     <THEAD>شناسه</THEAD>
-    <THEAD>{messagingPlatformModelMeta.fields.platformName.label}</THEAD>
-    <THEAD>{messagingPlatformModelMeta.fields.platformKey.label}</THEAD>
+    <THEAD>{MessagingPlatformModelMeta.fields.platformName.label}</THEAD>
+    <THEAD>{MessagingPlatformModelMeta.fields.platformKey.label}</THEAD>
     <THEAD>تاریخ ایجاد</THEAD>
     <THEAD>تاریخ ویرایش</THEAD>
     <THEAD>عملیات</THEAD>

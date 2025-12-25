@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { userChannelModelMeta } from "./UserChannelModel.meta";
+import { UserChannelModelMeta } from "./UserChannelModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -50,19 +50,19 @@ const UserChannelSearch: React.FC<UserChannelSearchProps> = ({ onApplyFilters })
           {/* BaseModel fields: createdAt and updatedAt */}
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(userChannelModelMeta.fields.createdAt.label, "from")}
+            label={makeRangeLabel(UserChannelModelMeta.fields.createdAt.label, "from")}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(userChannelModelMeta.fields.createdAt.label, "to")}
+            label={makeRangeLabel(UserChannelModelMeta.fields.createdAt.label, "to")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
-            label={makeRangeLabel(userChannelModelMeta.fields.updatedAt.label, "from")}
+            label={makeRangeLabel(UserChannelModelMeta.fields.updatedAt.label, "from")}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
-            label={makeRangeLabel(userChannelModelMeta.fields.updatedAt.label, "to")}
+            label={makeRangeLabel(UserChannelModelMeta.fields.updatedAt.label, "to")}
           />
         </RowContainer>
 

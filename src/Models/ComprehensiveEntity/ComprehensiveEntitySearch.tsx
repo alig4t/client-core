@@ -1,7 +1,7 @@
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
 import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { comprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
 import Button from "@/core/components/general/button/Button";
@@ -52,7 +52,7 @@ const ComprehensiveEntitySearch: React.FC<ComprehensiveEntitySearchProps> = ({
         <RowContainer>
           <FormInput
             name={`stringField_${FilterOperator.LIKE}`}
-            label={comprehensiveEntityModelMeta.fields.stringField?.label}
+            label={ComprehensiveEntityModelMeta.fields.stringField?.label}
             placeholder="جستجو..."
           />
 
@@ -60,28 +60,28 @@ const ComprehensiveEntitySearch: React.FC<ComprehensiveEntitySearchProps> = ({
           <DateInput
             name={`createdAt_${FilterOperator.GE}`}
             label={makeRangeLabel(
-              comprehensiveEntityModelMeta.fields.createdAt.label,
+              ComprehensiveEntityModelMeta.fields.createdAt.label,
               "from"
             )}
           />
           <DateInput
             name={`createdAt_${FilterOperator.LE}`}
             label={makeRangeLabel(
-              comprehensiveEntityModelMeta.fields.createdAt.label,
+              ComprehensiveEntityModelMeta.fields.createdAt.label,
               "to"
             )}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.GE}`}
             label={makeRangeLabel(
-              comprehensiveEntityModelMeta.fields.updatedAt.label,
+              ComprehensiveEntityModelMeta.fields.updatedAt.label,
               "from"
             )}
           />
           <DateInput
             name={`updatedAt_${FilterOperator.LE}`}
             label={makeRangeLabel(
-              comprehensiveEntityModelMeta.fields.updatedAt.label,
+              ComprehensiveEntityModelMeta.fields.updatedAt.label,
               "to"
             )}
           />

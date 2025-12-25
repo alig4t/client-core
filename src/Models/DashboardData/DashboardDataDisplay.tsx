@@ -8,7 +8,7 @@ import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 import { DisplayField } from "@/core/components/general/container/DisplayField";
 import DashboardDataService from "./DashboardDataService";
-import { dashboardDataModelMeta } from "./DashboardDataModel.meta";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import OptionUtils from "@/core/forms/OptionUtils";
 import DateUtil from "@/core/forms/DateUtils";
 import TableErrorState from "@/core/components/general/TableErrorState";
@@ -86,17 +86,17 @@ const DashboardDataDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={dashboardDataModelMeta.fields.frequencyCount.label}
+            label={DashboardDataModelMeta.fields.frequencyCount.label}
             value={dashboardDataRecord.frequencyCount}
           />
           <DisplayField
-            label={dashboardDataModelMeta.fields.lastMatchedAt.label}
+            label={DashboardDataModelMeta.fields.lastMatchedAt.label}
             value={DateUtil.GEORGIAN_TO_JALALI_WITH_TIME(
               dashboardDataRecord.lastMatchedAt
             )}
           />
           <DisplayField
-            label={dashboardDataModelMeta.fields.coreUser.label}
+            label={DashboardDataModelMeta.fields.coreUser.label}
             value={
               dashboardDataRecord.coreUser ? (
                 <LinkView
@@ -110,7 +110,7 @@ const DashboardDataDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={dashboardDataModelMeta.fields.keyword.label}
+            label={DashboardDataModelMeta.fields.keyword.label}
             value={
               dashboardDataRecord.keyword ? (
                 <LinkView
@@ -124,7 +124,7 @@ const DashboardDataDisplay: React.FC = () => {
             }
           />
           <DisplayField
-            label={dashboardDataModelMeta.fields.channel.label}
+            label={DashboardDataModelMeta.fields.channel.label}
             value={
               dashboardDataRecord.channel ? (
                 <LinkView
