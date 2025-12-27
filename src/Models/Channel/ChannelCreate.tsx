@@ -1,236 +1,338 @@
-import React from "react";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
-import { FormWrapper } from "@/core/components/form/FormWrapper";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { MessageSquare, Info, Shield, Copy, AlertTriangle, CheckCircle2, Check } from "lucide-react";
+import Lottie from "lottie-react";
 import ChannelService from "./ChannelService";
 import { ChannelModelMeta } from "./ChannelModel.meta";
-import FormInput from "@/core/components/form/FormInput";
-import { FormSelect } from "@/core/components/form/FormSelect";
-import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
-import z from "@/core/forms/zod.config";
-import Validator from "@/core/forms/validation";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
 import Button from "@/core/components/general/button/Button";
 import PageHeader from "@/core/components/general/container/PageHeader";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
 import { VIEWNAME } from "@/router/ViewName";
 import { getViewPath } from "@/core/router/RouteUtils";
-import { publicMessages } from "@/core/forms/MessageUtils";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
-import BotService from "@/Models/Bot/BotService";
-import { BotModelMeta } from "@/Models/Bot/BotModel.meta";
-import StepperDemo from "@/core/components/general/stepper/StepperDemo";
 import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
-import { useLoading } from "@/stores/LoadingContext";
 import PlatformAuthorizationControllerService, { type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
+import chatBotAnimation from "@/components/pages/channel/ChatBot.json";
 
-const channelSchema = z.object({
-  channelName: Validator.notNull(),
-  // channelIdentifier: Validator.notNull(),
-  // status: Validator.notNull(),
-  platform: Validator.notNull(),
-  // bots: Validator.optional(),
-});
-
-type ChannelFormData = z.infer<typeof channelSchema>;
+interface Platform {
+  id: number;
+  platformKey: string;
+  platformName: string;
+  iconUrl?: string;
+}
 
 const ChannelCreate: React.FC = () => {
   const navigate = useNavigate();
-  const { id } = useParams<{ id: string }>();
-  const isEditMode = !!id;
-  const routeMeta = useRouteMetadata();
   const queryClient = useQueryClient();
-  const { openWaitDialog, closeWaitDialog } = useLoading();
 
-  const { data: existingData, isLoading } = useQuery({
-    queryKey: ["channel", id],
-    queryFn: () => ChannelService.getById(Number(id!)),
-    enabled: isEditMode,
-    ...ReactQueryOptions.editOptions,
-  });
+  // Multi-step state management
+  const [currentStep, setCurrentStep] = useState(0);
+  const [channelName, setChannelName] = useState("");
+  const [selectedPlatform, setSelectedPlatform] = useState<Platform | null>(null);
+  const [verificationCode, setVerificationCode] = useState("");
+  const [isGeneratingCode, setIsGeneratingCode] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false);
 
-  const mutation = useMutation({
-    mutationFn: async (data: ChannelFormData) => {
-      if (isEditMode) {
-        return ChannelService.update(Number(id), data);
-      }
-
-      console.log(data)
-
-      openWaitDialog();
-
-      // platForm get
-      const platform = await MessagingPlatformService.getById(data.platform.id)
-     
-
-      //draft
-      console.log(platform)
-      let dto : DraftDto  = {
-        chatTitle:data.channelName,
-        platformKey:platform.platformKey,
-        authorizationType: "MONITORING_CHANNEL"
-      }
-      const draftResult = await PlatformAuthorizationControllerService.draftAuthorizations(dto)
-      
-      const VERIFICATION_CODE = draftResult.verification_code
-      //get autorize
-
-      const auto = await PlatformAuthorizationControllerService.authorizationsByStatus("PENDING")
-
-
-      console.log(auto)
-      
-      
-      closeWaitDialog();
-      console.log(draftResult)
-      return ChannelService.create({});
-      // return new Promise();
-    },
-    onSuccess: () => {
-      toast.success(
-        isEditMode
-          ? ChannelModelMeta.messages.update.success.title
-          : ChannelModelMeta.messages.create.success.title,
-        {
-          description: isEditMode
-            ? ChannelModelMeta.messages.update.success.description
-            : ChannelModelMeta.messages.create.success.description,
-          position: "bottom-left",
-        }
-      );
-      queryClient.invalidateQueries({ queryKey: ["channel"] });
-      navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
-    },
-    onError: () => {
-      toast.error(
-        isEditMode
-          ? ChannelModelMeta.messages.update.error.title
-          : ChannelModelMeta.messages.create.error.title,
-        {
-          description: isEditMode
-            ? ChannelModelMeta.messages.update.error.description
-            : ChannelModelMeta.messages.create.error.description,
-          position: "bottom-left",
-        }
-      );
+  // Fetch available platforms
+  const { data: platforms, isLoading: loadingPlatforms } = useQuery({
+    queryKey: ["messaging-platforms"],
+    queryFn: async () => {
+      const response = await MessagingPlatformService.getAll();
+      return response;
     },
   });
 
-  const onSubmit = (data: ChannelFormData) => {
-    mutation.mutate(data);
-  };
-
-  const handleCancel = () => {
-    navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
-  };
-
-  const breadcrumbItems = useBreadcrumbs(
-    isEditMode
-      ? ChannelModelMeta.messages.pageTitle.edit
-      : ChannelModelMeta.messages.pageTitle.create
-  );
-
-  if (isLoading && isEditMode) {
-    return (
-      <PageWrapper>
-        <CreatePagePlaceholder rowCount={3} />
-      </PageWrapper>
-    );
-  }
+  const breadcrumbItems = useBreadcrumbs("اتصال کانال جدید");
 
   const steps: CompactStep[] = [
-    { id: 1, label: "ثبت کانال" },
-    { id: 2, label: "ساخت draft" },
-    { id: 3, label: "تایید " },
-  ]
+    { id: 0, label: "انتخاب پلتفرم و کانال" },
+    { id: 1, label: "دریافت کد تایید" },
+    { id: 2, label: "تایید نهایی" },
+  ];
+
+  // Step 1: Generate verification code
+  const handleGenerateCode = async () => {
+    if (!selectedPlatform || !channelName.trim()) {
+      toast.error("لطفا پلتفرم و نام کانال را وارد کنید");
+      return;
+    }
+
+    setIsGeneratingCode(true);
+    try {
+      const dto: DraftDto = {
+        chatTitle: channelName,
+        platformKey: selectedPlatform.platformKey,
+        authorizationType: "MONITORING_CHANNEL",
+      };
+
+      const result = await PlatformAuthorizationControllerService.draftAuthorizations(dto);
+      setVerificationCode(result.verificationCode);
+      setCurrentStep(1);
+      toast.success("کد تایید با موفقیت ایجاد شد");
+    } catch (error) {
+      toast.error("خطا در ایجاد کد تایید", {
+        description: "به نظر می رسد هنوز کد را وارد نکرده اید",
+      });
+    } finally {
+      setIsGeneratingCode(false);
+    }
+  };
+
+  // Step 2: Copy verification code
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(verificationCode);
+    toast.success("کد کپی شد", {
+      description: "حالا آن را در کانال خود ارسال کنید",
+    });
+  };
+
+  // Step 3: Verify and complete
+  const handleVerifyAndComplete = async () => {
+    setIsVerifying(true);
+    try {
+      const authorizations = await PlatformAuthorizationControllerService.authorizationsByStatus("PENDING");
+
+      if (authorizations && authorizations.length > 0) {
+        setCurrentStep(2);
+        setIsCompleted(true);
+        toast.success("کانال با موفقیت ثبت شد!", {
+          description: "در انتظار تایید ادمین",
+        });
+
+        // Navigate after a short delay to show success state
+        setTimeout(() => {
+          queryClient.invalidateQueries({ queryKey: ["channel"] });
+          navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
+        }, 2000);
+      } else {
+        toast.error("کد تایید یافت نشد", {
+          description: "لطفا مطمئن شوید که کد را در کانال ارسال کرده‌اید",
+        });
+      }
+    } catch (error) {
+      toast.error("خطا در تایید کانال", {
+        description: "لطفا دوباره تلاش کنید",
+      });
+    } finally {
+      setIsVerifying(false);
+    }
+  };
+
+  // Render Step 1: Platform Selection & Channel Name
+  const renderStep1 = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <h3 className="text-lg font-semibold mb-2">پلتفرم و کانال خود را انتخاب کنید</h3>
+        <p className="text-sm text-gray-600">
+          ابتدا کانال یا گروه خود را در پلتفرم مورد نظر ایجاد کنید
+        </p>
+      </div>
+
+      {/* Platform Selection */}
+      <div>
+        <label className="block text-sm font-medium mb-3">انتخاب پلتفرم</label>
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+          {loadingPlatforms ? (
+            <div className="col-span-full text-center py-8 text-gray-500">
+              در حال بارگذاری پلتفرم‌ها...
+            </div>
+          ) : (
+            platforms?.data?.map((platform) => (
+              <button
+                key={platform.id}
+                onClick={() => setSelectedPlatform(platform)}
+                className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
+                  selectedPlatform?.id === platform.id
+                    ? "border-blue-500 bg-blue-50"
+                    : "border-gray-200 hover:border-gray-300"
+                }`}
+              >
+                <div className="text-center">
+                  <MessageSquare className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                  <div className="font-medium text-sm">{platform.platformName}</div>
+                </div>
+              </button>
+            ))
+          )}
+        </div>
+      </div>
+
+      {/* Channel Name Input */}
+      <div>
+        <label className="block text-sm font-medium mb-2">نام کانال</label>
+        <input
+          type="text"
+          value={channelName}
+          onChange={(e) => setChannelName(e.target.value)}
+          placeholder="نام کانال یا گروه خود را وارد کنید"
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          maxLength={100}
+        />
+      </div>
+
+      {/* Instructions */}
+      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-sm font-medium mb-1">دستورالعمل مهم:</p>
+            <p className="text-sm text-gray-700">
+              ابتدا کانال یا گروه جدید خود را در پلتفرم انتخابی ایجاد کنید. سپس ربات <strong>@raya</strong> را به آن اضافه کرده و دسترسی ادمین به آن بدهید.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Next Button */}
+      <div className="flex justify-end gap-3 pt-4">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH))}
+        >
+          انصراف
+        </Button>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={handleGenerateCode}
+          loading={isGeneratingCode}
+          disabled={!selectedPlatform || !channelName.trim() || isGeneratingCode}
+        >
+          مرحله بعد
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Render Step 2: Display Verification Code
+  const renderStep2 = () => (
+    <div className="space-y-6">
+      <div className="text-center mb-8">
+        <div className="w-32 h-32 mx-auto mb-3">
+          <Lottie
+            animationData={chatBotAnimation}
+            loop={true}
+            autoplay={true}
+            style={{ width: "100%", height: "100%" }}
+          />
+        </div>
+        <h3 className="text-lg font-semibold mb-2">کد تایید شما آماده است</h3>
+        <p className="text-sm text-gray-600">
+          این کد را در کانال خود ارسال کنید
+        </p>
+      </div>
+
+      {/* Verification Code Display */}
+      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-6">
+        <div className="text-center mb-4">
+          <label className="block text-sm font-medium text-gray-700 mb-3">کد تایید</label>
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <code className="text-2xl font-mono font-bold text-blue-600 tracking-wider select-all">
+              {verificationCode}
+            </code>
+          </div>
+        </div>
+
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={handleCopyCode}
+          className="w-full flex items-center justify-center gap-2"
+        >
+          <Copy className="w-4 h-4" />
+          کپی کد
+        </Button>
+      </div>
+
+      {/* Instructions */}
+      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+          <div className="flex-1">
+            <p className="text-sm font-medium mb-1">مراحل بعدی:</p>
+            <ol className="text-sm text-gray-700 list-decimal list-inside space-y-1">
+              <li>کد بالا را کپی کنید</li>
+              <li>به کانال یا گروه خود بروید</li>
+              <li>کد را در آن ارسال کنید</li>
+              <li>سپس دکمه "کد را ارسال کردم" را کلیک کنید</li>
+            </ol>
+          </div>
+        </div>
+      </div>
+
+      {/* Action Buttons */}
+      <div className="flex justify-between gap-3 pt-4">
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => setCurrentStep(0)}
+        >
+          بازگشت
+        </Button>
+        <Button
+          type="button"
+          variant="primary"
+          onClick={handleVerifyAndComplete}
+          loading={isVerifying}
+          disabled={isVerifying}
+          className="flex items-center justify-center gap-2"
+        >
+          <Check className="w-4 h-4" />
+          کد را ارسال کردم
+        </Button>
+      </div>
+    </div>
+  );
+
+  // Render Step 3: Success State
+  const renderStep3 = () => (
+    <div className="space-y-6 text-center py-8">
+      <div className="w-64 h-64 mx-auto mb-4">
+        <Lottie
+          animationData={chatBotAnimation}
+          loop={true}
+          autoplay={true}
+          style={{ width: "100%", height: "100%" }}
+        />
+      </div>
+      <h3 className="text-xl font-bold text-green-600">کانال با موفقیت ثبت شد!</h3>
+      <p className="text-gray-600">
+        کانال شما در انتظار تایید ادمین است
+      </p>
+      <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md mx-auto">
+        <p className="text-sm text-gray-700">
+          پس از تایید ادمین، می‌توانید از کانال خود استفاده کنید
+        </p>
+      </div>
+    </div>
+  );
 
   return (
     <PageWrapper>
       <PageTransition>
-
-
-        {/* <StepperDemo /> */}
-
         <Breadcrumb items={breadcrumbItems} className="mb-4" />
-        <PageHeader
-          title={
-            isEditMode
-              ? ChannelModelMeta.messages.pageTitle.edit
-              : ChannelModelMeta.messages.pageTitle.create
-          }
-        />
+        <PageHeader title="اتصال کانال به ربات" />
+
         <CreatePageFormWrapper>
-          <CompactStepper steps={steps} currentStep={0} className="max-w-lg mx-auto mt-3 mb-8" />
+          <CompactStepper
+            steps={steps}
+            currentStep={currentStep}
+            className="max-w-2xl mx-auto mt-3 mb-8"
+          />
 
-          <FormWrapper
-            schema={channelSchema}
-            onSubmit={onSubmit}
-            defaultValues={existingData}
-          >
-            <RowContainer>
-              <FormInput
-                name="channelName"
-                label={ChannelModelMeta.fields.channelName.label}
-                placeholder={ChannelModelMeta.fields.channelName.placeholder}
-                maxLength={100}
-              />
-              {/* <FormInput
-                name="channelIdentifier"
-                label={ChannelModelMeta.fields.channelIdentifier.label}
-                placeholder={ChannelModelMeta.fields.channelIdentifier.placeholder}
-                maxLength={255}
-              /> */}
-              {/* <FormSelect
-                name="status"
-                label={ChannelModelMeta.fields.status.label}
-                options={ChannelModelMeta.fields.status.options || []}
-              /> */}
-              <FormAutoComplete
-                name="platform"
-                label={ChannelModelMeta.fields.platform.label}
-                service={MessagingPlatformService}
-                valueKey="id"
-                labelKey={MessagingPlatformModelMeta.displayField}
-              />
-              {/* <FormAutoComplete
-                name="bots"
-                label={ChannelModelMeta.fields.bots.label}
-                service={BotService}
-                labelKey={BotModelMeta.displayField}
-                valueKey="id"
-              /> */}
-            </RowContainer>
-
-            <ButtonPanel align="end">
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() => navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH))}
-              >
-                {publicMessages.form.buttons.cancel}
-              </Button>
-              <Button
-                type="submit"
-                variant="primary"
-                loading={mutation.isPending}
-                disabled={mutation.isPending}
-              >
-                {isEditMode
-                  ? publicMessages.form.buttons.update
-                  : publicMessages.form.buttons.save}
-              </Button>
-            </ButtonPanel>
-          </FormWrapper>
+          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm p-6">
+            {currentStep === 0 && renderStep1()}
+            {currentStep === 1 && renderStep2()}
+            {currentStep === 2 && renderStep3()}
+          </div>
         </CreatePageFormWrapper>
       </PageTransition>
     </PageWrapper>
