@@ -20,7 +20,7 @@ const Breadcrumb: React.FC<BreadcrumbProps> = ({ items, className = "" }) => {
   return (
     <nav
       aria-label="Breadcrumb"
-      className={`inline-flex flex-wrap justify-start items-center gap-2 px-4 py-2.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm text-sm ${className}`}
+      className={`inline-flex !mb-8 flex-wrap justify-start items-center gap-2 px-4 py-2.5 bg-white/60 dark:bg-slate-900/60 backdrop-blur-xl rounded-xl border border-slate-200/50 dark:border-slate-700/50 shadow-sm text-sm ${className}`}
     >
       {items.map((item, index) => {
         const isCurrentPage = index === items.length - 1;

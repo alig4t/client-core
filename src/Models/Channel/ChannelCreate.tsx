@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { MessageSquare, Info, Shield, Copy, AlertTriangle, CheckCircle2, Check, List } from "lucide-react";
+import { MessageSquare, Info, Shield, Copy, AlertTriangle, CheckCircle2, Check, List, MessageCircleMore } from "lucide-react";
 import Lottie from "lottie-react";
 import ChannelService from "./ChannelService";
 import { ChannelModelMeta } from "./ChannelModel.meta";
@@ -123,7 +123,7 @@ const ChannelCreate: React.FC = () => {
   const renderStep1 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-lg font-semibold mb-2">پلتفرم و کانال خود را انتخاب کنید</h3>
+        <h3 className="text-lg font-semibold mb-2">پلتفرم خود را انتخاب کنید</h3>
         <p className="text-sm text-gray-600">
           ابتدا کانال یا گروه خود را در پلتفرم مورد نظر ایجاد کنید
         </p>
@@ -149,7 +149,7 @@ const ChannelCreate: React.FC = () => {
                 }`}
               >
                 <div className="text-center">
-                  <MessageSquare className="w-8 h-8 mx-auto mb-2 text-blue-500" />
+                  <MessageCircleMore className="w-8 h-8 mx-auto mb-2 text-blue-500" />
                   <div className="font-medium text-sm">{platform.platformName}</div>
                 </div>
               </button>
@@ -178,7 +178,7 @@ const ChannelCreate: React.FC = () => {
           <div className="flex-1">
             <p className="text-sm font-medium mb-1">دستورالعمل مهم:</p>
             <p className="text-sm text-gray-700">
-              ابتدا کانال یا گروه جدید خود را در پلتفرم انتخابی ایجاد کنید. سپس ربات <strong>@raya</strong> را به آن اضافه کرده و دسترسی ادمین به آن بدهید.
+              ابتدا کانال یا گروه جدید خود را در پلتفرم انتخابی ایجاد کنید. سپس ربات <strong>rnt_social_test_bot@</strong> را به آن اضافه کرده و دسترسی ادمین به آن بدهید.
             </p>
           </div>
         </div>

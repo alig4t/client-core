@@ -7,6 +7,7 @@ import type { RouteConfig } from "@/router/path.types";
 const ChannelPage = lazy(() => import("./ChannelPage"));
 const ChannelCreate = lazy(() => import("./ChannelCreate"));
 const ChannelDisplay = lazy(() => import("./ChannelDisplay"));
+const ChannelApprove = lazy(() => import("./ChannelApprove"));
 
 export const ChannelRoutes: RouteConfig[] = [
   // List Page
@@ -50,4 +51,17 @@ export const ChannelRoutes: RouteConfig[] = [
     label: "ویرایش کانال",
     parent: "/dashboard/portal/channels",
   },
+  //approve
+
+    {
+    path: "/dashboard/portal/channels/approve",
+    label: "تایید کانال",
+    icon: <MessageSquare size={18} />,
+    element: ChannelApprove,
+    parent: "/dashboard/portal",
+    permission: Permission.Channel_Read,
+    showInMenu: true,
+    name: VIEWNAME.CHANNEL_SEARCH,
+  },
+
 ];

@@ -39,6 +39,20 @@ class PlatformAuthorizationControllerService extends BaseService<MessagingPlatfo
     );
   }
 
+  approveAuthorization(id: number) {
+    return this.call(
+      "put",
+      `authorizations/${id}/approve`,
+    );
+  }
+
+  rejectAuthorization(id: number) {
+    return this.call(
+      "put",
+      `authorizations/${id}/reject`,
+    );
+  }
+
 
 }
 
