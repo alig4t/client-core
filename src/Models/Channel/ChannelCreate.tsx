@@ -36,10 +36,10 @@ import PlatformAuthorizationControllerService, { type DraftDto } from "../Messag
 
 const channelSchema = z.object({
   channelName: Validator.notNull(),
-  channelIdentifier: Validator.notNull(),
-  status: Validator.notNull(),
+  // channelIdentifier: Validator.notNull(),
+  // status: Validator.notNull(),
   platform: Validator.notNull(),
-  bots: Validator.optional(),
+  // bots: Validator.optional(),
 });
 
 type ChannelFormData = z.infer<typeof channelSchema>;
@@ -76,14 +76,17 @@ const ChannelCreate: React.FC = () => {
       //draft
       console.log(platform)
       let dto : DraftDto  = {
+        chatTitle:data.channelName,
         platformKey:platform.platformKey,
         authorizationType: "MONITORING_CHANNEL"
       }
       const draftResult = await PlatformAuthorizationControllerService.draftAuthorizations(dto)
       
+      const VERIFICATION_CODE = draftResult.verification_code
       //get autorize
 
-      const auto = await PlatformAuthorizationControllerService.authorizations()
+      const auto = await PlatformAuthorizationControllerService.authorizationsByStatus("PENDING")
+
 
       console.log(auto)
       
@@ -181,17 +184,17 @@ const ChannelCreate: React.FC = () => {
                 placeholder={ChannelModelMeta.fields.channelName.placeholder}
                 maxLength={100}
               />
-              <FormInput
+              {/* <FormInput
                 name="channelIdentifier"
                 label={ChannelModelMeta.fields.channelIdentifier.label}
                 placeholder={ChannelModelMeta.fields.channelIdentifier.placeholder}
                 maxLength={255}
-              />
-              <FormSelect
+              /> */}
+              {/* <FormSelect
                 name="status"
                 label={ChannelModelMeta.fields.status.label}
                 options={ChannelModelMeta.fields.status.options || []}
-              />
+              /> */}
               <FormAutoComplete
                 name="platform"
                 label={ChannelModelMeta.fields.platform.label}
@@ -199,13 +202,13 @@ const ChannelCreate: React.FC = () => {
                 valueKey="id"
                 labelKey={MessagingPlatformModelMeta.displayField}
               />
-              <FormAutoComplete
+              {/* <FormAutoComplete
                 name="bots"
                 label={ChannelModelMeta.fields.bots.label}
                 service={BotService}
                 labelKey={BotModelMeta.displayField}
                 valueKey="id"
-              />
+              /> */}
             </RowContainer>
 
             <ButtonPanel align="end">

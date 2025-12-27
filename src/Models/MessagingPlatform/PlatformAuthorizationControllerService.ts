@@ -5,6 +5,7 @@ import { api } from "@/core/service/Axios";
 export type DraftDto = {
   platformKey: string,
   authorizationType: "MONITORING_CHANNEL" | "NOTIFICATION_CHANNEL";
+  chatTitle: string
 }
 class PlatformAuthorizationControllerService extends BaseService<MessagingPlatformModel> {
   constructor() {
@@ -28,6 +29,13 @@ class PlatformAuthorizationControllerService extends BaseService<MessagingPlatfo
     return this.call(
       "get",
       "authorizations",
+    );
+  }
+
+  authorizationsByStatus(status : "DRAFT"| "PENDING" | "APPROVED" | "REJECTED") {
+    return this.call(
+      "get",
+      `authorizations/my/${status}`,
     );
   }
 
