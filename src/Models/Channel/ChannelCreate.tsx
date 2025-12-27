@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { MessageSquare, Info, Shield, Copy, AlertTriangle, CheckCircle2, Check } from "lucide-react";
+import { MessageSquare, Info, Shield, Copy, AlertTriangle, CheckCircle2, Check, List } from "lucide-react";
 import Lottie from "lottie-react";
 import ChannelService from "./ChannelService";
 import { ChannelModelMeta } from "./ChannelModel.meta";
@@ -105,12 +105,6 @@ const ChannelCreate: React.FC = () => {
         toast.success("کانال با موفقیت ثبت شد!", {
           description: "در انتظار تایید ادمین",
         });
-
-        // Navigate after a short delay to show success state
-        setTimeout(() => {
-          queryClient.invalidateQueries({ queryKey: ["channel"] });
-          navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
-        }, 2000);
       } else {
         toast.error("کد تایید یافت نشد", {
           description: "لطفا مطمئن شوید که کد را در کانال ارسال کرده‌اید",
@@ -311,6 +305,19 @@ const ChannelCreate: React.FC = () => {
         <p className="text-sm text-gray-700">
           پس از تایید ادمین، می‌توانید از کانال خود استفاده کنید
         </p>
+      </div>
+      <div className="pt-4">
+        <Button
+          type="button"
+          variant="primary"
+          onClick={() => {
+            queryClient.invalidateQueries({ queryKey: ["channel"] });
+            navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
+          }}
+          icon={List}
+        >
+          مشاهده لیست کانال‌ها
+        </Button>
       </div>
     </div>
   );

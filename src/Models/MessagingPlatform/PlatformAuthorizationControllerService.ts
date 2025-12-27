@@ -32,7 +32,7 @@ class PlatformAuthorizationControllerService extends BaseService<MessagingPlatfo
     );
   }
 
-  authorizationsByStatus(status : "DRAFT"| "pending" | "APPROVED" | "REJECTED") {
+  authorizationsByStatus(status : "DRAFT"| "PENDING" | "APPROVED" | "REJECTED") {
     return this.call(
       "get",
       `authorizations/my/by-status?status=${status}&page=0&size=10`,
