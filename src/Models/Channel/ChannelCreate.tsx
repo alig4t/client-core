@@ -68,16 +68,27 @@ const ChannelCreate: React.FC = () => {
       console.log(data)
 
       openWaitDialog();
-      const platform = await MessagingPlatformService.getById(data.platform.id)
 
+      // platForm get
+      const platform = await MessagingPlatformService.getById(data.platform.id)
      
+
+      //draft
       console.log(platform)
       let dto : DraftDto  = {
         platformKey:platform.platformKey,
         authorizationType: "MONITORING_CHANNEL"
       }
       const draftResult = await PlatformAuthorizationControllerService.draftAuthorizations(dto)
-       closeWaitDialog();
+      
+      //get autorize
+
+      const auto = await PlatformAuthorizationControllerService.authorizations()
+
+      console.log(auto)
+      
+      
+      closeWaitDialog();
       console.log(draftResult)
       return ChannelService.create({});
       // return new Promise();

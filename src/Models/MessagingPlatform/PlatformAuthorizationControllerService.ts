@@ -23,6 +23,15 @@ class PlatformAuthorizationControllerService extends BaseService<MessagingPlatfo
     );
   }
 
+  // authorizations
+  authorizations() {
+    return this.call(
+      "get",
+      "authorizations",
+    );
+  }
+
+
 }
 
 export default new PlatformAuthorizationControllerService();
