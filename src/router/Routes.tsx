@@ -4,7 +4,6 @@ import { Home, User, Settings as SettingsIcon, Shield, Code, Bolt, MessageCircle
 import type { RouteConfig } from "./path.types";
 import { Permission } from "./Permission";
 import { VIEWNAME } from "./ViewName";
-import { ROUTE_PATHS } from "./route.paths";
 
 // Generated routes (safe - auto-updated by generator)
 import { generatedRoutes } from "./generated.routes";
@@ -32,25 +31,43 @@ const ComprehensiveDisplay = lazy(() => import("@/Models/Comprehensive/Comprehen
 // Helper for parameterized routes
 export const withId = (base: string) => `${base}/:id`;
 
+export const RARENT_PATHS = {
+  // Public routes
+  HOME: "/",
+  LOGIN: "/login",
+  REGISTER: "/register",
+
+  // Dashboard base
+  DASHBOARD: "/dashboard",
+  PROFILE: "/dashboard/profile",
+  SETTINGS: "/dashboard/settings",
+
+  // Parent groupings
+  PORTAL: "/dashboard/portal",
+  MESSAGING: "/dashboard/messaging",
+
+} as const;
+
+
 // Core/Base Routes (manual - safe)
 const coreRoutes: RouteConfig[] = [
   // Public Routes
   {
-    path: ROUTE_PATHS.HOME,
+    path: "/",
     element: LandingPage,
     isPublic: true,
     showInMenu: false,
     name: VIEWNAME.LANDING,
   },
   {
-    path: ROUTE_PATHS.LOGIN,
+    path: "/login",
     element: LoginPage,
     isPublic: true,
     showInMenu: false,
     name: VIEWNAME.LOGIN,
   },
   {
-    path: ROUTE_PATHS.REGISTER,
+    path: "/register",
     element: RegisterPage,
     isPublic: true,
     showInMenu: false,
@@ -59,7 +76,7 @@ const coreRoutes: RouteConfig[] = [
 
   // Dashboard
   {
-    path: ROUTE_PATHS.DASHBOARD,
+    path: "/dashboard",
     label: "خانه",
     icon: <Home size={24} />,
     element: Dashboard,
@@ -69,7 +86,7 @@ const coreRoutes: RouteConfig[] = [
 
   // Profile
   {
-    path: ROUTE_PATHS.PROFILE,
+    path: "/dashboard/profile",
     label: "پروفایل",
     icon: <User size={24} />,
     element: Profile,
@@ -79,7 +96,7 @@ const coreRoutes: RouteConfig[] = [
 
   // Settings
   {
-    path: ROUTE_PATHS.SETTINGS,
+    path: "/dashboard/settings",
     label: "تنظیمات",
     icon: <SettingsIcon size={24} />,
     element: Settings,
@@ -89,15 +106,15 @@ const coreRoutes: RouteConfig[] = [
 
   // Portal (menu grouping)
   {
-    path: ROUTE_PATHS.PORTAL,
+    path: "/dashboard/portal",
     label: "پورتال",
     icon: <Bolt size={24} />,
     showInMenu: true,
     name: VIEWNAME.PORTAL,
   },
-
+  
   {
-    path: ROUTE_PATHS.MESSAGING,
+    path: "/dashboard/messaging",
     label: "پیام رسان ها",
     icon: <MessageCircleCode size={24} />,
     showInMenu: true,
@@ -107,31 +124,31 @@ const coreRoutes: RouteConfig[] = [
 
   // Permission Module (manual)
   {
-    path: ROUTE_PATHS.PERMISSIONS,
+    path: "/dashboard/portal/permissions",
     label: "مجوز ها",
     icon: <Shield size={18} />,
     element: PermissionPage,
-    parent: ROUTE_PATHS.PORTAL,
+    parent: "/dashboard/portal",
     permission: Permission.Permission_Read,
     showInMenu: true,
     name: VIEWNAME.PERMISSION_LIST,
   },
   {
-    path: ROUTE_PATHS.PERMISSIONS_CREATE,
+    path: "/dashboard/portal/permissions/create",
     element: PermissionCreate,
     permission: Permission.Permission_Create,
     showInMenu: false,
     name: VIEWNAME.PERMISSION_CREATE,
     label: "ایجاد مجوز",
-    parent: ROUTE_PATHS.PERMISSIONS,
+    parent: "/dashboard/portal/permissions",
   },
   {
-    path: ROUTE_PATHS.PERMISSIONS_EDIT,
+    path: withId("/dashboard/portal/permissions"),
     permission: Permission.Permission_Update,
     showInMenu: false,
     name: VIEWNAME.PERMISSION_EDIT,
     label: "ویرایش مجوز",
-    parent: ROUTE_PATHS.PERMISSIONS,
+    parent: "/dashboard/portal/permissions",
   },
 
   // // Comprehensive (example entity - manual)
