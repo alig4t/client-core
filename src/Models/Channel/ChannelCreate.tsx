@@ -299,11 +299,11 @@ const ChannelCreate: React.FC = () => {
       </div>
       <h3 className="text-xl font-bold text-green-600">کانال با موفقیت ثبت شد!</h3>
       <p className="text-gray-600">
-        کانال شما در انتظار تایید ادمین است
+        کانال شما در انتظار تایید ادمین است.
       </p>
       <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md mx-auto">
         <p className="text-sm text-gray-700">
-          پس از تایید ادمین، می‌توانید از کانال خود استفاده کنید
+          پس از تایید ادمین، به لیست کانال هایتان اضافه میشود.
         </p>
       </div>
       <div className="pt-4">
