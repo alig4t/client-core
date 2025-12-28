@@ -22,23 +22,38 @@ const OwnedChannelTable: React.FC<OwnedChannelTableProps> = ({ filters, onSelect
   );
 
   return (
-    <CustomDataTable<OwnedChannelModel, DynamicFilters>
-      queryKey="owned-channel"
-      // service={OwnedChannelService}
-      header={OwnedChannelTableHeaders}
-      renderRow={(item, index, onDelete) => (
-        <OwnedChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
-      )}
-      title={OwnedChannelModelMeta.pluralDisplayName}
-      sortOptions={buildSortOptions(OwnedChannelModelMeta)}
-      filters={filters}
-      onSelectionChange={handleSelectionChange}
-      enableDelete={true}
-      customFetchFn={(params) => OwnedChannelService.authorized()}
-      // defaultSort="createdAt,desc"
-      // defaultPageSize={10}
-      // dataIdKey="id"
-    />
+    <div className="flex flex-col gap-8">
+
+      <CustomDataTable<OwnedChannelModel, DynamicFilters>
+        queryKey="owned-channel-active"
+        // service={OwnedChannelService}
+        header={OwnedChannelTableHeaders}
+        renderRow={(item, index, onDelete) => (
+          <OwnedChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
+        )}
+        title={'کانال های من'}
+        sortOptions={buildSortOptions(OwnedChannelModelMeta)}
+        filters={filters}
+        enableDelete={true}
+        customFetchFn={(params) => OwnedChannelService.authorized()}
+      />
+
+      <CustomDataTable<OwnedChannelModel, DynamicFilters>
+        queryKey="owned-channel-pending"
+        // service={OwnedChannelService}
+        header={OwnedChannelTableHeaders}
+        renderRow={(item, index, onDelete) => (
+          <OwnedChannelTableColumns key={item.id} item={item} onDelete={onDelete} />
+        )}
+        title={'کانال های منتظر تایید'}
+        sortOptions={buildSortOptions(OwnedChannelModelMeta)}
+        filters={filters}
+        enableDelete={true}
+        customFetchFn={(params) => OwnedChannelService.pending()}
+      />
+    </div>
+
+
   );
 };
 

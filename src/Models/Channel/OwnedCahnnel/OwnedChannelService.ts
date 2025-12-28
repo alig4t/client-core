@@ -7,13 +7,21 @@ class OwnedChannelService extends BaseService<OwnedChannelModel> {
     super("/owned-channels");
   }
 
-    authorized() {
-      return this.call(
-        "get",
-        "/authorized",
-      );
-    }
-  
+  authorized() {
+    return this.call(
+      "get",
+      "/authorized",
+    );
+  }
+
+
+  pending() {
+    return this.call(
+      "get",
+      "/pending",
+    );
+  }
+
 }
 
 export default new OwnedChannelService();
