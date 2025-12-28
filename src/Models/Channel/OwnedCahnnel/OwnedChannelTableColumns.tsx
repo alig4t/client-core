@@ -39,7 +39,7 @@ export const OwnedChannelTableColumns: React.FC<OwnedChannelTableColumnsProps> =
               ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
               : item.status === 'PENDING'
               ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
-              : item.status === 'APPROVED'
+              : item.status === 'APPROVED' || item.status === 'ACTIVE'
               ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
               : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
           }`}>
@@ -50,14 +50,14 @@ export const OwnedChannelTableColumns: React.FC<OwnedChannelTableColumnsProps> =
         <TBODY>{DateUtil.GEORGIAN_TO_JALALI(item.updatedAt)}</TBODY>
 
         <TBODY className="flex gap-x-2 justify-center">
-          <NavLink
+          {/* <NavLink
             variant="edit"
             permission={Permission.Channel_Update}
             viewName={VIEWNAME.CHANNEL_EDIT}
             idParam={item.id}
             tooltipSide="top"
             className="mr-2"
-          />
+          /> */}
 
           <TableLink
             to={getViewPath(VIEWNAME.OWNED_CHANNEL_DISPLAY, item.id)}

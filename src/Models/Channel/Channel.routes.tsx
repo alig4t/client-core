@@ -11,6 +11,7 @@ const ChannelCreate = lazy(() => import("./ChannelCreate"));
 const ChannelDisplay = lazy(() => import("./ChannelDisplay"));
 const ChannelApprove = lazy(() => import("./ChannelApprove"));
 const MYChannel = lazy(() => import("./OwnedCahnnel/OwnedChannelPage"));
+const MYChannelDisplay = lazy(() => import("./OwnedCahnnel/OwnedChannelDisplay"));
 
 const localParent = '/dashboard/messaging/channels'
 const mainParent = '/dashboard/messaging'
@@ -84,7 +85,7 @@ export const ChannelRoutes: RouteConfig[] = [
 
    {
     path: `${localParent}/my/:id`,
-    element: ChannelDisplay,
+    element: MYChannelDisplay,
     permission: Permission.Channel_Read,
     showInMenu: false,
     name: VIEWNAME.OWNED_CHANNEL_DISPLAY,

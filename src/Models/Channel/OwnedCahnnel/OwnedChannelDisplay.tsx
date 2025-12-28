@@ -87,30 +87,20 @@ const OwnedChannelDisplay: React.FC = () => {
       >
         <RowContainer numberOfColumns={3}>
           <DisplayField
-            label={OwnedChannelModelMeta.fields.displayName.label}
-            value={ownedChannelRecord.displayName}
-          />
-          <DisplayField
             label={OwnedChannelModelMeta.fields.platformKey.label}
-            value={ownedChannelRecord.platformKey}
+            value={ownedChannelRecord.platformKey || "---"}
           />
           <DisplayField
             label={OwnedChannelModelMeta.fields.provisionalIdentifier.label}
             value={ownedChannelRecord.provisionalIdentifier || "---"}
           />
           <DisplayField
+            label={OwnedChannelModelMeta.fields.displayName.label}
+            value={ownedChannelRecord.displayName || "---"}
+          />
+          <DisplayField
             label={OwnedChannelModelMeta.fields.channelId.label}
-            value={
-              ownedChannelRecord.channelId ? (
-                <LinkView
-                  viewName={VIEWNAME.CHANNEL_DISPLAY}
-                  id={ownedChannelRecord.channelId}
-                  label={String(ownedChannelRecord.channelId)}
-                />
-              ) : (
-                "---"
-              )
-            }
+            value={ownedChannelRecord.channelId ? String(ownedChannelRecord.channelId) : "---"}
           />
           <DisplayField
             label={OwnedChannelModelMeta.fields.channelTitle.label}
@@ -127,12 +117,16 @@ const OwnedChannelDisplay: React.FC = () => {
                 <LinkView
                   viewName={VIEWNAME.USER_DISPLAY}
                   id={ownedChannelRecord.ownerId}
-                  label={ownedChannelRecord.ownerName || String(ownedChannelRecord.ownerId)}
+                  label={String(ownedChannelRecord.ownerId)}
                 />
               ) : (
                 "---"
               )
             }
+          />
+          <DisplayField
+            label={OwnedChannelModelMeta.fields.ownerName.label}
+            value={ownedChannelRecord.ownerName || "---"}
           />
           <DisplayField
             label={OwnedChannelModelMeta.fields.status.label}
@@ -142,13 +136,21 @@ const OwnedChannelDisplay: React.FC = () => {
                   ? 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300'
                   : ownedChannelRecord.status === 'PENDING'
                   ? 'bg-amber-100 dark:bg-amber-900 text-amber-700 dark:text-amber-300'
-                  : ownedChannelRecord.status === 'APPROVED'
+                  : ownedChannelRecord.status === 'APPROVED'  || ownedChannelRecord.status === 'ACTIVE'
                   ? 'bg-green-100 dark:bg-green-900 text-green-700 dark:text-green-300'
                   : 'bg-red-100 dark:bg-red-900 text-red-700 dark:text-red-300'
               }`}>
                 {OptionUtils.getLabel(ownedChannelRecord.status, OwnedChannelStatusEnumLabels)}
               </span>
             }
+          />
+        </RowContainer>
+      </RecordDisplayLayout>
+      <RecordDisplayLayout title="اطلاعات سیستمی">
+        <RowContainer numberOfColumns={3}>
+          <DisplayField
+            label="شناسه"
+            value={ownedChannelRecord.id}
           />
           <DisplayField
             label="تاریخ ایجاد"
