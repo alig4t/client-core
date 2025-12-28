@@ -10,6 +10,7 @@ const ChannelPage = lazy(() => import("./ChannelPage"));
 const ChannelCreate = lazy(() => import("./ChannelCreate"));
 const ChannelDisplay = lazy(() => import("./ChannelDisplay"));
 const ChannelApprove = lazy(() => import("./ChannelApprove"));
+const MYChannel = lazy(() => import("./OwnedCahnnel/OwnedChannelPage"));
 
 const localParent = '/dashboard/messaging/channels'
 const mainParent = '/dashboard/messaging'
@@ -68,6 +69,27 @@ export const ChannelRoutes: RouteConfig[] = [
     permission: Permission.Channel_Read,
     showInMenu: true,
     name: VIEWNAME.CHANNEL_SEARCH,
+  },
+
+    {
+    path: `${localParent}/my`,
+    label: "کانال های من",
+    icon: <MessageSquare size={18} />,
+    element: MYChannel,
+    parent: mainParent,
+    permission: Permission.Channel_Read,
+    showInMenu: true,
+    name: VIEWNAME.CHANNEL_SEARCH,
+  },
+
+   {
+    path: `${localParent}/my/:id`,
+    element: ChannelDisplay,
+    permission: Permission.Channel_Read,
+    showInMenu: false,
+    name: VIEWNAME.OWNED_CHANNEL_DISPLAY,
+    label: "جزئیات کانال",
+    parent: localParent,
   },
 
 ];

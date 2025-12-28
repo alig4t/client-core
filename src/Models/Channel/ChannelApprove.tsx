@@ -14,7 +14,7 @@ import PageTransition from "@/core/components/general/animation/PageTransition";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
 import PlatformAuthorizationControllerService from "../MessagingPlatform/PlatformAuthorizationControllerService";
 import chatBotAnimation from "@/components/pages/channel/ChatBot.json";
-import OwnedChannelService from "./OwnedChannelService";
+import OwnedChannelService from "./OwnedCahnnel/OwnedChannelService";
 import LinkView from "@/core/components/general/link/LinkView";
 import { VIEWNAME } from "@/router/ViewName";
 
