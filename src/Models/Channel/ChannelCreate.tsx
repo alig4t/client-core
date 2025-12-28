@@ -123,18 +123,18 @@ const ChannelCreate: React.FC = () => {
   const renderStep1 = () => (
     <div className="space-y-6">
       <div className="text-center mb-8">
-        <h3 className="text-lg font-semibold mb-2">پلتفرم خود را انتخاب کنید</h3>
-        <p className="text-sm text-gray-600">
+        <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)]">پلتفرم خود را انتخاب کنید</h3>
+        <p className="text-sm text-[var(--text-secondary)]">
           ابتدا کانال یا گروه خود را در پلتفرم مورد نظر ایجاد کنید
         </p>
       </div>
 
       {/* Platform Selection */}
       <div>
-        <label className="block text-sm font-medium mb-3">انتخاب پلتفرم</label>
+        <label className="block text-sm font-medium mb-3 text-[var(--text-primary)]">انتخاب پلتفرم</label>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {loadingPlatforms ? (
-            <div className="col-span-full text-center py-8 text-gray-500">
+            <div className="col-span-full text-center py-8 text-[var(--text-secondary)]">
               در حال بارگذاری پلتفرم‌ها...
             </div>
           ) : (
@@ -144,13 +144,13 @@ const ChannelCreate: React.FC = () => {
                 onClick={() => setSelectedPlatform(platform)}
                 className={`p-4 rounded-lg border-2 transition-all hover:shadow-md ${
                   selectedPlatform?.id === platform.id
-                    ? "border-blue-500 bg-blue-50"
-                    : "border-gray-200 hover:border-gray-300"
+                    ? "border-[var(--color-primary)] bg-[var(--bg-accent)]"
+                    : "border-[var(--input-border)] hover:border-[var(--border-focus)] bg-[var(--input-bg)]"
                 }`}
               >
                 <div className="text-center">
-                  <MessageCircleMore className="w-8 h-8 mx-auto mb-2 text-blue-500" />
-                  <div className="font-medium text-sm">{platform.platformName}</div>
+                  <MessageCircleMore className="w-8 h-8 mx-auto mb-2 text-[var(--color-primary)]" />
+                  <div className="font-medium text-sm text-[var(--text-primary)]">{platform.platformName}</div>
                 </div>
               </button>
             ))
@@ -160,25 +160,25 @@ const ChannelCreate: React.FC = () => {
 
       {/* Channel Name Input */}
       <div>
-        <label className="block text-sm font-medium mb-2">نام کانال</label>
+        <label className="block text-sm font-medium mb-2 text-[var(--text-primary)]">نام کانال</label>
         <input
           type="text"
           value={channelName}
           onChange={(e) => setChannelName(e.target.value)}
           placeholder="نام کانال یا گروه خود را وارد کنید"
-          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          className="w-full px-4 py-2.5 border border-[var(--input-border)] bg-[var(--input-bg)] text-[var(--input-text)] placeholder:text-[var(--input-placeholder)] rounded-lg focus:ring-2 focus:ring-[var(--input-focus-ring)] focus:border-[var(--border-focus)] transition-all"
           maxLength={100}
         />
       </div>
 
       {/* Instructions */}
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+      <div className="bg-[var(--bg-accent)] border border-[var(--border-secondary)] rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <Info className="w-5 h-5 text-blue-600 flex-shrink-0 mt-0.5" />
+          <Info className="w-5 h-5 text-[var(--color-primary)] flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-sm font-medium mb-1">دستورالعمل مهم:</p>
-            <p className="text-sm text-gray-700">
-              ابتدا کانال یا گروه جدید خود را در پلتفرم انتخابی ایجاد کنید. سپس ربات <strong>rnt_social_test_bot@</strong> را به آن اضافه کرده و دسترسی ادمین به آن بدهید.
+            <p className="text-sm font-medium mb-1 text-[var(--text-primary)]">دستورالعمل مهم:</p>
+            <p className="text-sm text-[var(--text-secondary)]">
+              ابتدا کانال یا گروه جدید خود را در پلتفرم انتخابی ایجاد کنید. سپس ربات <strong className="text-[var(--text-primary)]">rnt_social_test_bot@</strong> را به آن اضافه کرده و دسترسی ادمین به آن بدهید.
             </p>
           </div>
         </div>
@@ -218,18 +218,18 @@ const ChannelCreate: React.FC = () => {
             style={{ width: "100%", height: "100%" }}
           />
         </div>
-        <h3 className="text-lg font-semibold mb-2">کد امنیتی شما آماده است</h3>
-        <p className="text-sm text-gray-600">
+        <h3 className="text-lg font-semibold mb-2 text-[var(--text-primary)]">کد امنیتی شما آماده است</h3>
+        <p className="text-sm text-[var(--text-secondary)]">
           این کد را در کانال خود ارسال کنید
         </p>
       </div>
 
       {/* Verification Code Display */}
-      <div className="bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-300 rounded-xl p-6">
+      <div className="bg-[var(--bg-accent)] border-2 border-[var(--border-secondary)] rounded-xl p-6 shadow-sm">
         <div className="text-center mb-4">
-          <label className="block text-sm font-medium text-gray-700 mb-3">کد تایید</label>
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <code className="text-2xl font-mono font-bold text-blue-600 tracking-wider select-all">
+          <label className="block text-sm font-medium text-[var(--text-primary)] mb-3">کد تایید</label>
+          <div className="bg-[var(--input-bg)] border border-[var(--input-border)] rounded-lg p-4 shadow-sm">
+            <code className="text-2xl font-mono font-bold text-[var(--color-primary)] tracking-wider select-all">
               {verificationCode}
             </code>
           </div>
@@ -247,12 +247,12 @@ const ChannelCreate: React.FC = () => {
       </div>
 
       {/* Instructions */}
-      <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+      <div className="bg-[var(--bg-warning)] border border-[var(--border-warning)] rounded-lg p-4">
         <div className="flex items-start gap-3">
-          <AlertTriangle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="w-5 h-5 text-[var(--text-warning)] flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-sm font-medium mb-1">مراحل بعدی:</p>
-            <ol className="text-sm text-gray-700 list-decimal list-inside space-y-1">
+            <p className="text-sm font-medium mb-1 text-[var(--text-primary)]">مراحل بعدی:</p>
+            <ol className="text-sm text-[var(--text-secondary)] list-decimal list-inside space-y-1">
               <li>کد بالا را کپی کنید</li>
               <li>به کانال یا گروه خود بروید</li>
               <li>کد را در آن ارسال کنید</li>
@@ -297,12 +297,12 @@ const ChannelCreate: React.FC = () => {
           style={{ width: "100%", height: "100%" }}
         />
       </div>
-      <h3 className="text-xl font-bold text-green-600">کانال با موفقیت ثبت شد!</h3>
-      <p className="text-gray-600">
+      <h3 className="text-xl font-bold text-[var(--text-success)]">کانال با موفقیت ثبت شد!</h3>
+      <p className="text-[var(--text-secondary)]">
         کانال شما در انتظار تایید ادمین است.
       </p>
-      <div className="bg-green-50 border border-green-200 rounded-lg p-4 max-w-md mx-auto">
-        <p className="text-sm text-gray-700">
+      <div className="bg-[var(--bg-success)] border border-[var(--border-success)] rounded-lg p-4 max-w-md mx-auto">
+        <p className="text-sm text-[var(--text-secondary)]">
           پس از تایید ادمین، به لیست کانال هایتان اضافه میشود.
         </p>
       </div>
@@ -335,7 +335,7 @@ const ChannelCreate: React.FC = () => {
             className="max-w-2xl mx-auto mt-3 mb-8"
           />
 
-          <div className="max-w-2xl mx-auto bg-white rounded-lg shadow-sm p-6">
+          <div className="max-w-2xl mx-auto bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg shadow-sm p-6">
             {currentStep === 0 && renderStep1()}
             {currentStep === 1 && renderStep2()}
             {currentStep === 2 && renderStep3()}
