@@ -62,7 +62,7 @@ export class BaseService<T> {
       params,
     });
 
-    return response.data;
+    return response as any;
   }
 
   async getAll(params: ServerSideParams<T> = {}): Promise<ApiResponsePayload<T>> {
