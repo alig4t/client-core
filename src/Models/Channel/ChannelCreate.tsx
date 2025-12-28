@@ -215,7 +215,13 @@ const ChannelCreate: React.FC = () => {
               
               <strong className="text-[var(--text-primary)] inline-block font-mono bg-blue-100 px-1.5 rounded-xl  mx-2">rnt_social_test_bot@</strong> 
               
-              را به آن اضافه کرده و دسترسی ادمین به آن بدهید.
+              را به آن اضافه کرده و دسترسی 
+                {' '}
+              {/* <strong className="text-[var(--text-primary)] font-bold ">  </strong>  */}
+              ادمین
+               {' '}
+              
+              به آن بدهید.
             </p>
           </div>
         </div>
