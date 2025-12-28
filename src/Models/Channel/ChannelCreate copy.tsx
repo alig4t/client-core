@@ -74,7 +74,8 @@ const ChannelCreate: React.FC = () => {
       console.log(platform)
       let dto : DraftDto  = {
         platformKey:platform.platformKey,
-        authorizationType: "MONITORING_CHANNEL"
+        authorizationType: "MONITORING_CHANNEL",
+        chatTitle:data.channelName
       }
       const draftResult = await PlatformAuthorizationControllerService.draftAuthorizations(dto)
        closeWaitDialog();
