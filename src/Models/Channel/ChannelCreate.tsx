@@ -53,7 +53,7 @@ const ChannelCreate: React.FC = () => {
 
   const steps: CompactStep[] = [
     { id: 0, label: "انتخاب پلتفرم و کانال" },
-    { id: 1, label: "دریافت کد تایید" },
+    { id: 1, label: "دریافت کد امنیتی" },
     { id: 2, label: "تایید نهایی" },
   ];
 
@@ -75,7 +75,7 @@ const ChannelCreate: React.FC = () => {
       const result = await PlatformAuthorizationControllerService.draftAuthorizations(dto);
       setVerificationCode(result.verificationCode);
       setCurrentStep(1);
-      toast.success("کد تایید با موفقیت ایجاد شد");
+      toast.success("کد امنیتی با موفقیت ایجاد شد");
     } catch (error) {
       toast.error("خطا در ایجاد کد تایید", {
         description: "به نظر می رسد هنوز کد را وارد نکرده اید",
@@ -106,7 +106,7 @@ const ChannelCreate: React.FC = () => {
           description: "در انتظار تایید ادمین",
         });
       } else {
-        toast.error("کد تایید یافت نشد", {
+        toast.error("کد امنیتی یافت نشد", {
           description: "لطفا مطمئن شوید که کد را در کانال ارسال کرده‌اید",
         });
       }
@@ -218,7 +218,7 @@ const ChannelCreate: React.FC = () => {
             style={{ width: "100%", height: "100%" }}
           />
         </div>
-        <h3 className="text-lg font-semibold mb-2">کد تایید شما آماده است</h3>
+        <h3 className="text-lg font-semibold mb-2">کد امنیتی شما آماده است</h3>
         <p className="text-sm text-gray-600">
           این کد را در کانال خود ارسال کنید
         </p>
