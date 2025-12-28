@@ -232,56 +232,57 @@ const CustomDataTable = <TData extends Record<string, any>, TFilters extends Rec
     }
 
     return (
-        <div className="w-full space-y-4">
-            {/* Header Controls */}
-            <div className="flex flex-col md:flex-row justify-between items-center gap-4 bg-[var(--card-bg)] p-6 rounded-lg border border-[var(--card-border)] max-w-full">
-                <h2 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h2>
-
-                <div className="flex flex-wrap-reverse md:flex-nowrap items-center gap-2 w-full sm:w-auto">
-                    <AnimatePresence mode="wait">
-                        {enableDelete && isSelectionMode && selectedIds.length > 0 && (
-                            <motion.div
-                                initial={{ opacity: 0, scale: 0.8, x: -20 }}
-                                animate={{ opacity: 1, scale: 1, x: 0 }}
-                                exit={{ opacity: 0, scale: 0.8, x: -20 }}
-                                transition={{ duration: 0.2 }}
-                                className="mr-auto sm:mr-0"
-                            >
-                                <Button
-                                    variant="danger"
-                                    icon={Trash2}
-                                    onClick={handleBulkDeleteClick}
-                                    className="min-w-60"
-                                >
-                                    حذف انتخاب شده ها  ({selectedIds.length})
-                                </Button>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-
-                    <Select
-                        options={sortOptions}
-                        value={sortValue}
-                        onChange={(val) => setSortValue(String(val))}
-                        className="w-40"
-                        minilabel="مرتب‌سازی"
-                    />
-
-                    <Select
-                        options={PAGE_SIZE_OPTIONS}
-                        value={pageSize}
-                        onChange={(val) => {
-                            setPageSize(Number(val));
-                            setPage(0);
-                        }}
-                        className="w-24"
-                        minilabel="تعداد"
-                    />
-                </div>
-            </div>
-
-            {/* Table */}
+        <div className="w-full">
+            {/* Header Controls & Table */}
             <div className="w-full bg-[var(--card-bg)] rounded-lg border border-[var(--card-border)] overflow-hidden">
+                {/* Header Controls */}
+                <div className="flex flex-col md:flex-row justify-between items-center gap-4 p-6 border-b border-[var(--card-border)]">
+                    <h2 className="text-lg font-semibold text-[var(--text-primary)]">{title}</h2>
+
+                    <div className="flex flex-wrap-reverse md:flex-nowrap items-center gap-2 w-full sm:w-auto">
+                        <AnimatePresence mode="wait">
+                            {enableDelete && isSelectionMode && selectedIds.length > 0 && (
+                                <motion.div
+                                    initial={{ opacity: 0, scale: 0.8, x: -20 }}
+                                    animate={{ opacity: 1, scale: 1, x: 0 }}
+                                    exit={{ opacity: 0, scale: 0.8, x: -20 }}
+                                    transition={{ duration: 0.2 }}
+                                    className="mr-auto sm:mr-0"
+                                >
+                                    <Button
+                                        variant="danger"
+                                        icon={Trash2}
+                                        onClick={handleBulkDeleteClick}
+                                        className="min-w-60"
+                                    >
+                                        حذف انتخاب شده ها  ({selectedIds.length})
+                                    </Button>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
+
+                        <Select
+                            options={sortOptions}
+                            value={sortValue}
+                            onChange={(val) => setSortValue(String(val))}
+                            className="w-40"
+                            minilabel="مرتب‌سازی"
+                        />
+
+                        <Select
+                            options={PAGE_SIZE_OPTIONS}
+                            value={pageSize}
+                            onChange={(val) => {
+                                setPageSize(Number(val));
+                                setPage(0);
+                            }}
+                            className="w-24"
+                            minilabel="تعداد"
+                        />
+                    </div>
+                </div>
+
+                {/* Table */}
                 <div className="relative w-full overflow-x-auto scrollbar-thin">
                     <table className="min-w-full text-sm text-right">
                         <thead className="bg-[var(--table-header-bg)] text-[var(--table-header-text)] font-medium border-b border-[var(--table-border)]">
@@ -394,13 +395,13 @@ const CustomDataTable = <TData extends Record<string, any>, TFilters extends Rec
                         </Button>
                     </div>
                 </div>
-            </div>
 
-            {isFetching && !isLoading && (
-                <div className="absolute inset-0 bg-[var(--bg-secondary)]/50 z-10 flex items-center justify-center">
-                    {/* Optional: Add a spinner here */}
-                </div>
-            )}
+                {isFetching && !isLoading && (
+                    <div className="absolute inset-0 bg-[var(--bg-secondary)]/50 z-10 flex items-center justify-center">
+                        {/* Optional: Add a spinner here */}
+                    </div>
+                )}
+            </div>
 
             {/* Confirmation Modal */}
             <ConfirmationModal
