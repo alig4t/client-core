@@ -24,7 +24,7 @@ export interface ServerSideParams<T = any> {
   filters?: Filters<T>;
 }
 
-interface ApiResponsePayload<T> {
+export interface ApiResponsePayload<T> {
   data: T[];
   meta?: {
     totalItems: number;
@@ -48,8 +48,9 @@ export class BaseService<T> {
   protected async call<R = any>(
     method: HttpMethod,
     relativeUrl: string = "",
+    pageType: boolean = false,
     data?: any,
-    params?: Record<string, any>
+    params?: Record<string, any>,
   ): Promise<R> {
     const fullUrl = relativeUrl
       ? `${this.url}/${relativeUrl}`.replace(/\/+/g, "/")
@@ -62,7 +63,10 @@ export class BaseService<T> {
       params,
     });
 
-    return response as any;
+    if (pageType) {
+      return response as R;
+    }
+    return response.data;
   }
 
   async getAll(params: ServerSideParams<T> = {}): Promise<ApiResponsePayload<T>> {

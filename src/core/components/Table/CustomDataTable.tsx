@@ -153,7 +153,7 @@ const CustomDataTable = <TData extends Record<string, any>, TFilters extends Rec
         },
     });
 
-    const pageData : [] = data.data ?? [];
+    const pageData : [] = data?.data ?? [];
     const meta = data?.meta;
     
     const totalPages = meta?.totalPages ?? 0;

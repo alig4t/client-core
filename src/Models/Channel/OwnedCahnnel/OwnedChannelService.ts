@@ -1,4 +1,4 @@
-import { BaseService } from "@/core/service/BaseService";
+import { BaseService, type ApiResponsePayload } from "@/core/service/BaseService";
 import type { ChannelModel } from "../ChannelModel";
 import type { OwnedChannelModel } from "./OwnedChannelModel";
 
@@ -7,18 +7,19 @@ class OwnedChannelService extends BaseService<OwnedChannelModel> {
     super("/owned-channels");
   }
 
-  authorized() {
-    return this.call(
+  authorized(): Promise<ApiResponsePayload<OwnedChannelModel>> {
+    return this.call<ApiResponsePayload<OwnedChannelModel>>(
       "get",
       "/authorized",
+      true,
     );
   }
 
-
-  pending() {
-    return this.call(
+  pending(): Promise<ApiResponsePayload<OwnedChannelModel>> {
+    return this.call<ApiResponsePayload<OwnedChannelModel>>(
       "get",
       "/pending",
+      true,
     );
   }
 
