@@ -1,252 +1,113 @@
-# RNT Social API - Frontend Code Generator
+# Frontend generator
 
-Generates complete CRUD components for React frontend from XML entity definitions.
+Generates typed entity definitions, response/create/update contracts and thin CRUD pages using the shared React core. The normalized contract lives in `src/core/entity`; templates reuse that runtime instead of duplicating form and table logic.
 
-## 🎯 Features
+## Setup and commands
 
-- ✅ Generates 9 files per entity (Model, Meta, Service, Page, Table, Columns, Create, Display, Search)
-- ✅ Supports all field types (STRING, INTEGER, ENUM, DATE, etc.)
-- ✅ Supports all relationship types (ONE_TO_ONE, MANY_TO_ONE, ONE_TO_MANY, MANY_TO_MANY)
-- ✅ Persian/Farsi UI labels and metadata
-- ✅ Core entity detection (User, Document, etc.)
-- ✅ Automatic enum file generation
-- ✅ Prettier code formatting
-- ✅ Fully configurable via `config.json`
-
-## 📦 Installation
+From the repository root (CI uses Node.js 22):
 
 ```bash
-cd generator
-npm install
-npm run build
-```
-
-## 🚀 Usage
-
-### Generate Single Entity
-
-```bash
-npm run generate -- generate Channel
-```
-
-### Generate All Entities
-
-```bash
+npm ci
+npm --prefix generator ci
+npm run generator:build
+npm run generate -- Product --dry-run
+npm run generate -- Product
 npm run generate:all
+npm run generate:check
 ```
 
-### Development Mode (with live reload)
+Direct CLI, including a custom configuration:
 
 ```bash
-npm run dev generate Channel
+node generator/dist/index.js generate Product --config generator/config.json
+node generator/dist/index.js generate:all --config generator/config.json --dry-run
+node generator/dist/index.js generate:all --config generator/config.json --check
 ```
 
-## 📁 Project Structure
+`--dry-run` validates and lists changes without writing. `--check` also exits unsuccessfully when output is stale. Parse, formatting, graph or type errors fail the command before output is replaced. Rebuild the CLI after editing generator sources.
 
-```
-generator/
-├── config.json              # Configuration file
-├── entity-definitions/      # XML + Meta files
-│   ├── Channel.xml
-│   ├── Channel.meta.yaml
-│   ├── ComprehensiveEntity.xml
-│   └── ComprehensiveEntity.meta.yaml
-├── src/
-│   ├── index.ts            # CLI entry point
-│   ├── config.ts           # Config loader
-│   ├── parsers/
-│   │   ├── XmlParser.ts    # XML → Entity
-│   │   └── MetaParser.ts   # YAML → Metadata
-│   ├── generators/
-│   │   └── FrontendGenerator.ts  # Main generator
-│   ├── templates/          # Handlebars templates
-│   │   ├── Model.hbs
-│   │   ├── ModelMeta.hbs
-│   │   ├── Service.hbs
-│   │   ├── Page.hbs
-│   │   ├── Table.hbs
-│   │   ├── TableColumns.hbs
-│   │   ├── Create.hbs
-│   │   ├── Display.hbs
-│   │   └── Search.hbs
-│   ├── types/
-│   │   └── EntityTypes.ts  # TypeScript types
-│   └── utils/
-│       ├── EntityMerger.ts     # XML + Meta merger
-│       └── TemplateHelpers.ts  # Handlebars helpers
-└── README.md
+## Define an entity
+
+Add `Product.xml` under the configured entityDefinitions directory:
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<entity>
+  <name>Product</name>
+  <generate>true</generate>
+  <fields>
+    <field>
+      <name>title</name>
+      <type>STRING</type>
+      <required>true</required>
+      <searchable>true</searchable>
+      <minLength>3</minLength>
+    </field>
+    <field><name>amount</name><type>BIG_DECIMAL</type></field>
+    <field><name>active</name><type>BOOLEAN</type></field>
+  </fields>
+</entity>
 ```
 
-## ⚙️ Configuration
-
-Edit `config.json` to customize:
-
-### Paths
-- `entityDefinitions`: Where XML/meta files are located
-- `outputBase`: Where generated files go (`../src/Models`)
-- `coreComponents`: Core components path
-- `menuConfig`: Menu configuration file
-
-### Core Entities
-Define which entities are "core" (pre-existing):
-
-```json
-"coreEntities": {
-  "User": {
-    "isCore": true,
-    "importPath": "@/core/models/User",
-    "servicePath": "@/core/services/UserService"
-  }
-}
-```
-
-### Generation Options
-```json
-"generation": {
-  "formatWithPrettier": true,
-  "generateRoutes": true,
-  "generatePermissions": true,
-  "overwriteExisting": false
-}
-```
-
-## 📝 Creating Entities
-
-### Step 1: Copy XML from Backend
-
-```bash
-# From backend repo
-cp rnt-social-api-main/src/main/resources/generate-xmls/Channel.xml \
-   ../frontend-repo/generator/entity-definitions/
-```
-
-### Step 2: Create Meta File
-
-Create `Channel.meta.yaml`:
+Optional `Product.meta.yaml`:
 
 ```yaml
-displayName: کانال
-displayNamePlural: کانال‌ها
-autocompleteField: channelName
-
+displayName: محصول
+displayNamePlural: محصولات
+autocompleteField: title
+endpoint: /products
+idType: string
 routing:
-  basePath: /dashboard/portal/channels
-  menuLabel: کانال‌ها
-  menuIcon: MessageSquare
-  menuParent: /dashboard/portal
+  basePath: /dashboard/products
+  menuLabel: محصولات
+  menuIcon: Package
   showInMenu: true
-
 fields:
-  channelName:
-    label: نام کانال
-    placeholder: نام کانال را وارد کنید
+  title:
+    label: نام محصول
     sortable: true
-
-  status:
-    label: وضعیت
-    sortable: true
-    enums:
-      ACTIVE: فعال
-      INACTIVE: غیرفعال
-
-relationships:
-  platform:
-    label: پلتفرم
-    type: autocomplete
-    displayField: platformName
+  amount:
+    label: قیمت
+  active:
+    label: فعال
+    defaultValue: false
+operations:
+  update:
+    method: patch
 ```
 
-### Step 3: Generate
+Metadata merges per field; missing metadata keeps XML constraints and defaults. Unknown fields, invalid XML/types, missing relation targets and invalid display fields fail validation. XML scalar types are STRING, INTEGER, LONG, DOUBLE, BIG_DECIMAL, BOOLEAN, DATE, LOCAL_DATE, LOCAL_DATE_TIME and ENUM. See `entity-definitions/ComprehensiveEntity.xml` and its YAML for enum and relationship examples.
+
+Relationships support ONE_TO_ONE, MANY_TO_ONE, ONE_TO_MANY and MANY_TO_MANY. A document relationship uses the upload control. Relations use references by default; `relation.valueMode: id` opts into scalar IDs. Override relation display labels, endpoint and dependent lookup filters in YAML `relationships`. Nested owned structures can be declared with object/array metadata and child `fields`.
+
+LONG and BIG_DECIMAL default to strings to preserve precision. DATE is an instant, LOCAL_DATE is date-only and LOCAL_DATE_TIME is a local datetime. Calendar display is independent of wire formats. Keep backend serializers consistent with these contracts.
+
+## Configuration
+
+Paths resolve relative to the configuration file, including templates. `paths` controls definitions, output, core, menu, router and project root. Type checking uses `paths.projectRoot/tsconfig.app.json`; the application's aliases must resolve configured paths.
+
+`generation` controls formatting, route registration, permissions, overwrite and type checking. Type checking is enabled by default. Keep it enabled for application output. With `overwriteExisting: false`, differing owned files are reported as preserved. Existing wrappers and extension files are always retained.
+
+`coreEntities` maps existing entities to their model import, service import, endpoint and display field. Their configured services power generated lookups. Keep these imports pointed at real application modules. `fieldTypeMapping` controls compatible scalar representations, including numeric versus string LONG/decimal. `formTypeMapping` controls supported widgets; metadata may override the widget without replacing the domain type.
+
+## Ownership and extension points
+
+Managed implementations live in `Models/<Entity>/generated/`. Root wrappers and `<Entity>.extension.ts` are created only when absent. Generated routes, viewnames and permissions are registered centrally; menu entries are merged with existing manual configuration.
+
+`Models/.generator-manifest.json` records managed file hashes, normalizing line endings. Manual edits to an owned file cause generation to stop. Put custom field configuration in `definitionOverrides` and services, transforms, actions or renderers in `entityExtension`; replace a root wrapper for custom page behavior.
+
+Output is planned and type checked in memory before writing. Each changed file is replaced through a temporary file; write failures restore previous contents. Two identical generations produce no changes. Removing an entity or disabling a generation option does not delete existing modules or registries; remove obsolete application references explicitly.
+
+## Verification
 
 ```bash
-npm run generate -- generate Channel
+npm run typecheck
+npm run lint
+npm test
+npm run generator:build
+npm run generate:check
+npm run build
+npm run test:e2e
 ```
 
-### Step 4: Update Routes
-
-The generated files need to be added to your routes. See generated output for imports.
-
-## 🔧 Field Type Support
-
-| Backend Type | TypeScript Type | Form Component |
-|-------------|-----------------|----------------|
-| STRING | string | FormInput (text) |
-| INTEGER | number | FormInput (number) |
-| LONG | number | FormInput (number) |
-| DOUBLE | number | FormInput (number) |
-| BIG_DECIMAL | string | FormInput (number) |
-| BOOLEAN | boolean | Checkbox |
-| DATE | string | DateInput |
-| LOCAL_DATE | string | DateInput |
-| LOCAL_DATE_TIME | string | DateInput |
-| ENUM | string | FormSelect |
-
-## 🔗 Relationship Support
-
-| Type | Form Component | Example |
-|------|----------------|---------|
-| ONE_TO_ONE | FormAutoComplete | User selection |
-| MANY_TO_ONE | FormAutoComplete | Channel selection |
-| ONE_TO_MANY | FormAutoComplete (multi) | Keywords |
-| MANY_TO_MANY | FormAutoComplete (multi) | Messages |
-
-## 🎨 Generated Files
-
-For entity `Channel`, generates:
-
-1. **ChannelModel.ts** - TypeScript interface
-2. **ChannelModel.meta.ts** - UI metadata
-3. **ChannelService.ts** - API service
-4. **ChannelPage.tsx** - List page
-5. **ChannelTable.tsx** - Data table wrapper
-6. **ChannelTableColumns.tsx** - Table row rendering
-7. **ChannelCreate.tsx** - Create/Edit form
-8. **ChannelDisplay.tsx** - Detail view
-9. **ChannelSearch.tsx** - Search/filter form
-
-Plus enum files if entity has enum fields.
-
-## 🚨 Core Entity Handling
-
-Core entities (User, Document, etc.) are imported from core instead of generated:
-
-```typescript
-// Non-core
-import type { ChannelModel } from "@/Models/Channel/ChannelModel";
-
-// Core
-import type { User } from "@/core/models/User";
-```
-
-Configure in `config.json` > `coreEntities`.
-
-## 🐛 Troubleshooting
-
-### Template Errors
-Check Handlebars syntax in `src/templates/*.hbs`
-
-### Missing Meta File
-Generator will use defaults if `.meta.yaml` not found (with warning)
-
-### Type Errors
-Ensure all relationships reference existing entities or are marked as core
-
-### Overwrite Protection
-Set `overwriteExisting: true` in config to replace existing files
-
-## 📚 Examples
-
-See `entity-definitions/` for:
-- `Channel.meta.yaml` - Simple entity
-- `ComprehensiveEntity.meta.yaml` - Complex entity with all features
-
-## 🤝 Contributing
-
-To modify templates:
-1. Edit `src/templates/*.hbs`
-2. Rebuild: `npm run build`
-3. Test: `npm run generate -- generate TestEntity`
-
-## 📄 License
-
-Internal tool for RNT Social API project.
+Fixtures cover boolean-only and to-many-only entities, absent/partial metadata, quoted labels, type-correct output, option handling, edited-file protection and repeatable generation. See the [Persian core guide](../docs/CORE_GUIDE.fa.md) for runtime contracts and application adapters.
