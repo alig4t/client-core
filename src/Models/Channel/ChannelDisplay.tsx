@@ -1,25 +1,24 @@
-import React from "react";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import TableErrorState from "@/core/components/general/TableErrorState";
+import Button from "@/core/components/general/button/Button";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
 import LinkView from "@/core/components/general/link/LinkView";
-import { VIEWNAME } from "@/router/ViewName";
-import { DisplayField } from "@/core/components/general/container/DisplayField";
-import ChannelService from "./ChannelService";
-import { ChannelModelMeta } from "./ChannelModel.meta";
-import OptionUtils from "@/core/forms/OptionUtils";
-import DateUtil from "@/core/forms/DateUtils";
-import TableErrorState from "@/core/components/general/TableErrorState";
-import Button from "@/core/components/general/button/Button";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import { getViewPath } from "@/core/router/RouteUtils";
-import { ChannelStatusEnumLabels } from "./ChannelStatusEnum";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 import { publicMessages } from "@/core/forms/MessageUtils";
+import OptionUtils from "@/core/forms/OptionUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { VIEWNAME } from "@/router/ViewName";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate,useParams } from "react-router-dom";
+import { ChannelModelMeta } from "./ChannelModel.meta";
+import ChannelService from "./ChannelService";
+import { ChannelStatusEnumLabels } from "./ChannelStatusEnum";
 
 const ChannelDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -80,7 +79,7 @@ const ChannelDisplay: React.FC = () => {
       <RecordDisplayLayout
         title={publicMessages.record.displayTitle + " : " + channelRecord.id}
         actions={
-          <Button variant="primary" onClick={handleEditClick}>
+          <Button permission="channel:update" variant="primary" onClick={handleEditClick}>
             ویرایش
           </Button>
         }
@@ -115,7 +114,7 @@ const ChannelDisplay: React.FC = () => {
           <DisplayField
             label={ChannelModelMeta.fields.bots.label}
             value={
-              channelRecord.bots?.map((item: any) => item?.token)?.join(", ") || "---"
+              channelRecord.bots?.map((item) => item?.token)?.join(", ") || "---"
             }
           />
         </RowContainer>

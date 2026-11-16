@@ -11,11 +11,12 @@ export const YES_OR_NO_OPTIONS: Option[] = [
 ];
 
 export const GET_BOOLEAN_OPTION = (value: boolean | undefined): string => {
-  if(!value) return "-"
-  return YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label || "";
-}
-
-
+  if (value === undefined || value === null) return "-";
+  return (
+    YES_OR_NO_OPTIONS.find((option) => option.value === Number(value))?.label ||
+    ""
+  );
+};
 
 export const PAGE_SIZE_OPTIONS: Option[] = [
   { label: "5", value: 5 },
@@ -24,20 +25,17 @@ export const PAGE_SIZE_OPTIONS: Option[] = [
   { label: "50", value: 50 },
 ];
 
-
 /**
  * Automatically build sort options based on model metadata
  */
 export function buildSortOptions<
-  TModel extends Record<string, any>,
-  TFieldMeta extends FormFieldMetadata
->(
-  modelMeta: {
-    fields: {
-      [K in keyof TModel]?: TFieldMeta;
-    };
-  }
-): Option[] {
+  TModel extends object,
+  TFieldMeta extends FormFieldMetadata,
+>(modelMeta: {
+  fields: {
+    [K in keyof TModel]?: TFieldMeta;
+  };
+}): Option[] {
   const options: Option[] = [];
 
   // Convert Object.keys to keyof TModel and filter
@@ -53,7 +51,7 @@ export function buildSortOptions<
 
       options.push(
         { label: `${label} (صعودی)`, value: `${fieldKey},asc` },
-        { label: `${label} (نزولی)`, value: `${fieldKey},desc` }
+        { label: `${label} (نزولی)`, value: `${fieldKey},desc` },
       );
     });
 
@@ -67,7 +65,7 @@ export function buildSortOptions<
  */
 export function getOptions(
   enumObj: Record<string, string | number>,
-  labels: Record<string | number, string>
+  labels: Record<string | number, string>,
 ): Option[] {
   return Object.values(enumObj).map((value) => ({
     value,
@@ -82,9 +80,9 @@ export function getOptions(
  */
 export function getLabel(
   value: string | number | undefined,
-  labels: Record<string | number, string>
+  labels: Record<string | number, string>,
 ): string {
-  if(!value) return ''
+  if (value === undefined || value === null) return "";
   return labels[value] || String(value);
 }
 
@@ -95,6 +93,6 @@ const OptionUtils = {
   buildSortOptions,
   getOptions,
   getLabel,
-}
+};
 
 export default OptionUtils;

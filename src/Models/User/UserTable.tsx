@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { UserModel } from "./UserModel";
-import UserService from "./UserService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { UserModelMeta } from "./UserModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { UserTableColumns, UserTableHeaders } from "./UserTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { UserModel } from "./UserModel";
+import { UserModelMeta } from "./UserModel.meta";
+import UserService from "./UserService";
+import { UserTableColumns,UserTableHeaders } from "./UserTableColumns";
 
 interface UserTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const UserTable: React.FC<UserTableProps> = ({ filters, onSelectionChange }) => 
       sortOptions={buildSortOptions(UserModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="user:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

@@ -1,32 +1,30 @@
 // src/pages/PermissionCreate.tsx
 
+import { useMutation,useQuery,useQueryClient } from "@tanstack/react-query";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { useNavigate,useParams } from "react-router-dom";
 import { toast } from "sonner";
-import { z } from "zod";
-import permissionService from "@/Models/Permission/PermissionService";
-import Spinner from "@/core/components/general/loading/Spinner";
+import { z } from "zod/v3";
 // import { FormWrapper } from "@/components/shared/FormWrapper";
-import { PermissionModelMeta } from "./PermissionModel.meta";
-import { FormWrapper } from "@/core/components/form/FormWrapper";
-import FormInput from "@/core/components/form/FormInput";
-import Validator from "@/core/forms/validation";
 import PermissionService from "@/Models/Permission/PermissionService";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import FormInput from "@/core/components/form/FormInput";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import Button from "@/core/components/general/button/Button";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
 import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
+import Validator from "@/core/forms/validation";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { VIEWNAME } from "@/router/ViewName";
+import { PermissionModelMeta } from "./PermissionModel.meta";
 
 
 const permissionSchema = z.object({
@@ -59,7 +57,7 @@ const PermissionCreate: React.FC = () => {
       }
       return PermissionService.create(data);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success(
         isEditMode
           ? PermissionModelMeta.messages.update.success.title
@@ -74,7 +72,7 @@ const PermissionCreate: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["permission"] });
       navigate(getViewPath(VIEWNAME.PERMISSION_LIST));
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(
         isEditMode
           ? PermissionModelMeta.messages.update.error.title

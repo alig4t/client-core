@@ -1,8 +1,6 @@
 // components/PageHeader.tsx
-import React from 'react';
-import type { ButtonVariant } from '../button/Button';
-import Button from '../button/Button';
-
+import type { ButtonVariant } from "../button/Button";
+import Button from "../button/Button";
 
 type PageHeaderProps = {
   title: string;
@@ -10,19 +8,25 @@ type PageHeaderProps = {
     label: string;
     onClick: () => void;
     variant?: ButtonVariant; // Reuse the same variant type
+    permission?: string;
   };
   className?: string;
 };
 
-const PageHeader = ({ title, actionButton, className = '' }: PageHeaderProps) => {
+const PageHeader = ({
+  title,
+  actionButton,
+  className = "",
+}: PageHeaderProps) => {
   return (
     <div className={`flex justify-between items-center mb-6 ${className}`}>
       <h1 className="text-2xl font-bold text-[var(--text-primary)]">{title}</h1>
       {actionButton && (
         <Button
-          variant={actionButton.variant || 'success'}
+          variant={actionButton.variant || "success"}
           onClick={actionButton.onClick}
           type="button"
+          permission={actionButton.permission}
         >
           {actionButton.label}
         </Button>

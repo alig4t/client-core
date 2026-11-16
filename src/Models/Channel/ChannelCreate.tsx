@@ -1,24 +1,22 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { MessageSquare, Info, Shield, Copy, AlertTriangle, CheckCircle2, Check, List, MessageCircleMore, CheckIcon, CheckCircleIcon } from "lucide-react";
-import Lottie from "lottie-react";
-import ChannelService from "./ChannelService";
-import { ChannelModelMeta } from "./ChannelModel.meta";
-import Button from "@/core/components/general/button/Button";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import PageTransition from "@/core/components/general/animation/PageTransition";
-import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
-import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
-import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
-import PlatformAuthorizationControllerService, { type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
 import chatBotAnimation from "@/components/pages/channel/ChatBot.json";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import Button from "@/core/components/general/button/Button";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import CompactStepper,{ type CompactStep } from "@/core/components/general/stepper/CompactStepper";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { VIEWNAME } from "@/router/ViewName";
+import { useQuery,useQueryClient } from "@tanstack/react-query";
+import Lottie from "lottie-react";
+import { AlertTriangle,Check,CheckCircle2,CheckIcon,Copy,Info,List,MessageSquare } from "lucide-react";
+import React,{ useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import PlatformAuthorizationControllerService,{ type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
 
 interface Platform {
   id: number;
@@ -38,7 +36,7 @@ const ChannelCreate: React.FC = () => {
   const [verificationCode, setVerificationCode] = useState("");
   const [isGeneratingCode, setIsGeneratingCode] = useState(false);
   const [isVerifying, setIsVerifying] = useState(false);
-  const [isCompleted, setIsCompleted] = useState(false);
+  const [, setIsCompleted] = useState(false);
 
   // Fetch available platforms
   const { data: platforms, isLoading: loadingPlatforms } = useQuery({
@@ -76,7 +74,7 @@ const ChannelCreate: React.FC = () => {
       setVerificationCode(result.verificationCode);
       setCurrentStep(1);
       toast.success("کد امنیتی با موفقیت ایجاد شد");
-    } catch (error) {
+    } catch {
       toast.error("خطا در ایجاد کد تایید", {
         description: "به نظر می رسد هنوز کد را وارد نکرده اید",
       });
@@ -110,7 +108,7 @@ const ChannelCreate: React.FC = () => {
           description: "لطفا مطمئن شوید که کد را در کانال ارسال کرده‌اید",
         });
       }
-    } catch (error) {
+    } catch {
       toast.error("خطا در تایید کانال", {
         description: "لطفا دوباره تلاش کنید",
       });

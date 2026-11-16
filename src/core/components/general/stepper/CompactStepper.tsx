@@ -1,8 +1,8 @@
 // src/core/components/general/stepper/CompactStepper.tsx
 
-import React from "react";
-import { Check } from "lucide-react";
 import { motion } from "framer-motion";
+import { Check } from "lucide-react";
+import React from "react";
 
 export interface CompactStep {
   id: string | number;
@@ -49,7 +49,6 @@ const CompactStepper: React.FC<CompactStepperProps> = ({
         {steps.map((step, index) => {
           const isCompleted = index < currentStep;
           const isCurrent = index === currentStep;
-          const isUpcoming = index > currentStep;
 
           return (
             <div
@@ -62,8 +61,8 @@ const CompactStepper: React.FC<CompactStepperProps> = ({
                   isCompleted
                     ? "bg-[var(--color-success)] border-[var(--color-success)] text-white"
                     : isCurrent
-                    ? "bg-[var(--color-primary)] border-[var(--color-primary)] text-white"
-                    : "bg-[var(--card-bg)] border-[var(--border-secondary)] text-[var(--text-tertiary)]"
+                      ? "bg-[var(--color-primary)] border-[var(--color-primary)] text-white"
+                      : "bg-[var(--card-bg)] border-[var(--border-secondary)] text-[var(--text-tertiary)]"
                 }`}
                 initial={false}
                 animate={{
@@ -89,8 +88,8 @@ const CompactStepper: React.FC<CompactStepperProps> = ({
                   isCurrent
                     ? "text-[var(--color-primary)] font-medium"
                     : isCompleted
-                    ? "text-[var(--text-primary)]"
-                    : "text-[var(--text-tertiary)]"
+                      ? "text-[var(--text-primary)]"
+                      : "text-[var(--text-tertiary)]"
                 }`}
               >
                 {step.label}

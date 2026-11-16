@@ -1,122 +1,118 @@
-// src/components/form/DateInput.tsx
-import React from "react";
-import { useFormContext, Controller } from "react-hook-form";
-import CustomDatePicker from "@/core/components/form/CustomDatePicker";
-import { DateObject, type Value } from "react-multi-date-picker"; // Value = DateObject | null
-import persian from "react-date-object/calendars/persian";
+import { useState } from "react";
 import gregorian from "react-date-object/calendars/gregorian";
-
-import DateUtil from "@/core/forms/DateUtils";
-import Label from "./Label";
-import ErrorFormText from "@/core/components/form/ErrorFormText";
-
+import persian from "react-date-object/calendars/persian";
+import { Controller, useFormContext } from "react-hook-form";
+import { DateObject, type Value } from "react-multi-date-picker";
+import CustomDatePicker from "./CustomDatePicker";
+import { useCore } from "../../entity/CoreProvider";
+export type DateKind = "date" | "datetime" | "instant";
 interface DateInputProps {
   name: string;
   label: string;
   placeholder?: string;
   className?: string;
-  onValueChange?: (isoValue: string) => void;
+  onValueChange?: (value: string) => void;
   standalone?: boolean;
+  kind?: DateKind;
+  disabled?: boolean;
+  value?: string;
 }
-
-export const DateInput: React.FC<DateInputProps> = ({
+export function datePickerValue(
+  value: string | undefined,
+  kind: DateKind,
+  calendar: "persian" | "gregorian" = "persian",
+): Value {
+  const displayCalendar = calendar === "gregorian" ? gregorian : persian;
+  if (!value) return null;
+  if (kind === "instant") {
+    const date = new Date(value);
+    return Number.isNaN(date.getTime())
+      ? null
+      : new DateObject(date).convert(displayCalendar);
+  }
+  return new DateObject({
+    date: value.replace("T", " "),
+    format: kind === "date" ? "YYYY-MM-DD" : "YYYY-MM-DD HH:mm:ss",
+    calendar: gregorian,
+  }).convert(displayCalendar);
+}
+export function serializePickedDate(value: Value, kind: DateKind): string {
+  if (!(value instanceof DateObject)) return "";
+  const date = new DateObject(value).convert(gregorian);
+  if (kind === "date") return date.format("YYYY-MM-DD");
+  if (kind === "datetime") return date.format("YYYY-MM-DDTHH:mm:ss");
+  return date.toDate().toISOString();
+}
+function DateControl({
   name,
   label,
-  placeholder = "انتخاب تاریخ",
-  className = "",
+  kind = "instant",
+  value,
   onValueChange,
-  standalone = false,
-}) => {
-  // --- Standalone Mode ---
-  if (standalone) {
-    const [dateObjectValue, setDateObjectValue] = React.useState<Value>(null);
-
-    const handleChange = (newValue: Value) => {
-      setDateObjectValue(newValue);
-      if (newValue instanceof DateObject) {
-        // Convert Solar DateObject to Gregorian date then to ISO
-        const gregorianDate = newValue.convert(gregorian).toDate();
-        const isoString = gregorianDate.toISOString().replace("Z", "+00:00");
-        onValueChange?.(isoString);
-      } else {
-        onValueChange?.("");
-      }
-    };
-
-    return (
-      <div className={`w-full ${className}`}>
-        <Label>{label}</Label>
-        <div className="w-full">
-          <CustomDatePicker
-            value={dateObjectValue}
-            onChange={handleChange}
-            placeholder={placeholder}
-          />
-        </div>
-      </div>
-    );
-  }
-
-  // --- RHF Mode ---
-  const formContext = useFormContext();
-
-  if (!formContext) {
-    throw new Error(
-      "DateInput must be used inside a FormWrapper (FormProvider). Use standalone={true} for standalone usage."
-    );
-  }
-
-  const {
-    control,
-    formState: { errors },
-  } = formContext;
-
+  disabled,
+  placeholder = "انتخاب تاریخ",
+  className,
+}: DateInputProps) {
+  const { calendar } = useCore();
   return (
-    <div className={`w-full ${className}`}>
-      <Label>{label}</Label>
-      <Controller
+    <div className={className}>
+      <label htmlFor={name} className="block mb-1.5 text-sm">
+        {label}
+      </label>
+      <CustomDatePicker
         name={name}
-        control={control}
-        render={({ field: { onChange, value: isoValueFromRHF } }) => {
-          // Convert ISO received from RHF to Solar DateObject for display
-          let dateObjectForPicker: Value = null;
-          if (isoValueFromRHF) {
-            try {
-              const jsDate = new Date(isoValueFromRHF);
-              if (!isNaN(jsDate.getTime())) {
-                dateObjectForPicker = new DateObject(jsDate).convert(persian);
-              }
-            } catch (e) {
-              // In case of error, remains null
-            }
-          }
-
-          return (
-            <CustomDatePicker
-              value={dateObjectForPicker}
-              onChange={(selectedValue: Value) => {
-                if (selectedValue instanceof DateObject) {
-                  // Convert Solar DateObject to ISO
-                  const gregorianDate = selectedValue
-                    .convert(gregorian)
-                    .toDate();
-                  const isoToSend = gregorianDate
-                    .toISOString()
-                    .replace("Z", "+00:00");
-                  onChange(isoToSend);
-                  onValueChange?.(isoToSend);
-                } else {
-                  // User cleared the value
-                  onChange("");
-                  onValueChange?.("");
-                }
-              }}
-              placeholder={placeholder}
-            />
-          );
-        }}
+        value={datePickerValue(value, kind, calendar)}
+        onChange={(next) => onValueChange?.(serializePickedDate(next, kind))}
+        placeholder={placeholder}
+        withTime={kind !== "date"}
+        disabled={disabled}
       />
-      {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}
     </div>
   );
-};
+}
+function StandaloneDate(props: DateInputProps) {
+  const [value, setValue] = useState(props.value ?? "");
+  return (
+    <DateControl
+      {...props}
+      value={props.value ?? value}
+      onValueChange={(next) => {
+        setValue(next);
+        props.onValueChange?.(next);
+      }}
+    />
+  );
+}
+function ConnectedDate(props: DateInputProps) {
+  const { control } = useFormContext();
+  return (
+    <Controller
+      name={props.name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <div>
+          <DateControl
+            {...props}
+            value={field.value}
+            onValueChange={(value) => {
+              field.onChange(value);
+              props.onValueChange?.(value);
+            }}
+          />
+          {fieldState.error && (
+            <p role="alert" className="text-red-600">
+              {fieldState.error.message}
+            </p>
+          )}
+        </div>
+      )}
+    />
+  );
+}
+export function DateInput(props: DateInputProps) {
+  return props.standalone ? (
+    <StandaloneDate {...props} />
+  ) : (
+    <ConnectedDate {...props} />
+  );
+}

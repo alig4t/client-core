@@ -1,18 +1,18 @@
-import type { FC, ReactElement } from "react";
+import type { FC,ReactElement } from "react";
 import {
-  Bar,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-  BarChart as ReBarChart,
+Bar,
+Cell,
+BarChart as ReBarChart,
+ResponsiveContainer,
+Tooltip,
+XAxis,
+YAxis,
 } from "recharts";
 import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
 
 // --- Small horizontal chart for sidebar ---
 const TopKeywordMiniChart: FC<{
-  topKeywordPerformance: any;
+  topKeywordPerformance: typeof DashboardData.topKeywordPerformance;
   isLoading: boolean;
 }> = ({ topKeywordPerformance, isLoading }) => {
   if (isLoading) {

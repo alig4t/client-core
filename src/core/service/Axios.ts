@@ -1,120 +1,98 @@
-import axios, { AxiosError, type AxiosResponse } from "axios";
-import { API_BASE_URL } from "@/config/api";
+import axios, { type AxiosRequestConfig } from "axios";
 import NProgress from "nprogress";
-import { toast } from "sonner";
+import {
+  ApiError,
+  parseApiError,
+  unwrapResponse,
+  type ApiResponse,
+} from "./contracts";
+export type { ApiResponse } from "./contracts";
 
-export interface ApiResponse<T = any> {
-  type: 'data' | 'error';
-  status: number;
-  data: T;
-  meta?: {
-    totalItems: number;
-    totalPages: number;
-    pageSize: number;
-    currentPage: number;
-    isLastPage?: boolean;
-  };
-  timestamp?: string;
+interface ApiRuntime {
+  baseURL: string;
+  locale: string;
+  token: () => string | null;
+  onUnauthorized: () => void;
+  onNetworkError?: (error: ApiError) => void;
 }
 
-interface ApiErrorData {
-  data?: string;
-  message?: string;
+let runtime: ApiRuntime = {
+  baseURL: "/api",
+  locale: "fa",
+  token: () => null,
+  onUnauthorized: () => {},
+};
+
+export function configureApi(options: Partial<ApiRuntime>) {
+  runtime = { ...runtime, ...options };
 }
 
-// --- Axios Instance ---
-export const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    "Content-Type": "application/json",
-    "accept-language": "fa",
-  },
-});
+export const axiosTransport = axios.create({ timeout: 30000 });
+let activeRequests = 0;
 
-// --- Progress Bar Management ---
-let requestCount = 0;
-const startProgress = () => {
-  if (requestCount === 0) NProgress.start();
-  requestCount++;
+async function request<T = unknown>(
+  config: AxiosRequestConfig,
+): Promise<ApiResponse<T>> {
+  if (activeRequests++ === 0 && typeof document !== "undefined")
+    NProgress.start();
+  try {
+    const token = runtime.token();
+    const response = await axiosTransport.request({
+      ...config,
+      baseURL: config.baseURL ?? runtime.baseURL,
+      headers: {
+        "accept-language": runtime.locale,
+        ...(token ? { Authorization: "Bearer " + token } : {}),
+        ...config.headers,
+      },
+    });
+    return unwrapResponse<T>(response.data, response.status);
+  } catch (cause) {
+    if (axios.isCancel(cause)) throw cause;
+    const error =
+      cause instanceof ApiError
+        ? cause
+        : axios.isAxiosError(cause)
+          ? parseApiError(
+              cause.response?.data,
+              cause.response?.status ?? 0,
+              cause,
+            )
+          : new ApiError(
+              cause instanceof Error ? cause.message : "خطای پیش‌بینی‌نشده",
+              0,
+              {},
+              cause,
+            );
+    if (error.status === 401) runtime.onUnauthorized();
+    if (error.status === 0) runtime.onNetworkError?.(error);
+    throw error;
+  } finally {
+    activeRequests = Math.max(0, activeRequests - 1);
+    if (activeRequests === 0 && typeof document !== "undefined")
+      NProgress.done();
+  }
+}
+
+export const api = {
+  request,
+  get: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
+    request<T>({ ...config, url, method: "get" }),
+  post: <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => request<T>({ ...config, url, data, method: "post" }),
+  put: <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => request<T>({ ...config, url, data, method: "put" }),
+  patch: <T = unknown>(
+    url: string,
+    data?: unknown,
+    config?: AxiosRequestConfig,
+  ) => request<T>({ ...config, url, data, method: "patch" }),
+  delete: <T = unknown>(url: string, config?: AxiosRequestConfig) =>
+    request<T>({ ...config, url, method: "delete" }),
 };
-const stopProgress = () => {
-  requestCount--;
-  if (requestCount <= 0) {
-    NProgress.done();
-    requestCount = 0;
-  }
-};
-
-// --- Request Interceptor ---
-api.interceptors.request.use(
-  (config) => {
-    startProgress();
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  (error) => {
-    stopProgress();
-    return Promise.reject(error);
-  }
-);
-
-// --- Response Interceptor ---
-api.interceptors.response.use(
-  // Cast to any to allow returning ApiResponse instead of AxiosResponse
-  ((response: AxiosResponse<ApiResponse>) => {
-    stopProgress();
-    if (response.config.responseType === 'blob') {
-      return response; // Return the full response
-    }
-    const responseData = response.data;
-    if (responseData && responseData.type === 'error' && responseData.status >= 400) {
-      const errorMessage = (responseData.data as string) || 'خطایی از سمت سرور رخ داده است.';
-      const error = new AxiosError(errorMessage, String(responseData.status), response.config, response.request, response);
-      error.message = errorMessage;
-      return Promise.reject(error);
-    }
-
-    console.log(responseData)
-    // Return the full ApiResponse (with data + meta preserved)
-    return responseData;
-  }) as any,
-  (error: AxiosError<ApiErrorData>) => {
-    stopProgress();
-
-    if (!error.response) {
-      toast.error("خطای شبکه", {
-        description: "اتصال به سرور برقرار نشد. لطفاً اینترنت خود را بررسی کنید.",
-        position: "bottom-left",
-      });
-      return Promise.reject(error);
-    }
-
-    const responseData = error.response.data;
-    let errorMessage = "یک خطای پیش‌بینی نشده رخ داده است.";
-
-    if (responseData) {
-      if (typeof responseData.data === 'string') errorMessage = responseData.data;
-      else if (typeof responseData.message === 'string') errorMessage = responseData.message;
-    }
-
-    error.message = errorMessage;
-
-    if (error.response.status === 401) {
-      localStorage.removeItem("token");
-      if (window.location.pathname !== '/login') {
-        toast.error("نشست شما منقضی شده", {
-          description: "لطفاً دوباره وارد شوید.",
-          position: "bottom-left",
-        });
-        setTimeout(() => {
-          window.location.href = '/';
-        }, 1500);
-      }
-    }
-
-    return Promise.reject(error);
-  }
-);

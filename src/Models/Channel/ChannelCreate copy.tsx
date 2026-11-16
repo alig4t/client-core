@@ -1,38 +1,36 @@
-import React from "react";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { FormWrapper } from "@/core/components/form/FormWrapper";
-import ChannelService from "./ChannelService";
-import { ChannelModelMeta } from "./ChannelModel.meta";
+import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
 import FormInput from "@/core/components/form/FormInput";
 import { FormSelect } from "@/core/components/form/FormSelect";
-import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
-import z from "@/core/forms/zod.config";
-import Validator from "@/core/forms/validation";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
-import Button from "@/core/components/general/button/Button";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
-import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
-import { publicMessages } from "@/core/forms/MessageUtils";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import Button from "@/core/components/general/button/Button";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
-import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
-import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
-import BotService from "@/Models/Bot/BotService";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
+import CompactStepper,{ type CompactStep } from "@/core/components/general/stepper/CompactStepper";
+import { publicMessages } from "@/core/forms/MessageUtils";
+import Validator from "@/core/forms/validation";
+import z from "@/core/forms/zod.config";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { BotModelMeta } from "@/Models/Bot/BotModel.meta";
-import StepperDemo from "@/core/components/general/stepper/StepperDemo";
-import CompactStepper, { type CompactStep } from "@/core/components/general/stepper/CompactStepper";
+import BotService from "@/Models/Bot/BotService";
+import { MessagingPlatformModelMeta } from "@/Models/MessagingPlatform/MessagingPlatformModel.meta";
+import MessagingPlatformService from "@/Models/MessagingPlatform/MessagingPlatformService";
+import { VIEWNAME } from "@/router/ViewName";
 import { useLoading } from "@/stores/LoadingContext";
-import PlatformAuthorizationControllerService, { type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
+import { useMutation,useQuery,useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate,useParams } from "react-router-dom";
+import { toast } from "sonner";
+import PlatformAuthorizationControllerService,{ type DraftDto } from "../MessagingPlatform/PlatformAuthorizationControllerService";
+import { ChannelModelMeta } from "./ChannelModel.meta";
+import ChannelService from "./ChannelService";
 
 const channelSchema = z.object({
   channelName: Validator.notNull(),
@@ -48,7 +46,6 @@ const ChannelCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const routeMeta = useRouteMetadata();
   const queryClient = useQueryClient();
   const { openWaitDialog, closeWaitDialog } = useLoading();
 
@@ -72,7 +69,7 @@ const ChannelCreate: React.FC = () => {
 
      
       console.log(platform)
-      let dto : DraftDto  = {
+      const dto : DraftDto  = {
         platformKey:platform.platformKey,
         authorizationType: "MONITORING_CHANNEL",
         chatTitle:data.channelName
@@ -117,9 +114,6 @@ const ChannelCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  const handleCancel = () => {
-    navigate(getViewPath(VIEWNAME.CHANNEL_SEARCH));
-  };
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode

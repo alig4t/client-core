@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { CityModel } from "./CityModel";
-import CityService from "./CityService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { CityModelMeta } from "./CityModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { CityTableColumns, CityTableHeaders } from "./CityTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { CityModel } from "./CityModel";
+import { CityModelMeta } from "./CityModel.meta";
+import CityService from "./CityService";
+import { CityTableColumns,CityTableHeaders } from "./CityTableColumns";
 
 interface CityTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const CityTable: React.FC<CityTableProps> = ({ filters, onSelectionChange }) => 
       sortOptions={buildSortOptions(CityModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="city:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

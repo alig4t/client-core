@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { UserChannelModel } from "./UserChannelModel";
-import UserChannelService from "./UserChannelService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { UserChannelModelMeta } from "./UserChannelModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { UserChannelModel } from "./UserChannelModel";
+import { UserChannelModelMeta } from "./UserChannelModel.meta";
+import UserChannelService from "./UserChannelService";
 import {
-  UserChannelTableColumns,
-  UserChannelTableHeaders,
+UserChannelTableColumns,
+UserChannelTableHeaders,
 } from "./UserChannelTableColumns";
 
 interface UserChannelTableProps {
@@ -39,7 +39,7 @@ const UserChannelTable: React.FC<UserChannelTableProps> = ({
       sortOptions={buildSortOptions(UserChannelModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="userchannel:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

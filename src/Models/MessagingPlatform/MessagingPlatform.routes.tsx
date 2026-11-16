@@ -1,9 +1,8 @@
-import { lazy } from "react";
-import { Globe } from "lucide-react";
-import { VIEWNAME } from "@/router/ViewName";
-import { Permission } from "@/router/Permission";
 import type { RouteConfig } from "@/router/path.types";
-import { RARENT_PATHS } from "@/router/Routes";
+import { Permission } from "@/router/Permission";
+import { VIEWNAME } from "@/router/ViewName";
+import { Globe } from "lucide-react";
+import { lazy } from "react";
 
 const MessagingPlatformPage = lazy(() => import("./MessagingPlatformPage"));
 const MessagingPlatformCreate = lazy(() => import("./MessagingPlatformCreate"));

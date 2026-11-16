@@ -1,28 +1,27 @@
 // src/pages/ComprehensiveDisplay.tsx
-import React from "react";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useParams } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import FilePreview from "@/core/components/form/FilePreview";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import Button from "@/core/components/general/button/Button";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
 import { RowContainer } from "@/core/components/general/container/RowContainer";
 import LinkView from "@/core/components/general/link/LinkView";
-import { VIEWNAME } from "@/router/ViewName";
-import { DisplayField } from "@/core/components/general/container/DisplayField";
-import FilePreview from "@/core/components/form/FilePreview";
-import ComprehensiveService from "./ComprehensiveService";
-import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import OptionUtils from "@/core/forms/OptionUtils";
-import DateUtil from "@/core/forms/DateUtils";
-import TableErrorState from "@/core/components/general/TableErrorState";
-import { useNavigate } from "react-router-dom";
-import Button from "@/core/components/general/button/Button";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import { getViewPath } from "@/core/router/RouteUtils";
-import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
+import TableErrorState from "@/core/components/general/TableErrorState";
+import DateUtil from "@/core/forms/DateUtils";
 import { publicMessages } from "@/core/forms/MessageUtils";
+import OptionUtils from "@/core/forms/OptionUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { VIEWNAME } from "@/router/ViewName";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate,useParams } from "react-router-dom";
+import { ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
+import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import ComprehensiveService from "./ComprehensiveService";
 
 const ComprehensiveDisplayPage: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
@@ -91,7 +90,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
         <RecordDisplayLayout
           title={publicMessages.record.displayTitle + " : " + comprehensiveRecord.id}
           actions={
-            <Button variant="primary" onClick={handleEditClick}>
+            <Button permission="comprehensive:update" variant="primary" onClick={handleEditClick}>
               ویرایش
             </Button>
           }
@@ -185,7 +184,7 @@ const ComprehensiveDisplayPage: React.FC = () => {
             <DisplayField
               label={comprehensiveModelMeta.fields.attachmentIds.label}
               value={
-                <FilePreview fileId={(comprehensiveRecord as any).attachments?.[0]?.id} previewSize="sm" className="mr-2" />
+                <FilePreview fileId={comprehensiveRecord.attachments?.[0]?.id} previewSize="sm" className="mr-2" />
               }
             />
           </RowContainer>

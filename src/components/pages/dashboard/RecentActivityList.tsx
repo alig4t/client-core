@@ -1,11 +1,11 @@
-import type { FC, ReactElement } from "react";
-import ChartContainer, { ChartSkeleton } from "./ChartContainer";
-import { ChevronLeft, ChevronRight, List } from "lucide-react";
-import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
+import type { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
+import { ChevronLeft,List } from "lucide-react";
+import type { FC,ReactElement } from "react";
+import ChartContainer,{ ChartSkeleton } from "./ChartContainer";
 
 // 3. کامپوننت لیست فعالیت‌های اخیر
 export const RecentActivityList: FC<{
-  recentActivityData: any[];
+  recentActivityData: typeof DashboardData.recentActivityData;
   isLoading: boolean;
 }> = ({ recentActivityData, isLoading }) => {
   if (isLoading) {

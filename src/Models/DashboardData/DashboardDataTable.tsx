@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { DashboardDataModel } from "./DashboardDataModel";
-import DashboardDataService from "./DashboardDataService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { DashboardDataModel } from "./DashboardDataModel";
+import { DashboardDataModelMeta } from "./DashboardDataModel.meta";
+import DashboardDataService from "./DashboardDataService";
 import {
-  DashboardDataTableColumns,
-  DashboardDataTableHeaders,
+DashboardDataTableColumns,
+DashboardDataTableHeaders,
 } from "./DashboardDataTableColumns";
 
 interface DashboardDataTableProps {
@@ -39,7 +39,7 @@ const DashboardDataTable: React.FC<DashboardDataTableProps> = ({
       sortOptions={buildSortOptions(DashboardDataModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="dashboarddata:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

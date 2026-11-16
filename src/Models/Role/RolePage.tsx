@@ -1,17 +1,17 @@
-import React, { useState } from "react";
 import Accordion from "@/core/components/general/Accordion";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import { useNavigate } from "react-router-dom";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { publicMessages } from "@/core/forms/MessageUtils";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import React,{ useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { RoleModelMeta } from "./RoleModel.meta";
 import RoleSearch from "./RoleSearch";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import PageTransition from "@/core/components/general/animation/PageTransition";
 import RoleTable from "./RoleTable";
-import { publicMessages } from "@/core/forms/MessageUtils";
 
 const RolePage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
@@ -29,6 +29,7 @@ const RolePage: React.FC = () => {
             title={routeMeta?.label || RoleModelMeta.messages.manage.title}
             actionButton={{
               label: RoleModelMeta.messages.createButton,
+              permission: "role:create",
               onClick: () => navigate("create"),
               variant: "success",
             }}

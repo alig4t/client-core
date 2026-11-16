@@ -1,5 +1,5 @@
+import { CircleAlert, RotateCw } from "lucide-react";
 import React from "react";
-import { AlertTriangle, CircleAlert, RotateCw } from "lucide-react";
 
 interface TableErrorStateProps {
   message: string;
@@ -13,7 +13,10 @@ const TableErrorState: React.FC<TableErrorStateProps> = ({
   colSpan = 3,
 }) => {
   return (
-    <div dir="rtl" className="p-6 bg-[var(--white)] rounded-lg border border-rose-200 dark:border-rose-300">
+    <div
+      dir="rtl"
+      className="p-6 bg-[var(--white)] rounded-lg border border-rose-200 dark:border-rose-300"
+    >
       {/* Placeholder for title and sort filter */}
       <div className="flex justify-between items-center mb-4">
         <div className="h-5 w-8 sm:w-32 bg-red-50 dark:bg-rose-200 rounded"></div>

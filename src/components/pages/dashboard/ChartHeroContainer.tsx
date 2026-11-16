@@ -1,20 +1,20 @@
-import type { FC, ReactElement } from "react";
+import type { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
+import { Layers,TrendingUp } from "lucide-react";
+import type { FC,ReactElement } from "react";
 import {
-  CartesianGrid,
-  Legend,
-  Line,
-  LineChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
+CartesianGrid,
+Legend,
+Line,
+LineChart,
+ResponsiveContainer,
+Tooltip,
+XAxis,
+YAxis,
 } from "recharts";
-import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
-import ChartContainer, { ChartSkeleton } from "./ChartContainer";
-import { Layers, TrendingUp } from "lucide-react";
+import ChartContainer,{ ChartSkeleton } from "./ChartContainer";
 
 // نمودار خطی روند زمانی (Hero Chart)
-const MonitoringTrendChart: FC<{ timeSeriesData: any }> = ({
+const MonitoringTrendChart: FC<{ timeSeriesData: typeof DashboardData.timeSeriesData }> = ({
   timeSeriesData,
 }) => (
   <div
@@ -85,7 +85,7 @@ const MonitoringTrendChart: FC<{ timeSeriesData: any }> = ({
     </ResponsiveContainer>
   </div>
 );
-const ChartHeroContainer: FC<{ timeSeriesData: any; isLoading: boolean }> = ({
+const ChartHeroContainer: FC<{ timeSeriesData: typeof DashboardData.timeSeriesData; isLoading: boolean }> = ({
   timeSeriesData,
   isLoading,
 }) => {

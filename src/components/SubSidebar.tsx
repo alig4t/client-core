@@ -1,9 +1,9 @@
 // src/components/SubSidebar/SubSidebar.tsx
-import { Link, useLocation } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 
-import { useEffect, useState } from "react";
 import { getSubMenus } from "@/router/menuUtils";
 import { useAuth } from "@/stores/AuthContext";
+import { useEffect,useState } from "react";
 // import { subMenus } from "@/router/menuUtils";
 
 const SubSidebar = () => {
@@ -26,7 +26,7 @@ const SubSidebar = () => {
       // if (item.permission && !hasPermission(item.permission)) {
       //   return false;
       // }
-      return true;
+      return !item.permission || hasPermission(item.permission);
     })
     : [];
 

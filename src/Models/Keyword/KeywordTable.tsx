@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { KeywordModel } from "./KeywordModel";
-import KeywordService from "./KeywordService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { KeywordModelMeta } from "./KeywordModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { KeywordTableColumns, KeywordTableHeaders } from "./KeywordTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { KeywordModel } from "./KeywordModel";
+import { KeywordModelMeta } from "./KeywordModel.meta";
+import KeywordService from "./KeywordService";
+import { KeywordTableColumns,KeywordTableHeaders } from "./KeywordTableColumns";
 
 interface KeywordTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const KeywordTable: React.FC<KeywordTableProps> = ({ filters, onSelectionChange 
       sortOptions={buildSortOptions(KeywordModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="keyword:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

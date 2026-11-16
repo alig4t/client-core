@@ -1,19 +1,21 @@
+import type { User } from "@/stores/AuthContext";
+import type { NavigateFunction } from "react-router-dom";
 // src/pages/LandingPage.tsx
 
-import React, { useState, useEffect } from "react";
-import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
-import { useFormContext } from "react-hook-form";
-import { toast } from "sonner";
-import { useAuth } from "@/stores/AuthContext";
 import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
 import UserService from "@/Models/User/UserService";
+import { useAuth } from "@/stores/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import { Eye,EyeOff } from "lucide-react";
+import React,{ useEffect,useState } from "react";
+import { useFormContext } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod/v3";
 import Navbar from "./HomeNavbar";
-import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 import "./LandingPage.css";
-import { Eye, EyeOff } from "lucide-react";
+import SocialMonitoringAnimation from "./SocialMonitoringAnimation";
 
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
@@ -89,7 +91,7 @@ function LoginFormFields() {
   );
 }
 
-function LoggedInSection({ user, navigate }: { user: any; navigate: any }) {
+function LoggedInSection({ user, navigate }: { user: User | null; navigate: NavigateFunction }) {
   return (
     <div className="w-full max-w-md">
       {/* Card */}
@@ -213,7 +215,7 @@ const LandingPage: React.FC = () => {
     } else {
       document.documentElement.classList.remove("dark");
     }
-  }, []);
+  }, [darkMode]);
 
   const mutation = useMutation({
     mutationFn: (data: LoginFormData) => UserService.login(data),
@@ -235,7 +237,7 @@ const LandingPage: React.FC = () => {
         navigate("/dashboard", { replace: true });
       }, 1000);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error("ورود ناموفق بود", {
         description:
           error?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",

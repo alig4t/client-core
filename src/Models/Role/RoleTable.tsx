@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { RoleModel } from "./RoleModel";
-import RoleService from "./RoleService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { RoleModelMeta } from "./RoleModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { RoleTableColumns, RoleTableHeaders } from "./RoleTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { RoleModel } from "./RoleModel";
+import { RoleModelMeta } from "./RoleModel.meta";
+import RoleService from "./RoleService";
+import { RoleTableColumns,RoleTableHeaders } from "./RoleTableColumns";
 
 interface RoleTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const RoleTable: React.FC<RoleTableProps> = ({ filters, onSelectionChange }) => 
       sortOptions={buildSortOptions(RoleModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="role:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

@@ -1,16 +1,16 @@
 import { Layers } from "lucide-react";
-import type { FC, ReactElement } from "react";
+import type { FC,ReactElement } from "react";
 import {
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
+Cell,
+Legend,
+Pie,
+PieChart,
+ResponsiveContainer,
+Tooltip,
 } from "recharts";
 import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
+import ChartContainer,{ ChartSkeleton } from "./ChartContainer";
 import { renderCustomizedLabel } from "./ChartUtils";
-import ChartContainer, { ChartSkeleton } from "./ChartContainer";
 
 const Skeleton: ReactElement = (
   <div className="col-span-1">
@@ -42,7 +42,7 @@ const Skeleton: ReactElement = (
 
 // نمودار دایره‌ای توزیع کانال
 export const ChannelDistributionChart: FC<{
-  channelDistributionData: any;
+  channelDistributionData: typeof DashboardData.channelDistributionData;
   isLoading: boolean;
 }> = ({ channelDistributionData, isLoading }) => {
   if (isLoading) {

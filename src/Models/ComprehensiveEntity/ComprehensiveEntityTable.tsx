@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { ComprehensiveEntityModel } from "./ComprehensiveEntityModel";
-import ComprehensiveEntityService from "./ComprehensiveEntityService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { ComprehensiveEntityModel } from "./ComprehensiveEntityModel";
+import { ComprehensiveEntityModelMeta } from "./ComprehensiveEntityModel.meta";
+import ComprehensiveEntityService from "./ComprehensiveEntityService";
 import {
-  ComprehensiveEntityTableColumns,
-  ComprehensiveEntityTableHeaders,
+ComprehensiveEntityTableColumns,
+ComprehensiveEntityTableHeaders,
 } from "./ComprehensiveEntityTableColumns";
 
 interface ComprehensiveEntityTableProps {
@@ -39,7 +39,7 @@ const ComprehensiveEntityTable: React.FC<ComprehensiveEntityTableProps> = ({
       sortOptions={buildSortOptions(ComprehensiveEntityModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="comprehensiveentity:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

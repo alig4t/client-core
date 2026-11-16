@@ -1,483 +1,323 @@
-// src/components/form/FormAutoComplete.tsx
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  useMemo,
-} from "react";
+import { useEffect, useId, useMemo, useRef, useState } from "react";
 import { useFormContext, useWatch } from "react-hook-form";
-import ErrorFormText from "./ErrorFormText";
-import Label from "./Label";
-import { ChevronDown } from "lucide-react";
-import { motion, AnimatePresence } from "framer-motion";
-
-// ----------------------------------------------------------------------
-// Interfaces
-// ----------------------------------------------------------------------
+import type { ServerSideParams } from "../../service/BaseService";
+import type { EntityId } from "../../service/contracts";
 export interface BaseModel {
-  id: number | string;
+  id: EntityId;
 }
-
-interface ServerSideParams {
-  page?: number;
-  size?: number;
-  sort?: string;
-  filters?: Record<string, any>;
+interface LookupService<T> {
+  getAll(
+    params: ServerSideParams<T>,
+  ): Promise<{ data: T[]; meta?: { totalPages?: number } }>;
+  getById?(id: EntityId, options?: { signal?: AbortSignal }): Promise<T>;
 }
-
-interface ApiResponsePayload<T> {
-  data: T[];
-  meta?: {
-    totalItems: number;
-    totalPages: number;
-    pageSize: number;
-    currentPage: number;
-    isLastPage?: boolean;
-  };
-}
-
-interface IBaseService<T extends BaseModel> {
-  getAll(params: ServerSideParams): Promise<ApiResponsePayload<T>>;
-}
-
-// ----------------------------------------------------------------------
-// UI Components
-// ----------------------------------------------------------------------
-const ChevronIcon = ({ isOpen }: { isOpen: boolean }) => (
-  <ChevronDown
-    size={14}
-    className={`text-gray-600 dark:text-gray-500 transition-transform duration-200 ${
-      isOpen ? "transform rotate-180" : ""
-    }`}
-  />
-);
-
-const CheckIcon = () => (
-  <svg
-    className="w-4 h-4 text-white"
-    xmlns="http://www.w3.org/2000/svg"
-    viewBox="0 0 20 20"
-    fill="currentColor"
-    aria-hidden="true"
-  >
-    <path
-      fillRule="evenodd"
-      d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z"
-      clipRule="evenodd"
-    />
-  </svg>
-);
-
-const LoadingSpinner = () => (
-  <svg
-    className="animate-spin -ml-1 mr-3 h-5 w-5 text-purple-500"
-    xmlns="http://www.w3.org/2000/svg"
-    fill="none"
-    viewBox="0 0 24 24"
-  >
-    <circle
-      className="opacity-25"
-      cx="12"
-      cy="12"
-      r="10"
-      stroke="currentColor"
-      strokeWidth="4"
-    ></circle>
-    <path
-      className="opacity-75"
-      fill="currentColor"
-      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-    ></path>
-  </svg>
-);
-
-// ----------------------------------------------------------------------
-// Main Component
-// ----------------------------------------------------------------------
 interface FormAutoCompleteProps<T extends BaseModel> {
   name: string;
   label?: string;
   minilabel?: string;
-  service: IBaseService<T>;
+  service: LookupService<T>;
   labelKey: keyof T;
-  valueKey: keyof T; // usually 'id'
+  valueKey: keyof T;
   multi?: boolean;
   className?: string;
   placeholder?: string;
   maxVisible?: number;
   debounceTime?: number;
-  extraFilters?: Record<string, any>;
+  extraFilters?: Record<string, unknown>;
+  valueMode?: "id" | "object";
+  disabled?: boolean;
 }
-
-const EMPTY_FILTERS = {};
-
-export const FormAutoComplete = <T extends BaseModel>({
+export function FormAutoComplete<T extends BaseModel>({
   name,
   label,
-  minilabel,
   service,
   labelKey,
   valueKey,
   multi = false,
-  className = "",
+  className,
   placeholder = "جستجو و انتخاب کنید",
-  maxVisible = 2,
   debounceTime = 300,
-  extraFilters = EMPTY_FILTERS,
-}: FormAutoCompleteProps<T>) => {
-  const formContext = useFormContext();
-  if (!formContext) {
-    throw new Error("FormAutoComplete must be used inside FormWrapper.");
-  }
-
-  const {
-    setValue,
-    control,
-    formState: { errors },
-  } = formContext;
-
-  const [isOpen, setIsOpen] = useState(false);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [fetchedOptions, setFetchedOptions] = useState<T[]>([]);
-  const [highlightedIndex, setHighlightedIndex] = useState<number>(0);
-  const [currentPage, setCurrentPage] = useState<number>(0);
-  const [totalPages, setTotalPages] = useState<number>(0);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLDivElement>(null);
-
-  // Watch current value from RHF
-  const currentValue = useWatch({ name, control });
-
-  // Extract selected items for display
-  const selectedItems = useMemo(() => {
-    if (multi) {
-      return Array.isArray(currentValue) ? currentValue : [];
-    }
-    return currentValue ? [currentValue] : [];
-  }, [currentValue, multi]);
-
-  const selectedLabels = useMemo(() => {
-    return selectedItems.map((item) => item[labelKey] as string);
-  }, [selectedItems, labelKey]);
-
-  // Debounce search term
+  extraFilters = {},
+  valueMode = "object",
+  disabled,
+}: FormAutoCompleteProps<T>) {
+  const { control, setValue, getFieldState, formState } = useFormContext();
+  const currentValue: unknown = useWatch({ name, control });
+  const selected = useMemo<unknown[]>(
+    () =>
+      multi
+        ? Array.isArray(currentValue)
+          ? currentValue
+          : []
+        : currentValue == null
+          ? []
+          : [currentValue],
+    [currentValue, multi],
+  );
+  const idOf = (value: unknown): EntityId =>
+    value && typeof value === "object"
+      ? ((value as T)[valueKey] as EntityId)
+      : (value as EntityId);
+  const [open, setOpen] = useState(false),
+    [search, setSearch] = useState(""),
+    [term, setTerm] = useState(""),
+    [page, setPage] = useState(0),
+    [totalPages, setTotalPages] = useState(0),
+    [options, setOptions] = useState<T[]>([]),
+    [loading, setLoading] = useState(false),
+    [error, setError] = useState(""),
+    [highlight, setHighlight] = useState(0);
+  const cache = useRef(new Map<EntityId, T>());
+  const [, setHydrated] = useState(0);
+  const wrapper = useRef<HTMLDivElement>(null),
+    trigger = useRef<HTMLButtonElement>(null);
+  const listId = useId();
+  const filterKey = JSON.stringify(extraFilters);
+  const previousFilters = useRef(filterKey);
   useEffect(() => {
-    const handler = setTimeout(
-      () => setDebouncedSearchTerm(searchTerm),
-      debounceTime
-    );
-    return () => clearTimeout(handler);
-  }, [searchTerm, debounceTime]);
-
-  // Fetch options
-  const fetchOptions = useCallback(async () => {
-    if (!isOpen) return;
-    setLoading(true);
-    try {
-      const searchFilterKey = `${String(labelKey)}_like`;
-      const results = await service.getAll({
-        filters: { ...extraFilters, [searchFilterKey]: debouncedSearchTerm },
-        page: currentPage,
-        size: 5,
+    if (previousFilters.current !== filterKey) {
+      previousFilters.current = filterKey;
+      setPage(0);
+      setValue(name, multi ? [] : null, {
+        shouldDirty: true,
+        shouldValidate: true,
       });
-      setFetchedOptions(results.data);
-      if (results.meta) {
-        setTotalPages(results.meta.totalPages);
-      }
-    } catch (e) {
-      console.error("Failed to fetch autocomplete options:", e);
-      setFetchedOptions([]);
-    } finally {
-      setLoading(false);
     }
-  }, [isOpen, debouncedSearchTerm, currentPage, service, extraFilters, labelKey]);
-
+  }, [filterKey, name, multi, setValue]);
   useEffect(() => {
-    fetchOptions();
-  }, [fetchOptions]);
-
-  // Reset page when search term changes or dropdown opens
-  useEffect(() => {
-    setCurrentPage(0);
-  }, [debouncedSearchTerm]);
-
-  // Reset page when dropdown opens
-  useEffect(() => {
-    if (isOpen) {
-      setCurrentPage(0);
-    }
-  }, [isOpen]);
-
-  // Reset highlighted index when options change
-  useEffect(() => {
-    setHighlightedIndex(0);
-  }, [fetchedOptions]);
-
-  // ✅ Helper: Create minimal object with only id and label
-  const createMinimalItem = useCallback(
-    (item: T) => {
-      return {
-        [valueKey]: item[valueKey],
-        [labelKey]: item[labelKey],
-      } as Pick<T, typeof valueKey | typeof labelKey>;
-    },
-    [valueKey, labelKey]
-  );
-
-  // Handle selection
-  const handleToggle = useCallback(
-    (item: T) => {
-      const minimalItem = createMinimalItem(item);
-
-      if (multi) {
-        const current = Array.isArray(currentValue) ? [...currentValue] : [];
-        const exists = current.some(
-          (i) => i[valueKey] === minimalItem[valueKey]
-        );
-        const newItems = exists
-          ? current.filter((i) => i[valueKey] !== minimalItem[valueKey])
-          : [...current, minimalItem];
-        setValue(name, newItems, { shouldValidate: true, shouldDirty: true });
-      } else {
-        const newValue =
-          currentValue?.[valueKey] === minimalItem[valueKey]
-            ? null
-            : minimalItem;
-        setValue(name, newValue, { shouldValidate: true, shouldDirty: true });
-        setIsOpen(false);
-      }
-    },
-    [currentValue, multi, name, setValue, valueKey, createMinimalItem]
-  );
-
-  // Check if item is selected
-  const isSelected = (item: T) => {
-    const itemValue = item[valueKey];
-    if (multi) {
-      return (
-        Array.isArray(currentValue) &&
-        currentValue.some((i) => i[valueKey] === itemValue)
-      );
-    }
-    return currentValue?.[valueKey] === itemValue;
-  };
-
-  // Display text
-  let displayText = placeholder;
-  const count = selectedLabels.length;
-  if (count > 0) {
-    if (multi) {
-      displayText =
-        count <= maxVisible
-          ? selectedLabels.join("، ")
-          : `${selectedLabels[0]} و ${count - 1} مورد دیگر`;
-    } else {
-      displayText = selectedLabels[0];
-    }
-  }
-
-  // Keyboard navigation
-  useEffect(() => {
-    if (!isOpen) return;
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      switch (e.key) {
-        case "ArrowDown":
-          e.preventDefault();
-          setHighlightedIndex((prev) =>
-            prev < fetchedOptions.length - 1 ? prev + 1 : prev
+    if (!service.getById) return;
+    const controller = new AbortController();
+    const ids = selected
+      .filter(
+        (value) =>
+          !(
+            value &&
+            typeof value === "object" &&
+            (value as T)[labelKey] !== undefined
+          ),
+      )
+      .map((value) =>
+        value && typeof value === "object"
+          ? ((value as T)[valueKey] as EntityId)
+          : (value as EntityId),
+      )
+      .filter((id) => !cache.current.has(id));
+    if (!ids.length) return;
+    Promise.all(
+      ids.map((id) => service.getById!(id, { signal: controller.signal })),
+    )
+      .then((records) => {
+        if (!controller.signal.aborted) {
+          records.forEach((record) =>
+            cache.current.set(record[valueKey] as EntityId, record),
           );
-          break;
-        case "ArrowUp":
-          e.preventDefault();
-          setHighlightedIndex((prev) => (prev > 0 ? prev - 1 : 0));
-          break;
-        case "PageDown":
-          e.preventDefault();
-          if (currentPage < totalPages) {
-            setCurrentPage((prev) => prev + 1);
-          }
-          break;
-        case "PageUp":
-          e.preventDefault();
-          if (currentPage > 0) {
-            setCurrentPage((prev) => prev - 1);
-          }
-          break;
-        case "Enter":
-          e.preventDefault();
-          if (fetchedOptions[highlightedIndex]) {
-            handleToggle(fetchedOptions[highlightedIndex]);
-          }
-          break;
-        case "Escape":
-          e.preventDefault();
-          setIsOpen(false);
-          setSearchTerm("");
-          setCurrentPage(0);
-          break;
-      }
-    };
-
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [isOpen, fetchedOptions, highlightedIndex, handleToggle, currentPage, totalPages]);
-
-  // Scroll highlighted item into view
+          setHydrated((value) => value + 1);
+        }
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted)
+          setError(
+            cause instanceof Error
+              ? cause.message
+              : "دریافت مقدار اولیه ناموفق بود",
+          );
+      });
+    return () => controller.abort();
+  }, [selected, service, labelKey, valueKey]);
   useEffect(() => {
-    if (isOpen && listRef.current) {
-      const highlightedElement = listRef.current.querySelector(
-        `[data-index="${highlightedIndex}"]`
-      );
-      if (highlightedElement) {
-        highlightedElement.scrollIntoView({
-          behavior: "smooth",
-          block: "nearest",
-        });
-      }
-    }
-  }, [highlightedIndex, isOpen]);
-
-  // Smart positioning
-  const [openDirection, setOpenDirection] = useState<"down" | "up">("down");
+    const timer = setTimeout(() => {
+      setTerm(search);
+      setPage(0);
+    }, debounceTime);
+    return () => clearTimeout(timer);
+  }, [search, debounceTime]);
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        wrapperRef.current &&
-        !wrapperRef.current.contains(e.target as Node)
-      ) {
-        setIsOpen(false);
-        setSearchTerm("");
-      }
+    if (!open) return;
+    const controller = new AbortController();
+    setLoading(true);
+    setError("");
+    service
+      .getAll({
+        page,
+        size: 5,
+        filters: {
+          ...JSON.parse(filterKey),
+          [String(labelKey) + "_like"]: term,
+        },
+        signal: controller.signal,
+      })
+      .then((result) => {
+        if (controller.signal.aborted) return;
+        result.data.forEach((item) =>
+          cache.current.set(item[valueKey] as EntityId, item),
+        );
+        setOptions(result.data);
+        setTotalPages(result.meta?.totalPages ?? 1);
+        setHighlight(0);
+      })
+      .catch((cause) => {
+        if (!controller.signal.aborted) {
+          setOptions([]);
+          setError(
+            cause instanceof Error
+              ? cause.message
+              : "دریافت گزینه‌ها ناموفق بود",
+          );
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) setLoading(false);
+      });
+    return () => controller.abort();
+  }, [open, page, term, service, filterKey, labelKey, valueKey]);
+  useEffect(() => {
+    const close = (event: MouseEvent) => {
+      if (!wrapper.current?.contains(event.target as Node)) setOpen(false);
     };
-
-    if (isOpen && wrapperRef.current) {
-      const rect = wrapperRef.current.getBoundingClientRect();
-      const spaceBelow = window.innerHeight - rect.bottom;
-      const spaceAbove = rect.top;
-      setOpenDirection(
-        spaceBelow < 300 && spaceAbove > spaceBelow ? "up" : "down"
-      );
+    document.addEventListener("mousedown", close);
+    return () => document.removeEventListener("mousedown", close);
+  }, []);
+  const toggle = (item: T) => {
+    const id = item[valueKey] as EntityId;
+    cache.current.set(id, item);
+    const value =
+      valueMode === "id" ? id : { [valueKey]: id, [labelKey]: item[labelKey] };
+    const exists = selected.some((entry) => idOf(entry) === id);
+    setValue(
+      name,
+      multi
+        ? exists
+          ? selected.filter((entry) => idOf(entry) !== id)
+          : [...selected, value]
+        : exists
+          ? null
+          : value,
+      { shouldValidate: true, shouldDirty: true },
+    );
+    if (!multi) {
+      setOpen(false);
+      trigger.current?.focus();
     }
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
-
-  const dropdownPositionClasses =
-    openDirection === "up" ? "bottom-[72%] mb-1" : "top-[80%] mt-1";
-
+  };
+  const selectedLabel = (value: unknown) => {
+    if (value && typeof value === "object")
+      return String(
+        (value as T)[labelKey] ??
+          cache.current.get(idOf(value))?.[labelKey] ??
+          idOf(value),
+      );
+    return String(cache.current.get(value as EntityId)?.[labelKey] ?? value);
+  };
+  const fieldError = getFieldState(name, formState).error?.message;
   return (
-    <div className={`relative w-full ${className}`} ref={wrapperRef}>
-      <Label>{label ?? ""}</Label>
+    <div
+      className={"relative " + (className ?? "")}
+      ref={wrapper}
+      onKeyDown={(event) => {
+        if (event.key === "Escape") {
+          event.stopPropagation();
+          setOpen(false);
+          trigger.current?.focus();
+        }
+        if (!open) return;
+        if (event.key === "ArrowDown") {
+          event.preventDefault();
+          setHighlight((index) => Math.min(index + 1, options.length - 1));
+        }
+        if (event.key === "ArrowUp") {
+          event.preventDefault();
+          setHighlight((index) => Math.max(0, index - 1));
+        }
+        if (event.key === "Enter" && options[highlight]) {
+          event.preventDefault();
+          toggle(options[highlight]);
+        }
+      }}
+    >
+      <label htmlFor={name} className="block text-sm mb-1.5">
+        {label}
+      </label>
       <button
+        ref={trigger}
+        id={name}
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
-        className="flex relative gap-1 justify-between items-center w-full p-3 text-right bg-white dark:bg-gray-800 border border-[var(--input-border)] dark:border-gray-600 rounded-lg shadow-sm cursor-pointer hover:border-purple-500 dark:hover:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-500"
-        aria-expanded={isOpen}
+        role="combobox"
+        aria-expanded={open}
+        aria-controls={listId}
+        disabled={disabled}
+        onClick={() => {
+          setOpen((value) => !value);
+          setPage(0);
+        }}
+        className="w-full text-start p-2 border rounded-lg bg-[var(--input-bg)] border-[var(--input-border)]"
       >
-        {minilabel && (
-          <span className="absolute right-2 px-1 w-fit bg-white dark:bg-gray-800 dark:text-gray-300 text-gray-400 top-0 -translate-y-1/2 text-[9px] rounded-sm">
-            {minilabel}
-          </span>
-        )}
-        <span
-          className={`flex-1 truncate ${
-            count > 0
-              ? "text-gray-900 dark:text-gray-100"
-              : "text-gray-500 dark:text-gray-400"
-          }`}
-        >
-          {displayText}
-        </span>
-        <ChevronIcon isOpen={isOpen} />
+        {selected.length ? selected.map(selectedLabel).join("، ") : placeholder}
       </button>
-
-      <AnimatePresence>
-        {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: openDirection === "up" ? 10 : -10, scale: 0.95 }}
-            transition={{ duration: 0.15, ease: "easeOut" }}
-            className={`absolute z-50 w-full bg-white dark:bg-gray-800 border border-[var(--input-border)] dark:border-gray-600 rounded-lg shadow-xl ${dropdownPositionClasses}`}
-            onMouseDown={(e) => e.stopPropagation()}
-          >
-            <div className="p-2 border-b border-gray-100 dark:border-gray-700 sticky top-0 bg-white dark:bg-gray-800 z-10">
-              <input
-                type="text"
-                placeholder="جستجو..."
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full p-2 text-right placeholder:text-[var(--placeholder-text)] dark:placeholder:text-gray-500 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100 rounded-md focus:outline-none focus:ring-1 focus:ring-purple-500"
-                autoFocus
-              />
-              {totalPages > 1 && (
-                <div className="flex justify-between items-center mt-2 text-xs text-gray-500 dark:text-gray-400">
-                  <span>صفحه {currentPage} از {totalPages}</span>
-                  <span className="text-[10px]">PageUp/PageDown برای تغییر صفحه</span>
-                </div>
-              )}
-            </div>
-            <div className="max-h-60 overflow-y-auto" ref={listRef}>
-              {loading && (
-                <div className="flex justify-center items-center p-4 text-purple-600 dark:text-purple-400">
-                  <LoadingSpinner />
-                  <span className="mr-2">درحال بارگذاری...</span>
-                </div>
-              )}
-              {!loading && fetchedOptions.length === 0 && (
-                <div className="p-4 text-sm text-gray-500 dark:text-gray-400 text-center">
-                  موردی یافت نشد.
-                </div>
-              )}
-              {!loading && fetchedOptions.length > 0 && (
-                <ul className="p-1">
-                  {fetchedOptions.map((item, index) => {
-                    const selected = isSelected(item);
-                    const highlighted = index === highlightedIndex;
-                    return (
-                      <li
-                        key={item[valueKey] as string | number}
-                        data-index={index}
-                        onClick={() => handleToggle(item)}
-                        onMouseEnter={() => setHighlightedIndex(index)}
-                        className={`flex items-center gap-2 p-2 my-0.5 text-sm rounded-md cursor-pointer transition duration-150 ${
-                          selected
-                            ? "bg-purple-100 dark:bg-purple-900/40 font-semibold text-gray-900 dark:text-gray-100"
-                            : highlighted
-                            ? "bg-purple-50 dark:bg-gray-700 text-gray-900 dark:text-gray-200"
-                            : "text-gray-900 dark:text-gray-200 hover:bg-purple-50 dark:hover:bg-gray-700"
-                        }`}
-                      >
-                        {multi ? (
-                          <div
-                            className={`w-5 h-5 flex items-center justify-center border rounded transition-all ${
-                              selected
-                                ? "bg-purple-600 dark:bg-purple-500 border-purple-600 dark:border-purple-500"
-                                : "bg-gray-200 dark:bg-gray-700 border-gray-300 dark:border-gray-600"
-                            }`}
-                          >
-                            {selected && <CheckIcon />}
-                          </div>
-                        ) : selected ? (
-                          <CheckIcon />
-                        ) : null}
-                        <span>{item[labelKey] as string}</span>
-                      </li>
-                    );
-                  })}
-                </ul>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-
-      {errors[name] && <ErrorFormText msg={errors[name]?.message as string} />}
+      {open && (
+        <div className="absolute z-50 w-full p-2 bg-[var(--input-bg)] border rounded-lg shadow-lg">
+          <input
+            autoFocus
+            aria-label={"جستجو " + (label ?? name)}
+            aria-controls={listId}
+            aria-activedescendant={
+              options[highlight] ? listId + "-" + highlight : undefined
+            }
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+            className="w-full p-2 border rounded"
+          />
+          {loading && <p role="status">در حال دریافت…</p>}
+          {error && <p role="alert">{error}</p>}
+          <ul id={listId} role="listbox" aria-multiselectable={multi}>
+            {options.map((item, index) => (
+              <li
+                key={String(item[valueKey])}
+                id={listId + "-" + index}
+                role="option"
+                aria-selected={selected.some(
+                  (value) => idOf(value) === item[valueKey],
+                )}
+                className={
+                  highlight === index ? "bg-purple-100 dark:bg-gray-700" : ""
+                }
+              >
+                <button
+                  type="button"
+                  className="w-full p-2 text-start"
+                  onClick={() => toggle(item)}
+                >
+                  {String(item[labelKey])}
+                </button>
+              </li>
+            ))}
+          </ul>
+          {!loading && !error && !options.length && <p>موردی یافت نشد</p>}
+          <div className="flex justify-between">
+            <button
+              type="button"
+              disabled={page === 0}
+              onClick={() => setPage((value) => value - 1)}
+            >
+              قبلی
+            </button>
+            <span>
+              {totalPages ? page + 1 : 0} / {totalPages}
+            </span>
+            <button
+              type="button"
+              disabled={page >= totalPages - 1}
+              onClick={() => setPage((value) => value + 1)}
+            >
+              بعدی
+            </button>
+          </div>
+        </div>
+      )}
+      {fieldError && (
+        <p role="alert" className="text-red-600">
+          {fieldError}
+        </p>
+      )}
     </div>
   );
-};
+}

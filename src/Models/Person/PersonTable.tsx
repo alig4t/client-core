@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { PersonModel } from "./PersonModel";
-import PersonService from "./PersonService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { PersonModelMeta } from "./PersonModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { PersonTableColumns, PersonTableHeaders } from "./PersonTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { PersonModel } from "./PersonModel";
+import { PersonModelMeta } from "./PersonModel.meta";
+import PersonService from "./PersonService";
+import { PersonTableColumns,PersonTableHeaders } from "./PersonTableColumns";
 
 interface PersonTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const PersonTable: React.FC<PersonTableProps> = ({ filters, onSelectionChange })
       sortOptions={buildSortOptions(PersonModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="person:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

@@ -27,13 +27,13 @@ export const baseModelMeta = {
  * Build full metadata for a model including fields, display name, and standard messages
  */
 export function createModelMeta<
-  T extends Record<string, any>,
-  M extends FormFieldMetadata = FormFieldMetadata
+  T extends object,
+  M extends FormFieldMetadata = FormFieldMetadata,
 >(
   specificFields: { [K in keyof T]?: M },
   displayField: keyof T,
   displayName: string,
-  pluralDisplayName: string
+  pluralDisplayName: string,
 ) {
   // ✅ We create messages once here
   const messages = createMessages(displayName, pluralDisplayName);

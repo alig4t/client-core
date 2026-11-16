@@ -1,7 +1,4 @@
-import type { FC, ReactElement } from "react";
-import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
-import { ChartSkeleton } from "./ChartContainer";
-import { Layers } from "lucide-react";
+import type { FC,ReactElement } from "react";
 
 interface StatCardProps {
   title: string;

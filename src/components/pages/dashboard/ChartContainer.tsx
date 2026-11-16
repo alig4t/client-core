@@ -40,7 +40,7 @@ export const ChartSkeleton: FC<{
   title: string;
   icon: FC<React.SVGProps<SVGSVGElement>>;
   className?: string;
-}> = ({ children, title, icon: Icon, className = "" }) => {
+}> = ({ children }) => {
   return (
     <div
       className={`

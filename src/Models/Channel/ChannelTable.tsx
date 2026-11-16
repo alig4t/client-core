@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { ChannelModel } from "./ChannelModel";
-import ChannelService from "./ChannelService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { ChannelModelMeta } from "./ChannelModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { ChannelTableColumns, ChannelTableHeaders } from "./ChannelTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { ChannelModel } from "./ChannelModel";
+import { ChannelModelMeta } from "./ChannelModel.meta";
+import ChannelService from "./ChannelService";
+import { ChannelTableColumns,ChannelTableHeaders } from "./ChannelTableColumns";
 
 interface ChannelTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const ChannelTable: React.FC<ChannelTableProps> = ({ filters, onSelectionChange 
       sortOptions={buildSortOptions(ChannelModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="channel:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

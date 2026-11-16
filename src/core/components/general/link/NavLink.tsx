@@ -1,21 +1,21 @@
+import { useCore } from "@/core/entity/CoreProvider";
 // components/NavLink.tsx
-import React from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { Link } from "react-router-dom";
+} from "@/core/components/ui/tooltip";
+import { getViewPath } from "@/core/router/RouteUtils";
+
 import {
+  CheckCircle,
   Eye,
   Pencil,
-  CheckCircle,
   Trash2,
   type LucideIcon,
 } from "lucide-react";
-import type { ViewName } from "@/router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
-
+import React from "react";
+import { Link } from "react-router-dom";
 
 type Permission = string;
 
@@ -24,7 +24,7 @@ type NavLinkVariant = "display" | "edit" | "accept" | "delete";
 type NavLinkProps = {
   variant: NavLinkVariant;
   permission: Permission;
-  viewName: ViewName;
+  viewName: string;
   idParam: number | string;
   icon?: LucideIcon;
   label?: string;
@@ -37,7 +37,7 @@ const iconButtonStyle =
   "!p-1 text-gray-400 rounded-full group-hover:opacity-100 hover:bg-gray-100 dark:hover:bg-gray-600 hover:text-purple-600 dark:hover:text-purple-400 transition-all duration-200";
 
 const getVariantConfig = (
-  variant: NavLinkVariant
+  variant: NavLinkVariant,
 ): { icon: LucideIcon; label: string } => {
   switch (variant) {
     case "display":
@@ -79,8 +79,8 @@ const NavLink: React.FC<NavLinkProps> = ({
   className = "",
   onClick,
 }) => {
-
-  const hasPermission = true;
+  const { can } = useCore();
+  const hasPermission = can(permission);
 
   if (!hasPermission) {
     return null;

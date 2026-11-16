@@ -1,15 +1,13 @@
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  useCallback,
-  type FC,
-} from "react";
-import { Bell, MoonIcon, SunIcon, Settings, LogOut } from "lucide-react";
 import { useAuth } from "@/stores/AuthContext";
-import Dropdown from "../core/components/general/DropDown";
+import { AnimatePresence,motion } from "framer-motion";
+import { Bell,LogOut,MoonIcon,Settings,SunIcon } from "lucide-react";
+import React,{
+useCallback,
+useState,
+type FC
+} from "react";
 import { useNavigate } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import Dropdown from "../core/components/general/DropDown";
 
 // --- TypeScript Interfaces ---
 
@@ -112,7 +110,7 @@ const Navbar: FC = () => {
   const handleLogout = useCallback(() => {
     logout();
     navigate("/");
-  }, [logout]);
+  }, [logout, navigate]);
 
   return (
     <div className="w-full h-16 bg-[var(--background)] border-b border-gray-300 dark:border-gray-700 flex items-center justify-end md:justify-between px-6">

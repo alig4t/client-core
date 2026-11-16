@@ -1,28 +1,28 @@
-import React, { useState } from "react";
 import Accordion from "@/core/components/general/Accordion";
 import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import { useNavigate } from "react-router-dom";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import React,{ useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 
+import Button from "@/core/components/general/button/Button";
 import { publicMessages } from "@/core/forms/MessageUtils";
 import { useLoading } from "@/stores/LoadingContext";
-import Button from "@/core/components/general/button/Button";
-import KeywordTable from "../Keyword/KeywordTable";
-import KeywordSearch from "../Keyword/KeywordSearch";
 import { KeywordModelMeta } from "../Keyword/KeywordModel.meta";
+import KeywordSearch from "../Keyword/KeywordSearch";
+import KeywordTable from "../Keyword/KeywordTable";
 const KeywordPage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
   const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
-    const { openWaitDialog, closeWaitDialog } = useLoading();
+    const { openWaitDialog } = useLoading();
 
 
     const loagin = () => {
@@ -49,6 +49,7 @@ const KeywordPage: React.FC = () => {
             title={routeMeta?.label || KeywordModelMeta.messages.manage.title}
             actionButton={{
               label: KeywordModelMeta.messages.createButton,
+              permission: "comprehensive:create",
               onClick: () => navigate("create"),
               variant: "success",
             }}

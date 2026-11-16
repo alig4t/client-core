@@ -1,7 +1,7 @@
 // src/components/SocialMonitoringAnimation.tsx
 
-import React from "react";
 import Lottie from "lottie-react";
+import React from "react";
 // Set path according to your JSON file location
 // import animationData from "./Boy-Under-Social-Tree.json";
 // import animationData from "./email-marketing.json";
@@ -16,14 +16,6 @@ const SocialMonitoringAnimation: React.FC<SocialMonitoringAnimationProps> = ({
   width = "100%",
   height = "100%",
 }) => {
-  const defaultOptions = {
-    loop: true, // Should animation loop
-    autoplay: true, // Should animation start immediately
-    animationData: animationData, // Animation JSON data
-    rendererSettings: {
-      preserveAspectRatio: "xMidYMid slice", // Scaling mode
-    },
-  };
 
   return (
     <div style={{ width: width, height: height }}>

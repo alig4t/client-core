@@ -1,24 +1,21 @@
-import React from "react";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
-import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
-import LinkView from "@/core/components/general/link/LinkView";
-import { VIEWNAME } from "@/router/ViewName";
-import { DisplayField } from "@/core/components/general/container/DisplayField";
-import RoleService from "./RoleService";
-import { RoleModelMeta } from "./RoleModel.meta";
-import OptionUtils from "@/core/forms/OptionUtils";
-import DateUtil from "@/core/forms/DateUtils";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
 import TableErrorState from "@/core/components/general/TableErrorState";
 import Button from "@/core/components/general/button/Button";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
+import { DisplayField } from "@/core/components/general/container/DisplayField";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import { getViewPath } from "@/core/router/RouteUtils";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { RecordDisplayLayout } from "@/core/components/general/container/RecordDisplayLayout";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
 import ViewPagePlaceholder from "@/core/components/general/placeHolder/ViewPagePlaceholder";
 import { publicMessages } from "@/core/forms/MessageUtils";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { VIEWNAME } from "@/router/ViewName";
+import { useQuery } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate,useParams } from "react-router-dom";
+import { RoleModelMeta } from "./RoleModel.meta";
+import RoleService from "./RoleService";
 
 const RoleDisplay: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -79,7 +76,7 @@ const RoleDisplay: React.FC = () => {
       <RecordDisplayLayout
         title={publicMessages.record.displayTitle + " : " + roleRecord.id}
         actions={
-          <Button variant="primary" onClick={handleEditClick}>
+          <Button permission="role:update" variant="primary" onClick={handleEditClick}>
             ویرایش
           </Button>
         }
@@ -89,7 +86,7 @@ const RoleDisplay: React.FC = () => {
           <DisplayField
             label={RoleModelMeta.fields.users.label}
             value={
-              roleRecord.users?.map((item: any) => item?.username)?.join(", ") || "---"
+              roleRecord.users?.map((item) => item?.username)?.join(", ") || "---"
             }
           />
         </RowContainer>

@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { BotModel } from "./BotModel";
-import BotService from "./BotService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { BotModelMeta } from "./BotModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { BotTableColumns, BotTableHeaders } from "./BotTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { BotModel } from "./BotModel";
+import { BotModelMeta } from "./BotModel.meta";
+import BotService from "./BotService";
+import { BotTableColumns,BotTableHeaders } from "./BotTableColumns";
 
 interface BotTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const BotTable: React.FC<BotTableProps> = ({ filters, onSelectionChange }) => {
       sortOptions={buildSortOptions(BotModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="bot:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

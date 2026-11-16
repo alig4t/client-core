@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { MessagingPlatformModel } from "./MessagingPlatformModel";
-import MessagingPlatformService from "./MessagingPlatformService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { MessagingPlatformModel } from "./MessagingPlatformModel";
+import { MessagingPlatformModelMeta } from "./MessagingPlatformModel.meta";
+import MessagingPlatformService from "./MessagingPlatformService";
 import {
-  MessagingPlatformTableColumns,
-  MessagingPlatformTableHeaders,
+MessagingPlatformTableColumns,
+MessagingPlatformTableHeaders,
 } from "./MessagingPlatformTableColumns";
 
 interface MessagingPlatformTableProps {
@@ -39,7 +39,7 @@ const MessagingPlatformTable: React.FC<MessagingPlatformTableProps> = ({
       sortOptions={buildSortOptions(MessagingPlatformModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="messagingplatform:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

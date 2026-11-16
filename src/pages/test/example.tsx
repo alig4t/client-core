@@ -1,58 +1,38 @@
 // src/pages/ComprehensiveCreate.tsx
-import React from "react";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import z from "@/core/forms/zod.config";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
 import Button from "@/core/components/general/button/Button";
 import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useMutation } from "@tanstack/react-query";
+import React from "react";
+import { useParams } from "react-router-dom";
+import { toast } from "sonner";
 
-import Validator from "@/core/forms/validation";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import { useLoading } from "@/stores/LoadingContext";
-import UserService from "@/Models/User/UserService";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import ChannelService from "@/Models/Channel/ChannelService";
 import { comprehensiveModelMeta } from "@/Models/Comprehensive/ComprehensiveModel.meta";
+import UserService from "@/Models/User/UserService";
+import { useLoading } from "@/stores/LoadingContext";
 
-const comprehensiveSchema = z.object({
-  stringField: Validator.optional(),
-  integerField: Validator.optional(),
-  indexedField: Validator.optional(),
-  longField: Validator.optional(),
-  doubleField: Validator.optional(),
-  bigDecimalField: Validator.optional(),
-  booleanField: Validator.optional(),
-  dateField: Validator.optional(),
-  enumField: Validator.optional(),
-  oneToOneUser: Validator.optional(),
-  manyToOneChannel: Validator.optional(),
-  uniqueField: Validator.optional(),
-  attachmentIds: Validator.optional(), // Change to attachments
-});
 
-type ComprehensiveFormData = z.infer<typeof comprehensiveSchema>;
 
 const ComprehensiveCreate: React.FC = () => {
-  const navigate = useNavigate();
   const { id } = useParams<{ id: string }>(); // Get id from URL
-  const queryClient = useQueryClient();
   const isEditMode = !!id; // Detect edit mode
   const { openWaitDialog, closeWaitDialog } = useLoading();
 
 
   const userMutation = useMutation({
-    mutationFn: async (channelId: number) => {
+    mutationFn: async (_channelId: number) => {
       openWaitDialog("در حال دریافت اطلاعات کاربران و کانال‌ها...");
 
       const users = await UserService.getAll();
 
-      let params = {
+      const params = {
         page: 0,
-        filters: { channelName_like: "امنیتی" } as any
+        filters: { channelName_like: "امنیتی" }
       }
 
       const channel = await ChannelService.getAll(params);
@@ -66,7 +46,7 @@ const ComprehensiveCreate: React.FC = () => {
         position: "bottom-left",
       });
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       closeWaitDialog();
       toast.error("خطا در دریافت اطلاعات", {
         description: error?.message || "مشکلی در دریافت اطلاعات به وجود آمد",

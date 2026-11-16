@@ -1,41 +1,39 @@
 // src/pages/ComprehensiveCreate.tsx
-import React from "react";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { FormWrapper } from "@/core/components/form/FormWrapper";
-import ComprehensiveService from "./ComprehensiveService";
-import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
 import { Checkbox } from "@/core/components/form/Checkbox";
 import { DateInput } from "@/core/components/form/DateInput";
-import OptionUtils from "@/core/forms/OptionUtils";
-import { FormSelect } from "@/core/components/form/FormSelect";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
-import z from "@/core/forms/zod.config";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
-import Button from "@/core/components/general/button/Button";
-import PageHeader from "@/core/components/general/container/PageHeader";
 import FormInput from "@/core/components/form/FormInput";
+import { FormSelect } from "@/core/components/form/FormSelect";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
 import Breadcrumb from "@/core/components/general/BreadCrumb";
+import Button from "@/core/components/general/button/Button";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import OptionUtils from "@/core/forms/OptionUtils";
+import z from "@/core/forms/zod.config";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { useMutation,useQuery,useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate,useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
+import ComprehensiveService from "./ComprehensiveService";
 
-import Validator from "@/core/forms/validation";
 import { FormUploader } from "@/core/components/form/FormUpload";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import PageTransition from "@/core/components/general/animation/PageTransition";
-import TablePlaceholder from "@/core/components/general/placeHolder/TablePlaceholder";
-import { useLoading } from "@/stores/LoadingContext";
-import UserService from "../User/UserService";
-import { ComprehensiveEnumFieldOption, ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
+import { publicMessages } from "@/core/forms/MessageUtils";
+import Validator from "@/core/forms/validation";
+import { getViewPath } from "@/core/router/RouteUtils";
 import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
 import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
 import ChannelService from "../Channel/ChannelService";
-import { publicMessages } from "@/core/forms/MessageUtils";
-import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
-import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import UserService from "../User/UserService";
+import { ComprehensiveEnumFieldOption,ComprehensiveEnumFieldOptionLabels } from "./ComprehensiveEnumField";
 
 const comprehensiveSchema = z.object({
   stringField: Validator.optional(),
@@ -60,7 +58,7 @@ const ComprehensiveCreate: React.FC = () => {
   const { id } = useParams<{ id: string }>(); // Get id from URL
   const queryClient = useQueryClient();
   const isEditMode = !!id; // Detect edit mode
-  const { openWaitDialog, closeWaitDialog } = useLoading();
+
 
   // Load data in edit mode
   const { data: initialData, isLoading: isLoadingInitial } = useQuery({
@@ -77,7 +75,7 @@ const ComprehensiveCreate: React.FC = () => {
       }
       return ComprehensiveService.create(data);
     },
-    onSuccess: (data) => {
+    onSuccess: () => {
       toast.success(
         isEditMode
           ? comprehensiveModelMeta.messages.update.success.title
@@ -92,7 +90,7 @@ const ComprehensiveCreate: React.FC = () => {
       queryClient.invalidateQueries({ queryKey: ["comprehensive"] });
       navigate(getViewPath(VIEWNAME.COMPREHENSIVE_LIST));
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error(
         isEditMode
           ? comprehensiveModelMeta.messages.update.error.title

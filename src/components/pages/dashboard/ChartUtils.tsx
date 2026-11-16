@@ -1,5 +1,6 @@
-import React, { type FC } from "react";
+import type { PieLabelRenderProps } from "recharts";
 import { type LucideIcon } from "lucide-react";
+import React,{ type FC } from "react";
 
 // --- Custom Types/Interfaces ---
 
@@ -28,15 +29,8 @@ const RADIAN = Math.PI / 180;
 /**
  * رندر کننده سفارشی لیبل‌ها برای نمودار دایره‌ای (Pie Chart)
  */
-export const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  name,
-}: any) => {
+export const renderCustomizedLabel = (props: PieLabelRenderProps) => {
+  const cx = Number(props.cx ?? 0), cy = Number(props.cy ?? 0), midAngle = Number(props.midAngle ?? 0), innerRadius = Number(props.innerRadius ?? 0), outerRadius = Number(props.outerRadius ?? 0), percent = Number(props.percent ?? 0);
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);

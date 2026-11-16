@@ -1,22 +1,21 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { CheckCircle, XCircle, Clock, MessageSquare, User, Calendar } from "lucide-react";
-import Lottie from "lottie-react";
-import { ChannelModelMeta } from "./ChannelModel.meta";
-import Button from "@/core/components/general/button/Button";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import PageTransition from "@/core/components/general/animation/PageTransition";
-import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
-import PlatformAuthorizationControllerService from "../MessagingPlatform/PlatformAuthorizationControllerService";
+import type { OwnedChannelModel } from "./OwnedCahnnel/OwnedChannelModel";
 import chatBotAnimation from "@/components/pages/channel/ChatBot.json";
-import OwnedChannelService from "./OwnedCahnnel/OwnedChannelService";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import Button from "@/core/components/general/button/Button";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import LinkView from "@/core/components/general/link/LinkView";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
 import { VIEWNAME } from "@/router/ViewName";
+import { useMutation,useQuery,useQueryClient } from "@tanstack/react-query";
+import Lottie from "lottie-react";
+import { Calendar,CheckCircle,Clock,MessageSquare,User,XCircle } from "lucide-react";
+import React,{ useState } from "react";
+import { toast } from "sonner";
+import PlatformAuthorizationControllerService from "../MessagingPlatform/PlatformAuthorizationControllerService";
+import OwnedChannelService from "./OwnedCahnnel/OwnedChannelService";
 
 interface Authorization {
   id: number;
@@ -27,10 +26,12 @@ interface Authorization {
   verificationCode?: string;
   createdAt: string;
   updatedAt?: string;
+  platform?: { platformKey: string };
+  ownChannel?: OwnedChannelModel;
 }
 
 const ChannelApprove: React.FC = () => {
-  const navigate = useNavigate();
+
   const queryClient = useQueryClient();
   const [processingId, setProcessingId] = useState<number | null>(null);
 
@@ -44,7 +45,7 @@ const ChannelApprove: React.FC = () => {
         await PlatformAuthorizationControllerService.authorizationsByStatus("PENDING");
 
       const enrichedResponse = await Promise.all(
-        response.map(async (row: any) => {
+        response.map(async (row) => {
           const ownChannel = await OwnedChannelService.getById(row.ownedChannelId);
           return {
             ...row,
@@ -215,7 +216,7 @@ const ChannelApprove: React.FC = () => {
                       <div className="flex items-center gap-2 text-[var(--text-secondary)]">
                         <User className="w-4 h-4" strokeWidth={2} />
                         <span>پلتفرم:</span>
-                        <span className="font-medium text-[var(--text-primary)]">{(auth as any).platform.platformKey}</span>
+                        <span className="font-medium text-[var(--text-primary)]">{auth.platform?.platformKey ?? auth.platformKey}</span>
                       </div>
 
                       {/* Status */}
@@ -232,7 +233,7 @@ const ChannelApprove: React.FC = () => {
                         <span>سازنده:</span>
                         <span className="font-medium text-[var(--text-primary)]">
                           
-                          <LinkView viewName={VIEWNAME.USER_DISPLAY} id={(auth as any).ownChannel?.ownerId} label={(auth as any).ownChannel?.ownerName}  />
+                          <LinkView viewName={VIEWNAME.USER_DISPLAY} id={auth.ownChannel?.ownerId} label={auth.ownChannel?.ownerName ?? "—"} disabled={!auth.ownChannel?.ownerId}  />
                           {/* {(auth as any).ownChannel?.ownerName} */}
                           
                           </span>

@@ -1,61 +1,54 @@
-import React from "react";
-import DatePicker from "react-multi-date-picker";
-import type { Value } from "react-multi-date-picker";
 import persian from "react-date-object/calendars/persian";
-import persian_fa from "react-date-object/locales/persian_fa";
-import { Calendar, CalendarX, CircleX } from "lucide-react";
-import DateObject from "react-date-object";
-
+import persianFa from "react-date-object/locales/persian_fa";
+import gregorian from "react-date-object/calendars/gregorian";
+import gregorianEn from "react-date-object/locales/gregorian_en";
+import { useCore } from "../../entity/CoreProvider";
+import DatePicker, { type Value } from "react-multi-date-picker";
+import TimePicker from "react-multi-date-picker/plugins/time_picker";
 interface CustomDatePickerProps {
+  name?: string;
   value: Value;
   onChange: (value: Value) => void;
   placeholder: string;
+  withTime?: boolean;
+  disabled?: boolean;
 }
-
-const CustomDatePicker: React.FC<CustomDatePickerProps> = ({
+export default function CustomDatePicker({
+  name,
   value,
   onChange,
   placeholder,
-}) => {
+  withTime = false,
+  disabled,
+}: CustomDatePickerProps) {
+  const runtime = useCore();
   return (
-    <DatePicker
-      containerClassName="w-full"
-      editable={false} // 👈 Changed to false
-      value={value}
-      onChange={onChange}
-      calendar={persian}
-      locale={persian_fa}
-      calendarPosition="bottom-right"
-      placeholder={placeholder}
-      onOpenPickNewDate={false} // 👈 Prevent auto-selecting today's date
-      render={(stringifiedValue, openCalendar) => (
-        <div className="relative w-full" onClick={openCalendar}>
-          <input
-            readOnly // 👈 Important: must be read-only
-            value={stringifiedValue || ""}
-            placeholder={placeholder}
-            className="w-full p-2 pr-10 border border-[var(--input-border)] dark:border-gray-600 placeholder:text-[var(--placeholder-text)] dark:placeholder:text-gray-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 rounded-md text-right focus:outline-none focus:ring-2 focus:ring-purple-500 cursor-pointer hover:border-purple-500 dark:hover:border-purple-400 transition duration-150"
-          />
-          <div className="absolute top-1/2 right-3 -translate-y-1/2 text-gray-400 dark:text-gray-500 pointer-events-none">
-            <Calendar size={20} />
-          </div>
-          {stringifiedValue && (
-            <button
-              type="button"
-              className="absolute top-1/2 left-1 !px-2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-300"
-              onClick={(e) => {
-                e.stopPropagation();
-                onChange(null);
-              }}
-              tabIndex={-1}
-            >
-              <CircleX size={18} />
-            </button>
-          )}
-        </div>
+    <div className="flex gap-1">
+      <DatePicker
+        id={name}
+        containerClassName="w-full"
+        inputClass="w-full p-2 border rounded-lg bg-[var(--input-bg)] border-[var(--input-border)]"
+        value={value}
+        onChange={onChange}
+        calendar={runtime.calendar === "gregorian" ? gregorian : persian}
+        locale={runtime.calendar === "gregorian" ? gregorianEn : persianFa}
+        calendarPosition={
+          runtime.direction === "rtl" ? "bottom-right" : "bottom-left"
+        }
+        placeholder={placeholder}
+        disabled={disabled}
+        format={withTime ? "YYYY/MM/DD HH:mm:ss" : "YYYY/MM/DD"}
+        plugins={withTime ? [<TimePicker key="time" position="bottom" />] : []}
+      />
+      {value && !disabled && (
+        <button
+          type="button"
+          aria-label="پاک کردن تاریخ"
+          onClick={() => onChange(null)}
+        >
+          ×
+        </button>
       )}
-    />
+    </div>
   );
-};
-
-export default CustomDatePicker;
+}

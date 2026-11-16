@@ -1,11 +1,11 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { MessageModel } from "./MessageModel";
-import MessageService from "./MessageService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { MessageModelMeta } from "./MessageModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
-import { MessageTableColumns, MessageTableHeaders } from "./MessageTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { MessageModel } from "./MessageModel";
+import { MessageModelMeta } from "./MessageModel.meta";
+import MessageService from "./MessageService";
+import { MessageTableColumns,MessageTableHeaders } from "./MessageTableColumns";
 
 interface MessageTableProps {
   filters: DynamicFilters;
@@ -33,7 +33,7 @@ const MessageTable: React.FC<MessageTableProps> = ({ filters, onSelectionChange 
       sortOptions={buildSortOptions(MessageModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="message:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

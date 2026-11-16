@@ -70,15 +70,16 @@ const Drawer: React.FC<DrawerProps> = ({
   if (!isMounted) return null;
 
   // --- Dynamic Classes for Position & Animation ---
-  const positionClasses =
-    position === "right"
-      ? "right-0"
-      : "left-0";
+  const positionClasses = position === "right" ? "right-0" : "left-0";
 
   const transformClasses =
     position === "right"
-      ? (isAnimatingIn ? "translate-x-0" : "translate-x-full")
-      : (isAnimatingIn ? "translate-x-0" : "-translate-x-full");
+      ? isAnimatingIn
+        ? "translate-x-0"
+        : "translate-x-full"
+      : isAnimatingIn
+        ? "translate-x-0"
+        : "-translate-x-full";
 
   return (
     // --- Backdrop Overlay ---
@@ -108,15 +109,21 @@ const Drawer: React.FC<DrawerProps> = ({
       >
         {/* --- Header (Title & Close Button) --- */}
         {/* The dir="rtl" on this div ensures header content is RTL-aligned */}
-        <div dir="rtl" className="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700">
+        <div
+          dir="rtl"
+          className="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700"
+        >
           {title && (
-            <h3 id="drawer-title" className="text-lg font-semibold text-gray-900 dark:text-white">
+            <h3
+              id="drawer-title"
+              className="text-lg font-semibold text-gray-900 dark:text-white"
+            >
               {title}
             </h3>
           )}
           {/* This empty div ensures the 'X' button is pushed to the left in RTL */}
-          {!title && <div />} 
-          
+          {!title && <div />}
+
           <button
             type="button"
             onClick={onClose}
@@ -128,15 +135,11 @@ const Drawer: React.FC<DrawerProps> = ({
         </div>
 
         {/* --- Scrollable Body --- */}
-        <div className="flex-grow p-4 overflow-y-auto">
-          {children}
-        </div>
+        <div className="flex-grow p-4 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
 };
-
-
 
 // USAGE
 // return (
@@ -204,3 +207,4 @@ const Drawer: React.FC<DrawerProps> = ({
 //     </div>
 //   );
 // };
+export default Drawer;

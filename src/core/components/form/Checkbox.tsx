@@ -1,197 +1,91 @@
-// src/components/form/Checkbox.tsx
-
-import React from "react";
-import { useFormContext, useWatch } from "react-hook-form";
-import Label from "./Label";
-import ErrorFormText from "./ErrorFormText";
-
-interface BaseCheckboxProps {
+import { useState, type InputHTMLAttributes } from "react";
+import { Controller, useFormContext } from "react-hook-form";
+interface CheckboxProps extends Omit<
+  InputHTMLAttributes<HTMLInputElement>,
+  "name" | "onChange"
+> {
   name: string;
   label?: string;
-  className?: string;
-  onChange?: (checked: boolean) => void;
-  disabled?: boolean;
-  // Simple mode (without react-hook-form)
   standalone?: boolean;
-  // For table: raw checkbox only
   hideLabel?: boolean;
+  onChange?: (checked: boolean) => void;
 }
-
-type CheckboxProps = BaseCheckboxProps &
-  Omit<React.InputHTMLAttributes<HTMLInputElement>, "onChange">;
-
-export const Checkbox: React.FC<CheckboxProps> = ({
+function CheckboxControl({
   name,
   label,
-  className = "",
+  hideLabel,
+  checked,
   onChange,
-  disabled = false,
-  standalone = false,
-  hideLabel = false,
+  className,
   ...rest
-}) => {
-  // --- Simple mode (without React Hook Form) ---
-  if (standalone) {
-    const [checked, setChecked] = React.useState(false);
-
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-      const newChecked = e.target.checked;
-      setChecked(newChecked);
-      if (onChange) onChange(newChecked);
-    };
-
-    return (
-      <div className={`flex items-center ${className}`}>
-        {!hideLabel && label && (
-          <label htmlFor={name} className="mr-2 text-sm text-[var(--text-primary)]">
-            {label}
-          </label>
-        )}
-        <label className="relative flex items-center cursor-pointer">
-          <input
-            id={name}
-            type="checkbox"
-            checked={checked}
-            onChange={handleChange}
-            disabled={disabled}
-            className="sr-only"
-            {...rest}
-          />
-          <div
-            className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-all duration-200 ${checked
-                ? "bg-[var(--color-primary)] border-[var(--color-primary)]"
-                : "bg-[var(--input-bg)] border-[var(--input-border)] hover:border-[var(--border-focus)]"
-              } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            {checked && (
-              <svg
-                className="w-3 h-3 text-white"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="3"
-                  d="M5 13l4 4L19 7"
-                />
-              </svg>
-            )}
-          </div>
-        </label>
-      </div>
-    );
-  }
-
-  // --- Normal mode (with React Hook Form) ---
-  const formContext = useFormContext();
-
-  if (!formContext) {
-    throw new Error(
-      "Checkbox must be used inside a FormProvider. If you want to use it standalone, pass standalone={true}."
-    );
-  }
-
-  const {
-    register,
-    formState: { errors },
-  } = formContext;
-
-  const { onChange: registerOnChange, ...registerRest } = register(name);
-  const currentValue = useWatch({ name, control: formContext.control });
-
-  const checkboxRef = React.useRef<HTMLInputElement>(null); // 👈 Added
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    registerOnChange(e);
-    if (onChange) onChange(e.target.checked);
-  };
-
-  const handleDivClick = () => {
-    if (checkboxRef.current && !disabled) {
-      checkboxRef.current.click(); // Simulate click on checkbox
-    }
-  };
-
-  // --- Render UI ---
-  const renderCheckbox = () => (
-    <label className="relative flex items-center cursor-pointer min-h-10 ">
+}: CheckboxProps) {
+  return (
+    <label
+      htmlFor={name}
+      className={"flex items-center gap-2 " + (className ?? "")}
+    >
       <input
-        id={name}
-        type="checkbox"
-        onChange={handleChange}
-        disabled={disabled}
-        className="sr-only"
-        {...registerRest}
         {...rest}
+        id={name}
+        name={name}
+        type="checkbox"
+        checked={Boolean(checked)}
+        onChange={(event) => onChange?.(event.target.checked)}
+        className="h-4 w-4 accent-purple-600"
       />
-      <div
-        className={`flex items-center justify-center w-5 h-5 rounded border-2 transition-all duration-200 ${currentValue
-          ? "bg-[var(--color-primary)] border-[var(--color-primary)]"
-          : "bg-[var(--input-bg)] border-[var(--input-border)] hover:border-[var(--border-focus)]"
-          } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-      >
-        {currentValue && (
-          <svg
-            className="w-3 h-3 text-white"
-            fill="none"
-            stroke="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="3"
-              d="M5 13l4 4L19 7"
-            />
-          </svg>
-        )}
-      </div>
+      {!hideLabel && label}
     </label>
   );
-
-  // --- Table mode (without label and error) ---
-  if (hideLabel) {
-    return renderCheckbox();
-  }
-
-  // --- Form mode (with label and error) ---
+}
+function StandaloneCheckbox({
+  standalone: _standalone,
+  ...props
+}: CheckboxProps) {
+  const [checked, setChecked] = useState(Boolean(props.defaultChecked));
   return (
-    <div className="">
-      <Label> </Label>
-      <div
-        className={`flex items-center
-          rounded-md px-2 ${className}`}
-      >
-        {/* border border-gray-300 */}
-        {renderCheckbox()}
-        {label && (
-          <label htmlFor={name} className="mr-2 text-sm text-[var(--text-primary)]">
-            {label}
-          </label>
-        )}
-        {errors[name] && (
-          <ErrorFormText msg={errors[name]?.message as string} />
-        )}
-      </div>
-    </div>
+    <CheckboxControl
+      {...props}
+      checked={props.checked ?? checked}
+      onChange={(next) => {
+        setChecked(next);
+        props.onChange?.(next);
+      }}
+    />
   );
-};
-
-// import React from 'react';
-
-// interface CheckboxProps {
-//   label: string;
-// }
-
-// const Checkbox: React.FC<CheckboxProps> = ({ label }) => {
-//   return (
-//     <label className="flex items-center gap-2 cursor-pointer">
-//       <input type="checkbox" className="h-4 w-4 rounded border-gray-300 text-purple-600 focus:ring-purple-500" />
-//       <span>{label}</span>
-//     </label>
-//   );
-// };
-
-// export default Checkbox;
+}
+function ConnectedCheckbox({
+  standalone: _standalone,
+  ...props
+}: CheckboxProps) {
+  const { control } = useFormContext();
+  return (
+    <Controller
+      name={props.name}
+      control={control}
+      render={({ field, fieldState }) => (
+        <div>
+          <CheckboxControl
+            {...props}
+            checked={field.value}
+            onChange={(value) => {
+              field.onChange(value);
+              props.onChange?.(value);
+            }}
+          />
+          {fieldState.error && (
+            <p role="alert" className="text-red-600">
+              {fieldState.error.message}
+            </p>
+          )}
+        </div>
+      )}
+    />
+  );
+}
+export function Checkbox(props: CheckboxProps) {
+  return props.standalone ? (
+    <StandaloneCheckbox {...props} />
+  ) : (
+    <ConnectedCheckbox {...props} />
+  );
+}

@@ -1,20 +1,20 @@
 // src/routes/index.tsx
-import type { RouteObject } from "react-router-dom";
 import { Suspense } from "react";
+import type { RouteObject } from "react-router-dom";
 
-import Layout from "@/core/components/layout/Layout";
 import NotFoundPage from "@/components/NotFoundPage";
-import { routeConfig } from "./Routes"; // ✅ Without 'type'
-import PublicRoute from "../core/router/PublicRoute";
-import ProtectedRoute from "../core/router/ProtectedRoute";
+import Layout from "@/components/AppLayout";
+import ProtectedRoute from "./ProtectedRoute";
+import PublicRoute from "./PublicRoute";
 import LazyFallbackElement from "./LazyFallbackElement";
+import { routeConfig } from "./Routes"; // ✅ Without 'type'
 
-const LazyFallback = () => <LazyFallbackElement />;
+const lazyFallback = <LazyFallbackElement />;
 
 const buildRoutes = (routes: typeof routeConfig): RouteObject[] => {
   return routes.map((route) => {
     const element = route.element ? (
-      <Suspense fallback={<LazyFallback />}>
+      <Suspense fallback={lazyFallback}>
         <route.element />
       </Suspense>
     ) : undefined;
@@ -38,7 +38,7 @@ export const appRoutes: RouteObject[] = [
   },
   {
     path: "/",
-    element: <PublicRoute />,
+    element: <ProtectedRoute />,
     children: [
       {
         path: "/dashboard",

@@ -98,14 +98,19 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
         <div className="flex-shrink-0 p-4 border-b border-gray-200 dark:border-gray-700">
           {/* Grip Bar */}
           <div className="w-12 h-1.5 bg-gray-300 dark:bg-gray-600 rounded-full mx-auto mb-3" />
-          
+
           <div className="flex justify-between items-center">
             {title ? (
-              <h3 id="sheet-title" className="text-lg font-semibold text-gray-900 dark:text-white">
+              <h3
+                id="sheet-title"
+                className="text-lg font-semibold text-gray-900 dark:text-white"
+              >
                 {title}
               </h3>
-            ) : <div />} {/* Placeholder to keep close button aligned right */}
-            
+            ) : (
+              <div />
+            )}{" "}
+            {/* Placeholder to keep close button aligned right */}
             <button
               type="button"
               onClick={onClose}
@@ -118,15 +123,11 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
         </div>
 
         {/* --- Scrollable Body --- */}
-        <div className="flex-grow p-4 overflow-y-auto">
-          {children}
-        </div>
+        <div className="flex-grow p-4 overflow-y-auto">{children}</div>
       </div>
     </div>
   );
 };
-
-
 
 // USAGE
 // --- ✨ DEMO APPLICATION ✨ ---
@@ -139,7 +140,7 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
 //   const generateDummyContent = (count: number) => {
 //     return Array.from({ length: count }, (_, i) => (
 //       <p key={i} className="mb-2 text-gray-700 dark:text-gray-300 leading-relaxed">
-//         This is scrollable content row #{i + 1}. Lorem ipsum dolor sit amet, 
+//         This is scrollable content row #{i + 1}. Lorem ipsum dolor sit amet,
 //         consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
 //       </p>
 //     ));
@@ -184,7 +185,7 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
 //       Price (Low to High)
 //             </label>
 //           </div>
-          
+
 //           <p className="font-medium text-gray-800 dark:text-white mt-4">Dummy Scrollable Content</p>
 //           {/* Add lots of content to test scrolling */}
 //           {generateDummyContent(15)}
@@ -202,3 +203,4 @@ const BottomSheetModal: React.FC<BottomSheetModalProps> = ({
 // };
 
 // export default App;
+export default BottomSheetModal;

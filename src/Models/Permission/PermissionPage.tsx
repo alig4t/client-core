@@ -1,33 +1,32 @@
-import React, { useState } from "react";
-import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import PermissionTable from "./PermissionTable";
-import { Navigate, useNavigate } from "react-router-dom";
-import PermissionSearch from "./PermissionSearch";
-import { useAuth } from "@/stores/AuthContext";
-import { Permission } from "@/router/Permission";
-import ForbiddenPage from "@/pages/ForbiddenPage";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { PermissionModelMeta } from "./PermissionModel.meta";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import PageTransition from "@/core/components/general/animation/PageTransition";
 import Accordion from "@/core/components/general/Accordion";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import ForbiddenPage from "@/pages/ForbiddenPage";
+import { Permission } from "@/router/Permission";
+import { useAuth } from "@/stores/AuthContext";
+import React,{ useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { PermissionModelMeta } from "./PermissionModel.meta";
+import PermissionSearch from "./PermissionSearch";
+import PermissionTable from "./PermissionTable";
 
 const PermissionPage: React.FC = () => {
   const { hasPermission } = useAuth();
 
-
-  if (!hasPermission(Permission.Permission_Read)) {
-    return <ForbiddenPage />;
-  }
 
   const breadcrumbItems = useBreadcrumbs();
   const routeMeta = useRouteMetadata();
 
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
   const navigate = useNavigate();
+  if (!hasPermission(Permission.Permission_Read)) {
+    return <ForbiddenPage />;
+  }
   return (
     <PageWrapper>
       <PageTransition>
@@ -37,6 +36,7 @@ const PermissionPage: React.FC = () => {
             title={routeMeta?.label || PermissionModelMeta.messages.manage.title}
             actionButton={{
               label: PermissionModelMeta.messages.createButton,
+              permission: "permission:create",
               onClick: () => navigate("create"),
               variant: "success",
             }}

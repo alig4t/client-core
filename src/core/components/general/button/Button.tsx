@@ -1,6 +1,7 @@
 // components/Button.tsx
-import React from "react";
 import { Loader2, type LucideIcon } from "lucide-react";
+import React from "react";
+import { useCore } from "../../../entity/CoreProvider";
 
 export type ButtonVariant =
   | "primary"
@@ -19,6 +20,7 @@ type ButtonProps = {
   className?: string;
   icon?: LucideIcon; // آیکون اختیاری از lucide-react
   badgeCount?: number;
+  permission?: string;
 };
 
 export const variantClasses = {
@@ -53,7 +55,10 @@ const Button = ({
   className = "",
   icon: Icon, // توجه به نام‌گذاری با حرف بزرگ
   badgeCount,
+  permission,
 }: ButtonProps) => {
+  const { can } = useCore();
+  if (!can(permission)) return null;
   const isDisabled = disabled || loading;
 
   const baseClasses =
@@ -61,7 +66,8 @@ const Button = ({
 
   // استفاده از کلاس badge متناسب با variant
   const badgeClasses = `mr-2 text-xs font-bold px-2 pb-[2px] pt-[3px] rounded-full ${
-    badgeVariantClasses[variant] || "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]"
+    badgeVariantClasses[variant] ||
+    "bg-[var(--bg-tertiary)] text-[var(--text-secondary)]"
   }`;
 
   return (

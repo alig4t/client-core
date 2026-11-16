@@ -1,7 +1,9 @@
+import { GENERATED_PERMISSIONS } from "./generated.permissions";
 // src/constants/Permission.ts
 
 // Your system's main resources based on API data
 export const Permission = {
+  ...GENERATED_PERMISSIONS,
   // Bot
   Bot_Root: "bot:root",
   Bot_Create: "bot:create",

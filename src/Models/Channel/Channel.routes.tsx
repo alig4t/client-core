@@ -1,9 +1,8 @@
-import { lazy } from "react";
-import { MessageSquare } from "lucide-react";
-import { VIEWNAME } from "@/router/ViewName";
-import { Permission } from "@/router/Permission";
 import type { RouteConfig } from "@/router/path.types";
-import { RARENT_PATHS } from "@/router/Routes";
+import { Permission } from "@/router/Permission";
+import { VIEWNAME } from "@/router/ViewName";
+import { MessageSquare } from "lucide-react";
+import { lazy } from "react";
 
 
 const ChannelPage = lazy(() => import("./ChannelPage"));

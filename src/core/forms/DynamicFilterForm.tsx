@@ -1,12 +1,13 @@
+import CustomDatePicker from "@/core/components/form/CustomDatePicker";
+import Input from "@/core/components/form/Input";
+import { Select } from "@/core/components/form/Select";
 import React, { useState } from "react";
+import gregorian from "react-date-object/calendars/gregorian";
 import { DateObject } from "react-multi-date-picker";
 import type { FilterField } from "./Filter"; // Import field type
-import Input from "@/core/components/form/Input";
-import CustomDatePicker from "@/core/components/form/CustomDatePicker";
-import { Select } from "@/core/components/form/Select";
 
 export interface DynamicFilters {
-  [key: string]: any; // e.g., { "name_like": "test", "createdAt_ge": "2025-10-07" }
+  [key: string]: unknown;
 }
 
 interface DynamicFilterFormProps {
@@ -19,10 +20,15 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({
   onApplyFilters,
 }) => {
   // A state to hold values of all fields
-  const [formState, setFormState] = useState<Record<string, any>>({});
+  const [formState, setFormState] = useState<
+    Record<string, string | number | DateObject | null>
+  >({});
 
   // A function to manage changes of all inputs
-  const handleInputChange = (fieldName: string, value: any) => {
+  const handleInputChange = (
+    fieldName: string,
+    value: string | number | DateObject | null,
+  ) => {
     setFormState((prevState) => ({
       ...prevState,
       [fieldName]: value,
@@ -38,7 +44,9 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({
       if (value !== null && value !== undefined && value !== "") {
         // If date, format it
         if (value instanceof DateObject) {
-          finalFilters[field.filterKey] = value.format("YYYY-MM-DD");
+          finalFilters[field.filterKey] = new DateObject(value)
+            .convert(gregorian)
+            .format("YYYY-MM-DD");
         } else {
           finalFilters[field.filterKey] = value;
         }
@@ -64,23 +72,30 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({
             {field.type === "text" && (
               <Input
                 placeholder={`جستجو بر اساس ${field.label}...`}
-                value={formState[field.name] || ""}
+                value={String(formState[field.name] ?? "")}
                 onChange={(e) => handleInputChange(field.name, e.target.value)}
               />
             )}
             {field.type === "date" && (
               <CustomDatePicker
-                value={formState[field.name] || null}
-                onChange={(date) => handleInputChange(field.name, date)}
+                value={
+                  formState[field.name] instanceof DateObject
+                    ? formState[field.name]
+                    : null
+                }
+                onChange={(date) =>
+                  handleInputChange(
+                    field.name,
+                    date instanceof DateObject ? date : null,
+                  )
+                }
                 placeholder="انتخاب تاریخ"
               />
             )}
             {field.type === "select" && (
               <Select
-                value={formState[field.name] || ""}
-                onChange={(e) =>
-                  handleInputChange(field.name, (e as any).target.value)
-                }
+                value={String(formState[field.name] ?? "")}
+                onChange={(value) => handleInputChange(field.name, value)}
                 options={field.options || []}
               />
             )}

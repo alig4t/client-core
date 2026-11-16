@@ -1,25 +1,18 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { OwnedChannelModel } from "./OwnedChannelModel";
-import OwnedChannelService from "./OwnedChannelService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { OwnedChannelModelMeta } from "./OwnedChannelModel.meta";
 import CustomDataTable from "@/core/components/Table/CustomDataTable";
-import { OwnedChannelTableColumns, OwnedChannelTableHeaders } from "./OwnedChannelTableColumns";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React from "react";
+import type { OwnedChannelModel } from "./OwnedChannelModel";
+import { OwnedChannelModelMeta } from "./OwnedChannelModel.meta";
+import OwnedChannelService from "./OwnedChannelService";
+import { OwnedChannelTableColumns,OwnedChannelTableHeaders } from "./OwnedChannelTableColumns";
 
 interface OwnedChannelTableProps {
   filters: DynamicFilters;
   onSelectionChange?: (selectedIds: (string | number)[]) => void;
 }
 
-const OwnedChannelTable: React.FC<OwnedChannelTableProps> = ({ filters, onSelectionChange }) => {
-  const handleSelectionChange = useCallback(
-    (ids: (string | number)[]) => {
-      const numericIds = ids.map((id) => Number(id)).filter((id) => !Number.isNaN(id));
-      onSelectionChange?.(numericIds);
-    },
-    [onSelectionChange]
-  );
+const OwnedChannelTable: React.FC<OwnedChannelTableProps> = ({ filters }) => {
 
   return (
     <div className="flex flex-col gap-8">
@@ -34,8 +27,8 @@ const OwnedChannelTable: React.FC<OwnedChannelTableProps> = ({ filters, onSelect
         title={'کانال های من'}
         sortOptions={buildSortOptions(OwnedChannelModelMeta)}
         filters={filters}
-        enableDelete={true}
-        customFetchFn={(params) => OwnedChannelService.authorized()}
+        enableDelete={true} deletePermission="channel:delete"
+        customFetchFn={() => OwnedChannelService.authorized()}
       />
 
       <CustomDataTable<OwnedChannelModel, DynamicFilters>
@@ -48,8 +41,8 @@ const OwnedChannelTable: React.FC<OwnedChannelTableProps> = ({ filters, onSelect
         title={'کانال های منتظر تایید'}
         sortOptions={buildSortOptions(OwnedChannelModelMeta)}
         filters={filters}
-        enableDelete={true}
-        customFetchFn={(params) => OwnedChannelService.pending()}
+        enableDelete={true} deletePermission="channel:delete"
+        customFetchFn={() => OwnedChannelService.pending()}
       />
     </div>
 

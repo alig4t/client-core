@@ -1,15 +1,14 @@
 // src/pages/Login.tsx
-import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
-import { replace, useNavigate } from "react-router-dom";
-import { useFormContext } from "react-hook-form";
-import { toast } from "sonner";
-import { useAuth } from "@/stores/AuthContext";
-import ErrorFormText from "@/core/components/form/ErrorFormText";
-import { APP_LOGO_SMALL_BLUE } from "@/constants/images";
-import { Link } from "react-router-dom";
 import UserService from "@/Models/User/UserService";
+import { APP_LOGO_SMALL_BLUE } from "@/constants/images";
+import ErrorFormText from "@/core/components/form/ErrorFormText";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
+import { useAuth } from "@/stores/AuthContext";
+import { useMutation } from "@tanstack/react-query";
+import { useFormContext } from "react-hook-form";
+import { Link,useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+import { z } from "zod/v3";
 
 const loginSchema = z.object({
   username: z.string().nonempty("نام کاربری را وارد نمایید"),
@@ -68,14 +67,14 @@ function LoginFormFields() {
 }
 
 export default function LoginPage({
-  inModal,
-  switchModal,
+  inModal = false,
+  switchModal = () => {},
   onClose, // Add prop to close modal
 }: {
-  inModal: boolean;
-  switchModal: () => void;
+  inModal?: boolean;
+  switchModal?: () => void;
   onClose?: () => void; // New prop to close modal
-}) {
+} = {}) {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
@@ -102,7 +101,7 @@ export default function LoginPage({
         navigate("/dashboard", { replace: true }); // Immediate redirect to dashboard
       }, 1000);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error("ورود ناموفق بود", {
         description:
           error?.message || "نام کاربری یا رمز عبور شما صحیح نمی‌باشد.",

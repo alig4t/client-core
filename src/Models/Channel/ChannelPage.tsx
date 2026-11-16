@@ -1,17 +1,17 @@
-import React, { useState } from "react";
 import Accordion from "@/core/components/general/Accordion";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
 import { type DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import { useNavigate } from "react-router-dom";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { publicMessages } from "@/core/forms/MessageUtils";
 import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import React,{ useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { ChannelModelMeta } from "./ChannelModel.meta";
 import ChannelSearch from "./ChannelSearch";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import PageTransition from "@/core/components/general/animation/PageTransition";
 import ChannelTable from "./ChannelTable";
-import { publicMessages } from "@/core/forms/MessageUtils";
 
 const ChannelPage: React.FC = () => {
   const [activeFilters, setActiveFilters] = useState<DynamicFilters>({});
@@ -29,6 +29,7 @@ const ChannelPage: React.FC = () => {
             title={routeMeta?.label || ChannelModelMeta.messages.manage.title}
             actionButton={{
               label: ChannelModelMeta.messages.createButton,
+              permission: "channel:create",
               onClick: () => navigate("create"),
               variant: "success",
             }}

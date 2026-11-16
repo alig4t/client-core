@@ -6,7 +6,7 @@ import { routeConfig } from "./Routes";
 // Just raw extraction
 const allMenuItems = routeConfig.filter((r): r is RouteMeta => {
   return r.showInMenu === true && typeof r.label === "string" && r.icon != null;
-});
+}).sort((a,b) => (a.menuOrder ?? 0) - (b.menuOrder ?? 0));
 
 export const getMainMenu = () => allMenuItems.filter(item => !item.parent);
 export const getSubMenus = () => {

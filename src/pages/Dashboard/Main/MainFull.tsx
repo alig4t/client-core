@@ -1,43 +1,34 @@
-import React, { type FC } from "react";
+import type { PieLabelRenderProps } from "recharts";
 import {
-  Layers,
-  Search,
-  Clock,
-  TrendingUp,
-  BarChart,
-  List,
-  ChevronRight,
-  Zap,
-  RefreshCw,
+BarChart,
+ChevronRight,
+Layers,
+List,
+RefreshCw,
+TrendingUp
 } from "lucide-react";
+import React,{ type FC } from "react";
 import {
-  LineChart,
-  Line,
-  BarChart as ReBarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  Legend,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  Sector,
+Bar,
+CartesianGrid,
+Cell,
+Legend,
+Line,
+LineChart,
+Pie,
+PieChart,
+BarChart as ReBarChart,
+ResponsiveContainer,
+Tooltip,
+XAxis,
+YAxis
 } from "recharts";
 import { DashboardData } from "./DashboardData";
 
 const RADIAN = Math.PI / 180;
-const renderCustomizedLabel = ({
-  cx,
-  cy,
-  midAngle,
-  innerRadius,
-  outerRadius,
-  percent,
-  name,
-}: any) => {
+const renderCustomizedLabel = (props: PieLabelRenderProps) => {
+  const cx = Number(props.cx ?? 0), cy = Number(props.cy ?? 0), midAngle = Number(props.midAngle ?? 0), innerRadius = Number(props.innerRadius ?? 0), outerRadius = Number(props.outerRadius ?? 0), percent = Number(props.percent ?? 0);
+  const name = String(props.name ?? "");
   const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
   const x = cx + radius * Math.cos(-midAngle * RADIAN);
   const y = cy + radius * Math.sin(-midAngle * RADIAN);

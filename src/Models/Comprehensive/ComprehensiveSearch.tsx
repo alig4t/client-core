@@ -1,23 +1,23 @@
 
+import { DateInput } from "@/core/components/form/DateInput";
+import FormInput from "@/core/components/form/FormInput";
+import { FormSelect } from "@/core/components/form/FormSelect";
+import {
+FormWrapper,
+type searchFilters,
+} from "@/core/components/form/FormWrapper";
+import Button from "@/core/components/general/button/Button";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import { FilterOperator } from "@/core/forms/FilterOperators";
+import { makeRangeLabel,publicMessages } from "@/core/forms/MessageUtils";
+import OptionUtils from "@/core/forms/OptionUtils";
+import Validator from "@/core/forms/validation";
 import React from "react";
 import type { SubmitHandler } from "react-hook-form";
-import {
-  FormWrapper,
-  type searchFilters,
-} from "@/core/components/form/FormWrapper";
-import { DateInput } from "@/core/components/form/DateInput";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
-import Button from "@/core/components/general/button/Button";
-import FormInput from "@/core/components/form/FormInput";
-import { z } from "zod";
-import { FilterOperator } from "@/core/forms/FilterOperators";
+import { z } from "zod/v3";
 import { comprehensiveModelMeta } from "./ComprehensiveModel.meta";
-import Validator from "@/core/forms/validation";
-import { FormSelect } from "@/core/components/form/FormSelect";
-import OptionUtils from "@/core/forms/OptionUtils";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
 
 // --- Filter output interface ---
 
@@ -60,7 +60,7 @@ type SearchFormData = z.infer<typeof searchSchema>;
 const ComprehensiveSearch: React.FC<ComprehensiveSearchProps> = ({
   onApplyFilters,
 }) => {
-  const [formMethods, setFormMethods] = React.useState<any>(null);
+  const [formMethods, setFormMethods] = React.useState<{ reset: () => void } | null>(null);
 
   const onSubmit: SubmitHandler<SearchFormData> = (data) => {
     console.log(data);

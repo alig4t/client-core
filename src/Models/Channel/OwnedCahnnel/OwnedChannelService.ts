@@ -1,5 +1,5 @@
-import { BaseService, type ApiResponsePayload } from "@/core/service/BaseService";
-import type { ChannelModel } from "../ChannelModel";
+import { BaseService,type ApiResponsePayload } from "@/core/service/BaseService";
+import { normalizePage } from "@/core/service/contracts";
 import type { OwnedChannelModel } from "./OwnedChannelModel";
 
 class OwnedChannelService extends BaseService<OwnedChannelModel> {
@@ -7,20 +7,12 @@ class OwnedChannelService extends BaseService<OwnedChannelModel> {
     super("/owned-channels");
   }
 
-  authorized(): Promise<ApiResponsePayload<OwnedChannelModel>> {
-    return this.call<ApiResponsePayload<OwnedChannelModel>>(
-      "get",
-      "/authorized",
-      true,
-    );
+  async authorized(): Promise<ApiResponsePayload<OwnedChannelModel>> {
+    return normalizePage(await this.request<OwnedChannelModel[]>({ method: "get", path: "authorized" }));
   }
 
-  pending(): Promise<ApiResponsePayload<OwnedChannelModel>> {
-    return this.call<ApiResponsePayload<OwnedChannelModel>>(
-      "get",
-      "/pending",
-      true,
-    );
+  async pending(): Promise<ApiResponsePayload<OwnedChannelModel>> {
+    return normalizePage(await this.request<OwnedChannelModel[]>({ method: "get", path: "pending" }));
   }
 
 }

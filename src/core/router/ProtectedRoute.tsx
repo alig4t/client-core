@@ -1,34 +1,23 @@
-// src/components/ProtectedRoute.tsx
-
 import { Navigate, Outlet, useLocation } from "react-router-dom";
-import { useAuth } from "../../stores/AuthContext"; // Correct path to AuthContext
-import { routeConfig } from "../../router/Routes";
-import ForbiddenPage from "@/pages/ForbiddenPage";
-import { VIEWNAME } from "../../router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
-
-const ProtectedRoute = () => {
-  const { isAuthenticated, hasPermission, user } = useAuth();
+import type { ReactNode } from "react";
+import { findMatchingRoute } from "./matchRoute";
+import type { RouteConfig } from "./types";
+export default function ProtectedRoute({
+  isAuthenticated,
+  can,
+  routes,
+  loginPath = "/login",
+  forbidden = <p role="alert">اجازه دسترسی وجود ندارد</p>,
+}: {
+  isAuthenticated: boolean;
+  can: (permission: string) => boolean;
+  routes: RouteConfig[];
+  loginPath?: string;
+  forbidden?: ReactNode;
+}) {
   const location = useLocation();
-
-  const LOGIN_PAGE = getViewPath(VIEWNAME.LANDING);
-
-  // If not logged in
-  if (!isAuthenticated || !user) {
-    return <Navigate to={LOGIN_PAGE} state={{ from: location }} replace />;
-  }
-
-  const currentRoute = routeConfig.find(
-    (route) => route.path === location.pathname
-  );
-
-  // If route requires permission and user doesn't have it
-  if (currentRoute?.permission && !hasPermission(currentRoute.permission)) {
-    // return <Navigate to="/dashboard" replace />;
-    return <ForbiddenPage />;
-  }
-
-  return <Outlet />;
-};
-
-export default ProtectedRoute;
+  if (!isAuthenticated)
+    return <Navigate to={loginPath} state={{ from: location }} replace />;
+  const route = findMatchingRoute(routes, location.pathname);
+  return route?.permission && !can(route.permission) ? forbidden : <Outlet />;
+}

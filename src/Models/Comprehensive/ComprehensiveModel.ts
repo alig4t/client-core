@@ -20,4 +20,5 @@ export interface ComprehensiveModel extends BaseModel {
     oneToOneUser: UserModel;
     manyToOneChannel: ChannelModel;
     attachmentIds: AttachmentModel[];
+    attachments?: AttachmentModel[];
 }

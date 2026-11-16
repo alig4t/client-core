@@ -1,9 +1,10 @@
 // Main Routes - Safe Modular Architecture
+import { Bolt,Home,MessageCircleCode,Settings as SettingsIcon,Shield,User } from "lucide-react";
 import { lazy } from "react";
-import { Home, User, Settings as SettingsIcon, Shield, Code, Bolt, MessageCircleCode } from "lucide-react";
 import type { RouteConfig } from "./path.types";
 import { Permission } from "./Permission";
 import { VIEWNAME } from "./ViewName";
+import { configureRoutes } from "@/core/router/RouteUtils";
 
 // Generated routes (safe - auto-updated by generator)
 import { generatedRoutes } from "./generated.routes";
@@ -24,9 +25,6 @@ const PermissionPage = lazy(() => import("@/Models/Permission/PermissionPage"));
 const PermissionCreate = lazy(() => import("@/Models/Permission/PermissionCreate"));
 
 // Comprehensive Module (manual/example)
-const ComprehensivePage = lazy(() => import("@/Models/Comprehensive/ComprehensivePage"));
-const ComprehensiveCreate = lazy(() => import("@/Models/Comprehensive/ComprehensiveCreate"));
-const ComprehensiveDisplay = lazy(() => import("@/Models/Comprehensive/ComprehensiveDisplay"));
 
 // Helper for parameterized routes
 export const withId = (base: string) => `${base}/:id`;
@@ -197,3 +195,4 @@ export const routeConfig: RouteConfig[] = [
   ...generatedRoutes,     // ✨ All auto-generated entity routes
   ...customRoutes,        // ✨ Your custom routes
 ];
+configureRoutes(routeConfig);

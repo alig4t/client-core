@@ -1,31 +1,30 @@
-import React from "react";
-import { useRouteMetadata } from "@/core/hooks/useRouteMetadata";
-import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
-import { useNavigate, useParams } from "react-router-dom";
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
-import { FormWrapper } from "@/core/components/form/FormWrapper";
-import RoleService from "./RoleService";
-import { RoleModelMeta } from "./RoleModel.meta";
-import FormInput from "@/core/components/form/FormInput";
-import z from "@/core/forms/zod.config";
-import Validator from "@/core/forms/validation";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
-import Button from "@/core/components/general/button/Button";
-import PageHeader from "@/core/components/general/container/PageHeader";
-import Breadcrumb from "@/core/components/general/BreadCrumb";
-import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import PageTransition from "@/core/components/general/animation/PageTransition";
-import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
-import { VIEWNAME } from "@/router/ViewName";
-import { getViewPath } from "@/core/router/RouteUtils";
-import { publicMessages } from "@/core/forms/MessageUtils";
-import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
-import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
-import ButtonPanel from "@/core/components/general/button/ButtonPanel";
-import UserService from "@/Models/User/UserService";
-import { UserModelMeta } from "@/Models/User/UserModel.meta";
 import { FormAutoComplete } from "@/core/components/form/FormAutoComplete";
+import FormInput from "@/core/components/form/FormInput";
+import { FormWrapper } from "@/core/components/form/FormWrapper";
+import PageTransition from "@/core/components/general/animation/PageTransition";
+import Breadcrumb from "@/core/components/general/BreadCrumb";
+import Button from "@/core/components/general/button/Button";
+import ButtonPanel from "@/core/components/general/button/ButtonPanel";
+import CreatePageFormWrapper from "@/core/components/general/container/CreateFormWrapper";
+import PageHeader from "@/core/components/general/container/PageHeader";
+import { PageWrapper } from "@/core/components/general/container/PageWrapper";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import CreatePagePlaceholder from "@/core/components/general/placeHolder/CreatePagePlaceholder";
+import { publicMessages } from "@/core/forms/MessageUtils";
+import Validator from "@/core/forms/validation";
+import z from "@/core/forms/zod.config";
+import { getViewPath } from "@/core/router/RouteUtils";
+import { ReactQueryOptions } from "@/core/service/ReactQueryOptions";
+import { useBreadcrumbs } from "@/hooks/useBreadcrumbs";
+import { UserModelMeta } from "@/Models/User/UserModel.meta";
+import UserService from "@/Models/User/UserService";
+import { VIEWNAME } from "@/router/ViewName";
+import { useMutation,useQuery,useQueryClient } from "@tanstack/react-query";
+import React from "react";
+import { useNavigate,useParams } from "react-router-dom";
+import { toast } from "sonner";
+import { RoleModelMeta } from "./RoleModel.meta";
+import RoleService from "./RoleService";
 
 const roleSchema = z.object({
   name: Validator.notNull(),
@@ -38,7 +37,6 @@ const RoleCreate: React.FC = () => {
   const navigate = useNavigate();
   const { id } = useParams<{ id: string }>();
   const isEditMode = !!id;
-  const routeMeta = useRouteMetadata();
   const queryClient = useQueryClient();
 
   const { data: existingData, isLoading } = useQuery({
@@ -89,9 +87,6 @@ const RoleCreate: React.FC = () => {
     mutation.mutate(data);
   };
 
-  const handleCancel = () => {
-    navigate(getViewPath(VIEWNAME.ROLE_SEARCH));
-  };
 
   const breadcrumbItems = useBreadcrumbs(
     isEditMode

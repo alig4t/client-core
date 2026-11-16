@@ -1,19 +1,30 @@
-import { routeConfig } from "../../router/Routes";
-import type { ViewName } from "../../router/ViewName";
-
-export const getViewPath = (viewName: ViewName, id?: string | number): string => {
-  const route = routeConfig.find((r) => r.name === viewName);
-  if (!route) {
-    console.error(`No route found for viewName: ${viewName}`);
-    return "#";
-  }
-
-  let path = route.path;
-
-  // If the path includes ":id" and id is provided, replace it
-  if (id !== undefined && path.includes("/:id")) {
-    path = path.replace("/:id", `/${id}`);
-  }
-
-  return path;
-};
+import { generatePath } from "react-router-dom";
+import type { RouteConfig } from "./types";
+let registry: RouteConfig[] = [];
+export function configureRoutes(routes: RouteConfig[]) {
+  registry = routes;
+}
+export function getRouteRegistry() {
+  return registry;
+}
+export function getViewPath(
+  viewName: string,
+  idOrParams?: string | number | Record<string, string>,
+): string {
+  const find = (routes: RouteConfig[]): RouteConfig | undefined => {
+    for (const route of routes) {
+      if (route.name === viewName) return route;
+      const child = route.children ? find(route.children) : undefined;
+      if (child) return child;
+    }
+  };
+  const route = find(registry);
+  if (!route) throw new Error("No route registered for view: " + viewName);
+  const params =
+    typeof idOrParams === "object"
+      ? idOrParams
+      : idOrParams !== undefined
+        ? { id: String(idOrParams) }
+        : {};
+  return generatePath(route.path, params);
+}

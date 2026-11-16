@@ -1,14 +1,14 @@
 // src/components/Sidebar/Sidebar.tsx
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
+Tooltip,
+TooltipContent,
+TooltipProvider,
+TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { getMainMenu } from "@/router/menuUtils";
 import { useAuth } from "@/stores/AuthContext";
 import { LayoutDashboard } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 
 const Sidebar = () => {
   const { hasPermission } = useAuth();
@@ -41,7 +41,7 @@ const Sidebar = () => {
             return (
               <Tooltip key={index}>
                 <TooltipTrigger asChild>
-                  <Link to={item.path}>
+                  <Link to={item.path} aria-label={item.label}>
                     <div
                       className={`text-white hover:bg-gray-800 p-2 rounded-lg cursor-pointer
                         ${isActive

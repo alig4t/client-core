@@ -1,11 +1,16 @@
-import type { FC, ReactElement } from "react";
+import { useCore } from "../../../entity/CoreProvider";
+import type { FC, ReactNode } from "react";
 
 export const PageWrapper: FC<{
-  children: ReactElement[] | ReactElement;
+  children: ReactNode;
   className?: string;
 }> = ({ children, className = "" }) => {
+  const { direction } = useCore();
   return (
-    <div dir="rtl" className={`sm:p-8 max-w-[1800px] font-sans ${className}`}>
+    <div
+      dir={direction}
+      className={`sm:p-8 max-w-[1800px] font-sans ${className}`}
+    >
       {children}
     </div>
   );

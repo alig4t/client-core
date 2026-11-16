@@ -1,19 +1,18 @@
-import React from "react";
-import type { SubmitHandler } from "react-hook-form";
-import { FormWrapper, type searchFilters } from "@/core/components/form/FormWrapper";
-import { OwnedChannelModelMeta } from "./OwnedChannelModel.meta";
-import FormInput from "@/core/components/form/FormInput";
 import { DateInput } from "@/core/components/form/DateInput";
+import FormInput from "@/core/components/form/FormInput";
 import { FormSelect } from "@/core/components/form/FormSelect";
+import { FormWrapper,type searchFilters } from "@/core/components/form/FormWrapper";
 import Button from "@/core/components/general/button/Button";
 import ButtonPanel from "@/core/components/general/button/ButtonPanel";
-import { FilterOperator } from "@/core/forms/FilterOperators";
-import { RowContainer } from "@/core/components/general/container/RowContainer";
 import { PageWrapper } from "@/core/components/general/container/PageWrapper";
-import { publicMessages, makeRangeLabel } from "@/core/forms/MessageUtils";
-import z from "@/core/forms/zod.config";
+import { RowContainer } from "@/core/components/general/container/RowContainer";
+import { FilterOperator } from "@/core/forms/FilterOperators";
+import { makeRangeLabel,publicMessages } from "@/core/forms/MessageUtils";
 import Validator from "@/core/forms/validation";
-import OptionUtils from "@/core/forms/OptionUtils";
+import z from "@/core/forms/zod.config";
+import React from "react";
+import type { SubmitHandler } from "react-hook-form";
+import { OwnedChannelModelMeta } from "./OwnedChannelModel.meta";
 
 const searchSchema = z.object({
   [`displayName_${FilterOperator.LIKE}`]: Validator.optional(),
@@ -35,7 +34,7 @@ interface OwnedChannelSearchProps {
 }
 
 const OwnedChannelSearch: React.FC<OwnedChannelSearchProps> = ({ onApplyFilters }) => {
-  const [formMethods, setFormMethods] = React.useState<any>(null);
+  const [formMethods, setFormMethods] = React.useState<{ reset: () => void } | null>(null);
 
   const onSubmit: SubmitHandler<SearchFormData> = (data) => {
     console.log(data);

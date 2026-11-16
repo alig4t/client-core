@@ -1,20 +1,20 @@
-import type { FC, ReactElement } from "react";
+import { BarChart } from "lucide-react";
+import type { FC,ReactElement } from "react";
 import {
-  Bar,
-  CartesianGrid,
-  Cell,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-  BarChart as ReBarChart,
+Bar,
+CartesianGrid,
+Cell,
+BarChart as ReBarChart,
+ResponsiveContainer,
+Tooltip,
+XAxis,
+YAxis,
 } from "recharts";
 import { DashboardData } from "../../../pages/Dashboard/Main/DashboardData";
-import ChartContainer, { ChartSkeleton } from "./ChartContainer";
-import { BarChart } from "lucide-react";
+import ChartContainer,{ ChartSkeleton } from "./ChartContainer";
 
 // نمودار میله‌ای فراوانی کلیدواژه‌ها
-const KeywordFrequencyChart: FC<{ frequencyData: any; isLoading: boolean }> = ({
+const KeywordFrequencyChart: FC<{ frequencyData: typeof DashboardData.frequencyData; isLoading: boolean }> = ({
   frequencyData,
   isLoading,
 }) => {

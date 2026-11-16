@@ -1,13 +1,13 @@
-import React, { useCallback } from "react";
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import type { KeywordMatchModel } from "./KeywordMatchModel";
-import KeywordMatchService from "./KeywordMatchService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import React,{ useCallback } from "react";
+import type { KeywordMatchModel } from "./KeywordMatchModel";
+import { KeywordMatchModelMeta } from "./KeywordMatchModel.meta";
+import KeywordMatchService from "./KeywordMatchService";
 import {
-  KeywordMatchTableColumns,
-  KeywordMatchTableHeaders,
+KeywordMatchTableColumns,
+KeywordMatchTableHeaders,
 } from "./KeywordMatchTableColumns";
 
 interface KeywordMatchTableProps {
@@ -39,7 +39,7 @@ const KeywordMatchTable: React.FC<KeywordMatchTableProps> = ({
       sortOptions={buildSortOptions(KeywordMatchModelMeta)}
       filters={filters}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="keywordmatch:delete"
       // defaultSort="createdAt,desc"
       // defaultPageSize={10}
       // dataIdKey="id"

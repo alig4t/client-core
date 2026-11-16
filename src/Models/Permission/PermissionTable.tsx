@@ -1,14 +1,14 @@
 // src/components/permission/PermissionTableWrapper.tsx
 
-import React, { useCallback } from "react";
+import React,{ useCallback } from "react";
 
-import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
-import PermissionService from "./PermissionService";
-import { buildSortOptions } from "@/core/forms/OptionUtils";
-import { PermissionModelMeta } from "./PermissionModel.meta";
-import type { PermissionModel } from "./PermissionModel";
-import PermissionTableColumns, { PermissionTableHeaders } from "./PermissionTableColumns";
 import BaseDataTable from "@/core/components/Table/BaseDataTable";
+import type { DynamicFilters } from "@/core/forms/DynamicFilterForm";
+import { buildSortOptions } from "@/core/forms/OptionUtils";
+import type { PermissionModel } from "./PermissionModel";
+import { PermissionModelMeta } from "./PermissionModel.meta";
+import PermissionService from "./PermissionService";
+import PermissionTableColumns,{ PermissionTableHeaders } from "./PermissionTableColumns";
 
 
 interface PermissionTableProps {
@@ -50,7 +50,7 @@ const PermissionTable: React.FC<PermissionTableProps> = ({
       defaultSort="createdAt,desc"
       defaultPageSize={10}
       onSelectionChange={handleSelectionChange}
-      enableDelete={true}
+      enableDelete={true} deletePermission="permission:delete"
     />
   );
 };

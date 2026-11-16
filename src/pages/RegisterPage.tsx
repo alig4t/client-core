@@ -1,14 +1,14 @@
-import { z } from "zod";
 import { useMutation } from "@tanstack/react-query";
+import { z } from "zod/v3";
 
-import { Link, useNavigate } from "react-router-dom";
-import { useFormContext } from "react-hook-form";
-import { toast } from "sonner";
+import UserService from "@/Models/User/UserService";
 import { SOCIAL_MEDIA_LOGO } from "@/assets/icons"; // Assumed logo is imported from here
 import ErrorFormText from "@/core/components/form/ErrorFormText";
-import { useAuth } from "@/stores/AuthContext";
-import UserService from "@/Models/User/UserService";
 import { FormWrapper } from "@/core/components/form/FormWrapper";
+import { useAuth } from "@/stores/AuthContext";
+import { useFormContext } from "react-hook-form";
+import { Link,useNavigate } from "react-router-dom";
+import { toast } from "sonner";
 
 // --- Schema for registration form validation ---
 const registerSchema = z
@@ -115,14 +115,14 @@ function RegisterFormFields() {
 
 // --- Main Register Page Component with new style ---
 export default function RegisterPage({
-  inModal,
-  switchModal,
+  inModal = false,
+  switchModal = () => {},
   onClose,
 }: {
-  inModal: boolean;
-  switchModal: () => void;
+  inModal?: boolean;
+  switchModal?: () => void;
   onClose?: () => void;
-}) {
+} = {}) {
   const navigate = useNavigate();
   const { login: authLogin } = useAuth();
 
@@ -158,7 +158,7 @@ export default function RegisterPage({
       //   }
       // }, 1500);
     },
-    onError: (error: any) => {
+    onError: (error: Error) => {
       toast.error("ثبت‌نام ناموفق بود", {
         description: error?.message || "لطفاً اطلاعات وارد شده را بررسی کنید.",
         position: "bottom-left",

@@ -1,58 +1,109 @@
-// src/forms/FieldTypes.ts
-
 export type FieldType =
   | "text"
   | "email"
   | "password"
   | "number"
+  | "long"
+  | "double"
+  | "bigDecimal"
   | "bigDecimalField"
-  | "date"               // Date only: yyyy-MM-dd
-  | "datetime-local"     // Date + Time without timezone (for localDateTime and dateField)
+  | "date"
+  | "datetime-local"
+  | "instant"
   | "textarea"
   | "select"
-  | "checkbox"           // For boolean in form
-  | "boolean"            // For display in table or readonly (e.g., true/false or yes/no)
+  | "checkbox"
+  | "boolean"
   | "autocomplete"
   | "hidden"
-  | "File";
-
-// Select or autocomplete options
+  | "File"
+  | "object"
+  | "array";
+export type DataType =
+  | "string"
+  | "integer"
+  | "long"
+  | "double"
+  | "decimal"
+  | "boolean"
+  | "date"
+  | "datetime"
+  | "instant"
+  | "enum"
+  | "reference"
+  | "file"
+  | "object"
+  | "array";
 export interface SelectOption {
   value: string | number;
   label: string;
 }
-
-// For autocomplete fields that refer to another model
-export interface AutocompleteFieldConfig {
-  model: string; // Target model name (e.g., "UserModel")
-  displayField: string; // Field used for display (e.g., "username")
-  searchFields?: string[]; // Fields used in search
+export interface FieldCondition {
+  field: string;
+  operator?: "eq" | "ne" | "in" | "truthy";
+  value?: unknown;
 }
-
-// Extended metadata for form fields
+export interface AutocompleteFieldConfig {
+  model: string;
+  displayField: string;
+  searchFields?: string[];
+}
+export interface RelationConfig {
+  entity: string;
+  endpoint?: string;
+  displayField: string;
+  multiple?: boolean;
+  valueMode?: "id" | "object";
+  lookupFilters?: Record<string, string>;
+  allowCreate?: boolean;
+}
 export interface FormFieldMetadata {
   label: string;
-  sortable?: boolean; // for table
   type: FieldType;
+  widget?: string;
+  readPermission?: string;
+  writePermission?: string;
+  dataType?: DataType;
   placeholder?: string;
   required?: boolean;
+  unique?: boolean;
+  indexed?: boolean;
+  nullable?: boolean;
   disabled?: boolean;
+  readOnly?: boolean;
+  writeOnly?: boolean;
+  create?: boolean;
+  edit?: boolean;
+  list?: boolean;
+  detail?: boolean;
+  hidden?: boolean;
+  searchable?: boolean;
+  sortable?: boolean;
+  order?: number;
+  group?: string;
+  section?: string;
+  tab?: string;
+  defaultValue?: unknown;
   displayField?: string;
-  // For select, radio, autocomplete types
   options?: SelectOption[];
-
-  // For advanced autocomplete (when referring to another model)
   autocompleteConfig?: AutocompleteFieldConfig;
-
-  // For number and datetime
+  relation?: RelationConfig;
+  multiple?: boolean;
+  valueMode?: "id" | "object";
   min?: string | number;
   max?: string | number;
-  step?: string | number; // e.g., "0.01" for decimals
-
-  // For textarea
+  minLength?: number;
+  maxLength?: number;
+  pattern?: string;
+  step?: string | number;
   rows?: number;
-
-  // For boolean (display in table)
-  trueLabel?: string;  // Default: "Yes"
-  falseLabel?: string; // Default: "No"
+  trueLabel?: string;
+  falseLabel?: string;
+  maxFileSize?: number;
+  accept?: string[];
+  numericEncoding?: "string" | "number";
+  visibleWhen?: FieldCondition;
+  requiredWhen?: FieldCondition;
+  disabledWhen?: FieldCondition;
+  fields?: Record<string, FormFieldMetadata>;
 }

@@ -1,9 +1,9 @@
 // src/core/components/general/stepper/Stepper.tsx
 
-import React from "react";
-import { Check, ChevronLeft } from "lucide-react";
-import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
+import type { LucideIcon } from "lucide-react";
+import { Check } from "lucide-react";
+import React from "react";
 
 export interface Step {
   id: string | number;
@@ -49,7 +49,11 @@ const Stepper: React.FC<StepperProps> = ({
   };
 
   const isClickable = (index: number): boolean => {
-    return allowClickOnCompleted && getStepStatus(index) === "completed" && !!onStepClick;
+    return (
+      allowClickOnCompleted &&
+      getStepStatus(index) === "completed" &&
+      !!onStepClick
+    );
   };
 
   return (
@@ -91,8 +95,8 @@ const Stepper: React.FC<StepperProps> = ({
                     status === "completed"
                       ? "bg-[var(--color-success)] border-[var(--color-success)] text-white"
                       : status === "current"
-                      ? "bg-[var(--color-primary)] border-[var(--color-primary)] text-white shadow-lg shadow-[var(--color-primary)]/30"
-                      : "bg-[var(--card-bg)] border-[var(--border-secondary)] text-[var(--text-secondary)]"
+                        ? "bg-[var(--color-primary)] border-[var(--color-primary)] text-white shadow-lg shadow-[var(--color-primary)]/30"
+                        : "bg-[var(--card-bg)] border-[var(--border-secondary)] text-[var(--text-secondary)]"
                   } ${
                     clickable
                       ? "cursor-pointer hover:scale-110 hover:shadow-lg"
@@ -146,8 +150,8 @@ const Stepper: React.FC<StepperProps> = ({
                       status === "current"
                         ? "text-[var(--color-primary)]"
                         : status === "completed"
-                        ? "text-[var(--text-primary)]"
-                        : "text-[var(--text-secondary)]"
+                          ? "text-[var(--text-primary)]"
+                          : "text-[var(--text-secondary)]"
                     }`}
                   >
                     {step.label}

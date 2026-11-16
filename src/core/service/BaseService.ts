@@ -1,5 +1,24 @@
-import { api, type ApiResponse } from "@/core/service/Axios";
-import type { FilterOperator } from "@/core/forms/FilterOperators";
+import type { FilterOperator } from "../forms/FilterOperators";
+import type { ServiceOperation, ServiceOperationName } from "./contracts";
+export interface ServiceOptions<T> {
+  operations?: Partial<Record<ServiceOperationName, ServiceOperation>>;
+  pageAdapter?: (
+    response: ApiResponse<unknown>,
+    params: ServerSideParams<T>,
+  ) => Page<T>;
+}
+import { api } from "./Axios";
+import {
+  BulkOperationError,
+  normalizePage,
+  serializeQuery,
+  type ApiResponse,
+  type BulkDeleteResult,
+  type EntityId,
+  type Page,
+  type QueryParams,
+  type RequestOptions,
+} from "./contracts";
 
 export interface PagedResponse<T> {
   content: T[];
@@ -8,121 +27,136 @@ export interface PagedResponse<T> {
   number: number;
   size: number;
 }
-
-// Type-safe filter keys: fieldName_operator (e.g., "createdAt_ge", "name_like")
 type FilterKeys<T> = {
-  [K in keyof T]: `${string & K}_${FilterOperator}`
+  [K in keyof T]: `${string & K}_${FilterOperator}`;
 }[keyof T];
-
-// Type-safe filters object
-export type Filters<T> = Partial<Record<FilterKeys<T>, any>>;
-
-export interface ServerSideParams<T = any> {
+export type Filters<T> = Partial<
+  Record<FilterKeys<T> | `${string}_${FilterOperator}`, unknown>
+>;
+export interface ServerSideParams<T = Record<string, unknown>> {
   page?: number;
   size?: number;
   sort?: string;
   filters?: Filters<T>;
+  signal?: AbortSignal;
+}
+export type ApiResponsePayload<T> = Page<T>;
+export interface ServiceTransport {
+  request<T>(config: {
+    url: string;
+    method: RequestOptions["method"];
+    data?: unknown;
+    params?: URLSearchParams;
+    signal?: AbortSignal;
+  }): Promise<ApiResponse<T>>;
 }
 
-export interface ApiResponsePayload<T> {
-  data: T[];
-  meta?: {
-    totalItems: number;
-    totalPages: number;
-    pageSize: number;
-    currentPage: number;
-    isLastPage?: boolean;
-  };
-}
-
-type HttpMethod = "get" | "post" | "put" | "delete";
-
-
-export class BaseService<T> {
+export class BaseService<
+  T,
+  TCreate = Partial<T>,
+  TUpdate = Partial<T>,
+  TId extends EntityId = EntityId,
+> {
   protected url: string;
-
-  constructor(url: string) {
+  protected transport: ServiceTransport;
+  protected options: ServiceOptions<T>;
+  constructor(
+    url: string,
+    transport: ServiceTransport = api,
+    options: ServiceOptions<T> = {},
+  ) {
     this.url = url;
+    this.transport = transport;
+    this.options = options;
   }
-
-  protected async call<R = any>(
-    method: HttpMethod,
-    relativeUrl: string = "",
-    pageType: boolean = false,
-    data?: any,
-    params?: Record<string, any>,
-  ): Promise<R> {
-    const fullUrl = relativeUrl
-      ? `${this.url}/${relativeUrl}`.replace(/\/+/g, "/")
-      : this.url;
-
-    const response = await api.request<R>({
-      url: fullUrl,
-      method,
-      data,
-      params,
-    });
-
-    if (pageType) {
-      return response as R;
-    }
-    return response.data;
-  }
-
-  async getAll(params: ServerSideParams<T> = {}): Promise<ApiResponsePayload<T>> {
-    const queryParams = new URLSearchParams();
-    queryParams.append('page', String(params.page ?? 0));
-    queryParams.append('size', String(params.size ?? 10));
-
-    if (params.filters) {
-      Object.entries(params.filters).forEach(([key, value]) => {
-        if (value !== null && value !== undefined && value !== '') {
-          queryParams.append(key, String(value));
-        }
-      });
-    }
-    if (params.sort) queryParams.append('sort', params.sort);
-
-    // Cast the response to ApiResponse<T[]> to be explicit
-    const response = await api.get(`${this.url}?${queryParams.toString()}`) as ApiResponse<T[]>;
-
-    console.log('Full response:', response);
-
-    if (!response.meta) {
-      throw new Error('Pagination metadata missing in response');
-    }
-
-    console.log('Response data:', response.data);
-
+  private operation(
+    name: ServiceOperationName,
+    method: RequestOptions["method"],
+    path = "",
+    id?: EntityId,
+  ): RequestOptions {
+    const operation = this.options.operations?.[name];
     return {
-      data: response.data,
-      meta: {
-        totalPages: response.meta.totalPages,
-        totalItems: response.meta.totalItems,
-        currentPage: response.meta.currentPage,
-        pageSize: response.meta.pageSize,
-        isLastPage: response.meta.isLastPage,
-      }
+      method: operation?.method ?? method,
+      path: (operation?.path ?? path).replace(
+        /:id\b/g,
+        encodeURIComponent(String(id)),
+      ),
     };
   }
-  async getById(id: number): Promise<T> {
-    const apiService = await api.get(`${this.url}/${id}`);
-    return apiService.data;
+
+  protected async call<R = unknown>(options: RequestOptions): Promise<R> {
+    return (await this.request<R>(options)).data;
   }
 
-  create(data: Partial<T>): Promise<T> {
-    return api.post(this.url, data);
+  protected request<R>(options: RequestOptions): Promise<ApiResponse<R>> {
+    const suffix = options.path ? "/" + options.path.replace(/^\/+/, "") : "";
+    return this.transport.request<R>({
+      url: options.path?.startsWith("/")
+        ? options.path
+        : this.url.replace(/\/$/, "") + suffix,
+      method: options.method,
+      data: options.body,
+      params: options.query ? serializeQuery(options.query) : undefined,
+      signal: options.signal,
+    });
   }
 
-  update(id: number, data: Partial<T>): Promise<T> {
-    return api.put(`${this.url}/${id}`, data);
+  async getAll(params: ServerSideParams<T> = {}): Promise<Page<T>> {
+    const page = params.page ?? 0;
+    const size = params.size ?? 10;
+    const response = await this.request<T[] | PagedResponse<T>>({
+      ...this.operation("list", "get"),
+      query: {
+        ...params.filters,
+        page,
+        size,
+        sort: params.sort,
+      } as QueryParams,
+      signal: params.signal,
+    });
+    return this.options.pageAdapter
+      ? this.options.pageAdapter(response, params)
+      : normalizePage(response, page, size);
   }
 
-  delete(id: number): Promise<void> {
-    return api.delete(`${this.url}/${id}`);
+  getById(id: TId, options?: { signal?: AbortSignal }): Promise<T> {
+    return this.call<T>({
+      ...this.operation("detail", "get", encodeURIComponent(String(id)), id),
+      signal: options?.signal,
+    });
   }
 
-  async deleteMany(ids: number[]): Promise<void> {
-    await Promise.all(ids.map((id) => this.delete(id)));
+  create(data: TCreate): Promise<T> {
+    return this.call<T>({ ...this.operation("create", "post"), body: data });
+  }
+  update(id: TId, data: TUpdate): Promise<T> {
+    return this.call<T>({
+      ...this.operation("update", "put", encodeURIComponent(String(id)), id),
+      body: data,
+    });
+  }
+  patch(id: TId, data: Partial<TUpdate>): Promise<T> {
+    return this.call<T>({
+      method: "patch",
+      path: encodeURIComponent(String(id)),
+      body: data,
+    });
+  }
+  async delete(id: TId): Promise<void> {
+    await this.call(
+      this.operation("delete", "delete", encodeURIComponent(String(id)), id),
+    );
+  }
+
+  async deleteMany(ids: TId[]): Promise<BulkDeleteResult> {
+    const settled = await Promise.allSettled(ids.map((id) => this.delete(id)));
+    const result: BulkDeleteResult = { succeeded: [], failed: [] };
+    settled.forEach((entry, index) => {
+      if (entry.status === "fulfilled") result.succeeded.push(ids[index]);
+      else result.failed.push({ id: ids[index], error: entry.reason });
+    });
+    if (result.failed.length) throw new BulkOperationError(result);
+    return result;
   }
 }

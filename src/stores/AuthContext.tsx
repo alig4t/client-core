@@ -1,122 +1,117 @@
-import { createContext, useContext, useState, useEffect } from "react";
-import type { ReactNode } from "react";
+import { useQueryClient } from "@tanstack/react-query";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+  type ReactNode,
+} from "react";
 import { useNavigate } from "react-router-dom";
-
-// 1. Define type for user object
-// Adjust this type based on the actual structure of your user object
-
-// Types related to permission data
 interface Permission {
   id: number;
-  name: string; // e.g., "bot:create"
+  name: string;
   showName: string;
 }
-
 interface Role {
   id: number;
   name: string;
   permission: Permission[];
 }
-
 export interface User {
   id: number;
   name: string;
   username: string;
-  roles: Role[]; // ✅ Changed from string[] to Role[]
+  roles: Role[];
 }
-
-// 2. Define type for values that the Context provides
 interface AuthContextType {
   token: string | null;
   user: User | null;
   isAuthenticated: boolean;
   login: (token: string, user: User) => void;
   logout: () => void;
-  hasPermission: (permissionName: string) => boolean; //
+  hasPermission: (name: string) => boolean;
 }
-
-// 3. Create Context
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
-
-// 4. Create Provider (main component)
+function loadSession(): { token: string | null; user: User | null } {
+  try {
+    const token = localStorage.getItem("token");
+    const user: User | null = JSON.parse(
+      localStorage.getItem("user") ?? "null",
+    );
+    if (
+      !token ||
+      token === "undefined" ||
+      token === "null" ||
+      !user ||
+      !Array.isArray(user.roles)
+    )
+      return { token: null, user: null };
+    return { token, user };
+  } catch {
+    return { token: null, user: null };
+  }
+}
 export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
-  // --- States ---
-  // Read token from localStorage on initial load
-  const [token, setToken] = useState<string | null>(() =>
-    localStorage.getItem("token")
-  );
-
-  // Inside AuthProvider
-  const hasPermission = (permissionName: string): boolean => {
-    if (!user?.roles) return false;
-
-    // Check all roles and their permissions
-    return user.roles.some((role) =>
-      role.permission.some((p) => p.name === permissionName)
-    );
-  };
-
-  // Read user information from localStorage on initial load
-  const [user, setUser] = useState<User | null>(() => {
-    const storedUser = localStorage.getItem("user");
-    // To prevent errors if localStorage data is corrupted, use try-catch
-    try {
-      return storedUser ? JSON.parse(storedUser) : null;
-    } catch (error) {
-      console.error("Failed to parse user from localStorage", error);
-      return null;
-    }
-  });
-
-  // --- Effects for synchronization ---
-  // This Effect updates localStorage whenever token or user changes
+  const queryClient = useQueryClient();
+  const [session, setSession] = useState(loadSession);
+  const logout = useCallback(() => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    queryClient.clear();
+    setSession({ token: null, user: null });
+    navigate("/login", { replace: true });
+  }, [navigate, queryClient]);
   useEffect(() => {
-    if (token && user) {
-      localStorage.setItem("token", token);
-      localStorage.setItem("user", JSON.stringify(user));
-    } else {
-      // If one of them is null, clear both to keep the state consistent
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-    }
-  }, [token, user]);
-
-  // --- Main functions ---
-  // The login function now receives and stores both token and user
-  const login = (newToken: string, newUser: User) => {
-    setToken(newToken);
-    setUser(newUser);
+    const expire = () => logout();
+    const sync = (event: StorageEvent) => {
+      if (event.key === "token" || event.key === "user") {
+        queryClient.clear();
+        setSession(loadSession());
+      }
+    };
+    window.addEventListener("core:unauthorized", expire);
+    window.addEventListener("storage", sync);
+    return () => {
+      window.removeEventListener("core:unauthorized", expire);
+      window.removeEventListener("storage", sync);
+    };
+  }, [logout, queryClient]);
+  const login = (token: string, user: User) => {
+    queryClient.clear();
+    localStorage.setItem("token", token);
+    localStorage.setItem("user", JSON.stringify(user));
+    setSession({ token, user });
     navigate("/dashboard");
   };
-
-  // The logout function clears both token and user states
-  const logout = () => {
-    setToken(null);
-    setUser(null);
-    navigate("/");
-  };
-
-  // --- Derived State ---
-  // The isAuthenticated variable is calculated based on the presence of the token
-  const isAuthenticated =
-    !!token && token !== "undefined" && token !== "null" && token.length > 10;
-
-  // --- Providing values to child components ---
+  const hasPermission = useCallback(
+    (name: string) =>
+      Boolean(
+        session.user?.roles.some(
+          (role) =>
+            Array.isArray(role.permission) &&
+            role.permission.some((permission) => permission.name === name),
+        ),
+      ),
+    [session.user],
+  );
   return (
     <AuthContext.Provider
-      value={{ token, user, isAuthenticated, login, logout, hasPermission }}
+      value={{
+        ...session,
+        isAuthenticated: Boolean(session.token && session.user),
+        login,
+        logout,
+        hasPermission,
+      }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
-
-// 5. Custom hook for easy use of Context
 export function useAuth() {
   const context = useContext(AuthContext);
-  if (context === undefined) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
+  if (!context) throw new Error("useAuth must be used within AuthProvider");
   return context;
 }
