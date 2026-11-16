@@ -1,0 +1,16 @@
+{
+  "extends": "./tsconfig.app.json",
+  "compilerOptions": {
+    "erasableSyntaxOnly": false,
+    "esModuleInterop": true,
+    "target": "ES2022",
+    "lib": ["ES2022", "DOM", "DOM.Iterable"],
+    "types": ["node"]
+  },
+  "include": [
+    "tests",
+    "generator/src",
+    "vitest.config.ts",
+    "playwright.config.ts"
+  ]
+}

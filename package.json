@@ -8,10 +8,14 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false && tsc -p tsconfig.tests.json --noEmit --pretty false",
+    "generate:check": "npm --prefix generator run generate:all -- --check",
+    "generate:all": "npm --prefix generator run generate:all --",
+    "test:watch": "vitest",
     "generator:build": "npm --prefix generator run build",
     "generate": "npm --prefix generator run generate -- generate",
-    "generate:all": "npm --prefix generator run generate:all --",
-    "generate:check": "npm --prefix generator run generate:all -- --check"
+    "test:e2e": "playwright test",
+    "test": "vitest run"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
