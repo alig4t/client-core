@@ -1,5 +1,6 @@
-<!-- Role.xml -->
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Role.xml -->
+
 <entity>
     <name>Role</name>
     <generate>true</generate>

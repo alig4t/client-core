@@ -1,24 +1,104 @@
-# Centralized Menu Configuration
-# This file is auto-updated by the generator when routing.showInMenu = true
-
 entities:
-  # Auto-generated entries from entity meta files
-  # Manual entries can be added here and will be preserved
-
-  # Example manual entry:
+  Bot:
+    basePath: /dashboard/portal/bots
+    menuIcon: Bot
+    menuLabel: ربات‌ها
+    menuOrder: 20
+    menuParent: /dashboard/portal
+    showInMenu: true
+  Channel:
+    basePath: /dashboard/portal/channels
+    menuIcon: MessageSquare
+    menuLabel: کانال‌ها
+    menuOrder: 10
+    menuParent: /dashboard/portal
+    showInMenu: true
+  City:
+    basePath: /dashboard/portal/cities
+    menuIcon: MapPin
+    menuLabel: شهرها
+    menuOrder: 30
+    menuParent: /dashboard/portal
+    showInMenu: true
+  ComprehensiveEntity:
+    basePath: /dashboard/portal/comprehensive
+    menuIcon: Code
+    menuLabel: ترکیبی‌ها
+    menuOrder: 99
+    menuParent: /dashboard/portal
+    showInMenu: true
   Dashboard:
     basePath: /dashboard
-    menuLabel: خانه
     menuIcon: Home
-    showInMenu: true
+    menuLabel: خانه
     menuOrder: 0
-
+    showInMenu: true
+  DashboardData:
+    basePath: /dashboard/portal/dashboard-data
+    menuIcon: NotebookPen
+    menuLabel: داده‌های داشبورد
+    menuOrder: 80
+    menuParent: /dashboard/portal
+    showInMenu: false
+  Keyword:
+    basePath: /dashboard/portal/keywords
+    menuIcon: Hash
+    menuLabel: کلمات کلیدی
+    menuOrder: 40
+    menuParent: /dashboard/portal
+    showInMenu: true
+  KeywordMatch:
+    basePath: /dashboard/portal/keyword-matches
+    menuIcon: Database
+    menuLabel: تطابق‌های کلمات
+    menuOrder: 50
+    menuParent: /dashboard/portal
+    showInMenu: true
+  Message:
+    basePath: /dashboard/portal/messages
+    menuIcon: MessageCircle
+    menuLabel: پیام‌ها
+    menuOrder: 40
+    menuParent: /dashboard/portal
+    showInMenu: true
+  MessagingPlatform:
+    basePath: /dashboard/portal/platforms
+    menuIcon: Globe
+    menuLabel: پلتفرم‌ها
+    menuOrder: 5
+    menuParent: /dashboard/portal
+    showInMenu: true
+  Person:
+    basePath: /dashboard/portal/persons
+    menuIcon: Users
+    menuLabel: اشخاص
+    menuOrder: 60
+    menuParent: /dashboard/portal
+    showInMenu: true
   Portal:
     basePath: /dashboard/portal
-    menuLabel: پورتال
     menuIcon: Bolt
-    showInMenu: true
+    menuLabel: پورتال
     menuOrder: 5
-    # Note: No element, just menu grouping
-
-  # Generated entities will be appended below
+    showInMenu: true
+  Role:
+    basePath: /dashboard/portal/roles
+    menuIcon: Shield
+    menuLabel: نقش ها
+    menuOrder: 40
+    menuParent: /dashboard/portal
+    showInMenu: true
+  User:
+    basePath: /dashboard/portal/users
+    menuIcon: User
+    menuLabel: کاربران
+    menuOrder: 30
+    menuParent: /dashboard/portal
+    showInMenu: true
+  UserChannel:
+    basePath: /dashboard/portal/user-channels
+    menuIcon: UserCheck
+    menuLabel: کاربران کانال
+    menuOrder: 70
+    menuParent: /dashboard/portal
+    showInMenu: true

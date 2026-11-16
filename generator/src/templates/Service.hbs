@@ -1,10 +1,5 @@
 import { BaseService } from "@/core/service/BaseService";
-import type { {{entityName}}Model } from "./{{entityName}}Model";
-
-class {{entityName}}Service extends BaseService<{{entityName}}Model> {
-  constructor() {
-    super("/{{lowercase entityName}}");
-  }
-}
-
-export default new {{entityName}}Service();
+import type { {{entityName}}Model, {{entityName}}CreateInput, {{entityName}}UpdateInput } from "./{{entityName}}Model";
+import { {{entityName}}Definition } from "./{{entityName}}.definition";
+const service = new BaseService<{{entityName}}Model, {{entityName}}CreateInput, {{entityName}}UpdateInput>({{endpointLiteral}}, undefined, { operations: {{entityName}}Definition.operations });
+export default service;

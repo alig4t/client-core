@@ -1,293 +1,393 @@
-import Handlebars from 'handlebars';
-import { writeFileSync, mkdirSync, existsSync, readFileSync } from 'fs';
-import { join, resolve, dirname } from 'path';
-import prettier from 'prettier';
-import chalk from 'chalk';
-import type { EnhancedEntity, GeneratorConfig, Field, Relationship } from '../types/EntityTypes.js';
-import { registerHelpers } from '../utils/TemplateHelpers.js';
-
+import Handlebars from "handlebars";
+import { readFileSync, existsSync } from "node:fs";
+import { join, relative } from "node:path";
+import prettier from "prettier";
+import ts from "typescript";
+import type { EnhancedEntity, GeneratorConfig } from "../types/EntityTypes.js";
+import { resolvePathFromGenerator } from "../config.js";
+import { registerHelpers } from "../utils/TemplateHelpers.js";
+import { dataTypeOf } from "../../../src/core/entity/fields";
+import type { FormFieldMetadata } from "../../../src/core/forms/FieldFormTypes";
+export interface PlannedFile {
+  path: string;
+  content: string;
+  owned: boolean;
+}
+const literal = (value: unknown) => JSON.stringify(value) ?? "undefined";
+export const snakeCase = (name: string) =>
+  name.replace(/([a-z0-9])([A-Z])/g, "$1_$2").toUpperCase();
 export class FrontendGenerator {
-  private handlebars: typeof Handlebars;
-  private templates: Map<string, HandlebarsTemplateDelegate> = new Map();
-
+  private templates = new Map<string, Handlebars.TemplateDelegate>();
   constructor(private config: GeneratorConfig) {
-    this.handlebars = Handlebars.create();
-    registerHelpers(this.handlebars);
-    this.loadTemplates();
+    const engine = Handlebars.create();
+    registerHelpers(engine);
+    for (const [name, path] of Object.entries(config.templates))
+      this.templates.set(
+        name,
+        engine.compile(
+          readFileSync(resolvePathFromGenerator(path, config), "utf8"),
+          { noEscape: true, strict: true },
+        ),
+      );
   }
-
-  private loadTemplates() {
-    for (const [name, path] of Object.entries(this.config.templates)) {
-      const fullPath = resolve(process.cwd(), path);
-      const templateContent = readFileSync(fullPath, 'utf-8');
-      this.templates.set(name, this.handlebars.compile(templateContent));
-    }
-  }
-
-  async generate(entity: EnhancedEntity): Promise<void> {
-    console.log(chalk.blue(`\n📦 Generating ${entity.name}...`));
-
-    const outputDir = this.getOutputDir(entity.name);
-    this.ensureDir(outputDir);
-
-    const context = this.prepareContext(entity);
-
-    await this.generateFile('Model', `${entity.name}Model.ts`, outputDir, context);
-    await this.generateFile('ModelMeta', `${entity.name}Model.meta.ts`, outputDir, context);
-    await this.generateFile('Service', `${entity.name}Service.ts`, outputDir, context);
-    await this.generateFile('Page', `${entity.name}Page.tsx`, outputDir, context);
-    await this.generateFile('Table', `${entity.name}Table.tsx`, outputDir, context);
-    await this.generateFile('TableColumns', `${entity.name}TableColumns.tsx`, outputDir, context);
-    await this.generateFile('Create', `${entity.name}Create.tsx`, outputDir, context);
-    await this.generateFile('Display', `${entity.name}Display.tsx`, outputDir, context);
-    await this.generateFile('Search', `${entity.name}Search.tsx`, outputDir, context);
-
-    // Generate routing files
-    if (entity.meta.routing) {
-      await this.generateFile('ModuleRoutes', `${entity.name}.routes.tsx`, outputDir, context);
-      await this.generateFile('ModuleViewNames', `${entity.name}.viewnames.ts`, outputDir, context);
-    }
-
-    // Generate enum files if needed
-    for (const field of entity.fields) {
-      if (field.enums && field.enums.length > 0) {
-        await this.generateEnumFile(entity.name, field, outputDir);
+  async plan(entity: EnhancedEntity): Promise<PlannedFile[]> {
+    if (entity.isCore) return [];
+    const output = resolvePathFromGenerator(
+        this.config.paths.outputBase,
+        this.config,
+      ),
+      root = join(output, entity.name),
+      generated = join(root, "generated");
+    const definition = entity.definition,
+      fields = definition.fields,
+      imports = new Map<string, string>();
+    const projectSource = join(
+      resolvePathFromGenerator(
+        this.config.paths.projectRoot ?? "..",
+        this.config,
+      ),
+      "src",
+    );
+    const alias = (path: string, fallback: string) => {
+      const name = relative(projectSource, path).replace(/\\/g, "/");
+      return name.startsWith("..") ? fallback : "@/" + name;
+    };
+    const modelAlias = alias(output, "@/Models"),
+      coreAlias = alias(
+        resolvePathFromGenerator(this.config.paths.coreComponents, this.config),
+        "@/core",
+      );
+    const typeOf = (name: string) => {
+      const relationship = entity.relationships.find(
+          (value) => value.name === name,
+        ),
+        field = fields[name];
+      if (relationship) {
+        const core = this.config.coreEntities[relationship.relatedEntityName];
+        const type = relationship.relatedEntityName + "Model";
+        const importPath =
+          core?.importPath ??
+          modelAlias + "/" + relationship.relatedEntityName + "/" + type;
+        if (!core?.skipImport) imports.set(type, importPath);
+        const base = core?.skipImport ? "{ id: EntityId }" : type;
+        return (
+          (field.multiple ? base + "[]" : base) +
+          (field.nullable ? " | null" : "")
+        );
       }
-    }
-
-    console.log(chalk.green(`✅ Generated ${entity.name} successfully!`));
-  }
-
-  private prepareContext(entity: EnhancedEntity): any {
-    const displayFields = this.getDisplayFields(entity);
-    const searchableFields = entity.fields.filter(f => f.searchable);
-
-    const hasDateFields = entity.fields.some(f =>
-      ['DATE', 'LOCAL_DATE', 'LOCAL_DATE_TIME'].includes(f.type)
-    );
-    const hasEnumFields = entity.fields.some(f => f.enums && f.enums.length > 0);
-    const hasSelectFields = hasEnumFields;
-    const hasAutocompleteFields = entity.relationships.some(r =>
-      ['ONE_TO_ONE', 'MANY_TO_ONE'].includes(r.relationshipType)
-    );
-    const hasBooleanFields = entity.fields.some(f => f.type === 'BOOLEAN');
-    const hasFileFields = entity.relationships.some(r => r.document);
-    const hasEnums = hasEnumFields;
-
-    const imports = this.generateImports(entity);
-    const relationshipServices = this.generateRelationshipServices(entity);
-    const hasCoreUserRelationship = entity.relationships.some(r => r.coreUser);
-
-    return {
+      const original = entity.fields.find((value) => value.name === name)!;
+      let base = original.enums?.length
+        ? original.enums.map((value) => literal(value.name)).join(" | ")
+        : this.config.fieldTypeMapping[original.type];
+      if (original.type === "LONG" || original.type === "BIG_DECIMAL")
+        base = field.numericEncoding === "number" ? "number" : "string";
+      return (
+        (field.multiple ? "(" + base + ")[]" : base) +
+        (field.nullable ? " | null" : "")
+      );
+    };
+    const responseFields = Object.entries(fields)
+      .map(
+        ([name, field]) =>
+          "  " +
+          literal(name) +
+          (field.required ? "" : "?") +
+          ": " +
+          typeOf(name) +
+          ";",
+      )
+      .join("\n");
+    const nestedInputType = (
+      field: FormFieldMetadata,
+      mode: "create" | "edit",
+    ): string => {
+      const kind = dataTypeOf(field);
+      let type: string;
+      if (kind === "object" || kind === "array")
+        type =
+          "{ " +
+          Object.entries(field.fields ?? {})
+            .filter(
+              ([, child]) =>
+                !child.readOnly && !child.hidden && child[mode] !== false,
+            )
+            .map(
+              ([name, child]) =>
+                literal(name) +
+                (child.required ? "" : "?") +
+                ": " +
+                nestedInputType(child, mode) +
+                ";",
+            )
+            .join(" ") +
+          " }" +
+          (kind === "array" ? "[]" : "");
+      else if (kind === "integer" || kind === "double") type = "number";
+      else if (kind === "long" || kind === "decimal")
+        type = field.numericEncoding === "number" ? "number" : "string";
+      else if (kind === "boolean") type = "boolean";
+      else if (kind === "enum")
+        type =
+          field.options?.map((option) => literal(option.value)).join(" | ") ||
+          "string";
+      else if (kind === "file" || kind === "reference")
+        type =
+          field.valueMode === "id" || field.relation?.valueMode === "id"
+            ? "EntityId"
+            : "{ id: EntityId }";
+      else type = "string";
+      if (field.multiple && kind !== "array") type = "(" + type + ")[]";
+      return type + (field.nullable ? " | null" : "");
+    };
+    const inputFields = (mode: "create" | "edit") =>
+      Object.entries(fields)
+        .filter(
+          ([, field]) =>
+            !field.readOnly && !field.hidden && field[mode] !== false,
+        )
+        .map(([name, field]) => {
+          const relationship = entity.relationships.find(
+            (value) => value.name === name,
+          );
+          let type = typeOf(name);
+          if (relationship) {
+            const base =
+              field.valueMode === "id" || field.relation?.valueMode === "id"
+                ? "EntityId"
+                : "{ id: EntityId }";
+            type =
+              (field.multiple ? base + "[]" : base) +
+              (field.nullable ? " | null" : "");
+          }
+          if (dataTypeOf(field) === "object" || dataTypeOf(field) === "array")
+            type = nestedInputType(field, mode);
+          return (
+            "  " +
+            literal(name) +
+            (mode === "edit" || !field.required ? "?" : "") +
+            ": " +
+            type +
+            ";"
+          );
+        })
+        .join("\n");
+    const prefix = snakeCase(entity.name),
+      routing = definition.routing;
+    const context = {
       entityName: entity.name,
-      tableName: entity.tableName,
-      fields: entity.fields.map(f => ({
-        ...f,
-        meta: entity.meta.fields[f.name],
-        validatorType: this.getValidatorType(f),
-        isDate: ['DATE', 'LOCAL_DATE', 'LOCAL_DATE_TIME'].includes(f.type),
-        isBoolean: f.type === 'BOOLEAN',
-        isEnum: !!f.enums,
-      })),
-      relationships: entity.relationships.map(r => ({
-        ...r,
-        meta: entity.meta.relationships?.[r.name] || {},
-        coreEntity: this.config.coreEntities[r.relatedEntityName],
-      })),
-      meta: entity.meta,
-      displayFields: displayFields.map(df => ({
-        ...df,
-        isDate: df.field ? ['DATE', 'LOCAL_DATE', 'LOCAL_DATE_TIME'].includes(df.field.type) : false,
-        isBoolean: df.field ? df.field.type === 'BOOLEAN' : false,
-        isEnum: df.field ? !!df.field.enums : false,
-        isRelationship: !!df.relationship,
-        displayField: df.relationship ? entity.meta.relationships?.[df.relationship.name]?.displayField || 'id' : undefined,
-      })),
-      searchableFields,
-      hasDateFields,
-      hasEnumFields,
-      hasSelectFields,
-      hasAutocompleteFields,
-      hasBooleanFields,
-      hasFileFields,
-      hasEnums,
-      hasSearchableSelects: searchableFields.some(f => f.type === 'ENUM'),
-      hasSearchableDates: searchableFields.some(f => ['DATE', 'LOCAL_DATE', 'LOCAL_DATE_TIME'].includes(f.type)),
-      imports,
-      relationshipServices,
-      hasCoreUserRelationship,
+      usesEntityId: entity.relationships.length > 0,
+      modelImports: Array.from(
+        imports,
+        ([name, path]) =>
+          "import type { " + name + " } from " + literal(path) + ";",
+      ).join("\n"),
+      responseFields,
+      createFields: inputFields("create"),
+      updateFields: inputFields("edit"),
+      idTsType: definition.idType === "string" ? "string" : "number",
+      displayFieldLiteral: literal(definition.displayField),
+      displayNameLiteral: literal(definition.displayName),
+      pluralDisplayNameLiteral: literal(definition.pluralDisplayName),
+      endpointLiteral: literal(definition.endpoint),
+      columnsLiteral: literal(
+        Object.entries(fields)
+          .filter(
+            ([, field]) =>
+              field.list !== false && !field.hidden && !field.writeOnly,
+          )
+          .map(([name, field]) => ({
+            name,
+            label: field.label,
+            sortable: field.sortable ?? false,
+          })),
+      ),
+      viewnamePrefix: prefix,
+      viewnamesConstant: prefix + "_VIEWNAMES",
+      iconName: routing?.menuIcon ?? "Database",
+      basePathLiteral: literal(routing?.basePath),
+      createPathLiteral: literal(routing?.basePath + "/create"),
+      detailPathLiteral: literal(routing?.basePath + "/:id"),
+      editPathLiteral: literal(routing?.basePath + "/:id/edit"),
+      menuLabelLiteral: literal(
+        routing?.menuLabel ?? definition.pluralDisplayName,
+      ),
+      parentLiteral: literal(routing?.menuParent),
+      showInMenu: literal(routing?.showInMenu ?? false),
+      menuOrder: literal(routing?.menuOrder ?? 0),
+      createLabelLiteral: literal("ایجاد " + definition.displayName),
+      detailLabelLiteral: literal("جزئیات " + definition.displayName),
+      editLabelLiteral: literal("ویرایش " + definition.displayName),
     };
-  }
-
-  private getDisplayFields(entity: EnhancedEntity): any[] {
-    const fields: any[] = [];
-
-    // Add sortable fields first
-    for (const field of entity.fields) {
-      const meta = entity.meta.fields[field.name];
-      if (meta?.sortable) {
-        fields.push({ name: field.name, field });
-      }
-    }
-
-    // Add relationships that are sortable
-    for (const rel of entity.relationships) {
-      const meta = entity.meta.relationships?.[rel.name];
-      if (meta?.sortable && ['ONE_TO_ONE', 'MANY_TO_ONE'].includes(rel.relationshipType)) {
-        fields.push({ name: rel.name, relationship: rel });
-      }
-    }
-
-    return fields;
-  }
-
-  private getValidatorType(field: Field): string {
-    const typeMap: Record<string, string> = {
-      STRING: 'text',
-      INTEGER: 'integer',
-      LONG: 'long',
-      DOUBLE: 'double',
-      BIG_DECIMAL: 'bigDecimal',
-      BOOLEAN: 'boolean',
-      DATE: 'date',
-      LOCAL_DATE: 'date',
-      LOCAL_DATE_TIME: 'datetime-local',
-      ENUM: 'select',
-    };
-    return typeMap[field.type] || 'text';
-  }
-
-  private generateImports(entity: EnhancedEntity): any[] {
-    const imports: any[] = [];
-    const seen = new Set<string>();
-
-    for (const rel of entity.relationships) {
-      if (seen.has(rel.relatedEntityName)) continue;
-      seen.add(rel.relatedEntityName);
-
-      const coreInfo = this.config.coreEntities[rel.relatedEntityName];
-      if (coreInfo) {
-        imports.push({
-          typeName: rel.relatedEntityName,
-          importPath: coreInfo.importPath,
-          isCore: true,
-        });
-      } else {
-        imports.push({
-          typeName: `${rel.relatedEntityName}Model`,
-          entityName: rel.relatedEntityName,
-          isCore: false,
-        });
-      }
-    }
-
-    return imports;
-  }
-
-  private generateRelationshipServices(entity: EnhancedEntity): any[] {
-    const services: any[] = [];
-    const seen = new Set<string>();
-
-    for (const rel of entity.relationships) {
-      if (seen.has(rel.relatedEntityName)) continue;
-      seen.add(rel.relatedEntityName);
-
-      const coreInfo = this.config.coreEntities[rel.relatedEntityName];
-      // Skip if marked as skipImport
-      if (coreInfo?.skipImport) continue;
-
-      services.push({
-        serviceName: `${rel.relatedEntityName}Service`,
-        entityName: rel.relatedEntityName,
-        isCore: !!coreInfo,
+    const planned: PlannedFile[] = [];
+    const add = async (path: string, content: string, owned = true) => {
+      content = content.replaceAll('"@/core/', '"' + coreAlias + "/");
+      const formatted = this.config.generation.formatWithPrettier
+        ? await prettier.format(content, {
+            parser: "typescript",
+            semi: true,
+            singleQuote: false,
+          })
+        : content;
+      const check = ts.transpileModule(formatted, {
+        fileName: path,
+        reportDiagnostics: true,
+        compilerOptions: {
+          jsx: ts.JsxEmit.ReactJSX,
+          target: ts.ScriptTarget.ES2022,
+        },
       });
+      const diagnostics = (check.diagnostics ?? []).filter(
+        (value) => value.category === ts.DiagnosticCategory.Error,
+      );
+      if (diagnostics.length)
+        throw new Error(
+          path +
+            ": " +
+            ts.flattenDiagnosticMessageText(diagnostics[0].messageText, "\n"),
+        );
+      planned.push({ path, content: formatted, owned });
+    };
+    const lookupServices = new Map<string, string>();
+    for (const relationship of entity.relationships) {
+      const core = this.config.coreEntities[relationship.relatedEntityName];
+      if (core?.servicePath && !core.skipImport && !relationship.document)
+        lookupServices.set(relationship.relatedEntityName, core.servicePath);
     }
-
-    return services;
-  }
-
-  private async generateFile(
-    templateName: string,
-    fileName: string,
-    outputDir: string,
-    context: any
-  ): Promise<void> {
-    const template = this.templates.get(templateName);
-    if (!template) {
-      console.warn(chalk.yellow(`⚠️  Template ${templateName} not found`));
-      return;
+    const lookupImports = Array.from(
+      lookupServices,
+      ([name, path]) =>
+        "import " + name + "LookupService from " + literal(path) + ";",
+    ).join("\n");
+    const lookupEntries = Array.from(
+      lookupServices,
+      ([name]) =>
+        literal(name) +
+        ": { getAll: async params => { const page = await " +
+        name +
+        "LookupService.getAll(params); return { ...page, data: page.data.map(record => ({ ...record })) }; }, getById: async (id, options) => ({ ...await " +
+        name +
+        "LookupService.getById(id, options) }) }",
+    ).join(",");
+    await add(
+      join(generated, entity.name + ".definition.ts"),
+      'import { extendEntityDefinition, type EntityDefinition, type LookupAdapter } from "@/core/entity";\nimport { definitionOverrides } from "../' +
+        entity.name +
+        '.extension";\n' +
+        lookupImports +
+        "\nconst base = " +
+        literal(definition) +
+        " satisfies EntityDefinition;\nexport const " +
+        entity.name +
+        "Definition: EntityDefinition = extendEntityDefinition(base, definitionOverrides);\nexport const " +
+        entity.name +
+        "Lookups: Record<string, LookupAdapter> = {" +
+        lookupEntries +
+        "};\n",
+    );
+    const extension = join(root, entity.name + ".extension.ts");
+    if (!existsSync(extension))
+      await add(
+        extension,
+        'import type { EntityDefinitionOverrides, EntityPageProps } from "@/core/entity";\nimport type { ' +
+          entity.name +
+          "Model, " +
+          entity.name +
+          "CreateInput, " +
+          entity.name +
+          'UpdateInput } from "./generated/' +
+          entity.name +
+          'Model";\nexport const definitionOverrides: EntityDefinitionOverrides = {};\nexport const entityExtension: Partial<Omit<EntityPageProps<' +
+          entity.name +
+          "Model, " +
+          entity.name +
+          "CreateInput, " +
+          entity.name +
+          'UpdateInput>, "definition">> = {};\n',
+        false,
+      );
+    const files: Record<string, string> = {
+      Model: entity.name + "Model.ts",
+      ModelMeta: entity.name + "Model.meta.ts",
+      Service: entity.name + "Service.ts",
+      Page: entity.name + "Page.tsx",
+      Create: entity.name + "Create.tsx",
+      Display: entity.name + "Display.tsx",
+      Search: entity.name + "Search.tsx",
+      Table: entity.name + "Table.tsx",
+      TableColumns: entity.name + "TableColumns.tsx",
+    };
+    if (routing && this.config.generation.generateRoutes) {
+      files.ModuleRoutes = entity.name + ".routes.tsx";
+      files.ModuleViewNames = entity.name + ".viewnames.ts";
     }
-
-    const filePath = join(outputDir, fileName);
-
-    // Check if file exists and overwrite is disabled
-    if (existsSync(filePath) && !this.config.generation.overwriteExisting) {
-      console.log(chalk.yellow(`⏭️  Skipping ${fileName} (already exists)`));
-      return;
-    }
-
-    let content = template(context);
-
-    // Format with Prettier if enabled
-    if (this.config.generation.formatWithPrettier) {
-      try {
-        content = await prettier.format(content, {
-          parser: fileName.endsWith('.tsx') || fileName.endsWith('.jsx') ? 'typescript' : 'typescript',
-          semi: true,
-          singleQuote: false,
-          trailingComma: 'es5',
-          printWidth: 90,
-        });
-      } catch (error) {
-        console.warn(chalk.yellow(`⚠️  Prettier formatting failed for ${fileName}`));
+    for (const [templateName, fileName] of Object.entries(files)) {
+      const template = this.templates.get(templateName);
+      if (!template) throw new Error("Missing template: " + templateName);
+      const generatedName =
+        templateName === "TableColumns"
+          ? entity.name + ".columns.ts"
+          : fileName;
+      await add(join(generated, generatedName), template(context));
+      const wrapper = join(root, fileName);
+      if (!existsSync(wrapper)) {
+        const module = "./generated/" + generatedName.replace(/\.tsx?$/, "");
+        const named = [
+          "Model",
+          "ModelMeta",
+          "TableColumns",
+          "ModuleRoutes",
+          "ModuleViewNames",
+        ].includes(templateName);
+        await add(
+          wrapper,
+          (named ? "export * from " : "export { default } from ") +
+            literal(module) +
+            ";\n",
+          false,
+        );
       }
     }
-
-    writeFileSync(filePath, content, 'utf-8');
-    console.log(chalk.gray(`  ✓ ${fileName}`));
-  }
-
-  private async generateEnumFile(
-    entityName: string,
-    field: Field,
-    outputDir: string
-  ): Promise<void> {
-    const enumName = `${entityName}${field.name.charAt(0).toUpperCase() + field.name.slice(1)}Enum`;
-    const fileName = `${enumName}.ts`;
-    const filePath = join(outputDir, fileName);
-
-    const enumValues = field.enums!.map(e => `  ${e.name} : "${e.name}",`).join('\n');
-    const labelEntries = field.enums!.map(e => `    [${enumName}.${e.name}]: "${e.label || e.value}" ,`).join('\n');
-
-    const content = `export const ${enumName} = {
-${enumValues}
-} as const;
-
-export type ${enumName} = (typeof ${enumName})[keyof typeof ${enumName}]
-
-export const ${enumName}Labels = {
-${labelEntries}
-};
-`;
-
-    let formatted = content;
-    if (this.config.generation.formatWithPrettier) {
-      try {
-        formatted = await prettier.format(content, { parser: 'typescript' });
-      } catch {}
-    }
-
-    writeFileSync(filePath, formatted, 'utf-8');
-    console.log(chalk.gray(`  ✓ ${fileName}`));
-  }
-
-  private getOutputDir(entityName: string): string {
-    return resolve(process.cwd(), this.config.paths.outputBase, entityName);
-  }
-
-  private ensureDir(dir: string): void {
-    if (!existsSync(dir)) {
-      mkdirSync(dir, { recursive: true });
-    }
+    for (const field of entity.fields)
+      if (field.enums?.length) {
+        const name =
+          entity.name +
+          field.name[0].toUpperCase() +
+          field.name.slice(1) +
+          "Enum";
+        const values = Object.fromEntries(
+            field.enums.map((value) => [value.name, value.name]),
+          ),
+          labels = Object.fromEntries(
+            fields[field.name].options!.map((value) => [
+              value.value,
+              value.label,
+            ]),
+          );
+        await add(
+          join(generated, name + ".ts"),
+          "export const " +
+            name +
+            " = " +
+            literal(values) +
+            " as const;\nexport type " +
+            name +
+            " = typeof " +
+            name +
+            "[keyof typeof " +
+            name +
+            "];\nexport const " +
+            name +
+            "Labels = " +
+            literal(labels) +
+            ";\n",
+        );
+        if (!existsSync(join(root, name + ".ts")))
+          await add(
+            join(root, name + ".ts"),
+            "export * from " + literal("./generated/" + name) + ";\n",
+            false,
+          );
+      }
+    return planned;
   }
 }

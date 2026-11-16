@@ -1,139 +1,40 @@
-import { readdirSync, readFileSync, writeFileSync, existsSync } from 'fs';
-import { join } from 'path';
-import { XMLParser } from 'fast-xml-parser';
-import * as yaml from 'js-yaml';
-
-// Type mapping from XML field types to FormFieldType
-const TYPE_MAPPING: Record<string, string> = {
-  STRING: 'text',
-  INTEGER: 'number',
-  LONG: 'number',
-  DOUBLE: 'number',
-  BIG_DECIMAL: 'text', // Use text for precision
-  BOOLEAN: 'boolean',
-  DATE: 'date',
-  LOCAL_DATE: 'date',
-  LOCAL_DATE_TIME: 'datetime-local',
-  ENUM: 'select',
-};
-
-interface Field {
-  name: string;
-  type: string;
-  enums?: any[];
-}
-
-interface Relationship {
-  name: string;
-  relationshipType: string;
-}
-
-export function addTypesToYamlFiles(entityDefsPath: string) {
-  const xmlFiles = readdirSync(entityDefsPath).filter(f => f.endsWith('.xml'));
-
-  for (const xmlFile of xmlFiles) {
-    const entityName = xmlFile.replace('.xml', '');
-    const xmlPath = join(entityDefsPath, xmlFile);
-    const yamlPath = join(entityDefsPath, `${entityName}.meta.yaml`);
-
-    // Skip if YAML file doesn't exist
-    if (!existsSync(yamlPath)) {
-      console.log(`⏭️  Skipping ${entityName} - no YAML file found`);
-      continue;
-    }
-
-    try {
-      // Read and parse XML
-      const xmlContent = readFileSync(xmlPath, 'utf-8');
-      const parser = new XMLParser({
-        ignoreAttributes: false,
-        parseTagValue: true,
-      });
-      const xmlData = parser.parse(xmlContent);
-
-      // Read and parse YAML
-      const yamlContent = readFileSync(yamlPath, 'utf-8');
-      const yamlData = yaml.load(yamlContent) as any;
-
-      if (!yamlData.fields) {
-        console.log(`⏭️  Skipping ${entityName} - no fields section in YAML`);
-        continue;
-      }
-
-      // Get fields from XML
-      const xmlEntity = xmlData.entity;
-      const xmlFields = xmlEntity.fields?.field || [];
-      const fieldsArray = Array.isArray(xmlFields) ? xmlFields : [xmlFields];
-
-      let updated = false;
-
-      // Update each field with type from XML
-      for (const xmlField of fieldsArray) {
-        if (!xmlField || !xmlField.name) continue;
-
-        const fieldName = xmlField.name;
-        const xmlType = xmlField.type;
-
-        if (yamlData.fields[fieldName]) {
-          const formType = TYPE_MAPPING[xmlType] || 'text';
-
-          // Only add if not already present
-          if (!yamlData.fields[fieldName].type) {
-            yamlData.fields[fieldName].type = formType;
-            updated = true;
-            console.log(`  ✓ Added type "${formType}" to ${entityName}.${fieldName}`);
-          }
-        }
-      }
-
-      // Update relationship types
-      if (yamlData.relationships) {
-        const xmlRelationships = xmlEntity.relationships?.relationship || [];
-        const relsArray = Array.isArray(xmlRelationships) ? xmlRelationships : [xmlRelationships];
-
-        for (const xmlRel of relsArray) {
-          if (!xmlRel || !xmlRel.name) continue;
-
-          const relName = xmlRel.name;
-          const relType = xmlRel.relationshipType;
-
-          if (yamlData.relationships[relName]) {
-            // Only add if not already present
-            if (!yamlData.relationships[relName].type) {
-              // const isToMany = relType === 'ONE_TO_MANY' || relType === 'MANY_TO_MANY';
-              const formType = 'autocomplete';
-
-              yamlData.relationships[relName].type = formType;
-              updated = true;
-              console.log(`  ✓ Added type "${formType}" to ${entityName}.${relName}`);
-            }
-          }
-        }
-      }
-
-      // Write back to YAML if updated
-      if (updated) {
-        const newYamlContent = yaml.dump(yamlData, {
-          lineWidth: -1,
-          noRefs: true,
-        });
-        writeFileSync(yamlPath, newYamlContent, 'utf-8');
-        console.log(`✅ Updated ${entityName}.meta.yaml`);
-      } else {
-        console.log(`⏭️  No updates needed for ${entityName}.meta.yaml`);
-      }
-
-    } catch (error) {
-      console.error(`❌ Error processing ${entityName}:`, error);
-    }
+import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { join } from "node:path";
+import yaml from "js-yaml";
+import { XmlEntityParser } from "../parsers/XmlParser.js";
+import { loadConfig } from "../config.js";
+export function addTypesToYamlFiles(directory: string) {
+  const config = loadConfig(),
+    parser = new XmlEntityParser();
+  for (const file of readdirSync(directory).filter((file) =>
+    file.endsWith(".xml"),
+  )) {
+    const target = join(directory, file.replace(/\.xml$/, ".meta.yaml"));
+    if (!existsSync(target)) continue;
+    const entity = parser.parseFile(join(directory, file));
+    const data = yaml.load(readFileSync(target, "utf8")) as {
+      fields?: Record<string, { type?: string }>;
+      relationships?: Record<string, { type?: string }>;
+    };
+    for (const field of entity.fields)
+      if (data.fields?.[field.name] && !data.fields[field.name].type)
+        data.fields[field.name].type = config.formTypeMapping[field.type];
+    for (const relation of entity.relationships)
+      if (
+        data.relationships?.[relation.name] &&
+        !data.relationships[relation.name].type
+      )
+        data.relationships[relation.name].type = relation.document
+          ? "File"
+          : "autocomplete";
+    writeFileSync(
+      target,
+      yaml.dump(data, { lineWidth: 120, noRefs: true }),
+      "utf8",
+    );
   }
 }
-
-// Run if called directly
-const isMain = process.argv[1] && import.meta.url.endsWith(process.argv[1].replace(/\\/g, '/'));
-if (isMain || process.argv[1]?.includes('AddTypesToYaml')) {
-  const entityDefsPath = process.argv[2] || join(process.cwd(), 'entity-definitions');
-  console.log(`\n📝 Adding types to YAML files in: ${entityDefsPath}\n`);
-  addTypesToYamlFiles(entityDefsPath);
-  console.log('\n✅ Done!\n');
-}
+if (process.argv[1]?.includes("AddTypesToYaml"))
+  addTypesToYamlFiles(
+    process.argv[2] ?? join(process.cwd(), "entity-definitions"),
+  );

@@ -1,54 +1,7 @@
 import { createModelMeta } from "@/core/models/modelMetaUtils";
-import type { {{entityName}}Model } from "./{{entityName}}Model";
-import type { FormFieldMetadata } from "@/core/forms/FieldFormTypes";
-
-export const {{pascalCase entityName}}ModelMeta = createModelMeta<{{entityName}}Model, FormFieldMetadata>(
-  {
-{{#each fields}}
-    {{this.name}}: {
-      label: "{{this.meta.label}}",
-{{#if this.meta.type}}
-      type: "{{this.meta.type}}",
-{{/if}}
-{{#if this.meta.placeholder}}
-      placeholder: "{{this.meta.placeholder}}",
-{{/if}}
-      sortable: {{this.meta.sortable}},
-      required: {{this.required}},
-{{#if this.enums}}
-      options: [
-{{#each this.enums}}
-        { value: "{{this.name}}", label: "{{this.label}}" },
-{{/each}}
-      ],
-{{/if}}
-    },
-{{/each}}
-{{#each relationships}}
-    {{this.name}}: {
-      label: "{{this.meta.label}}",
-      type: "{{this.meta.type}}",
-      displayField: "{{this.meta.displayField}}",
-      sortable: {{this.meta.sortable}},
-{{#if this.required}}
-      required: true,
-{{/if}}
-    },
-{{/each}}
-  },
-  GET_AUTOCOMPLETE_DISPLAY_FIELD(),
-  GET_DISPLAY_NAME(),
-  GET_PLURAL_DISPLAY_NAME(),
-);
-
-function GET_AUTOCOMPLETE_DISPLAY_FIELD(): keyof {{entityName}}Model {
-  return "{{meta.autocompleteField}}";
-}
-
-function GET_DISPLAY_NAME(): string {
-  return "{{meta.displayName}}";
-}
-
-function GET_PLURAL_DISPLAY_NAME(): string {
-  return "{{meta.displayNamePlural}}";
-}
+import { {{entityName}}Definition } from "./{{entityName}}.definition";
+export const {{entityName}}ModelMeta = {
+  ...createModelMeta({{entityName}}Definition.fields, {{displayFieldLiteral}}, {{displayNameLiteral}}, {{pluralDisplayNameLiteral}}),
+  definition: {{entityName}}Definition,
+  displayField: {{displayFieldLiteral}} as const,
+};

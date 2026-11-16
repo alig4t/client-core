@@ -1,53 +1,15 @@
 import { lazy } from "react";
-import { {{meta.routing.menuIcon}} } from "lucide-react";
-import { VIEWNAME } from "@/router/ViewName";
-import { Permission } from "@/router/Permission";
+import { {{iconName}} } from "lucide-react";
 import type { RouteConfig } from "@/router/path.types";
-
-const {{entityName}}Page = lazy(() => import("./{{entityName}}Page"));
-const {{entityName}}Create = lazy(() => import("./{{entityName}}Create"));
-const {{entityName}}Display = lazy(() => import("./{{entityName}}Display"));
-
+import { {{entityName}}Definition } from "./{{entityName}}.definition";
+import { {{viewnamesConstant}} } from "./{{entityName}}.viewnames";
+const Page = lazy(() => import("../{{entityName}}Page"));
+const Create = lazy(() => import("../{{entityName}}Create"));
+const Display = lazy(() => import("../{{entityName}}Display"));
+const definition = {{entityName}}Definition;
 export const {{entityName}}Routes: RouteConfig[] = [
-  // List Page
-  {
-    path: "{{meta.routing.basePath}}",
-    label: "{{meta.routing.menuLabel}}",
-    icon: <{{meta.routing.menuIcon}} size={18} />,
-    element: {{entityName}}Page,
-    parent: "{{meta.routing.menuParent}}",
-    permission: Permission.{{entityName}}_Read,
-    showInMenu: {{meta.routing.showInMenu}},
-    name: VIEWNAME.{{snakeCase entityName}}_SEARCH,
-  },
-  // Create Page
-  {
-    path: "{{meta.routing.basePath}}/create",
-    element: {{entityName}}Create,
-    permission: Permission.{{entityName}}_Create,
-    showInMenu: false,
-    name: VIEWNAME.{{snakeCase entityName}}_CREATE,
-    label: "ایجاد {{meta.displayName}}",
-    parent: "{{meta.routing.basePath}}",
-  },
-  // Display Page
-  {
-    path: "{{meta.routing.basePath}}/:id",
-    element: {{entityName}}Display,
-    permission: Permission.{{entityName}}_Read,
-    showInMenu: false,
-    name: VIEWNAME.{{snakeCase entityName}}_DISPLAY,
-    label: "جزئیات {{meta.displayName}}",
-    parent: "{{meta.routing.basePath}}",
-  },
-  // Edit Page
-  {
-    path: "{{meta.routing.basePath}}/:id/edit",
-    element: {{entityName}}Create,
-    permission: Permission.{{entityName}}_Update,
-    showInMenu: false,
-    name: VIEWNAME.{{snakeCase entityName}}_EDIT,
-    label: "ویرایش {{meta.displayName}}",
-    parent: "{{meta.routing.basePath}}",
-  },
+  { path: {{basePathLiteral}}, label: {{menuLabelLiteral}}, icon: <{{iconName}} size={18}/>, element: Page, parent: {{parentLiteral}}, permission: definition.permissions?.read, showInMenu: {{showInMenu}}, menuOrder: {{menuOrder}}, name: {{viewnamesConstant}}.{{viewnamePrefix}}_SEARCH },
+  { path: {{createPathLiteral}}, label: {{createLabelLiteral}}, element: Create, parent: {{basePathLiteral}}, permission: definition.permissions?.create, name: {{viewnamesConstant}}.{{viewnamePrefix}}_CREATE },
+  { path: {{detailPathLiteral}}, label: {{detailLabelLiteral}}, element: Display, parent: {{basePathLiteral}}, permission: definition.permissions?.read, name: {{viewnamesConstant}}.{{viewnamePrefix}}_DISPLAY },
+  { path: {{editPathLiteral}}, label: {{editLabelLiteral}}, element: Create, parent: {{basePathLiteral}}, permission: definition.permissions?.update, name: {{viewnamesConstant}}.{{viewnamePrefix}}_EDIT },
 ];

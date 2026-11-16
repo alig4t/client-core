@@ -34,5 +34,5 @@ relationships:
   messages:
     label: پیام‌ها
     type: autocomplete
-    displayField: content
+    displayField: platformName
     sortable: false

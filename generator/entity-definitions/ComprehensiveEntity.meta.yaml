@@ -81,12 +81,12 @@ relationships:
   oneToManyKeywords:
     label: کلمات کلیدی
     type: autocomplete
-    displayField: keyword
+    displayField: keywordText
     sortable: false
   manyToManyMessages:
     label: پیام‌ها
     type: autocomplete
-    displayField: content
+    displayField: platformName
     sortable: false
   attachments:
     label: پیوست‌ها

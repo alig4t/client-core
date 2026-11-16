@@ -3,38 +3,45 @@
     "entityDefinitions": "./entity-definitions",
     "outputBase": "../src/Models",
     "coreComponents": "../src/core",
-    "menuConfig": "../menu-config.yaml"
+    "menuConfig": "../menu-config.yaml",
+    "routerOutput": "../src/router",
+    "projectRoot": ".."
   },
   "generation": {
     "formatWithPrettier": true,
     "generateRoutes": true,
     "generatePermissions": true,
-    "overwriteExisting": true
+    "overwriteExisting": true,
+    "typecheck": true
   },
   "coreEntities": {
-    "UserModel": {
+    "User": {
       "isCore": true,
-      "importPath": "@/core/models/UserModel",
-      "servicePath": "@/core/services/UserService"
+      "importPath": "@/Models/User/UserModel",
+      "servicePath": "@/Models/User/UserService",
+      "endpoint": "/auth/users",
+      "displayField": "username"
     },
-    "Document": {
+    "Role": {
       "isCore": true,
-      "importPath": "@/core/models/Document",
-      "servicePath": "@/core/services/DocumentService"
+      "importPath": "@/Models/Role/RoleModel",
+      "servicePath": "@/Models/Role/RoleService",
+      "endpoint": "/role",
+      "displayField": "name"
     },
-    "RoleModel": {
+    "Permission": {
       "isCore": true,
-      "importPath": "@/core/models/RoleModel",
-      "servicePath": "@/core/services/RoleService"
+      "importPath": "@/Models/Permission/PermissionModel",
+      "servicePath": "@/Models/Permission/PermissionService",
+      "endpoint": "/permission",
+      "displayField": "name"
     },
-    "PermissionModel": {
+    "Attachment": {
       "isCore": true,
-      "importPath": "@/core/models/PermissionModel",
-      "servicePath": "@/core/services/PermissionService"
-    },
-    "Message": {
-      "isCore": true,
-      "skipImport": true
+      "importPath": "@/Models/Attachment/AttachmentModel",
+      "servicePath": "@/Models/Attachment/AttachmentService",
+      "endpoint": "/attachment",
+      "displayField": "id"
     }
   },
   "templates": {
@@ -53,9 +60,9 @@
   "fieldTypeMapping": {
     "STRING": "string",
     "INTEGER": "number",
-    "LONG": "number",
+    "LONG": "string",
     "DOUBLE": "number",
-    "BIG_DECIMAL": "number",
+    "BIG_DECIMAL": "string",
     "BOOLEAN": "boolean",
     "DATE": "string",
     "LOCAL_DATE": "string",
@@ -65,11 +72,11 @@
   "formTypeMapping": {
     "STRING": "text",
     "INTEGER": "number",
-    "LONG": "number",
-    "DOUBLE": "number",
-    "BIG_DECIMAL": "number",
+    "LONG": "long",
+    "DOUBLE": "double",
+    "BIG_DECIMAL": "bigDecimal",
     "BOOLEAN": "boolean",
-    "DATE": "datetime-local",
+    "DATE": "instant",
     "LOCAL_DATE": "date",
     "LOCAL_DATE_TIME": "datetime-local",
     "ENUM": "select"

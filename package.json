@@ -7,7 +7,11 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "generator:build": "npm --prefix generator run build",
+    "generate": "npm --prefix generator run generate -- generate",
+    "generate:all": "npm --prefix generator run generate:all --",
+    "generate:check": "npm --prefix generator run generate:all -- --check"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.1",
