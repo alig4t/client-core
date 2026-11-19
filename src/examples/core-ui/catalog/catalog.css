@@ -1,0 +1,172 @@
+@layer project {
+  .catalog-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    gap: 1rem;
+    margin-block-end: 1rem;
+  }
+  .catalog-toolbar > :first-child {
+    flex: 1 1 20rem;
+  }
+  .catalog-brand {
+    display: grid;
+    gap: 0.5rem;
+  }
+  .catalog-brand select,
+  .catalog-card select:not([multiple]) {
+    padding: 0.5rem;
+    border: 1px solid var(--core-border);
+    border-radius: var(--core-radius);
+    background: var(--core-surface);
+    color: var(--core-text);
+  }
+  .catalog-categories {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-block: 1rem;
+  }
+  .catalog-categories [aria-pressed="true"] {
+    outline: 2px solid var(--core-focus);
+    outline-offset: 1px;
+  }
+  .catalog-intro {
+    margin-block: 1rem 1.5rem;
+    color: var(--text-secondary);
+  }
+  .catalog-intro span {
+    display: inline-block;
+    margin-inline-start: 0.5rem;
+    font-weight: 700;
+  }
+  .core-catalog {
+    --input-bg: var(--core-surface);
+    --input-text: var(--core-text);
+    --input-border: var(--core-border);
+    --card-bg: var(--core-surface);
+    --card-border: var(--core-border);
+    --white: var(--core-surface);
+    --text-primary: var(--core-text);
+    --text-secondary: var(--core-text-muted);
+    --text-tertiary: var(--core-text-muted);
+    --background: var(--core-surface);
+    --bg-tertiary: var(--core-surface-hover);
+    --border-primary: var(--core-border);
+    --border-secondary: var(--core-border);
+    --table-header-bg: var(--core-surface-hover);
+    --table-border: var(--core-border);
+    --color-primary: var(--core-action-bg);
+    --color-success: var(--core-success-bg);
+    --color-danger: var(--core-danger-bg);
+  }
+  .catalog-cards {
+    display: grid;
+    gap: 2rem;
+  }
+  .catalog-card {
+    min-width: 0;
+    padding: clamp(1rem, 3vw, 2rem);
+    border: 1px solid var(--core-border);
+    border-radius: max(0.75rem, var(--core-radius));
+    background: var(--core-surface);
+    scroll-margin-top: 1rem;
+  }
+  .catalog-card-header {
+    margin-block-end: 1.5rem;
+  }
+  .catalog-card-header h2 {
+    font-family: ui-monospace, monospace;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: start;
+    overflow-wrap: anywhere;
+  }
+  .catalog-card-header p {
+    margin-block-start: 0.5rem;
+  }
+  .catalog-category {
+    display: block;
+    color: var(--core-text-muted);
+    margin-block-end: 0.5rem;
+    font-size: 0.75rem;
+  }
+  .catalog-api,
+  .catalog-props {
+    font-family: ui-monospace, monospace;
+    font-size: 0.75rem;
+    line-height: 1.8;
+    overflow-wrap: anywhere;
+    color: var(--core-text-muted);
+  }
+  .catalog-example {
+    min-width: 0;
+    padding: 1rem 0;
+    border-block-start: 1px dashed var(--core-border);
+  }
+  .catalog-props {
+    display: block;
+    text-align: start;
+    margin-block-end: 1rem;
+  }
+  .catalog-example-content {
+    min-width: 0;
+  }
+  .catalog-example-content > * + * {
+    margin-block-start: 0.75rem;
+  }
+  .catalog-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .catalog-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr));
+    gap: 1rem;
+    align-items: start;
+  }
+  .catalog-preview-frame {
+    max-height: 24rem;
+    min-width: 0;
+    overflow: auto;
+    border: 1px solid var(--core-border);
+    border-radius: var(--core-radius);
+  }
+  .catalog-message {
+    display: block;
+    margin-block-start: 0.75rem;
+    color: var(--core-text-muted);
+    overflow-wrap: anywhere;
+  }
+  .catalog-values,
+  .catalog-source {
+    margin-block-start: 1rem;
+    color: var(--core-text-muted);
+  }
+  .catalog-values summary,
+  .catalog-source summary {
+    cursor: pointer;
+  }
+  .catalog-values pre {
+    max-height: 14rem;
+    overflow: auto;
+    margin-block-start: 0.5rem;
+    padding: 1rem;
+    background: var(--core-surface-hover);
+    border-radius: var(--core-radius);
+    font-size: 0.75rem;
+  }
+  .catalog-source code {
+    display: block;
+    margin-block-start: 0.5rem;
+    font-size: 0.75rem;
+    overflow-wrap: anywhere;
+  }
+  .catalog-empty {
+    padding: 3rem 1rem;
+    text-align: center;
+  }
+}
