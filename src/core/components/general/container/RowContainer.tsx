@@ -1,7 +1,7 @@
 // src/components/display/RowContainer.tsx
 
 import type { FC, ReactNode } from "react";
-
+import { useCore } from "../../../entity/CoreProvider";
 
 interface RowContainerProps {
   children: ReactNode;
@@ -16,6 +16,7 @@ export const RowContainer: FC<RowContainerProps> = ({
   children,
   numberOfColumns = 3,
 }) => {
+  const { direction } = useCore();
   const gridClass = {
     1: "sm:grid-cols-1",
     2: "sm:grid-cols-2",
@@ -24,10 +25,7 @@ export const RowContainer: FC<RowContainerProps> = ({
   }[numberOfColumns];
 
   return (
-    <dl
-      dir="rtl"
-      className={`grid grid-cols-1 ${gridClass} gap-4`}
-    >
+    <dl dir={direction} className={`grid grid-cols-1 ${gridClass} gap-4`}>
       {children}
     </dl>
   );

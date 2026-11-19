@@ -6,7 +6,11 @@ interface FilePreviewProps {
   previewSize?: "sm" | "md" | "lg";
   className?: string;
 }
-export default function FilePreview({ fileId, className }: FilePreviewProps) {
+export default function FilePreview({
+  fileId,
+  previewSize = "md",
+  className,
+}: FilePreviewProps) {
   const { uploads } = useCore();
   const [preview, setPreview] = useState<{
     url: string;
@@ -49,7 +53,11 @@ export default function FilePreview({ fileId, className }: FilePreviewProps) {
             <img
               src={preview.url}
               alt="پیوست"
-              className="h-20 w-20 object-contain rounded"
+              className={
+                { sm: "h-12 w-12", md: "h-20 w-20", lg: "h-32 w-32" }[
+                  previewSize
+                ] + " object-contain rounded"
+              }
             />
           ) : (
             "دریافت فایل"

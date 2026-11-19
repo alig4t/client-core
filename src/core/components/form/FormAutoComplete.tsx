@@ -72,6 +72,7 @@ export function FormAutoComplete<T extends BaseModel>({
   const wrapper = useRef<HTMLDivElement>(null),
     trigger = useRef<HTMLButtonElement>(null);
   const listId = useId();
+  const controlId = `${listId}-trigger`;
   const filterKey = JSON.stringify(extraFilters);
   const previousFilters = useRef(filterKey);
   useEffect(() => {
@@ -234,12 +235,12 @@ export function FormAutoComplete<T extends BaseModel>({
         }
       }}
     >
-      <label htmlFor={name} className="block text-sm mb-1.5">
+      <label htmlFor={controlId} className="block text-sm mb-1.5">
         {label}
       </label>
       <button
         ref={trigger}
-        id={name}
+        id={controlId}
         type="button"
         role="combobox"
         aria-expanded={open}

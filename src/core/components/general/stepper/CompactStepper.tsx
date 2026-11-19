@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Check } from "lucide-react";
 import React from "react";
+import { useCore } from "../../../entity/CoreProvider";
 
 export interface CompactStep {
   id: string | number;
@@ -24,9 +25,10 @@ const CompactStepper: React.FC<CompactStepperProps> = ({
   currentStep,
   className = "",
 }) => {
+  const { direction } = useCore();
   return (
     <div
-      dir="rtl"
+      dir={direction}
       className={`w-full ${className}`}
       role="navigation"
       aria-label="پیشرفت مراحل"
@@ -35,7 +37,7 @@ const CompactStepper: React.FC<CompactStepperProps> = ({
       <div className="relative w-full h-1 bg-[var(--border-secondary)] rounded-full overflow-hidden">
         {/* Animated Progress Fill */}
         <motion.div
-          className="absolute top-0 right-0 h-full bg-gradient-to-l from-[var(--color-primary)] to-[var(--color-success)] rounded-full"
+          className="absolute top-0 start-0 h-full bg-gradient-to-l from-[var(--color-primary)] to-[var(--color-success)] rounded-full"
           initial={{ width: "0%" }}
           animate={{
             width: `${((currentStep + 1) / steps.length) * 100}%`,

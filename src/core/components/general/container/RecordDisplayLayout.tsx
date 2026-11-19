@@ -1,6 +1,7 @@
 // src/components/display/RecordDisplayLayout.tsx
 
 import type { FC, ReactNode } from "react";
+import { useCore } from "../../../entity/CoreProvider";
 
 interface RecordDisplayLayoutProps {
   title: string;
@@ -18,8 +19,9 @@ export const RecordDisplayLayout: FC<RecordDisplayLayoutProps> = ({
   actions,
   isFetching = false,
 }) => {
+  const { direction } = useCore();
   return (
-    <div dir="rtl" className="p-8 min-h-screen font-sans">
+    <div dir={direction} className="p-8 min-h-screen font-sans">
       {/* Header Section */}
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold text-[var(--text-primary)]">

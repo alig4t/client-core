@@ -4,6 +4,7 @@ import * as TooltipPrimitive from "@radix-ui/react-tooltip";
 import * as React from "react";
 
 import { cn } from "../../utils/classNames";
+import { useCoreUI } from "../../ui/configuration";
 
 function TooltipProvider({
   delayDuration = 0,
@@ -40,9 +41,13 @@ function TooltipContent({
   children,
   ...props
 }: React.ComponentProps<typeof TooltipPrimitive.Content>) {
+  const ui = useCoreUI();
+  if (ui.portalContainer === null) return null;
   return (
-    <TooltipPrimitive.Portal>
+    <TooltipPrimitive.Portal container={ui.portalContainer}>
       <TooltipPrimitive.Content
+        dir={ui.direction}
+        lang={ui.locale}
         data-slot="tooltip-content"
         sideOffset={sideOffset}
         className={cn(

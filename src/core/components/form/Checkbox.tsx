@@ -1,9 +1,7 @@
-import { useState, type InputHTMLAttributes } from "react";
+import { useId, useState, type InputHTMLAttributes } from "react";
 import { Controller, useFormContext } from "react-hook-form";
-interface CheckboxProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  "name" | "onChange"
-> {
+interface CheckboxProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "name" | "onChange"> {
   name: string;
   label?: string;
   standalone?: boolean;
@@ -17,16 +15,20 @@ function CheckboxControl({
   checked,
   onChange,
   className,
+  id,
+  defaultChecked: _defaultChecked,
   ...rest
 }: CheckboxProps) {
+  const generatedId = useId();
+  const controlId = id ?? `checkbox-${generatedId}`;
   return (
     <label
-      htmlFor={name}
+      htmlFor={controlId}
       className={"flex items-center gap-2 " + (className ?? "")}
     >
       <input
         {...rest}
-        id={name}
+        id={controlId}
         name={name}
         type="checkbox"
         checked={Boolean(checked)}

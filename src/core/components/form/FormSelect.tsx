@@ -1,4 +1,5 @@
 import { Controller, useFormContext } from "react-hook-form";
+import { useId } from "react";
 import type { SelectOption } from "../../forms/FieldFormTypes";
 interface FormSelectProps {
   name: string;
@@ -22,17 +23,18 @@ export function FormSelect({
   disabled,
 }: FormSelectProps) {
   const { control } = useFormContext();
+  const controlId = useId();
   return (
     <Controller
       name={name}
       control={control}
       render={({ field, fieldState }) => (
         <div className={className}>
-          <label htmlFor={name} className="block mb-1.5 text-sm">
+          <label htmlFor={controlId} className="block mb-1.5 text-sm">
             {label ?? minilabel}
           </label>
           <select
-            id={name}
+            id={controlId}
             name={name}
             multiple={multi}
             disabled={disabled}

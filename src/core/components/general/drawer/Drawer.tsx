@@ -1,5 +1,6 @@
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useCore } from "../../../entity/CoreProvider";
 
 // --- Drawer Props ---
 interface DrawerProps {
@@ -24,6 +25,7 @@ const Drawer: React.FC<DrawerProps> = ({
   position = "right",
   className = "",
 }) => {
+  const { direction } = useCore();
   const [isMounted, setIsMounted] = useState(isOpen);
   const [isAnimatingIn, setIsAnimatingIn] = useState(false);
   const drawerRef = useRef<HTMLDivElement>(null);
@@ -110,7 +112,7 @@ const Drawer: React.FC<DrawerProps> = ({
         {/* --- Header (Title & Close Button) --- */}
         {/* The dir="rtl" on this div ensures header content is RTL-aligned */}
         <div
-          dir="rtl"
+          dir={direction}
           className="flex-shrink-0 flex justify-between items-center p-4 border-b border-gray-200 dark:border-gray-700"
         >
           {title && (

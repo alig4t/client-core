@@ -1,54 +1,47 @@
-import { motion } from "framer-motion";
+import * as Primitive from "@radix-ui/react-accordion";
 import { ChevronDown } from "lucide-react";
-import React, { useState } from "react";
+import type { ReactNode } from "react";
 
 interface AccordionProps {
-  title: string | React.ReactNode;
-  children: React.ReactNode;
+  title: ReactNode;
+  children: ReactNode;
   startOpen?: boolean;
 }
 
-const Accordion: React.FC<AccordionProps> = ({
+export default function Accordion({
   title,
   children,
   startOpen = false,
-}) => {
-  const [isOpen, setIsOpen] = useState(startOpen);
-
+}: AccordionProps) {
   return (
-    <div className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg mb-6 overflow-hidden">
-      <button
-        onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex justify-between items-center px-6 py-4 bg-[var(--table-header-bg)] hover:bg-[var(--bg-tertiary)] transition-colors duration-200 border-b border-[var(--table-border)]"
+    <Primitive.Root
+      type="single"
+      collapsible
+      defaultValue={startOpen ? "content" : undefined}
+    >
+      <Primitive.Item
+        value="content"
+        className="bg-[var(--card-bg)] border border-[var(--card-border)] rounded-lg mb-6 overflow-hidden"
       >
-        <div className="text-base font-semibold text-[var(--text-primary)]">
-          {title}
-        </div>
-        <motion.div
-          animate={{ rotate: isOpen ? 180 : 0 }}
-          transition={{ duration: 0.2, ease: "easeInOut" }}
-        >
-          <ChevronDown size={20} className="text-[var(--text-secondary)]" />
-        </motion.div>
-      </button>
-
-      <motion.section
-        initial={false}
-        animate={{
-          height: isOpen ? "auto" : 0,
-          opacity: isOpen ? 1 : 0,
-        }}
-        transition={{
-          height: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
-          opacity: { duration: 0.25, ease: "easeInOut" },
-        }}
-        className="bg-[var(--card-bg)] overflow-hidden"
-        aria-hidden={!isOpen}
-      >
-        <div className="px-6 py-5">{children}</div>
-      </motion.section>
-    </div>
+        <Primitive.Header>
+          <Primitive.Trigger
+            type="button"
+            className="group w-full flex justify-between items-center gap-3 px-6 py-4 text-start bg-[var(--table-header-bg)] hover:bg-[var(--bg-tertiary)] border-b border-[var(--table-border)]"
+          >
+            <span className="text-base font-semibold text-[var(--text-primary)]">
+              {title}
+            </span>
+            <ChevronDown
+              aria-hidden="true"
+              size={20}
+              className="shrink-0 text-[var(--text-secondary)] transition-transform group-data-[state=open]:rotate-180"
+            />
+          </Primitive.Trigger>
+        </Primitive.Header>
+        <Primitive.Content className="bg-[var(--card-bg)] overflow-hidden">
+          <div className="px-6 py-5 space-y-3">{children}</div>
+        </Primitive.Content>
+      </Primitive.Item>
+    </Primitive.Root>
   );
-};
-
-export default Accordion;
+}

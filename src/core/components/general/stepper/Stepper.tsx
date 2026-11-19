@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { Check } from "lucide-react";
 import React from "react";
+import { useCore } from "../../../entity/CoreProvider";
 
 export interface Step {
   id: string | number;
@@ -33,6 +34,7 @@ const Stepper: React.FC<StepperProps> = ({
   allowClickOnCompleted = true,
   className = "",
 }) => {
+  const { direction } = useCore();
   const getStepStatus = (index: number): StepStatus => {
     if (index < currentStep) return "completed";
     if (index === currentStep) return "current";
@@ -58,7 +60,7 @@ const Stepper: React.FC<StepperProps> = ({
 
   return (
     <div
-      dir="rtl"
+      dir={direction}
       className={`w-full ${className}`}
       role="navigation"
       aria-label="پیشرفت مراحل"
@@ -87,6 +89,7 @@ const Stepper: React.FC<StepperProps> = ({
               >
                 {/* Step Circle */}
                 <motion.button
+                  type="button"
                   onClick={() => handleStepClick(index)}
                   disabled={!clickable}
                   className={`relative flex items-center justify-center flex-shrink-0 ${
@@ -142,7 +145,7 @@ const Stepper: React.FC<StepperProps> = ({
                   className={`${
                     orientation === "horizontal"
                       ? "text-center mt-2 max-w-[120px]"
-                      : "mr-4 flex-1"
+                      : "ms-4 flex-1"
                   }`}
                 >
                   <p
@@ -176,15 +179,15 @@ const Stepper: React.FC<StepperProps> = ({
                   className={`relative ${
                     orientation === "horizontal"
                       ? "flex-1 h-[2px] mx-2 min-w-[40px]"
-                      : "w-[2px] h-12 mr-[18px]"
+                      : "w-[2px] h-12 ms-[18px]"
                   } bg-[var(--border-secondary)] overflow-hidden`}
                 >
                   {/* Progress Fill */}
                   <motion.div
                     className={`absolute ${
                       orientation === "horizontal"
-                        ? "top-0 right-0 h-full"
-                        : "top-0 right-0 w-full"
+                        ? "top-0 start-0 h-full"
+                        : "top-0 start-0 w-full"
                     } bg-[var(--color-success)]`}
                     initial={false}
                     animate={{

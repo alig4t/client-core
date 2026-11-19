@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import gregorian from "react-date-object/calendars/gregorian";
 import { DateObject } from "react-multi-date-picker";
 import type { FilterField } from "./Filter"; // Import field type
+import { useCore } from "../entity/CoreProvider";
 
 export interface DynamicFilters {
   [key: string]: unknown;
@@ -19,6 +20,7 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({
   fields,
   onApplyFilters,
 }) => {
+  const { direction } = useCore();
   // A state to hold values of all fields
   const [formState, setFormState] = useState<
     Record<string, string | number | DateObject | null>
@@ -61,7 +63,7 @@ const DynamicFilterForm: React.FC<DynamicFilterFormProps> = ({
   };
 
   return (
-    <div dir="rtl">
+    <div dir={direction}>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         {/* Dynamic render of fields based on config */}
         {fields.map((field) => (

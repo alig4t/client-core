@@ -28,7 +28,20 @@ export const DisplayField: FC<DisplayFieldProps> = ({
     colSpan === "full"
       ? "sm:col-span-full"
       : colSpan
-        ? `sm:col-span-${colSpan}`
+        ? ({
+            1: "sm:col-span-1",
+            2: "sm:col-span-2",
+            3: "sm:col-span-3",
+            4: "sm:col-span-4",
+            5: "sm:col-span-5",
+            6: "sm:col-span-6",
+            7: "sm:col-span-7",
+            8: "sm:col-span-8",
+            9: "sm:col-span-9",
+            10: "sm:col-span-10",
+            11: "sm:col-span-11",
+            12: "sm:col-span-12",
+          }[colSpan] ?? "sm:col-span-1")
         : "sm:col-span-1";
 
   // Check for empty/null values and display a placeholder
@@ -44,7 +57,9 @@ export const DisplayField: FC<DisplayFieldProps> = ({
       className={`flex flex-col gap-1.5 p-4 bg-[var(--bg-tertiary)] rounded-lg ${colSpanClass}`}
     >
       {/* Label/Title */}
-      <dt className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">{label}</dt>
+      <dt className="text-xs font-medium text-[var(--text-secondary)] uppercase tracking-wide">
+        {label}
+      </dt>
 
       {/* Value */}
       <dd className="text-sm font-medium text-[var(--text-primary)] break-words">
