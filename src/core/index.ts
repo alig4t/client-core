@@ -1,4 +1,5 @@
 export * from "./entity";
+export * from "./ui";
 export { BaseService } from "./service/BaseService";
 export type {
   Filters,

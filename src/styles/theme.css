@@ -1,6 +1,3 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-
 @layer base {
   /* ==========================================================================
      MODERN FLAT UI DESIGN SYSTEM
@@ -315,9 +312,9 @@
 /* ==========================================================================
    TAILWIND V4 THEME EXTENSIONS
    ========================================================================== */
-@theme {
-  --color-primary: var(--color-primary);
-  --color-primary-foreground: var(--button-primary-text);
+@theme inline {
+  --color-primary: var(--core-action-bg);
+  --color-primary-foreground: var(--core-action-fg);
 
   /* Animation for infinite slider */
   --animate-infinite-slider: infiniteSlider 20s linear infinite;

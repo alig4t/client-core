@@ -1,3 +1,4 @@
+@layer theme, base, components, project, utilities;
 @import "tailwindcss" source("./");
 @import "tw-animate-css";
 
@@ -6,6 +7,7 @@
 @import "@/assets/fontiran.css";
 
 @import "./styles/theme.css";
+@import "./core/ui/styles.css";
 
 
 /* 
@@ -27,53 +29,35 @@ a:hover {
   background-repeat: repeat;
 } */
 
-body {
-  margin: 0;
-  /* display: flex; */
-  /* place-items: center; */
-  /* min-width: 320px; */
-  min-height: 100vh;
-  font-family: IRANSansXFaNum;
-}
+@layer base {
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font-family: IRANSansXFaNum;
+  }
 
-html,
-body {
-  margin: 0;
-  padding: 0;
-  overflow-x: hidden;
-}
+  html,
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
 
-div {
-  font-family: IRANSansXFaNum !important;
-}
+  h1 {
+    line-height: 1.1;
+  }
 
-h1 {
-  /* font-size: 3.2em; */
-  line-height: 1.1;
-}
+  button {
+    font-weight: 500;
+    font-family: inherit;
+    cursor: pointer;
+  }
 
-button {
-  border-radius: 8px;
-  /* border: 1px solid transparent; */
-  padding: 0.6em 1.2em;
-  /* font-size: 1em; */
-  font-weight: 500;
-  font-family: inherit;
-  /* background-color: #1a1a1a; */
-  cursor: pointer;
-  transition: border-color 0.25s;
-}
-
-button:hover {
-  border-color: #c8c9ca;
-}
-
-button:focus,
-button:focus-visible {
-  /* outline: 4px auto -webkit-focus-ring-color; */
-  /* outline: 4px auto #f6f3f4; */
-  outline: none !important;
-  transition: all ease 0.2s;
+  button:focus,
+  button:focus-visible {
+    outline: 2px solid var(--core-focus);
+    outline-offset: 2px;
+  }
 }
 
 /* @media (prefers-color-scheme: light) {
@@ -196,16 +180,10 @@ button:focus-visible {
 
   .dark .bg-layout-content {
     @apply bg-[#111827];
-    color: #e4e4e7 !important;
+    color: #e4e4e7;
   }
 }
 
-.dark .bg-layout-content p,
-.dark .bg-layout-content a,
-.dark .bg-layout-content span,
-.dark .bg-layout-content div {
-  color: #e4e4e7;
-}
 
 
 
