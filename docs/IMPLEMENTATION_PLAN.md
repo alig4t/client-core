@@ -1,5 +1,7 @@
 # Core and generator implementation
 
+The UI architecture follow-up is tracked separately in [CORE_UI_IMPLEMENTATION_PLAN.fa.md](CORE_UI_IMPLEMENTATION_PLAN.fa.md), based on the full [component architecture review](CORE_COMPONENTS_ARCHITECTURE_REVIEW.fa.md). The completed checklist below covers the earlier CRUD/generator scope, not the new design, localization, or package-release work.
+
 The acceptance criteria are tracked against `CORE_READINESS_REVIEW.fa.md`.
 
 - [x] HTTP: typed envelopes, pagination adapters, object requests, cancellation, field errors, string IDs, partial bulk results.
