@@ -8,6 +8,7 @@ import type { FormFieldMetadata } from "../forms/FieldFormTypes";
 import type { ServerSideParams } from "../service/BaseService";
 import type { EntityId, Page } from "../service/contracts";
 import type { EntityRecord } from "./types";
+import { CoreUIProvider } from "../ui/CoreUIProvider";
 
 export interface UploadFile {
   id: EntityId;
@@ -70,7 +71,9 @@ export function CoreProvider({
         lookups: { ...parent.lookups, ...value.lookups },
       }}
     >
-      {children}
+      <CoreUIProvider value={{ direction: value.direction, locale: value.locale }}>
+        {children}
+      </CoreUIProvider>
     </CoreContext.Provider>
   );
 }

@@ -28,7 +28,7 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
     // استفاده از ModalAnimation به عنوان شل اصلی
     <ModalAnimation isOpen={isOpen} onDismiss={onClose} title={title} mobileBottomSheet={true}>
       {/* محتوای Confirmation */}
-      <div dir="rtl" className="flex flex-col gap-4">
+      <div className="flex flex-col gap-4">
         <div className="flex items-center gap-3">
           {/* Icon */}
           <AlertTriangle className="h-6 w-6 text-[var(--color-danger)] flex-shrink-0" />

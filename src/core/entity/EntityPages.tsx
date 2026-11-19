@@ -20,6 +20,7 @@ import { PageWrapper } from "../components/general/container/PageWrapper";
 import ConfirmationModal from "../components/general/modal/ConfirmationModal";
 import TableErrorState from "../components/general/TableErrorState";
 import Table, { TBODY, THEAD } from "../components/Table/DataTable";
+import Button from "../components/general/button/Button";
 import { DynamicFields } from "../forms/DynamicField";
 import type { FormFieldMetadata } from "../forms/FieldFormTypes";
 import { BaseService } from "../service/BaseService";
@@ -74,14 +75,14 @@ function FormActions({ cancel, busy }: { cancel: () => void; busy: boolean }) {
   const { pendingUploads } = useFormActivity();
   return (
     <div className="flex gap-3 mt-6">
-      <button
-        className="px-5 py-2 bg-purple-600 text-white rounded"
+      <Button
         type="submit"
         disabled={busy || isSubmitting || pendingUploads > 0}
       >
         ذخیره
-      </button>
-      <button
+      </Button>
+      <Button
+        variant="cancel"
         type="button"
         onClick={() => {
           if (
@@ -93,7 +94,7 @@ function FormActions({ cancel, busy }: { cancel: () => void; busy: boolean }) {
         }}
       >
         انصراف
-      </button>
+      </Button>
     </div>
   );
 }

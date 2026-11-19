@@ -1,5 +1,15 @@
-import { useState, type InputHTMLAttributes } from "react";
+import {
+  useState,
+  type InputHTMLAttributes,
+  type Ref,
+  type FocusEventHandler,
+} from "react";
 import { Controller, useFormContext } from "react-hook-form";
+import { Field } from "../../ui/Field";
+import { Input } from "../../ui/Input";
+import { Button } from "../../ui/Button";
+import { cn } from "../../utils/classNames";
+import type { SlotClasses } from "../../ui/types";
 export type FormInputType =
   | "text"
   | "email"
@@ -11,10 +21,11 @@ export type FormInputType =
   | "bigDecimal"
   | "date"
   | "datetime-local";
-interface FormInputProps extends Omit<
-  InputHTMLAttributes<HTMLInputElement>,
-  "name" | "onChange" | "type"
-> {
+export interface FormInputProps
+  extends Omit<
+    InputHTMLAttributes<HTMLInputElement>,
+    "name" | "onChange" | "type" | "onBlur"
+  > {
   name: string;
   label: string;
   type?: FormInputType;
@@ -22,9 +33,20 @@ interface FormInputProps extends Omit<
   multiline?: boolean;
   standalone?: boolean;
   rows?: number;
+  description?: string;
+  onBlur?: FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
+  ref?: Ref<HTMLInputElement | HTMLTextAreaElement>;
+  classNames?: SlotClasses<
+    "root" | "input" | "label" | "description" | "error" | "passwordToggle"
+  >;
 }
-const styles =
-  "w-full p-2 border rounded-lg bg-[var(--input-bg)] text-[var(--input-text)] border-[var(--input-border)]";
+function assignRef(
+  ref: FormInputProps["ref"],
+  element: HTMLInputElement | HTMLTextAreaElement | null,
+) {
+  if (typeof ref === "function") ref(element);
+  else if (ref) ref.current = element;
+}
 function Control({
   name,
   label,
@@ -33,6 +55,10 @@ function Control({
   rows = 3,
   onValueChange,
   error,
+  className,
+  classNames,
+  description,
+  ref,
   ...props
 }: Omit<FormInputProps, "standalone"> & { error?: string }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -52,65 +78,90 @@ function Control({
   };
   const value = props.value == null ? "" : String(props.value);
   return (
-    <div className={props.className ?? "w-full"}>
-      <label htmlFor={name} className="block text-sm mb-1.5">
-        {label}
-      </label>
-      {multiline ? (
-        <textarea
-          id={name}
-          name={name}
-          value={value}
-          rows={rows}
-          maxLength={props.maxLength}
-          disabled={props.disabled}
-          placeholder={props.placeholder}
-          onChange={(event) => change(event.target.value)}
-          className={styles}
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? name + "-error" : undefined}
-        />
-      ) : (
-        <input
-          {...props}
-          id={name}
-          name={name}
-          value={value}
-          type={
-            numeric
-              ? "text"
-              : type === "password" && showPassword
-                ? "text"
-                : type
-          }
-          inputMode={
-            numeric
-              ? type === "number" || type === "long"
-                ? "numeric"
-                : "decimal"
-              : props.inputMode
-          }
-          onChange={(event) => change(event.target.value)}
-          className={styles}
-          aria-invalid={Boolean(error)}
-          aria-describedby={error ? name + "-error" : undefined}
-        />
+    <Field
+      label={label}
+      controlId={props.id}
+      error={error}
+      description={description}
+      required={props.required}
+      className={className}
+      classNames={{
+        root: classNames?.root,
+        label: classNames?.label,
+        description: classNames?.description,
+        error: classNames?.error,
+      }}
+    >
+      {(control) => (
+        <>
+          {multiline ? (
+            <textarea
+              {...control}
+              ref={(element) => assignRef(ref, element)}
+              name={name}
+              value={value}
+              rows={rows}
+              maxLength={props.maxLength}
+              disabled={props.disabled}
+              readOnly={props.readOnly}
+              autoFocus={props.autoFocus}
+              dir={props.dir}
+              style={props.style}
+              placeholder={props.placeholder}
+              onBlur={props.onBlur}
+              onChange={(event) => change(event.target.value)}
+              className={cn("core-input", classNames?.input)}
+              aria-describedby={
+                [control["aria-describedby"], props["aria-describedby"]]
+                  .filter(Boolean)
+                  .join(" ") || undefined
+              }
+            />
+          ) : (
+            <Input
+              {...props}
+              {...control}
+              ref={(element) => assignRef(ref, element)}
+              name={name}
+              value={value}
+              type={
+                numeric
+                  ? "text"
+                  : type === "password" && showPassword
+                    ? "text"
+                    : type
+              }
+              inputMode={
+                numeric
+                  ? type === "number" || type === "long"
+                    ? "numeric"
+                    : "decimal"
+                  : props.inputMode
+              }
+              onChange={(event) => change(event.target.value)}
+              className={classNames?.input}
+              aria-describedby={
+                [control["aria-describedby"], props["aria-describedby"]]
+                  .filter(Boolean)
+                  .join(" ") || undefined
+              }
+            />
+          )}
+          {type === "password" && (
+            <Button
+              type="button"
+              appearance="ghost"
+              size="sm"
+              className={classNames?.passwordToggle}
+              onClick={() => setShowPassword((value) => !value)}
+              aria-label={showPassword ? "مخفی کردن رمز" : "نمایش رمز"}
+            >
+              {showPassword ? "مخفی کردن" : "نمایش"}
+            </Button>
+          )}
+        </>
       )}
-      {type === "password" && (
-        <button
-          type="button"
-          onClick={() => setShowPassword((value) => !value)}
-          aria-label={showPassword ? "مخفی کردن رمز" : "نمایش رمز"}
-        >
-          {showPassword ? "مخفی کردن" : "نمایش"}
-        </button>
-      )}
-      {error && (
-        <p id={name + "-error"} role="alert" className="text-red-600 text-sm">
-          {error}
-        </p>
-      )}
-    </div>
+    </Field>
   );
 }
 function StandaloneInput({
@@ -144,7 +195,14 @@ function ConnectedInput({
         <Control
           {...props}
           value={field.value ?? ""}
-          onBlur={field.onBlur}
+          ref={(element) => {
+            field.ref(element);
+            assignRef(props.ref, element);
+          }}
+          onBlur={(event) => {
+            field.onBlur();
+            props.onBlur?.(event);
+          }}
           onValueChange={(value) => {
             field.onChange(value);
             props.onValueChange?.(value);

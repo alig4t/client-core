@@ -5,6 +5,8 @@ import type { EntityId } from "../../service/contracts";
 import { Checkbox } from "../form/Checkbox";
 import { Select } from "../form/Select";
 import TableErrorState from "../general/TableErrorState";
+import { Table as CoreTable } from "../../ui/Table";
+import { Button } from "../../ui/Button";
 export const THEAD = ({
   children,
   className = "",
@@ -103,13 +105,15 @@ export default function Table<T extends object>({
         <h2>{title}</h2>
         <div className="flex flex-wrap gap-2">
           {onDeleteSelected && selected.length > 0 && (
-            <button
+            <Button
+              tone="danger"
+              appearance="ghost"
               type="button"
               onClick={() => onDeleteSelected(selected)}
               className="text-red-600"
             >
               حذف انتخاب‌شده‌ها ({selected.length})
-            </button>
+            </Button>
           )}
           {sortOptions.length > 0 && (
             <Select
@@ -130,87 +134,78 @@ export default function Table<T extends object>({
           />
         </div>
       </div>
-      <div className="overflow-auto">
-        <table className="min-w-full">
-          <thead>
-            <tr>
+      <CoreTable
+        empty={data.length === 0}
+        columnCount={100}
+        header={
+          <>
+            {onSelectionChange && (
+              <th>
+                <Checkbox
+                  name="select-all"
+                  standalone
+                  hideLabel
+                  aria-label="انتخاب همه ردیف‌ها"
+                  checked={all}
+                  onChange={(checked) =>
+                    setSelected(
+                      checked
+                        ? selectable.map((item) => item[dataIdKey] as EntityId)
+                        : [],
+                    )
+                  }
+                />
+              </th>
+            )}
+            {header}
+          </>
+        }
+      >
+        {data.map((item, index) => {
+          const id = item[dataIdKey] as EntityId;
+          return (
+            <tr key={id} className="border-t">
               {onSelectionChange && (
-                <th>
+                <td>
                   <Checkbox
-                    name="select-all"
+                    name={"select-" + id}
                     standalone
                     hideLabel
-                    aria-label="انتخاب همه ردیف‌ها"
-                    checked={all}
-                    onChange={(checked) =>
-                      setSelected(
-                        checked
-                          ? selectable.map(
-                              (item) => item[dataIdKey] as EntityId,
-                            )
-                          : [],
-                      )
-                    }
+                    aria-label={"انتخاب ردیف " + id}
+                    checked={selected.includes(id)}
+                    disabled={!(isRowSelectable?.(item) ?? true)}
+                    onChange={() => toggle(id)}
                   />
-                </th>
-              )}
-              {header}
-            </tr>
-          </thead>
-          <tbody>
-            {data.length ? (
-              data.map((item, index) => {
-                const id = item[dataIdKey] as EntityId;
-                return (
-                  <tr key={id} className="border-t">
-                    {onSelectionChange && (
-                      <td>
-                        <Checkbox
-                          name={"select-" + id}
-                          standalone
-                          hideLabel
-                          aria-label={"انتخاب ردیف " + id}
-                          checked={selected.includes(id)}
-                          disabled={!(isRowSelectable?.(item) ?? true)}
-                          onChange={() => toggle(id)}
-                        />
-                      </td>
-                    )}
-                    {renderRow(item, index, selected.includes(id), () =>
-                      toggle(id),
-                    )}
-                  </tr>
-                );
-              })
-            ) : (
-              <tr>
-                <td colSpan={100} className="text-center p-6">
-                  داده‌ای یافت نشد.
                 </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
+              )}
+              {renderRow(item, index, selected.includes(id), () => toggle(id))}
+            </tr>
+          );
+        })}
+      </CoreTable>
       <div className="flex gap-3 items-center justify-between mt-4">
         <span>{totalItems} رکورد</span>
-        <button
+        <Button
+          tone="neutral"
+          appearance="ghost"
           type="button"
           disabled={page <= 0 || Boolean(isFetching)}
           onClick={() => onPageChange(page - 1)}
         >
           قبلی
-        </button>
+        </Button>
         <span>
           صفحه {totalPages ? page + 1 : 0} از {totalPages}
         </span>
-        <button
+        <Button
+          tone="neutral"
+          appearance="ghost"
           type="button"
           disabled={page >= totalPages - 1 || Boolean(isFetching)}
           onClick={() => onPageChange(page + 1)}
         >
           بعدی
-        </button>
+        </Button>
       </div>
     </div>
   );

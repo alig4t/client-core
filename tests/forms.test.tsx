@@ -181,7 +181,7 @@ describe("form lifecycle and controls", () => {
         </Modal>
       </>,
     );
-    expect(screen.getByText("Open")).toHaveFocus();
+    await waitFor(() => expect(screen.getByText("Open")).toHaveFocus());
   });
   it("round-trips date-only and local datetime without timezone conversion", () => {
     const date = new DateObject({ date: "2026-03-21", format: "YYYY-MM-DD" });
